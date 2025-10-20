@@ -1,0 +1,75 @@
+"use client";
+
+import BrandLogo from "@/components/brand-logo";
+import { Button } from "@/components/ui/button";
+import { Card, CardTitle } from "@/components/ui/card";
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle
+} from "@/components/ui/empty";
+import SuccessIcon from "@/icons/success-icon";
+import { useState } from "react";
+import AuthLayout from "../auth-layout";
+import RegisterForm from "./form/register-form";
+
+export default function RegisterPage() {
+  const [isRegisterSuccess, setIsRegisterSuccess] = useState(false);
+
+  if (true) {
+    return (
+      <div className="min-h-dvh grid place-content-center px-5">
+        <Empty className="gap-8">
+          <EmptyHeader>
+            <EmptyMedia variant="icon">
+              <SuccessIcon />
+            </EmptyMedia>
+            <EmptyTitle className="text-xl lg:text-3xl mt-8 min-w-max">
+              Account Created Successfully!
+            </EmptyTitle>
+            <EmptyDescription className="leading-[140%] min-w-max">
+              Welcome aboard, Jan 👋 <br className="lg:hidden" />
+              Your Synapse account is now ready.
+            </EmptyDescription>
+          </EmptyHeader>
+          <EmptyContent>
+            <Button className="font-normal px-3">Go to main page</Button>
+          </EmptyContent>
+        </Empty>
+      </div>
+    );
+  }
+
+  return (
+    <AuthLayout>
+      <div className="flex flex-col items-start gap-6 lg:gap-12">
+        <div>
+          <BrandLogo />
+        </div>
+
+        <div>
+          <h1 className="text-xl lg:text-3xl font-medium">Almost There!</h1>
+          <p className="mt-4">
+            You’ve chosen your plan — now let’s set up your account.With just a
+            few details, you’ll unlock access to insights, connections, and
+            tools tailored to your needs.
+          </p>
+        </div>
+      </div>
+
+      <main>
+        <Card className="py-8 lg:py-12 px-6 lg:px-10">
+          <CardTitle className="text-xl lg:text-2xl text-center tracking-tight font-medium">
+            Create your account
+          </CardTitle>
+          <div>
+            <RegisterForm />
+          </div>
+        </Card>
+      </main>
+    </AuthLayout>
+  );
+}
