@@ -15,11 +15,14 @@ import SuccessIcon from "@/icons/success-icon";
 import { useState } from "react";
 import AuthLayout from "../auth-layout";
 import RegisterForm from "./form/register-form";
+import { XIcon } from "lucide-react";
 
 export default function RegisterPage() {
   const [isRegisterSuccess, setIsRegisterSuccess] = useState(false);
 
-  if (true) {
+  const handleRegisterSuccess = () => setIsRegisterSuccess(true);
+
+  if (isRegisterSuccess) {
     return (
       <div className="min-h-dvh grid place-content-center px-5">
         <Empty className="gap-8">
@@ -36,7 +39,9 @@ export default function RegisterPage() {
             </EmptyDescription>
           </EmptyHeader>
           <EmptyContent>
-            <Button className="font-normal px-3">Go to main page</Button>
+            <Button className="font-normal px-3 lg:px-5 py-2 lg:py-3.5">
+              Go to main page
+            </Button>
           </EmptyContent>
         </Empty>
       </div>
@@ -46,7 +51,15 @@ export default function RegisterPage() {
   return (
     <AuthLayout>
       <div className="flex flex-col items-start gap-6 lg:gap-12">
-        <div>
+        <Button
+          size="icon"
+          variant="outline"
+          className="size-10 rounded-sm absolute top-0 left-5 xl:-left-21"
+        >
+          <XIcon />
+        </Button>
+
+        <div className="mt-20 lg:mt-0">
           <BrandLogo />
         </div>
 
@@ -66,7 +79,7 @@ export default function RegisterPage() {
             Create your account
           </CardTitle>
           <div>
-            <RegisterForm />
+            <RegisterForm onSuccess={handleRegisterSuccess} />
           </div>
         </Card>
       </main>

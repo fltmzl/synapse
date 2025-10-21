@@ -74,7 +74,7 @@ export default function LoginForm() {
             <FormItem>
               <FormLabel className="label-required">Email</FormLabel>
               <FormControl>
-                <Input placeholder="Enter your email" {...field} />
+                <Input placeholder="Enter your email address" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
