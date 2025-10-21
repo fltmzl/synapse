@@ -37,7 +37,7 @@ export default function LoginForm() {
       email: "",
       password: ""
     },
-    mode: "onSubmit"
+    mode: "all"
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
