@@ -98,19 +98,20 @@ export default function LatestInfo() {
       <div>
         <SectionTitle>Actualité</SectionTitle>
       </div>
-      <div className="max-w-7xl mx-auto px-4">
+      <div className="max-w-7xl  mx-auto px-4">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          {/* Tabs Header */}
+         <div className="border-b">
           <NewsTabsHeader
             activeTab={activeTab}
             setActiveTab={setActiveTab}
             tabs={Object.keys(newsData)}
           />
+          </div>
 
           {/* Tabs Content */}
           {Object.entries(newsData).map(([category, items]) => (
             <TabsContent key={category} value={category}>
-              <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.2fr_1fr] gap-8 items-stretch">
+              <div className="pt-8 grid grid-cols-1 lg:grid-cols-[1fr_1.2fr_1fr] gap-8 items-stretch">
                 <div className="flex flex-col  justify-between h-full">
                   <div className="flex flex-col l gap-4">
                     <H4>{items[0].title}</H4>

@@ -27,7 +27,7 @@ const newsData: NewsItem[] = [
 
 export default function NewsSection() {
   return (
-    <section className="w-full flex flex-col gap-10 lg:gap-16 pt-0 pb-25 px-6 lg:px-0 max-w-7xl mx-auto">
+    <section className="w-full flex flex-col gap-10 lg:gap-16 pt-0 pb-25 px-6 max-w-7xl mx-auto">
       {/* Banner */}
       <div className="w-full relativ flex flex-col gap-8">
         <div className="bg-emerald-950 w-full h-[620px] rounded-lg"></div>

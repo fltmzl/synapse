@@ -9,27 +9,9 @@ import LatestProductions from "./sections/latest-prod";
 import LatestInfo from "./sections/latest-info";
 import Database from "./sections/database";
 import FindDataPage from "./sections/find-data";
+import { Bus } from "lucide-react";
+import BusinessCorner from "./sections/business-corner";
 
-// const productions = [
-//   {
-//     image: null,
-//     category: "Economy",
-//     date: "Sep 2, 2025",
-//     title: "Economic Outlook: Antilles & Guyana 2030"
-//   },
-//   {
-//     image: null,
-//     category: "Society",
-//     date: "Aug 25, 2025",
-//     title: "Guadeloupe: Reforms & Institutional Evolution"
-//   },
-//   {
-//     image: null,
-//     category: "Law",
-//     date: "Aug 10, 2025",
-//     title: "Mayotte Labor Dynamics & Workforce Trends"
-//   }
-// ];
 
 export default function Home() {
   return (
@@ -39,6 +21,7 @@ export default function Home() {
       <LatestInfo />
       <Database />
       <FindDataPage />
+      <BusinessCorner />
     </div>
   );
 }
