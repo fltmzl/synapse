@@ -8,7 +8,7 @@ export default function SectionTitle({
   return (
     <h1
       className={cn(
-        "text-[26px] lg:text-[48px] font-semibold leading-[120%] tracking-tight text-primary",
+        "text-[32px] lg:text-[40px] font-medium leading-[110%] tracking-[-0.03em]",
         className
       )}
     >

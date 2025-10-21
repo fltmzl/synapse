@@ -5,15 +5,15 @@ type Props = {
   className?: string;
 };
 
-export function H3({ className, children }: PropsWithChildren<Props>) {
+export function H4({ className, children }: PropsWithChildren<Props>) {
   return (
-    <h3
+    <h4
       className={cn(
-        "scroll-m-20 text-xs font-semibold tracking-tight",
+        "scroll-m-20 text-2xl font-medium tracking-[-0.02em] leading-[110%]",
         className
       )}
     >
       {children}
-    </h3>
+    </h4>
   );
 }

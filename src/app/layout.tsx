@@ -6,6 +6,7 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import Script from "next/script";
 import Footer from "./footer";
+import Header from "./header";
 
 const geist = Geist({
   variable: "--font-geist",
@@ -36,9 +37,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="scroll-smooth">
-      <body
-        className={`${geist.variable} ${geistMono.variable} antialiased bg-[#F9FAFB]`}
-      >
+      <body className={`${geist.variable} ${geistMono.variable} antialiased `}>
+        <Header />
         <ClientProviders>{children}</ClientProviders>
         <Footer />
         <Toaster position="bottom-right" richColors={true} />

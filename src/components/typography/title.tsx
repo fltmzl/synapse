@@ -1,18 +1,18 @@
 import { cn } from "@/lib/utils";
 import { PropsWithChildren } from "react";
 
-export function H2({
+export function Title({
   children,
   className
 }: PropsWithChildren<{ className?: string }>) {
   return (
-    <h2
+    <h1
       className={cn(
-        "scroll-m-20 text-base tracking-[-0.01em] leading-[150%] text-foreground/60",
+        "scroll-m-20 text-[3.25rem] font-medium tracking-[-0.03em] leading-[110%]",
         className
       )}
     >
       {children}
-    </h2>
+    </h1>
   );
 }

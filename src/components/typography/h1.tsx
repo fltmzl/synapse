@@ -8,7 +8,7 @@ export function H1({
   return (
     <h1
       className={cn(
-        "scroll-m-20 text-center text-xl font-semibold tracking-tight",
+        "scroll-m-20 text-xl tracking-[-0.02em] leading-[130%] text-foreground/80 font-medium",
         className
       )}
     >
