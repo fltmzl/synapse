@@ -14,7 +14,7 @@ export default function BrandLogo({ type = "default" }: Props) {
             ? "/assets/logo/brand.svg"
             : "/assets/logo/brand-white.svg"
         }
-        alt="brandiie"
+        alt="synapse"
         width={115}
         height={40}
         priority
