@@ -16,14 +16,12 @@ import { useState } from "react";
 import AuthLayout from "../auth-layout";
 import RegisterForm from "./form/register-form";
 import { XIcon } from "lucide-react";
-import { redirect } from "next/navigation";
+import Link from "next/link";
 
 export default function RegisterPage() {
   const [isRegisterSuccess, setIsRegisterSuccess] = useState(false);
 
   const handleRegisterSuccess = () => setIsRegisterSuccess(true);
-
-  return redirect("/auth/login");
 
   if (isRegisterSuccess) {
     return (
@@ -43,7 +41,7 @@ export default function RegisterPage() {
           </EmptyHeader>
           <EmptyContent>
             <Button className="font-normal px-3 lg:px-5 py-2 lg:py-3.5">
-              Go to main page
+              <Link href="/auth/login">Go to main page</Link>
             </Button>
           </EmptyContent>
         </Empty>
