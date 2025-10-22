@@ -2,28 +2,26 @@
 
 import { TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
+import { NewsTabsHeader } from "@/types/news.type";
 
-interface NewsTabsHeaderProps {
-  activeTab: string;
-  setActiveTab: (value: string) => void;
-  tabs: string[];
-}
-
-export default function NewsTabsHeader({
+export default function TabsHeader({
   activeTab,
   setActiveTab,
   tabs
-}: NewsTabsHeaderProps) {
+}: NewsTabsHeader) {
   return (
-    <TabsList className="flex  justify-start  rounded-none ">
+    <TabsList className="flex  justify-start  rounded-none overflow-x-scroll hide-scrollbar w-full lg:w-max">
       {tabs.map((key) => (
         <TabsTrigger
           key={key}
           value={key}
           onClick={() => setActiveTab(key)}
           className={cn(
-            "relative text-base font-medium px-6 py-4 data-[state=active]:text-blue-700 transition",
-            "after:absolute after:left-0 after:-bottom-[1px] after:h-[2px] after:w-full after:bg-blue-700 after:scale-x-0 data-[state=active]:after:scale-x-100 after:origin-left after:transition-transform"
+            "relative text-base font-medium px-8 py-4 leading-[130%] tracking-[-0.02em] transition",
+            "data-[state=active]:text-[var(--stroke)]",
+            "after:absolute after:left-0 after:bottom-0 after:w-full after:bg-primary after:origin-left after:transition-all after:duration-300",
+            "after:h-[2px] after:scale-x-0",
+            "data-[state=active]:after:scale-x-100 data-[state=active]:after:h-[2px] "
           )}
         >
           {key === "citoyenne"

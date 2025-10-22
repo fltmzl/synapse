@@ -4,19 +4,12 @@ import { H1 } from "@/components/typography/h1";
 import { H2 } from "@/components/typography/h2";
 import Image from "next/image";
 
-type NewsCardProps = {
-  category: string;
-  date: string;
-  title: string;
-  image: string;
-};
-
 export default function NewsCard({
   category,
   date,
   title,
   image
-}: NewsCardProps) {
+}: NewsItem) {
   return (
     <div className="flex flex-col gap-5">
       <div className="relative w-full h-[260px] overflow-hidden rounded-md">
@@ -25,7 +18,7 @@ export default function NewsCard({
           alt={title}
           fill
           priority
-          className="object-cover transition-transform duration-500 group-hover:scale-105"
+          className="object-cover "
         />
       </div>
       <div className="flex flex-col gap-2">

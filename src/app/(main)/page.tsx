@@ -16,7 +16,7 @@ export default function Home() {
   return (
     <div className="flex flex-col ">
       <NewsSection />
-      <LatestProductions />
+      <LatestProductions /> {/* cek lagi */}
       <LatestInfo />
       <Database />
       <FindDataPage />

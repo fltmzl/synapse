@@ -34,7 +34,7 @@ export default function Header() {
   }, [open]);
 
   return (
-    <header className="flex flex-col w-full max-w-7xl mx-auto px-6  py-8">
+    <header className="flex flex-col w-full max-w-7xl mx-auto px-6 py-8">
       <div>
         <div className="flex items-center justify-between">
           {/* Logo */}
@@ -48,23 +48,21 @@ export default function Header() {
               <Link
                 key={item}
                 href="#"
-                className="hover:text-blue-600 transition-colors"
               >
                 {item}
               </Link>
             ))}
           </nav>
 
-          {/* Right side (Desktop) */}
           <div className="flex items-center gap-4">
             {isLoggedIn ? (
               <Avatar className="hidden md:block w-8 h-8">
                 <AvatarImage src="/avatar.jpg" alt="User" />
-                <AvatarFallback>U</AvatarFallback>
+                <AvatarFallback></AvatarFallback>
               </Avatar>
             ) : (
               <Link href="/auth/login" passHref>
-                <Button className="hidden md:block">Login</Button>
+                <Button className="hidden md:block px-6 py-[10px]" size="md">Login</Button>
               </Link>
             )}
           </div>
@@ -79,7 +77,6 @@ export default function Header() {
           </button>
         </div>
 
-        {/* Mobile Dropdown */}
         <div
           ref={panelRef}
           style={{
@@ -105,7 +102,7 @@ export default function Header() {
               {isLoggedIn ? (
                 <Avatar className="w-12 h-12">
                   <AvatarImage src="/avatar.jpg" alt="User" />
-                  <AvatarFallback>U</AvatarFallback>
+                  <AvatarFallback></AvatarFallback>
                 </Avatar>
               ) : (
                 <Link href="/auth/login" passHref>

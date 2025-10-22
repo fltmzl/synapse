@@ -2,28 +2,7 @@ import { H2 } from "@/components/typography/h2";
 import { Title } from "@/components/typography/title";
 import { Button } from "@/components/ui/button";
 import NewsCard from "../components/card/news-card";
-
-const newsData: NewsItem[] = [
-  {
-    category: "Economy",
-    date: "Sep 2, 2025",
-    title: "Guadeloupe unemployment drops to 12% in Q3 2025",
-    image: "/images/news-1.png"
-  },
-  {
-    category: "Investment",
-    date: "Aug 29, 2025",
-    title: "Martinique SMEs secure €15M funding for green transition projects",
-    image: "/images/news-2.png"
-  },
-  {
-    category: "Trade",
-    date: "Aug 25, 2025",
-    title:
-      "Mayotte reports 5% increase in export activities for first half of 2025",
-    image: "/images/news-3.png"
-  }
-];
+import { newsData } from "@/data/news-data";
 
 export default function NewsSection() {
   return (

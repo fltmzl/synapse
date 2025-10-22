@@ -5,11 +5,11 @@ type Props = {
   className?: string;
 };
 
-export function H0({ className, children }: PropsWithChildren<Props>) {
+export function P({ className, children }: PropsWithChildren<Props>) {
   return (
     <p
       className={cn(
-        "text-foreground scroll-m-20 text-left lg:text-center text-3xl font-medium tracking-tight leading-[120%]",
+        "scroll-m-20 text-sm font-regular tracking-[-0.01em] leading-[140%] text-muted-foreground",
         className
       )}
     >

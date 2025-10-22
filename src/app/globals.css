@@ -102,7 +102,9 @@ html {
   --sidebar-accent-foreground: #173DBA;
   --sidebar-border: oklch(0.92 0.004 286.32);
   --sidebar-ring: oklch(0.705 0.015 286.067);
-  --section:oklch(98.46% 0.002 247.84)
+  --section:oklch(98.46% 0.002 247.84);
+  --stroke:#2447D5;
+  --dots:#CBD5E1;
 }
 
 .dark {
