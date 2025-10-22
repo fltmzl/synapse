@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -11,9 +11,19 @@ import {
   SelectTrigger,
   SelectValue,
   SelectContent,
-  SelectItem,
+  SelectItem
 } from "@/components/ui/select";
 import SectionTitle from "@/components/typography/section-title";
+import { H4 } from "@/components/typography/h4";
+import {
+  Form,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormMessage
+} from "@/components/ui/form";
+import { H1 } from "@/components/typography/h1";
 
 type FormValues = {
   fullName: string;
@@ -28,20 +38,20 @@ export default function BusinessCorner() {
       title: "Call for Investment: Green Energy in Réunion",
       date: "Sep 3, 2025",
       desc: "The government has officially announced the opening of tenders for exciting new solar and wind projects.",
-      img: "/images/bo-1.png",
+      img: "/images/bo-1.png"
     },
     {
       title: "Startup Grant Program in Guadeloupe",
       date: "Aug 28, 2025",
       desc: "",
-      img: "/images/bo-2.png",
+      img: "/images/bo-2.png"
     },
     {
       title: "Export Channel for Martinique Agro Products",
       date: "Aug 22, 2025",
       desc: "",
-      img: "/images/bo-3.png",
-    },
+      img: "/images/bo-3.png"
+    }
   ];
 
   const forecastPosts = [
@@ -49,40 +59,41 @@ export default function BusinessCorner() {
       title: "Unemployment Projection in Martinique: 10% by 2026",
       date: "Sep 2, 2025",
       desc: "The job market is anticipated to see significant improvements as a result of the ongoing expansion.",
-      img: "/images/forecast-1.png",
+      img: "/images/forecast-1.png"
     },
     {
       title: "GDP Forecast for Guyane Q1 2026: +4.2%",
       date: "Aug 30, 2025",
       desc: "",
-      img: "/images/forecast-2.png",
+      img: "/images/forecast-2.png"
     },
     {
       title: "Export Growth in Mayotte Seafood Sector: +8% YoY",
       date: "Aug 25, 2025",
       desc: "",
-      img: "/images/forecast-3.png",
-    },
+      img: "/images/forecast-3.png"
+    }
   ];
 
-  const { register, handleSubmit, control } = useForm<FormValues>({
+  const form = useForm<FormValues>({
+    mode: "onChange",
     defaultValues: {
       fullName: "",
       email: "",
-      serviceType: null,
-      description: "",
-    },
+      serviceType: "",
+      description: ""
+    }
   });
 
   const onSubmit = (data: FormValues) => {
-    console.log("Form submitted:", data);
+    console.log("✅ Submitted:", data);
   };
 
   return (
-    <section className="max-w-7xl mx-auto w-full px-6 py-25 flex flex-col gap-16">
+    <section className="max-w-7xl mx-auto w-full px-6 py-12 lg:py-25 flex flex-col gap-10 lg:gap-16">
       {/* Header */}
-      <div >
-        <SectionTitle>The Business Corner</SectionTitle>
+      <div className="text-center lg:text-leeft">
+        <SectionTitle>Le coin des affaires</SectionTitle>
       </div>
 
       {/* Grid */}
@@ -90,35 +101,53 @@ export default function BusinessCorner() {
         {/* LEFT 2 columns */}
         <div className="lg:col-span-2 flex flex-col">
           {/* top link */}
-          <a className="text-sm text-blue-600 hover:underline mb-5 inline-block">Business Opportunities</a>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
             {/* Featured Business Card */}
+
             <div>
-              <article className="space-y-4">
-                <div className="rounded-md overflow-hidden border border-gray-100 shadow-sm">
+              <H4 className="text-primary underline mb-6 inline-block">
+                Les opportunités de reprises
+              </H4>
+              <article>
+                <div>
                   <Image
                     src={businessPosts[0].img}
                     alt={businessPosts[0].title}
                     width={1200}
                     height={600}
-                    className="w-full h-56 object-cover"
+                    className="w-full mb-4 h-56 object-cover rounded-md"
                   />
-                  <div className="p-5">
-                    <p className="text-xs text-gray-500">{businessPosts[0].date}</p>
-                    <h3 className="mt-2 text-lg font-semibold text-gray-900 leading-tight">{businessPosts[0].title}</h3>
-                    <p className="mt-2 text-sm text-gray-600 line-clamp-3">{businessPosts[0].desc}</p>
+                  <div className="flex flex-col gap-2">
+                    <h3 className="text-base text-muted-foreground">
+                      {businessPosts[0].date}
+                    </h3>
+                    <H1>{businessPosts[0].title}</H1>
+                    <h3 className="line-clamp-3 mb-5 text-base text-muted-foreground">
+                      {businessPosts[0].desc}
+                    </h3>
                   </div>
                 </div>
 
                 {/* small list under featured */}
-                <div className="space-y-4">
+                <div>
                   {businessPosts.slice(1).map((post, i) => (
-                    <div key={i} className="flex gap-3 items-start">
-                      <Image src={post.img} alt={post.title} width={96} height={64} className="rounded-md object-cover flex-shrink-0" />
-                      <div className="flex-1">
-                        <p className="text-xs text-gray-500">{post.date}</p>
-                        <h4 className="text-sm font-medium text-gray-900">{post.title}</h4>
+                    <div
+                      key={i}
+                      className="border-t border-gray-200 py-5 flex items-center gap-4"
+                    >
+                      <Image
+                        src={post.img}
+                        alt={post.title}
+                        width={96}
+                        height={64}
+                        className="rounded-md object-cover flex-shrink-0"
+                      />
+                      <div className="flex flex-col justify-center gap-2">
+                        <p className="text-xs ">{post.date}</p>
+                        <h4 className="text-lg font-medium leading-snug tracking-tight">
+                          {post.title}
+                        </h4>
                       </div>
                     </div>
                   ))}
@@ -128,31 +157,47 @@ export default function BusinessCorner() {
 
             {/* Forecast column */}
             <div>
-                          <a className="text-sm text-blue-600 hover:underline mb-5 inline-block">Business Opportunities</a>
+              <H4 className=" mb-6 inline-block">Les prévisions économiques</H4>
 
-              <article className="space-y-4">
-                <div className="rounded-md overflow-hidden border border-gray-100 shadow-sm">
+              <article>
+                <div>
                   <Image
-                    src={forecastPosts[0].img}
-                    alt={forecastPosts[0].title}
+                    src={businessPosts[0].img}
+                    alt={businessPosts[0].title}
                     width={1200}
                     height={600}
-                    className="w-full h-56 object-cover"
+                    className="w-full mb-4 h-56 object-cover rounded-md"
                   />
-                  <div className="p-5">
-                    <p className="text-xs text-gray-500">{forecastPosts[0].date}</p>
-                    <h3 className="mt-2 text-lg font-semibold text-gray-900 leading-tight">{forecastPosts[0].title}</h3>
-                    <p className="mt-2 text-sm text-gray-600 line-clamp-3">{forecastPosts[0].desc}</p>
+                  <div className="flex flex-col gap-2">
+                    <h3 className="text-base text-muted-foreground">
+                      {businessPosts[0].date}
+                    </h3>
+                    <H1>{businessPosts[0].title}</H1>
+                    <h3 className="line-clamp-3 mb-5 text-base text-muted-foreground">
+                      {businessPosts[0].desc}
+                    </h3>
                   </div>
                 </div>
 
-                <div className="space-y-4">
-                  {forecastPosts.slice(1).map((post, i) => (
-                    <div key={i} className="flex gap-3 items-start">
-                      <Image src={post.img} alt={post.title} width={96} height={64} className="rounded-md object-cover flex-shrink-0" />
-                      <div className="flex-1">
-                        <p className="text-xs text-gray-500">{post.date}</p>
-                        <h4 className="text-sm font-medium text-gray-900">{post.title}</h4>
+                {/* small list under featured */}
+                <div>
+                  {businessPosts.slice(1).map((post, i) => (
+                    <div
+                      key={i}
+                      className="border-t border-gray-200 py-5 flex items-center gap-4"
+                    >
+                      <Image
+                        src={post.img}
+                        alt={post.title}
+                        width={96}
+                        height={64}
+                        className="rounded-md object-cover flex-shrink-0"
+                      />
+                      <div className="flex flex-col justify-center gap-2">
+                        <p className="text-xs ">{post.date}</p>
+                        <h4 className="text-lg font-medium leading-snug tracking-tight">
+                          {post.title}
+                        </h4>
                       </div>
                     </div>
                   ))}
@@ -164,54 +209,141 @@ export default function BusinessCorner() {
 
         {/* RIGHT: FORM (single column) */}
         <aside className="lg:col-span-1">
-          <Card className="rounded-xl border border-gray-100 shadow-sm">
-            <CardHeader className="px-6 pt-6">
-              <CardTitle className="text-lg font-semibold text-gray-900">Request a Service from Synapse</CardTitle>
-              <p className="text-sm text-gray-500 mt-1">Tell us what you need and our team will provide tailored insights, reports, or consulting services.</p>
+          <Card className=" rounded-xl border border-gray-100 shadow-sm">
+            <CardHeader>
+              <CardTitle className="text-lg font-semibold text-gray-900">
+                Request a Service from Synapse
+              </CardTitle>
+              <p className="text-sm text-gray-500 mt-1">
+                Tell us what you need and our team will provide tailored
+                insights, reports, or consulting services.
+              </p>
             </CardHeader>
 
             <CardContent className="p-6">
-              <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-                <div>
-                  <label className="text-sm font-medium block mb-2">Full name <span className="text-red-500">*</span></label>
-                  <Input placeholder="Enter your full name" {...register("fullName", { required: true })} />
-                </div>
-
-                <div>
-                  <label className="text-sm font-medium block mb-2">Email address <span className="text-red-500">*</span></label>
-                  <Input type="email" placeholder="Enter your email address" {...register("email", { required: true, pattern: /^\S+@\S+\.\S+$/ })} />
-                </div>
-
-                <div>
-                  <label className="text-sm font-medium block mb-2">Service type <span className="text-red-500">*</span></label>
-                  <Controller
-                    control={control}
-                    name="serviceType"
-                    rules={{ required: true }}
+              <Form {...form}>
+                <form
+                  onSubmit={form.handleSubmit(onSubmit)}
+                  className="space-y-4"
+                >
+                  {/* Full Name */}
+                  <FormField
+                    control={form.control}
+                    name="fullName"
+                    rules={{ required: "Full name is required" }}
                     render={({ field }) => (
-                      <Select value={field.value ?? undefined} onValueChange={(v) => field.onChange(v)}>
-                        <SelectTrigger className="w-full h-10 rounded-md border border-gray-200 px-3">
-                          <SelectValue placeholder="Select a service do you want" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="data">Data report</SelectItem>
-                          <SelectItem value="consulting">Consulting</SelectItem>
-                          <SelectItem value="research">Research request</SelectItem>
-                        </SelectContent>
-                      </Select>
+                      <FormItem>
+                        <FormLabel className="label-required">
+                          Full name
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="Enter your full name"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
                     )}
                   />
-                </div>
 
-                <div>
-                  <label className="text-sm font-medium block mb-2">Description of request <span className="text-red-500">*</span></label>
-                  <Textarea placeholder="Describe your service do you want" {...register("description", { required: true })} className="min-h-[120px]" />
-                </div>
+                  {/* Email */}
+                  <FormField
+                    control={form.control}
+                    name="email"
+                    rules={{
+                      required: "Email address is required",
+                      pattern: {
+                        value: /^\S+@\S+\.\S+$/,
+                        message: "Enter a valid email address"
+                      }
+                    }}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="label-required">
+                          Email address
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            type="email"
+                            placeholder="Enter your email address"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
-                <div className="pt-2">
-                  <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white rounded-md">Submit request</Button>
-                </div>
-              </form>
+                  {/* Service Type */}
+                  <FormField
+                    control={form.control}
+                    name="serviceType"
+                    rules={{ required: "Please select a service type" }}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="label-required">
+                          Service type
+                        </FormLabel>
+                        <FormControl>
+                          <Select
+                            onValueChange={field.onChange}
+                            value={field.value}
+                          >
+                            <SelectTrigger className="w-full h-10 rounded-md border border-gray-200 px-3">
+                              <SelectValue placeholder="Select a service you want" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="data">Data report</SelectItem>
+                              <SelectItem value="consulting">
+                                Consulting
+                              </SelectItem>
+                              <SelectItem value="research">
+                                Research request
+                              </SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  {/* Description */}
+                  <FormField
+                    control={form.control}
+                    name="description"
+                    rules={{ required: "Description is required" }}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="label-required">
+                          Description of request
+                        </FormLabel>
+                        <FormControl>
+                          <Textarea
+                            placeholder="Describe the service you want"
+                            className="min-h-[120px]"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  {/* Submit Button */}
+                  <div className="pt-2">
+                    <Button
+                      type="submit"
+                      size="lg"
+                      className="w-full bg-blue-600 hover:bg-blue-700 text-white rounded-md"
+                      disabled={!form.formState.isValid}
+                    >
+                      Submit request
+                    </Button>
+                  </div>
+                </form>
+              </Form>
             </CardContent>
           </Card>
         </aside>

@@ -25,7 +25,7 @@ const newsData: CategoryNews = {
       description:
         "The French Assembly is debating a tax reform bill for overseas territories, aiming to adjust fiscal structures and revenue allocation to create fairer economic conditions.",
       date: "April 3, 2025",
-      image: "/images/news-1.png"
+      image: "/images/actualite.png"
     },
     {
       title: "French Senate reviews proposal on overseas economic autonomy",
@@ -94,18 +94,18 @@ const newsData: CategoryNews = {
 export default function LatestInfo() {
   const [activeTab, setActiveTab] = useState("politique");
   return (
-    <section className="py-25 max-w-7xl mx-auto flex flex-col gap-16 justify-center items-center">
+    <section className="max-w-7xl mx-auto py-12 lg:py-25 w-full px-6 flex flex-col gap-10 lg:gap-16 items-center">
       <div>
         <SectionTitle>Actualité</SectionTitle>
       </div>
-      <div className="max-w-7xl  mx-auto px-4">
+      <div className="w-full">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-         <div className="border-b">
-          <NewsTabsHeader
-            activeTab={activeTab}
-            setActiveTab={setActiveTab}
-            tabs={Object.keys(newsData)}
-          />
+          <div className="border-b">
+            <NewsTabsHeader
+              activeTab={activeTab}
+              setActiveTab={setActiveTab}
+              tabs={Object.keys(newsData)}
+            />
           </div>
 
           {/* Tabs Content */}
@@ -113,36 +113,40 @@ export default function LatestInfo() {
             <TabsContent key={category} value={category}>
               <div className="pt-8 grid grid-cols-1 lg:grid-cols-[1fr_1.2fr_1fr] gap-8 items-stretch">
                 <div className="flex flex-col  justify-between h-full">
-                  <div className="flex flex-col l gap-4">
+                  <div className="flex flex-col  gap-4">
                     <H4>{items[0].title}</H4>
-                    <p className="text-sm text-gray-600 leading-relaxed mb-8">
+                    <p className="text-sm text-muted-foreground leading-relaxed mb-2 lg:mb-8">
                       {items[0].description}
                     </p>
                   </div>
-                  <p className="text-xs text-gray-500">{items[0].date}</p>
+                  <span className="text-sm tracking-[-0.01em] leading-[140%] text-muted-foreground">
+                    {items[0].date}
+                  </span>
                 </div>
 
                 {/* Big Image */}
-                <div className="relative w-full h-full rounded-lg overflow-hidden">
+                <div className="relative w-full aspect-square lg:aspect-auto rounded-lg overflow-hidden">
                   <Image
                     src={items[0].image}
                     alt={items[0].title}
                     fill
                     className="object-cover"
+                    sizes="(max-width: 1024px) 100vw, 33vw"
+                    priority
                   />
                 </div>
 
                 {/* Sub articles */}
-                <div className="flex flex-col h-full divide-y divide-gray-200">
+                <div className="flex flex-col h-full divide-y divide-border">
                   {items.slice(1).map((news, i) => (
                     <div key={i} className="py-4 first:pt-0 last:pb-0">
-                      <h3 className="text-lg font-medium mb-2 tracking-[-0.02em] leading-snug ">
+                      <h3 className="text-lg font-medium mb-2 tracking-[-0.02em] leading-snug">
                         {news.title}
                       </h3>
-                      <p className="line-clamp-2 mb-2 text-sm text-muted-foreground tracking-[-0.01em] leading-relaxed">
+                      <p className="line-clamp-2 mb-2 text-sm text-muted-foreground tracking-[-0.01em] leading-snug">
                         {news.description}
                       </p>
-                      <span className="text-sm tracking-[-0.01em] leading-[140%] text-gray-400">
+                      <span className="text-sm tracking-[-0.01em] leading-[140%] text-muted-foreground">
                         {news.date}
                       </span>
                     </div>
@@ -153,7 +157,7 @@ export default function LatestInfo() {
           ))}
         </Tabs>
       </div>
-      <div className="w-full items-center justify-center flex">
+      <div className="w-full items-center justify-center hidden lg:flex">
         <Button variant={"outline"}>Find more articles</Button>
       </div>
     </section>

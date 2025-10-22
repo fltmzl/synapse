@@ -19,13 +19,12 @@ export default function NewsCard({
 }: NewsCardProps) {
   return (
     <div className="flex flex-col gap-5">
-      <div className="relative w-full aspect-[16/9] overflow-hidden rounded-lg">
+      <div className="relative w-full h-[260px] overflow-hidden rounded-md">
         <Image
           src={image}
           alt={title}
           fill
           priority
-          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
           className="object-cover transition-transform duration-500 group-hover:scale-105"
         />
       </div>

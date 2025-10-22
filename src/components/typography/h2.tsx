@@ -8,7 +8,7 @@ export function H2({
   return (
     <h2
       className={cn(
-        "scroll-m-20 text-base tracking-[-0.01em] leading-[150%] text-foreground/60",
+        "scroll-m-20 text-sm lg:text-base tracking-[-0.01em] leading-[150%] text-foreground/60",
         className
       )}
     >

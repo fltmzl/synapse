@@ -6,6 +6,7 @@ import { Menu } from "lucide-react";
 import { Avatar } from "@radix-ui/react-avatar";
 import { AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
 
 const NAV_ITEMS = [
   "Actualité",
@@ -38,7 +39,7 @@ export default function Header() {
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link href="/" className="text-2xl font-serif">
-            Synapse
+            <Image src="/images/logo.png" alt="Logo" width={100} height={80} />
           </Link>
 
           {/* Desktop nav */}

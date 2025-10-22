@@ -8,7 +8,7 @@ export function Title({
   return (
     <h1
       className={cn(
-        "scroll-m-20 text-[3.25rem] font-medium tracking-[-0.03em] leading-[110%]",
+        "scroll-m-20 text-3xl lg:text-[3.25rem] font-medium tracking-[-0.03em] leading-[110%]",
         className
       )}
     >

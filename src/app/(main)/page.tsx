@@ -12,7 +12,6 @@ import FindDataPage from "./sections/find-data";
 import { Bus } from "lucide-react";
 import BusinessCorner from "./sections/business-corner";
 
-
 export default function Home() {
   return (
     <div className="flex flex-col ">
