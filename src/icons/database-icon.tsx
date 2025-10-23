@@ -1,6 +1,6 @@
 import { SVGProps } from "react";
 
-export function BuildingBankIcon(props: SVGProps<SVGSVGElement>) {
+export function DatabaseIcon(props: SVGProps<SVGSVGElement>) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -10,14 +10,17 @@ export function BuildingBankIcon(props: SVGProps<SVGSVGElement>) {
       {...props}
     >
       {/* Icon from Tabler Icons by Paweł Kuna - https://github.com/tabler/tabler-icons/blob/master/LICENSE */}
-      <path
+      <g
         fill="none"
         stroke="currentColor"
         strokeLinecap="round"
         strokeLinejoin="round"
-        strokeWidth="1.5"
-        d="M3 21h18M3 10h18M5 6l7-3l7 3M4 10v11m16-11v11M8 14v3m4-3v3m4-3v3"
-      />
+        strokeWidth="2"
+      >
+        <path d="M4 6a8 3 0 1 0 16 0A8 3 0 1 0 4 6" />
+        <path d="M4 6v6a8 3 0 0 0 16 0V6" />
+        <path d="M4 12v6a8 3 0 0 0 16 0v-6" />
+      </g>
     </svg>
   );
 }

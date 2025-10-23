@@ -98,7 +98,7 @@ function FormLabel({
     <Label
       data-slot="form-label"
       data-error={!!error}
-      className={cn("text-sm tracking-tight", className)}
+      className={cn("text-sm tracking-tight leading-[130%]", className)}
       htmlFor={formItemId}
       {...props}
     />

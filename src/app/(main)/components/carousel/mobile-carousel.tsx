@@ -1,17 +1,17 @@
 "use client";
 
 import { useRef, useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { ArrowLeft, ArrowRight } from "lucide-react";
 import clsx from "clsx";
 import { productionData } from "@/data/news-data";
 import SectionTitle from "@/components/typography/section-title";
 import ProductionCard from "../card/production-card";
 import { ArrowLeftIcon } from "@/icons/arrow-left-icon";
+import { ArrowRightIcon } from "@/icons/arrow-right-icon";
 
 export default function MobileCarousel() {
   const mobileRef = useRef<HTMLDivElement | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [dotCount, setDotCount] = useState(1);
 
   const scroll = (dir: "left" | "right") => {
     const el = mobileRef.current;
@@ -31,8 +31,40 @@ export default function MobileCarousel() {
     return () => el.removeEventListener("scroll", handleScroll);
   }, []);
 
+  /** Dynamic dots count */
+  useEffect(() => {
+    const updateDots = () => {
+      const el = mobileRef.current;
+      if (!el) return;
+      const cardWidth = el.querySelector("div > div")?.clientWidth || 300;
+      const visibleCards = Math.floor(el.clientWidth / cardWidth) || 1;
+      const totalPages = Math.ceil(productionData.length / visibleCards);
+      setDotCount(totalPages);
+    };
+
+    updateDots();
+    window.addEventListener("resize", updateDots);
+    return () => window.removeEventListener("resize", updateDots);
+  }, []);
+
+  /** Track scroll to update active dot */
+  useEffect(() => {
+    const el = mobileRef.current;
+    if (!el) return;
+
+    const handleScroll = () => {
+      const totalWidth = el.scrollWidth - el.clientWidth;
+      const scrollRatio = el.scrollLeft / totalWidth;
+      const newIndex = Math.round(scrollRatio * (dotCount - 1));
+      setActiveIndex(newIndex);
+    };
+
+    el.addEventListener("scroll", handleScroll);
+    return () => el.removeEventListener("scroll", handleScroll);
+  }, [dotCount]);
+
   return (
-    <div className="md:hidden flex flex-col items-center text-center gap-10">
+    <div className="md:hidden flex flex-col items-center text-center gap-10 pr-6">
       <SectionTitle>Les dernières publications</SectionTitle>
 
       <div
@@ -52,22 +84,18 @@ export default function MobileCarousel() {
       <div className="flex justify-between w-full items-center">
         {/* Controls */}
         <div className="flex items-center justify-center gap-4 mt-6">
-          <Button
-            variant="outline"
-            size="icon"
+          <button
             onClick={() => scroll("left")}
-            className="rounded-full w-12 h-12 border border-[var(--dots)]"
+            className="rounded-full w-12 h-12 border hover:border-primary grid place-content-center"
           >
-            <ArrowLeftIcon className="w-5 h-5" />
-          </Button>
-          <Button
-            variant="outline"
-            size="icon"
+            <ArrowLeftIcon className="w-6 h-6" />
+          </button>
+          <button
             onClick={() => scroll("right")}
-            className="rounded-full w-12 h-12 border"
+            className="rounded-full w-12 h-12 border hover:border-primary grid place-content-center"
           >
-            <ArrowRight className="w-5 h-5" />
-          </Button>
+            <ArrowRightIcon className="w-6 h-6" />
+          </button>
         </div>
 
         {/* Dots */}
@@ -77,7 +105,7 @@ export default function MobileCarousel() {
               key={i}
               className={clsx(
                 "h-2 rounded-full transition-all duration-300",
-                activeIndex === i ? "bg-primary w-8" : "bg-[var(--dots)] w-2"
+                activeIndex === i ? "bg-primary w-8" : "bg-border w-2"
               )}
             />
           ))}

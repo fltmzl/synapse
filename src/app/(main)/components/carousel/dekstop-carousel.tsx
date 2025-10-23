@@ -1,16 +1,12 @@
 "use client";
 
 import { useRef, useState, useEffect } from "react";
-import Image from "next/image";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { ArrowLeft, ArrowRight } from "lucide-react";
 import clsx from "clsx";
-import { H1 } from "@/components/typography/h1";
-import { H2 } from "@/components/typography/h2";
 import SectionTitle from "@/components/typography/section-title";
 import { productionData } from "@/data/news-data";
 import ProductionCard from "../card/production-card";
+import { ArrowLeftIcon } from "@/icons/arrow-left-icon";
+import { ArrowRightIcon } from "@/icons/arrow-right-icon";
 
 export default function DesktopCarousel() {
   const desktopRef = useRef<HTMLDivElement | null>(null);
@@ -24,7 +20,7 @@ export default function DesktopCarousel() {
     const scrollWidth = el.clientWidth;
     el.scrollBy({
       left: dir === "left" ? -scrollWidth : scrollWidth,
-      behavior: "smooth",
+      behavior: "smooth"
     });
   };
 
@@ -62,28 +58,24 @@ export default function DesktopCarousel() {
 
   return (
     <div className="hidden h-full md:flex items-start gap-10">
-          <div className="flex flex-col justify-between h-full items-start w-full max-w-xs shrink-0">
+      <div className="flex flex-col justify-between h-full items-start w-full max-w-xs shrink-0">
         <SectionTitle>Les dernières publications</SectionTitle>
 
         <div className="flex flex-row justify-between w-full items-center">
           {/* Arrows */}
           <div className="flex items-center gap-4">
-            <Button
-              variant="outline"
-              size="icon"
+            <button
               onClick={() => scroll("left")}
-              className="rounded-full w-12 h-12 border"
+              className="rounded-full w-12 h-12 border hover:border-primary grid place-content-center"
             >
-              <ArrowLeft className="w-5 h-5" />
-            </Button>
-            <Button
-              variant="outline"
-              size="icon"
+              <ArrowLeftIcon className="w-6 h-6" />
+            </button>
+            <button
               onClick={() => scroll("right")}
-              className="rounded-full w-12 h-12 border"
+              className="rounded-full w-12 h-12 border hover:border-primary grid place-content-center"
             >
-              <ArrowRight className="w-5 h-5" />
-            </Button>
+              <ArrowRightIcon className="w-6 h-6" />
+            </button>
           </div>
 
           {/* Dots */}
@@ -93,9 +85,7 @@ export default function DesktopCarousel() {
                 key={i}
                 className={clsx(
                   "h-2 rounded-full transition-all duration-300",
-                  activeIndex === i
-                    ? "bg-primary w-8"
-                    : "bg-muted-foreground w-2"
+                  activeIndex === i ? "bg-primary w-8 h-[6px]" : "bg-border w-2"
                 )}
               />
             ))}
@@ -110,8 +100,13 @@ export default function DesktopCarousel() {
         style={{ WebkitOverflowScrolling: "touch" }}
       >
         {productionData.map((news, i) => (
-    <ProductionCard key={i} data={news} className="snap-start flex-shrink-0 w-[320px]" variant="desktop" />
-  ))}
+          <ProductionCard
+            key={i}
+            data={news}
+            className="snap-start flex-shrink-0 w-[320px]"
+            variant="desktop"
+          />
+        ))}
       </div>
     </div>
   );

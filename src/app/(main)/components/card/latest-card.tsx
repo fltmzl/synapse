@@ -4,6 +4,7 @@ import Image, { StaticImageData } from "next/image";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
+import { NewsItem } from "@/types/news.type";
 
 export default function LatestCard({ category, date, title, image }: NewsItem) {
   return (

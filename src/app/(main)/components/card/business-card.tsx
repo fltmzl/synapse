@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { businessPosts } from "@/data/business-data";
 import { H1 } from "@/components/typography/h1";
+import { H2 } from "@/components/typography/h2";
 
 export default function BusinessCard() {
   return (
@@ -18,13 +19,13 @@ export default function BusinessCard() {
             className="w-full mb-4 h-56 object-cover rounded-md"
           />
           <div className="flex flex-col gap-2">
-            <p className="text-base text-muted-foreground">
+            <span className="text-base tracking-[-0.01em] leading-[150%] text-muted-foreground font-regular">
               {businessPosts[0].date}
-            </p>
+            </span>
             <H1>{businessPosts[0].title}</H1>
-            <p className="line-clamp-3 mb-5 text-base text-muted-foreground">
+            <span className="line-clamp-2 mb-5 text-base tracking-[-0.01em] leading-[150%] text-muted-foreground font-regular">
               {businessPosts[0].desc}
-            </p>
+            </span>
           </div>
         </div>
 
@@ -38,12 +39,14 @@ export default function BusinessCard() {
               <Image
                 src={post.img}
                 alt={post.title}
-                width={96}
-                height={64}
-                className="rounded-sm object-cover flex-shrink-0"
+                width={120}
+                height={88}
+                className="rounded-[4px] object-cover flex-shrink-0"
               />
               <div className="flex flex-col justify-center gap-2">
-                <p className="text-xs">{post.date}</p>
+                <span className="text-sm text-muted-foreground">
+                  {post.date}
+                </span>
                 <h4 className="text-lg font-medium leading-snug tracking-tight">
                   {post.title}
                 </h4>

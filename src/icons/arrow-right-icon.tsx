@@ -1,6 +1,6 @@
 import { SVGProps } from "react";
 
-export function BuildingBankIcon(props: SVGProps<SVGSVGElement>) {
+export function ArrowRightIcon(props: SVGProps<SVGSVGElement>) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -15,8 +15,8 @@ export function BuildingBankIcon(props: SVGProps<SVGSVGElement>) {
         stroke="currentColor"
         strokeLinecap="round"
         strokeLinejoin="round"
-        strokeWidth="1.5"
-        d="M3 21h18M3 10h18M5 6l7-3l7 3M4 10v11m16-11v11M8 14v3m4-3v3m4-3v3"
+        strokeWidth="1"
+        d="M5 12h14m-6 6l6-6m-6-6l6 6"
       />
     </svg>
   );

@@ -1,6 +1,6 @@
 import { SVGProps } from "react";
 
-export function BuildingBankIcon(props: SVGProps<SVGSVGElement>) {
+export function BuildingSkyScraperIcon(props: SVGProps<SVGSVGElement>) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -16,7 +16,7 @@ export function BuildingBankIcon(props: SVGProps<SVGSVGElement>) {
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="1.5"
-        d="M3 21h18M3 10h18M5 6l7-3l7 3M4 10v11m16-11v11M8 14v3m4-3v3m4-3v3"
+        d="M3 21h18M5 21V7l8-4v18m6 0V11l-6-4M9 9v.01M9 12v.01M9 15v.01M9 18v.01"
       />
     </svg>
   );

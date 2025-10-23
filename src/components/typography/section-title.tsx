@@ -6,13 +6,13 @@ export default function SectionTitle({
   className
 }: PropsWithChildren<{ className?: string }>) {
   return (
-    <h1
+    <h2
       className={cn(
         "text-3xl lg:text-[40px] font-medium leading-[110%] tracking-[-0.03em]",
         className
       )}
     >
       {children}
-    </h1>
+    </h2>
   );
 }

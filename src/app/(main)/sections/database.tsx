@@ -14,6 +14,9 @@ import { databaseData } from "@/data/database-data";
 import SectionTitle from "@/components/typography/section-title";
 import TabsHeader from "@/components/tabs-header";
 import { H2 } from "@/components/typography/h2";
+import { DownloadIcon } from "@/icons/download-icon";
+import { ArrowRightIcon } from "@/icons/arrow-right-icon";
+import { ArrowRightBoldIcon } from "@/icons/arrow-right-bold-icon";
 
 export default function DatabasePage() {
   const tabs = Object.keys(databaseData);
@@ -42,7 +45,7 @@ export default function DatabasePage() {
                 <H2 className="text-muted-foreground pr-4">Année</H2>
                 <div className="flex items-center border-l pl-4">
                   <Select value={year} onValueChange={setYear}>
-                    <SelectTrigger>
+                    <SelectTrigger className="border-none text-foreground font-medium text-base leading-6 tracking-[-0.02em]">
                       <SelectValue placeholder="2024" />
                     </SelectTrigger>
                     <SelectContent>
@@ -72,8 +75,17 @@ export default function DatabasePage() {
                   <div className="absolute inset-0 flex items-center justify-center">
                     {/* Titik biru */}
                     <div className="relative flex flex-col items-center">
-                      <div className="lg:w-5 lg:h-5 w-3 h-3 rounded-full bg-primary border-4" /> <div className="relative mt-2 bg-white shadow-md rounded-md px-4 py-2 text-center"> <p className="text-sm text-muted-foreground leading-tight">The Islands of</p> <p className="text-sm font-semibold text-foreground">{activeTab}</p> <div className="absolute left-1/2 -top-1.5 -translate-x-1/2 w-2 h-2 rotate-45 bg-white border-l border-t border-gray-200" /> </div>
+                      <div className="lg:w-5 lg:h-5 w-3 h-3 rounded-full bg-primary border-4" />{" "}
+                      <div className="relative mt-2 bg-white shadow-md rounded-md px-4 py-2 text-center">
+                        <p className="text-xs text-muted-foreground leading-tight">
+                          The Islands of
+                        </p>
+                        <p className="text-sm font-semibold text-foreground">
+                          {activeTab}
+                        </p>
+                        <div className="absolute left-1/2 -top-1.5 -translate-x-1/2 w-2 h-2 rotate-45 bg-white border-l border-t border-gray-200" />{" "}
                       </div>
+                    </div>
                   </div>
                 </div>
 
@@ -92,16 +104,13 @@ export default function DatabasePage() {
 
                   {/* Buttons */}
                   <div className="w-full flex items-center flex-col lg:flex-row gap-2 lg:gap-0 justify-between pt-6 lg:py-6 lg:px-14">
-                    <Button
-                      variant="outline"
-                      className="text-sm w-full lg:w-max"
-                    >
-                      <Download />
+                    <Button variant="outline" className=" w-full lg:w-max">
+                      <DownloadIcon className="w-6 h-6" />
                       <span className="text-sm">Download slide</span>
                     </Button>
-                    <button className="text-blue-700 text-sm font-medium leading-5 flex items-center py-[10px] px-4">
-                      More about {activeTab}{" "}
-                      <ArrowRight size={18} className="ml-[6px]" />
+                    <button className="gap-2 text-primary text-sm font-medium leading-5 flex items-center py-[10px] px-4">
+                      More about {activeTab}
+                      <ArrowRightBoldIcon className="w-4 h-4 mt-0.5" />
                     </button>
                   </div>
                 </div>

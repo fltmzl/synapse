@@ -18,7 +18,7 @@ export default function TabsHeader({
           onClick={() => setActiveTab(key)}
           className={cn(
             "relative text-base font-medium px-8 py-4 leading-[130%] tracking-[-0.02em] transition",
-            "data-[state=active]:text-[var(--stroke)]",
+            "data-[state=active]:text-primary",
             "after:absolute after:left-0 after:bottom-0 after:w-full after:bg-primary after:origin-left after:transition-all after:duration-300",
             "after:h-[2px] after:scale-x-0",
             "data-[state=active]:after:scale-x-100 data-[state=active]:after:h-[2px] "

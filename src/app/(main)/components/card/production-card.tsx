@@ -8,6 +8,8 @@ import { ArrowRight } from "lucide-react";
 import clsx from "clsx";
 import { ProductionCardProps } from "@/types/news.type";
 import { H3 } from "@/components/typography/h3";
+import { ArrowRightIcon } from "@/icons/arrow-right-icon";
+import { ArrowRightBoldIcon } from "@/icons/arrow-right-bold-icon";
 
 export default function ProductionCard({
   data,
@@ -43,7 +45,7 @@ export default function ProductionCard({
           </div>
 
           <div className="flex items-center gap-1 text-md text-primary font-medium">
-            View more <ArrowRight className="w-5 h-5" />
+            View more <ArrowRightBoldIcon className="w-5 h-5" />
           </div>
         </CardContent>
       </Card>
