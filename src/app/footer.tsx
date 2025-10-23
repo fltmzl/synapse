@@ -12,7 +12,7 @@ export default function Footer() {
   return (
     <div className="bg-[#122255]">
       <footer className="w-full max-w-7xl mx-auto text-[#94A3B8] py-12 lg:py-20 px-6">
-        <div className="grid lg:grid-cols-2 gap-10 pb-10 border-b border-border/10">
+        <div className="flex flex-col lg:flex-row lg:justify-between gap-10 pb-10 border-b border-border/10">
           <div>
             <div className="flex justify-start mb-8 lg:mb-10">
               <BrandLogo type="white" />
@@ -34,7 +34,7 @@ export default function Footer() {
             </ul>
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-10">
+          <div className="flex flex-col lg:flex-row lg:justify-between gap-10 max-w-6/12">
             <div>
               <h4 className="text-white mb-4 text-sm lg:text-base">Menu</h4>
               <ul className="space-y-4">
@@ -53,12 +53,12 @@ export default function Footer() {
               </ul>
             </div>
 
-            <div>
+            <div className="lg:basis-7/12">
               <h4 className="text-white mb-4 text-sm lg:text-base">
                 Categories
               </h4>
 
-              <div className="grid lg:grid-cols-2 gap-4 lg:gap-20">
+              <div className="flex flex-col lg:flex-row lg:justify-between gap-4 lg:gap-20">
                 <ul className="space-y-4">
                   <li>
                     <Link href="/politique">Politique</Link>
