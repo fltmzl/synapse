@@ -1,6 +1,6 @@
 import { SVGProps } from "react";
 
-export function ArrowUpRightIcon(props: SVGProps<SVGSVGElement>) {
+export function ArrowDownIcon(props: SVGProps<SVGSVGElement>) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -16,7 +16,7 @@ export function ArrowUpRightIcon(props: SVGProps<SVGSVGElement>) {
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="1.5"
-        d="M17 7L7 17M8 7h9v9"
+        d="M12 5v14m6-6l-6 6m-6-6l6 6"
       />
     </svg>
   );

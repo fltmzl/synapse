@@ -1,5 +1,5 @@
-import DesktopCarousel from "../(landing-page)/components/carousel/dekstop-carousel";
-import MobileCarousel from "../(landing-page)/components/carousel/mobile-carousel";
+import DesktopCarousel from "../components/carousel/dekstop-carousel";
+import MobileCarousel from "../components/carousel/mobile-carousel";
 
 export default function LatestProductions() {
   return (

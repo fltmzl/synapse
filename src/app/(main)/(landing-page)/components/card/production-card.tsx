@@ -38,8 +38,15 @@ export default function ProductionCard({
         <CardContent className="px-0 flex flex-col gap-5">
           <div className="flex flex-col gap-2">
             <div className="flex flex-row">
-              <H3 className="border-r pr-3">{data.category}</H3>
-              <H3 className="pl-3">{data.date}</H3>
+              <span className="text-sm tracking-[-0.01em] leading-[140%] text-muted-foreground font-regular">
+                {data.category}
+              </span>
+              <div className="mx-3 relative flex items-center">
+                <span className="block w-px h-[12px] bg-border relative top-[1px]" />
+              </div>
+              <span className="text-sm tracking-[-0.01em] leading-[140%] text-muted-foreground font-regular">
+                {data.date}
+              </span>
             </div>
             <H1>{data.title}</H1>
           </div>

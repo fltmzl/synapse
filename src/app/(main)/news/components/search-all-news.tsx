@@ -9,7 +9,7 @@ type SearchBarProps = {
   onSearch: (value: string) => void;
 };
 
-export const SearchBar = ({ onSearch }: SearchBarProps) => {
+export const SearchAll = ({ onSearch }: SearchBarProps) => {
   const [value, setValue] = useState("");
 
   return (
