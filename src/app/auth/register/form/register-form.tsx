@@ -43,7 +43,11 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-export default function RegisterForm() {
+type Props = {
+  onSuccess?: () => void;
+};
+
+export default function RegisterForm({ onSuccess }: Props) {
   const router = useRouter();
 
   const [showPassword, setShowPassword] = useState(false);
@@ -91,6 +95,7 @@ export default function RegisterForm() {
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log("register");
+    onSuccess?.();
     // registerMutation.mutate(values, {
     //   onSuccess: () => {
     //     router.push("/auth/register-success?email=" + values.email);
@@ -139,7 +144,7 @@ export default function RegisterForm() {
             name="lastName"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Nom</FormLabel>
+                <FormLabel className="label-required">Nom</FormLabel>
                 <FormControl>
                   <Input placeholder="Enter your last name" {...field} />
                 </FormControl>

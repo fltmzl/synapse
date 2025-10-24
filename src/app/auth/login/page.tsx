@@ -5,7 +5,7 @@ import LoginForm from "./form/login-form";
 
 export default function LoginPage() {
   return (
-    <div className="max-w-6xl mx-auto my-12 px-6 lg:min-h-dvh grid place-content-center">
+    <div className="max-w-6xl mx-auto my-12 px-6 min-h-96 lg:min-h-dvh grid place-content-center">
       <div className="grid lg:grid-cols-2 gap-10">
         <div className="flex flex-col items-start gap-6 lg:gap-12">
           <div>
@@ -41,7 +41,7 @@ export default function LoginPage() {
                 <span>Downloadable reports & visual dashboards</span>
               </li>
             </ul>
-            <p className="mt-6">Let&apos;s begin</p>
+            <p className="mt-6">Let&apos;s begin.</p>
           </div>
         </div>
 

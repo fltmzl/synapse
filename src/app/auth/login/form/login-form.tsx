@@ -37,7 +37,7 @@ export default function LoginForm() {
       email: "",
       password: ""
     },
-    mode: "onSubmit"
+    mode: "all"
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
@@ -74,7 +74,7 @@ export default function LoginForm() {
             <FormItem>
               <FormLabel className="label-required">Email</FormLabel>
               <FormControl>
-                <Input placeholder="Enter your email" {...field} />
+                <Input placeholder="Enter your email address" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
