@@ -2,9 +2,9 @@
 
 import SectionTitle from "@/components/typography/section-title";
 import { H4 } from "@/components/typography/h4";
-import BusinessCard from "../components/card/business-card";
-import BusinessForecast from "../components/card/forecast-card";
-import BusinessForm from "../components/form/business-form";
+import BusinessCard from "../(landing-page)/components/card/business-card";
+import BusinessForecast from "../(landing-page)/components/card/forecast-card";
+import BusinessForm from "../(landing-page)/components/form/business-form";
 
 export default function BusinessCorner() {
   return (

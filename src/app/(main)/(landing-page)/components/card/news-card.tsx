@@ -2,14 +2,10 @@
 
 import { H1 } from "@/components/typography/h1";
 import { H2 } from "@/components/typography/h2";
+import { NewsItem } from "@/types/news.type";
 import Image from "next/image";
 
-export default function NewsCard({
-  category,
-  date,
-  title,
-  image
-}: NewsItem) {
+export default function NewsCard({ category, date, title, image }: NewsItem) {
   return (
     <div className="flex flex-col gap-5">
       <div className="relative w-full h-[260px] overflow-hidden rounded-md">

@@ -1,8 +1,8 @@
 import { H2 } from "@/components/typography/h2";
 import { Title } from "@/components/typography/title";
 import { Button } from "@/components/ui/button";
-import NewsCard from "../components/card/news-card";
 import { newsData } from "@/data/news-data";
+import NewsCard from "../(landing-page)/components/card/news-card";
 
 export default function NewsSection() {
   return (

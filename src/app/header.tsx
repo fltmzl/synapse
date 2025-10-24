@@ -9,13 +9,12 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 
 const NAV_ITEMS = [
-  "Actualité",
-  "Base de données",
-  "Acteurs",
-  "Structure",
-  "Le coin des affaires"
+  { label: "Actualité", href: "/actualite" },
+  { label: "Base de données", href: "/base-de-donnees" },
+  { label: "Acteurs", href: "/acteurs" },
+  { label: "Structure", href: "/structure" },
+  { label: "Le coin des affaires", href: "/le-coin-des-affaires" }
 ];
-
 export default function Header() {
   const isLoggedIn = false;
 
@@ -45,11 +44,8 @@ export default function Header() {
           {/* Desktop nav */}
           <nav className="hidden md:flex gap-8 text-base">
             {NAV_ITEMS.map((item) => (
-              <Link
-                key={item}
-                href="#"
-              >
-                {item}
+              <Link key={item.href} href={item.href}>
+                {item.label}
               </Link>
             ))}
           </nav>
@@ -62,7 +58,9 @@ export default function Header() {
               </Avatar>
             ) : (
               <Link href="/auth/login" passHref>
-                <Button className="hidden md:block px-6 py-[10px]" size="md">Login</Button>
+                <Button className="hidden md:block px-6 py-[10px]" size="md">
+                  Login
+                </Button>
               </Link>
             )}
           </div>
@@ -89,12 +87,8 @@ export default function Header() {
           <div className="py-12 flex flex-col gap-10">
             <div className=" px-6 flex flex-col items-center gap-8">
               {NAV_ITEMS.map((item) => (
-                <Link
-                  key={item}
-                  href="#"
-                  className="text-base text-center w-full"
-                >
-                  {item}
+                <Link key={item.href} href={item.href}>
+                  {item.label}
                 </Link>
               ))}
             </div>
