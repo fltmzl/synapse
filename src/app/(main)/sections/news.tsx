@@ -1,33 +1,12 @@
 import { H2 } from "@/components/typography/h2";
 import { Title } from "@/components/typography/title";
 import { Button } from "@/components/ui/button";
-import NewsCard from "../components/card/news-card";
-
-const newsData: NewsItem[] = [
-  {
-    category: "Economy",
-    date: "Sep 2, 2025",
-    title: "Guadeloupe unemployment drops to 12% in Q3 2025",
-    image: "/images/news-1.png"
-  },
-  {
-    category: "Investment",
-    date: "Aug 29, 2025",
-    title: "Martinique SMEs secure €15M funding for green transition projects",
-    image: "/images/news-2.png"
-  },
-  {
-    category: "Trade",
-    date: "Aug 25, 2025",
-    title:
-      "Mayotte reports 5% increase in export activities for first half of 2025",
-    image: "/images/news-3.png"
-  }
-];
+import { newsData } from "@/data/news-data";
+import NewsCard from "../(landing-page)/components/card/news-card";
 
 export default function NewsSection() {
   return (
-    <section className="w-full flex flex-col gap-10 lg:gap-16 pt-0 pb-25 px-6 lg:px-0 max-w-7xl mx-auto">
+    <section className="w-full flex flex-col gap-10 lg:gap-16 pt-0 pb-12 lg:pb-25 px-6 max-w-7xl mx-auto">
       {/* Banner */}
       <div className="w-full relativ flex flex-col gap-8">
         <div className="bg-emerald-950 w-full h-[620px] rounded-lg"></div>
@@ -41,7 +20,9 @@ export default function NewsSection() {
               Synapse est une base informationnelle, économique, politique,
               sociale et citoyenne dédiée aux Outre-Mer
             </H2>
-            <Button className="w-max"> Accéder</Button>
+            <Button className="w-max" size={"default"}>
+              Accéder
+            </Button>
           </div>
         </div>
       </div>

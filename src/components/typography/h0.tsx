@@ -9,7 +9,7 @@ export function H0({ className, children }: PropsWithChildren<Props>) {
   return (
     <p
       className={cn(
-        "text-secondary scroll-m-20 text-center text-[32px] font-semibold tracking-tight text-balance leading-[120%]",
+        "text-foreground scroll-m-20 text-left lg:text-center text-3xl font-medium tracking-tight leading-[120%]",
         className
       )}
     >
