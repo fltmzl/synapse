@@ -39,7 +39,7 @@ export default function PricingPlanCard({
           <Button
             size="lg"
             variant="default"
-            className="w-full bg-background text-foreground invert-100"
+            className="w-full bg-background text-foreground invert-100 hover:bg-background/80"
           >
             Get enterprise
           </Button>
@@ -48,7 +48,7 @@ export default function PricingPlanCard({
   };
 
   return (
-    <Card className="p-6 w-full">
+    <Card className="p-6 w-full rounded-2lg">
       <CardHeader className="p-0 gap-2">
         <CardTitle className="lg:text-xl">{title}</CardTitle>
         <CardDescription className="mt-0">{description}</CardDescription>

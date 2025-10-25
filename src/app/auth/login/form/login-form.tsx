@@ -111,7 +111,7 @@ export default function LoginForm() {
 
         <div className="text-end">
           <Link
-            href={"/auth/forgot-password"}
+            href={"/auth/reset-password"}
             className="text-sm tracking-tight text-primary"
           >
             Forgot Password ?

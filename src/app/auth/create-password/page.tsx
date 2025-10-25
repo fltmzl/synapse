@@ -75,7 +75,7 @@ export default function CreatePasswordPage() {
       </div>
 
       <main>
-        <Card className="py-8 lg:py-12 px-6 lg:px-10">
+        <Card className="py-8 lg:py-12 px-6 lg:px-10 rounded-2lg">
           <CardTitle className="text-xl lg:text-2xl text-center tracking-tight font-medium">
             Créer un mot de passe
           </CardTitle>

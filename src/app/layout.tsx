@@ -40,7 +40,6 @@ export default function RootLayout({
       <body
         className={`${geist.variable} ${geistMono.variable} antialiased bg-body`}
       >
-        <Header />
         <ClientProviders>{children}</ClientProviders>
         <Footer />
         <Toaster position="bottom-right" richColors={true} />

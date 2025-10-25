@@ -252,7 +252,7 @@ input[type="password"] {
     @apply text-sm lg:text-base text-muted-foreground font-normal
   }
   li::marker {
-    color: var(--color-foreground) !important;
+    color: var(--color-muted-foreground) !important;
   }
   .muted-marker li::marker {
     color: var(--color-muted-foreground) !important;
@@ -263,6 +263,9 @@ input[type="password"] {
   }
   h1,h2,h3 {
     @apply tracking-tighter
+  }
+  section {
+    scroll-margin-top: 100px; 
   }
 }
 
@@ -317,5 +320,11 @@ input[type="password"] {
     .hide-scrollbar-mobile::-webkit-scrollbar {
       display: none;
     }
+  }
+}
+
+@layer components {
+  .toc-list {
+    @apply list-decimal list-outside pl-6 leading-relaxed
   }
 }
