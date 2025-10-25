@@ -63,6 +63,7 @@ html {
   0px 1px 1px -0.5px #2A334608,
   0px 0px 0px 1px #0E3F7E0F;
   --color-section: var(--section);
+  --color-body: var(--body);
 }
 
 :root {
@@ -107,6 +108,7 @@ html {
   --stroke:#2447D5;
   --dots:#CBD5E1;
   --tags:#BCDBFF;
+  --body: #F9FAFB;
 }
 
 .dark {
@@ -150,7 +152,7 @@ html {
   --stroke: #8EA4FF;
   --dots: #475569; 
   --tags: #1E3A8A; 
-
+  --body: #202020;
 }
 
 /* Start of Custom Scrollbar */
