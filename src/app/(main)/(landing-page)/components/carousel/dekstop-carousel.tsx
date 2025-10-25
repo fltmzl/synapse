@@ -66,13 +66,13 @@ export default function DesktopCarousel() {
           <div className="flex items-center gap-4">
             <button
               onClick={() => scroll("left")}
-              className="rounded-full w-12 h-12 border hover:border-primary grid place-content-center"
+              className="bg-background rounded-full w-12 h-12 border hover:border-primary grid place-content-center"
             >
               <ArrowLeftIcon className="w-6 h-6" />
             </button>
             <button
               onClick={() => scroll("right")}
-              className="rounded-full w-12 h-12 border hover:border-primary grid place-content-center"
+              className="bg-background rounded-full w-12 h-12 border hover:border-primary grid place-content-center"
             >
               <ArrowRightIcon className="w-6 h-6" />
             </button>
@@ -84,8 +84,8 @@ export default function DesktopCarousel() {
               <span
                 key={i}
                 className={clsx(
-                  "h-2 rounded-full transition-all duration-300",
-                  activeIndex === i ? "bg-primary w-8 h-[6px]" : "bg-border w-2"
+                  "h-1.5 rounded-full transition-all duration-300",
+                  activeIndex === i ? "bg-primary w-8 h-1.5" : "bg-border w-1.5"
                 )}
               />
             ))}

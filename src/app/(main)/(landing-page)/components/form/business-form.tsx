@@ -68,12 +68,7 @@ export default function BusinessForm() {
               name="firstName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>
-                    <div className="flex items-center">
-                      <span>Prénom</span>
-                      <span className="text-destructive text-sm pl-1">*</span>
-                    </div>
-                  </FormLabel>
+                  <FormLabel className="label-required">Prénom</FormLabel>
                   <FormControl>
                     <Input placeholder="Enter your first name" {...field} />
                   </FormControl>
@@ -88,12 +83,8 @@ export default function BusinessForm() {
               name="lastName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>
-                    <div className="flex items-center">
-                      <span>Nom</span>
-                      <span className="text-destructive text-sm pl-1">*</span>
-                    </div>
-                  </FormLabel>
+                  <FormLabel className="label-required">Nom</FormLabel>
+
                   <FormControl>
                     <Input placeholder="Enter your last name" {...field} />
                   </FormControl>
@@ -109,12 +100,8 @@ export default function BusinessForm() {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>
-                  <div className="flex items-center">
-                    <span>Email</span>
-                    <span className="text-destructive text-sm pl-1">*</span>
-                  </div>
-                </FormLabel>
+                <FormLabel className="label-required">Email</FormLabel>
+
                 <FormControl>
                   <Input
                     type="email"
@@ -134,17 +121,16 @@ export default function BusinessForm() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>
-                  <div className="flex items-center">
-                    <span>Type de service souhaité</span>
-                    <span className="text-destructive text-sm pl-1">*</span>
-                  </div>
+                  <FormLabel className="label-required">
+                    Type de service souhaité
+                  </FormLabel>
                 </FormLabel>
                 <FormControl>
                   <Select onValueChange={field.onChange} value={field.value}>
-                    <SelectTrigger className="w-full h-10 rounded-md border px-3">
+                    <SelectTrigger className="w-full">
                       <SelectValue placeholder="Select a service you want" />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="select-content-width-full">
                       <SelectItem value="data">Data report</SelectItem>
                       <SelectItem value="consulting">Consulting</SelectItem>
                       <SelectItem value="research">Research request</SelectItem>
@@ -162,16 +148,12 @@ export default function BusinessForm() {
             name="description"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>
-                  <div className="flex items-center">
-                    <span>Description</span>
-                    <span className="text-destructive text-sm pl-1">*</span>
-                  </div>
-                </FormLabel>
+                <FormLabel className="label-required">Description</FormLabel>
+
                 <FormControl>
                   <Textarea
                     placeholder="Décrivez votre demande pour l'obtention d'un chiffrage"
-                    className="min-h-[120px] resize-none"
+                    className="min-h-[120px] resize-none text-sm"
                     {...field}
                   />
                 </FormControl>

@@ -62,6 +62,7 @@ html {
   0px 2px 2px -1px #2A33460A,
   0px 1px 1px -0.5px #2A334608,
   0px 0px 0px 1px #0E3F7E0F;
+  --color-section: var(--section);
 }
 
 :root {
@@ -102,7 +103,7 @@ html {
   --sidebar-accent-foreground: #173DBA;
   --sidebar-border: oklch(0.92 0.004 286.32);
   --sidebar-ring: oklch(0.705 0.015 286.067);
-  --section:oklch(98.46% 0.002 247.84);
+  --section: oklch(98.46% 0.002 247.84);
   --stroke:#2447D5;
   --dots:#CBD5E1;
   --tags:#BCDBFF;
@@ -145,6 +146,11 @@ html {
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.552 0.016 285.938);
+  --section: oklch(12% 0.002 247.84);
+  --stroke: #8EA4FF;
+  --dots: #475569; 
+  --tags: #1E3A8A; 
+
 }
 
 /* Start of Custom Scrollbar */
@@ -193,6 +199,11 @@ input[type="password"] {
 .popover-content-width-full {
   width: var(--radix-popover-trigger-width);
   max-height: var(--radix-popover-content-available-height);
+}
+
+.select-content-width-full {
+  width: var(--radix-select-trigger-width);
+  max-height: var(--radix-select-content-available-height);
 }
 
 .prose-container {

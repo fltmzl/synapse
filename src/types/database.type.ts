@@ -4,10 +4,10 @@ export type StatItem = {
 };
 
 export type DatabaseRegionData = {
+  id: string;
+  title: string;
   image: string;
   stats: StatItem[];
 };
 
-export type DatabaseData = {
-  [region: string]: DatabaseRegionData;
-};
+export type DatabaseData = DatabaseRegionData[];

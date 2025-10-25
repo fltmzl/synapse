@@ -1,6 +1,6 @@
-import { H2 } from "@/components/typography/h2";
 import { Title } from "@/components/typography/title";
 import { Button } from "@/components/ui/button";
+import VideoPlayer from "@/components/video-player";
 import { newsData } from "@/data/news-data";
 import NewsCard from "../components/card/news-card";
 
@@ -9,7 +9,17 @@ export default function NewsSection() {
     <section className="w-full flex flex-col gap-10 lg:gap-16 pt-0 pb-12 lg:pb-25 px-6 max-w-7xl mx-auto">
       {/* Banner */}
       <div className="w-full relativ flex flex-col gap-8">
-        <div className="bg-emerald-950 w-full h-[620px] rounded-lg"></div>
+        <VideoPlayer
+          buttonPlayerType="largeBlur"
+          poster="/images/jumbotron-video-thumb.png"
+          classNames={{
+            wrapper:
+              "aspect-video min-h-[320px] md:min-h-[480px] lg:min-h-[620px] transition-all duration-500 ease-in-out"
+          }}
+        >
+          <source src="/assets/video/jumbotron-video.webm" type="video/mp4" />
+          Your browser does not support the video tag.
+        </VideoPlayer>
 
         <div className="flex justify-between flex-col lg:flex-row items-center lg:items-start gap-4 lg:gap-0">
           <div>
@@ -20,9 +30,7 @@ export default function NewsSection() {
               Synapse est une base informationnelle, économique, politique,
               sociale et citoyenne dédiée aux Outre-Mer
             </p>
-            <Button className="w-max" size={"default"}>
-              Accéder
-            </Button>
+            <Button className="w-max">Accéder</Button>
           </div>
         </div>
       </div>

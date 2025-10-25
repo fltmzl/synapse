@@ -41,7 +41,7 @@ export default function FindDataPage() {
       </div>
 
       <div className="w-full max-w-[58rem] mx-auto ">
-        <div className="bg-[var(--section)] border rounded-[14px] px-2">
+        <div className="bg-section border rounded-[14px] px-2">
           {/* Source Filter */}
           <div className="flex gap-2 px-4 py-4 pb-0 overflow-x-auto hide-scrollbar lg:overflow-x-hidden ">
             <h1 className="flex items-center justify-center text-muted-foreground">
@@ -72,7 +72,7 @@ export default function FindDataPage() {
 
                   <span
                     className={cn(
-                      "transition-colors text-base tracking-[-0.01em] leading-[150%] text-muted-foreground font-medium",
+                      "transition-colors text-base tracking-[-0.01em] leading-[150%] text-muted-foreground font-normal",
                       activeSource === name ? "text-primary" : "text-foreground"
                     )}
                   >

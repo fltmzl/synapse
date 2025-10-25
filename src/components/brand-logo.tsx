@@ -15,8 +15,8 @@ export default function BrandLogo({ type = "default" }: Props) {
             : "/assets/logo/brand-white.svg"
         }
         alt="synapse"
-        width={115}
-        height={40}
+        width={110}
+        height={38}
         priority
       />
     </Link>

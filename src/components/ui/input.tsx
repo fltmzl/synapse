@@ -13,7 +13,7 @@ function Input({ className, type, ...props }: React.ComponentProps<"input">) {
         "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
         "font-normal text-sm placeholder:font-normal placeholder:text-sm placeholder:tracking-tight py-3",
         "bg-background",
-        "disabled:bg-muted disabled:text-foreground disabled:opacity-100 placeholder:text-muted-foreground",
+        "disabled:bg-muted disabled:text-foreground disabled:opacity-100 placeholder:text-muted-foreground tracking-tight",
         className
       )}
       {...props}

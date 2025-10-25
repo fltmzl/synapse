@@ -1,12 +1,12 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
-import Link from "next/link";
-import { Menu } from "lucide-react";
-import { Avatar } from "@radix-ui/react-avatar";
+import BrandLogo from "@/components/brand-logo";
 import { AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import Image from "next/image";
+import { Avatar } from "@radix-ui/react-avatar";
+import { Menu } from "lucide-react";
+import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
 
 const NAV_ITEMS = [
   { label: "Actualité", href: "/news" },
@@ -33,16 +33,14 @@ export default function Header() {
   }, [open]);
 
   return (
-    <header className="flex flex-col w-full max-w-[1440px] mx-auto px-6 py-8">
+    <header className="flex flex-col w-full max-w-[1310px] mx-auto px-6 py-8">
       <div>
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="text-2xl font-serif">
-            <Image src="/images/logo.png" alt="Logo" width={100} height={80} />
-          </Link>
+          <BrandLogo />
 
           {/* Desktop nav */}
-          <nav className="hidden md:flex gap-8 text-base">
+          <nav className="hidden md:flex md:gap-4 lg:gap-8 text-base">
             {NAV_ITEMS.map((item) => (
               <Link key={item.href} href={item.href}>
                 {item.label}
@@ -57,11 +55,9 @@ export default function Header() {
                 <AvatarFallback></AvatarFallback>
               </Avatar>
             ) : (
-              <Link href="/auth/login" passHref>
-                <Button className="hidden md:block px-6 py-[10px]" size="md">
-                  Login
-                </Button>
-              </Link>
+              <Button asChild className="hidden md:block py" size="md">
+                <Link href="/auth/login">Login</Link>
+              </Button>
             )}
           </div>
 

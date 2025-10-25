@@ -86,20 +86,20 @@ export default function MobileCarousel() {
         <div className="flex items-center justify-center gap-4 mt-6">
           <button
             onClick={() => scroll("left")}
-            className="rounded-full w-12 h-12 border hover:border-primary grid place-content-center"
+            className="bg-background rounded-full w-12 h-12 border hover:border-primary grid place-content-center"
           >
             <ArrowLeftIcon className="w-6 h-6" />
           </button>
           <button
             onClick={() => scroll("right")}
-            className="rounded-full w-12 h-12 border hover:border-primary grid place-content-center"
+            className="bg-background rounded-full w-12 h-12 border hover:border-primary grid place-content-center"
           >
             <ArrowRightIcon className="w-6 h-6" />
           </button>
         </div>
 
         {/* Dots */}
-        <div className="flex items-center justify-center gap-2 mt-4">
+        <div className="flex items-center justify-center gap-1 mt-4">
           {productionData.map((_, i) => (
             <span
               key={i}

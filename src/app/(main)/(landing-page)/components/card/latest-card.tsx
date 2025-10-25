@@ -1,10 +1,10 @@
 "use client";
 
-import Image, { StaticImageData } from "next/image";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { ArrowRight } from "lucide-react";
-import Link from "next/link";
 import { NewsItem } from "@/types/news.type";
+import { ArrowRight } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
 
 export default function LatestCard({ category, date, title, image }: NewsItem) {
   return (
@@ -32,7 +32,7 @@ export default function LatestCard({ category, date, title, image }: NewsItem) {
 
         <Link
           href="#"
-          className="flex items-center gap-1 text-sm text-blue-600 hover:text-blue-700 font-medium px-1"
+          className="flex items-center gap-1 text-sm text-primary hover:text-primary font-medium px-1"
         >
           View more <ArrowRight size={14} />
         </Link>
