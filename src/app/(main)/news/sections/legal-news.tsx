@@ -10,6 +10,7 @@ import { SortLegal } from "../components/sort-legal";
 import { PlatformFilter } from "../components/platform-legal-filter";
 import { LegalFilter } from "../components/legal-filter";
 import { LegalCard } from "../card/legal-news-card";
+import SectionContainer from "@/components/container/section-container";
 
 export default function LegalNews() {
   const [category, setCategory] = useState("Tout");
@@ -25,7 +26,7 @@ export default function LegalNews() {
     .filter((n) => n.title.toLowerCase().includes(query.toLowerCase()));
 
   return (
-    <section className="bg-background px-4 py-6 lg:p-20 max-7xl border rounded-md">
+    <SectionContainer className="px-4 py-6 lg:p-20 max-7xl">
       <div className="flex flex-col gap-6 lg:gap-16">
         <div className="flex flex-col items-center justify-center gap-8 w-full">
           <div className="flex flex-col gap-8 ">
@@ -76,6 +77,6 @@ export default function LegalNews() {
           </Button>
         </div>
       </div>
-    </section>
+    </SectionContainer>
   );
 }

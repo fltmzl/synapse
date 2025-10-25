@@ -1,54 +1,190 @@
 import {
   CategoryNews,
-  LegalNewsItem,
   NewsItem,
-  SocialPost
+  LegalNewsItem,
+  SocialPost,
+  productionDataType
 } from "@/types/news.type";
 
 export const newsData: NewsItem[] = [
   {
-    category: "Economy",
-    date: "Sep 2, 2025",
-    title: "Guadeloupe unemployment drops to 12% in Q3 2025",
-    image: "/images/news/news-1.png"
-  },
-  {
-    category: "Investment",
-    date: "Aug 29, 2025",
+    slug: "martinique-green-transition-fund-2025",
     title: "Martinique SMEs secure €15M funding for green transition projects",
-    image: "/images/news/news-2.png"
+    category: "Juridique",
+    author: "Regional Council of Martinique",
+    date: "May 25, 2025",
+    images: [
+      "/images/news/news-1.png",
+      "/images/news/news-2.png",
+      "/images/news/news-3.png"
+    ],
+    content: [
+      {
+        text: `Small and medium-sized enterprises (SMEs) across Martinique have received a significant boost in their drive toward sustainability, as a new €15 million funding package is launched to support green transition initiatives across the island.`
+      },
+      {
+        text: `The program — spearheaded by the French Development Agency (AFD) in partnership with the European Green Growth Fund (EGGF) and the Regional Council of Martinique — aims to accelerate the island’s economic transformation by promoting renewable energy, eco-innovation, and low-carbon development within local industries.`
+      },
+      {
+        heading: "Empowering local businesses for a sustainable future",
+        text: `The fund will primarily target Martinique’s agriculture, construction, tourism, and transport sectors, which together account for nearly 70% of the island’s carbon emissions. Through the initiative, eligible SMEs will receive a combination of low-interest loans, innovation grants, and technical support to help them modernize operations and reduce environmental impact.`
+      },
+      {
+        text: `“This investment is not just about funding projects,” said Isabelle Moreau, Regional Delegate for Economic Cooperation. “It’s about empowering local entrepreneurs to take the lead in building a more resilient and sustainable Martinique — one that creates jobs while protecting our natural heritage.”`
+      },
+      {
+        text: `The new funding will also help SMEs transition to renewable energy sources, such as solar, wind, and bioenergy, with several pilot installations already planned across the island. In Fort-de-France, for instance, food-processing cooperatives will receive financial and technical assistance to install solar panels and energy-efficient cooling systems, reducing operational emissions by up to 35%.`
+      },
+      {
+        heading: "Supporting innovation and green jobs",
+        text: `A portion of the fund — approximately €3 million — has been earmarked for innovation and research, encouraging startups and small firms to develop sustainable technologies tailored to the Caribbean climate. The initiative will also support vocational training programs to equip local workers with the skills needed in emerging green sectors.`
+      },
+      {
+        text: `“The transition to a greener economy will only succeed if it’s inclusive,” said Jean-Luc Pierre, President of the Chamber of Commerce of Martinique. “We must ensure that small businesses, farmers, and artisans all benefit from this transformation, not just large corporations.”`
+      },
+      {
+        text: `By 2030, the project aims to reduce Martinique’s SME carbon emissions by 40% and create over 1,200 green jobs, while fostering cross-island partnerships with Guadeloupe and Saint Lucia to share sustainable development expertise.`
+      },
+      {
+        heading: "Part of a broader regional effort",
+        text: `This initiative is part of the French Overseas Green Pact, a national policy framework launched in 2023 to support environmental transition across France’s overseas territories. The program prioritizes islands such as Martinique, Réunion, and Guadeloupe, which face unique climate challenges due to their reliance on imported energy and vulnerability to extreme weather events.`
+      },
+      {
+        text: `Experts believe the €15 million investment could mark a turning point in how overseas territories approach sustainability — not as an obligation, but as an opportunity.`
+      },
+      {
+        text: `“Martinique can become a regional model for the green economy,” said Dr. Claire Bérard, environmental economist at the University of the French Antilles. “If the private sector continues to innovate at this pace, the island could achieve carbon neutrality well before 2040.”`
+      }
+    ]
   },
   {
-    category: "Trade",
-    date: "Aug 25, 2025",
+    slug: "martinique-smes-secure-15m-funding",
+    title: "Martinique SMEs secure €15M funding for green transition projects",
+    category: "Analyse",
+    author: "Citizen",
+    date: "Aug 29, 2025",
+    images: [
+      "/images/news/news-2.png",
+      "/images/news/news-3.png",
+      "/images/news/news-4.png"
+    ],
+    content: [
+      {
+        text: `Small and medium-sized enterprises (SMEs) across Martinique have received over €15 million in funding to support their green transition efforts. The initiative will help companies reduce emissions and modernize production processes.`
+      },
+      {
+        heading: "Empowering local businesses for sustainability",
+        text: `The funding program encourages entrepreneurs to invest in renewable energy, waste management, and eco-friendly logistics. It is expected to create more than 400 green jobs across the island.`
+      },
+      {
+        heading: "Regional collaboration",
+        text: `This initiative is part of a broader Caribbean-wide green development plan, aligning Martinique with global sustainability goals.`
+      }
+    ]
+  },
+  {
+    slug: "mayotte-exports-increase-h1-2025",
     title:
       "Mayotte reports 5% increase in export activities for first half of 2025",
-    image: "/images/news/news-3.png"
+    category: "Juridique",
+    author: "Mayotte Trade Bureau",
+    date: "Aug 25, 2025",
+    images: [
+      "/images/news/news-3.png",
+      "/images/news/news-4.png",
+      "/images/news/news-5.png"
+    ],
+    content: [
+      {
+        text: `Mayotte’s export volume increased by 5% in the first half of 2025, driven primarily by agricultural products and artisanal goods. The rise highlights growing demand from European and East African markets.`
+      },
+      {
+        heading: "Agriculture and trade innovation",
+        text: `Farmers in Mayotte have adopted new digital supply chain systems to manage exports more efficiently. The regional government also introduced incentives for sustainable farming practices.`
+      },
+      {
+        text: `The local Chamber of Commerce stated that this growth represents “a strong signal of economic diversification.”`
+      }
+    ]
   },
   {
-    category: "Citizen",
+    slug: "overseas-territories-representation-parliament",
+    title:
+      "Debate intensifies over representation of overseas territories in parliament",
+    category: "Citoyenne",
+    author: "Le Journal Outre-mer",
     date: "Sep 2, 2025",
-    title:
-      "Debate intensifies over representation of overseas territories in parliament",
-    image: "/images/news/news-4.png"
+    images: [
+      "/images/news/news-4.png",
+      "/images/news/news-5.png",
+      "/images/news/news-6.png"
+    ],
+    content: [
+      {
+        text: `A growing political debate has emerged regarding how France’s overseas territories are represented in the national parliament. Lawmakers argue that the current system underrepresents island populations.`
+      },
+      {
+        heading: "Proposals for change",
+        text: `Several parliament members have suggested new representation models that better reflect demographic realities and ensure stronger local voices in decision-making.`
+      },
+      {
+        text: `Citizens’ groups across Guadeloupe and Réunion have called for public consultations to ensure transparency and participation.`
+      }
+    ]
   },
   {
-    category: "Politics",
+    slug: "unified-judicial-system-french-overseas",
+    title: "Unified judicial system proposed for French overseas territories",
+    category: "Politique",
+    author: "Le Monde Juridique",
     date: "Oct 29, 2025",
-    title:
-      "Debate intensifies over representation of overseas territories in parliament",
-    image: "/images/news/news-5.png"
+    images: [
+      "/images/news/news-5.png",
+      "/images/news/news-1.png",
+      "/images/news/news-2.png"
+    ],
+    content: [
+      {
+        text: `Legal experts are advocating for a unified judicial system across France’s overseas territories to improve efficiency and reduce administrative disparities.`
+      },
+      {
+        heading: "Legal consistency across territories",
+        text: `The reform would align judicial processes and court structures with those in mainland France, while maintaining consideration for local customs.`
+      },
+      {
+        text: `Critics, however, fear that such centralization might erode the autonomy of local courts and overlook specific regional issues.`
+      }
+    ]
   },
   {
-    category: "Law",
-    date: "Oct 15, 2025",
+    slug: "legal-experts-call-unified-judicial-system",
     title:
       "Legal experts call for unified judicial system across French overseas territories",
-    image: "/images/news/news-6.png"
+    category: "Politique",
+    author: "France Info",
+    date: "Oct 15, 2025",
+    images: [
+      "/images/news/news-6.png",
+      "/images/news/news-2.png",
+      "/images/news/news-3.png"
+    ],
+    content: [
+      {
+        text: `A coalition of legal scholars and government advisors has reiterated calls for a unified legal framework governing all French overseas territories.`
+      },
+      {
+        heading: "Addressing inequality and efficiency",
+        text: `The proposal seeks to streamline administrative processes, improve case management, and ensure equal access to justice across regions.`
+      },
+      {
+        heading: "Political implications",
+        text: `While the government has shown interest, some local representatives caution that any reform must respect territorial autonomy and cultural diversity.`
+      }
+    ]
   }
 ];
 
-export const productionData: NewsItem[] = [
+export const productionData: productionDataType[] = [
   {
     category: "Legislation",
     date: "Sep 2, 2025",
@@ -77,78 +213,81 @@ export const productionData: NewsItem[] = [
   }
 ];
 
-export const lastInfo: CategoryNews = {
-  politique: [
-    {
-      title: "French Assembly debates overseas tax reform bill",
-      description:
-        "The French Assembly is debating a tax reform bill for overseas territories, aiming to adjust fiscal structures and revenue allocation to create fairer economic conditions.",
-      date: "April 3, 2025",
-      image: "/images/actualite.png"
-    },
-    {
-      title: "French Senate reviews proposal on overseas economic autonomy",
-      description:
-        "The French Senate is reviewing a proposal to grant more autonomy to overseas territories, strengthening local governance and fiscal control.",
-      date: "April 3, 2025",
-      image: "/images/news-2.png"
-    },
-    {
-      title:
-        "Debate intensifies over representation of overseas territories in parliament",
-      description:
-        "A growing debate centers on how overseas territories are represented in parliament, with calls for stronger voices from these regions.",
-      date: "April 3, 2025",
-      image: "/images/news-3.png"
-    }
-  ],
-  juridique: [
-    {
-      title: "New legislation enhances worker rights in overseas regions",
-      description:
-        "The new bill aims to standardize labor protections across all French territories, ensuring fair conditions for workers.",
-      date: "March 20, 2025",
-      image: "/images/news-2.png"
-    },
-    {
-      title: "Court rules in favor of tax exemptions for SMEs",
-      description:
-        "A landmark court decision grants tax relief to small and medium enterprises operating in overseas French territories.",
-      date: "March 18, 2025",
-      image: "/images/news-3.png"
-    },
-    {
-      title: "Legal experts call for unified judicial system",
-      description:
-        "Legal professionals are urging the government to streamline the judicial system across overseas territories for consistency.",
-      date: "March 15, 2025",
-      image: "/images/news-1.png"
-    }
-  ],
-  citoyenne: [
-    {
-      title: "Youth programs foster innovation in overseas territories",
-      description:
-        "Social initiatives are helping young people develop digital skills and connect with global markets.",
-      date: "Feb 28, 2025",
-      image: "/images/news-3.png"
-    },
-    {
-      title: "Community hubs expand in rural regions",
-      description:
-        "Local governments are opening new centers to strengthen social engagement and cultural identity.",
-      date: "Feb 22, 2025",
-      image: "/images/news-2.png"
-    },
-    {
-      title: "Online platforms empower women entrepreneurs",
-      description:
-        "New digital tools are helping women from overseas territories launch and grow their own businesses.",
-      date: "Feb 20, 2025",
-      image: "/images/news-1.png"
-    }
-  ]
-};
+export const lastInfo: CategoryNews[] = [
+  {
+    category: "politique",
+    title: "French Assembly debates overseas tax reform bill",
+    description:
+      "The French Assembly is debating a tax reform bill for overseas territories, aiming to adjust fiscal structures and revenue allocation to create fairer economic conditions.",
+    date: "April 3, 2025",
+    image: "/images/actualite.png"
+  },
+  {
+    category: "politique",
+    title: "French Senate reviews proposal on overseas economic autonomy",
+    description:
+      "The French Senate is reviewing a proposal to grant more autonomy to overseas territories, strengthening local governance and fiscal control.",
+    date: "April 3, 2025",
+    image: "/images/news/news-2.png"
+  },
+  {
+    category: "politique",
+    title:
+      "Debate intensifies over representation of overseas territories in parliament",
+    description:
+      "A growing debate centers on how overseas territories are represented in parliament, with calls for stronger voices from these regions.",
+    date: "April 3, 2025",
+    image: "/images/news/news-3.png"
+  },
+  {
+    category: "juridique",
+    title: "New legislation enhances worker rights in overseas regions",
+    description:
+      "The new bill aims to standardize labor protections across all French territories, ensuring fair conditions for workers.",
+    date: "March 20, 2025",
+    image: "/images/news/news-2.png"
+  },
+  {
+    category: "juridique",
+    title: "Court rules in favor of tax exemptions for SMEs",
+    description:
+      "A landmark court decision grants tax relief to small and medium enterprises operating in overseas French territories.",
+    date: "March 18, 2025",
+    image: "/images/news/news-3.png"
+  },
+  {
+    category: "juridique",
+    title: "Legal experts call for unified judicial system",
+    description:
+      "Legal professionals are urging the government to streamline the judicial system across overseas territories for consistency.",
+    date: "March 15, 2025",
+    image: "/images/news/news-1.png"
+  },
+  {
+    category: "citoyenne",
+    title: "Youth programs foster innovation in overseas territories",
+    description:
+      "Social initiatives are helping young people develop digital skills and connect with global markets.",
+    date: "Feb 28, 2025",
+    image: "/images/news/news-3.png"
+  },
+  {
+    category: "citoyenne",
+    title: "Community hubs expand in rural regions",
+    description:
+      "Local governments are opening new centers to strengthen social engagement and cultural identity.",
+    date: "Feb 22, 2025",
+    image: "/images/news/news-2.png"
+  },
+  {
+    category: "citoyenne",
+    title: "Online platforms empower women entrepreneurs",
+    description:
+      "New digital tools are helping women from overseas territories launch and grow their own businesses.",
+    date: "Feb 20, 2025",
+    image: "/images/news/news-1.png"
+  }
+];
 
 export const socialPosts: SocialPost[] = [
   {

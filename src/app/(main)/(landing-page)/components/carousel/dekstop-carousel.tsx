@@ -57,7 +57,7 @@ export default function DesktopCarousel() {
   }, [dotCount]);
 
   return (
-    <div className="hidden h-full md:flex items-start gap-10">
+    <div className="hidden h-full md:flex items-start gap-16">
       <div className="flex flex-col justify-between h-full items-start w-full max-w-xs shrink-0">
         <SectionTitle>Les dernières publications</SectionTitle>
 
@@ -96,14 +96,14 @@ export default function DesktopCarousel() {
       {/* SCROLL AREA */}
       <div
         ref={desktopRef}
-        className="flex gap-8 overflow-x-auto scroll-smooth hide-scrollbar w-full snap-x snap-mandatory"
+        className="flex gap-6 overflow-x-auto scroll-smooth hide-scrollbar w-full snap-x snap-mandatory"
         style={{ WebkitOverflowScrolling: "touch" }}
       >
         {productionData.map((news, i) => (
           <ProductionCard
             key={i}
-            data={news}
-            className="snap-start flex-shrink-0 w-[320px]"
+            {...news}
+            className="snap-start flex-shrink-0"
             variant="desktop"
           />
         ))}

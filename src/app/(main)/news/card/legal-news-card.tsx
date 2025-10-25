@@ -3,8 +3,20 @@
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { LegalNewsItem } from "@/types/news.type";
 import { MapPin, User } from "lucide-react";
+
+type Props = {
+  title: string;
+  image: string;
+  tags: string[];
+  territory: string;
+  excerpt?: string;
+  place?: string;
+  publisher: string;
+  date: string;
+  person?: string;
+  category: string;
+};
 
 export const LegalCard = ({
   title,
@@ -17,7 +29,7 @@ export const LegalCard = ({
   date,
   person,
   category
-}: LegalNewsItem) => {
+}: Props) => {
   return (
     <Card className="gap-0 py-0 overflow-hidden transition-all border rounded-md  w-full ">
       {/* Gambar */}

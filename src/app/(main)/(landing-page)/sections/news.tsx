@@ -44,7 +44,7 @@ export default function NewsSection() {
               category={news.category}
               date={news.date}
               title={news.title}
-              image={news.image}
+              image={news.images[0]}
             />
           ))}
         </div>

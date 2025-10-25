@@ -36,7 +36,7 @@ export default function MobileCarousel() {
     const updateDots = () => {
       const el = mobileRef.current;
       if (!el) return;
-      const cardWidth = el.querySelector("div > div")?.clientWidth || 300;
+      const cardWidth = el.querySelector(".flex > div")?.clientWidth || 300; //
       const visibleCards = Math.floor(el.clientWidth / cardWidth) || 1;
       const totalPages = Math.ceil(productionData.length / visibleCards);
       setDotCount(totalPages);
@@ -75,7 +75,11 @@ export default function MobileCarousel() {
         <div className="flex gap-6">
           {productionData.map((news, i) => (
             <div key={i} className="snap-center flex-shrink-0 w-full">
-              <ProductionCard data={news} variant="mobile" />
+              <ProductionCard
+                className="snap-start flex-shrink-0 w-[320px]"
+                {...news}
+                variant="mobile"
+              />
             </div>
           ))}
         </div>

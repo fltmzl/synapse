@@ -8,6 +8,7 @@ import { array } from "zod";
 import { ChevronDown } from "lucide-react";
 import { SearchAll } from "../components/search-all-news";
 import { SortNews } from "../components/sort-news";
+import SectionContainer from "@/components/container/section-container";
 
 export default function AllNews() {
   const [category, setCategory] = useState("Tout");
@@ -23,7 +24,7 @@ export default function AllNews() {
     .filter((n) => n.title.toLowerCase().includes(query.toLowerCase()));
 
   return (
-    <section className="bg-background px-4 py-5 lg:p-20 max-7xl border rounded-md">
+    <SectionContainer className="px-4 py-5 lg:p-20 max-7xl">
       <div className="flex flex-col gap-6 lg:gap-16">
         <div className="flex flex-col gap-8">
           <h1 className="text-3xl font-semibold text-center">Actualité</h1>
@@ -56,7 +57,7 @@ export default function AllNews() {
                   !isLast && "pb-8 border-b border-border"
                 )}
               >
-                <NewsCard {...news} />
+                <NewsCard {...news} slug={news.slug ?? ""} />
               </div>
             );
           })}
@@ -69,6 +70,6 @@ export default function AllNews() {
           </Button>
         </div>
       </div>
-    </section>
+    </SectionContainer>
   );
 }

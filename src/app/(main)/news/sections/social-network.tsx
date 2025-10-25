@@ -5,12 +5,13 @@ import clsx from "clsx";
 import { ChevronDown } from "lucide-react";
 import { SearchSocialNetwork } from "../components/search-social-news";
 import SocialPostCard from "../card/social-news-card";
+import SectionContainer from "@/components/container/section-container";
 
 export default function SocialNetworkNews() {
   const [query, setQuery] = useState("");
 
   return (
-    <section className="bg-background px-4 py-5 lg:p-20 max-7xl border rounded-md">
+    <SectionContainer className="px-4 py-5 lg:p-20 max-7xl">
       <div className="flex flex-col gap-6 lg:gap-16">
         <div className="flex flex-col gap-8">
           <h1 className="text-3xl font-semibold text-center">
@@ -59,6 +60,6 @@ export default function SocialNetworkNews() {
           </Button>
         </div>
       </div>
-    </section>
+    </SectionContainer>
   );
 }

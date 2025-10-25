@@ -1,17 +1,30 @@
 "use client";
 
 import { H4 } from "@/components/typography/h4";
-import { ArrowRightIcon } from "@/icons/arrow-right-icon";
 import { ArrowUpRightIcon } from "@/icons/arrow-up-right";
-import { NewsItem } from "@/types/news.type";
 import Image from "next/image";
+import Link from "next/link";
 
-export default function NewsCard({ category, date, title, image }: NewsItem) {
+type Props = {
+  slug: string;
+  category: string;
+  date: string;
+  title: string;
+  images: string[];
+};
+
+export default function NewsCard({
+  slug,
+  category,
+  date,
+  title,
+  images
+}: Props) {
   return (
     <div className="flex gap-5 lg:items-center lg:flex-row flex-col">
       <div className="relative w-full h-[200px] lg:w-[240px] lg:h-[150px]  rounded-md">
         <Image
-          src={image}
+          src={images[0]}
           alt={title}
           fill
           className="object-cover rounded-md"
@@ -29,11 +42,11 @@ export default function NewsCard({ category, date, title, image }: NewsItem) {
         </div>
         <H4>{title}</H4>
       </div>
-      <div className="flex items-center">
-        <button className="rounded-full w-12 h-12 border  grid place-content-center ">
+      <Link href={slug ? `/news/${slug}` : "#"} className="flex items-center">
+        <button className="hover:border-primary rounded-full w-12 h-12 border  grid place-content-center ">
           <ArrowUpRightIcon className="w-6 h-6" />
         </button>
-      </div>
+      </Link>
     </div>
   );
 }

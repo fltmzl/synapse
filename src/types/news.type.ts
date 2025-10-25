@@ -1,4 +1,18 @@
 export type NewsItem = {
+  id?: string;
+  slug: string;
+  category: string;
+  date: string;
+  title: string;
+  author: string;
+  images: string[];
+  content: {
+    heading?: string;
+    text: string;
+  }[];
+};
+
+export type productionDataType = {
   category: string;
   date: string;
   title: string;
@@ -16,21 +30,15 @@ export type NewsData = {
   description: string;
   date: string;
   image: string;
+  category: string;
 }[];
 
-export type CategoryNews = Record<string, NewsData>;
-
-export type ProductionItem = {
-  category: string;
-  date: string;
+export type CategoryNews = {
+  category: "politique" | "juridique" | "citoyenne";
   title: string;
+  description: string;
+  date: string;
   image: string;
-};
-
-export type ProductionCardProps = {
-  data: ProductionItem;
-  variant?: "desktop" | "mobile";
-  className?: string;
 };
 
 export interface SocialPost {

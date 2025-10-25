@@ -6,18 +6,19 @@ import { Button } from "@/components/ui/button";
 import { Avatar } from "@radix-ui/react-avatar";
 import { Menu } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
 const NAV_ITEMS = [
   { label: "Actualité", href: "/news" },
-  { label: "Base de données", href: "/base-de-donnees" },
-  { label: "Acteurs", href: "/acteurs" },
-  { label: "Structure", href: "/structure" },
-  { label: "Le coin des affaires", href: "/le-coin-des-affaires" }
+  { label: "Base de données", href: "/database" },
+  { label: "Acteurs", href: "/personality" },
+  { label: "Structure", href: "/explore-directory" },
+  { label: "Le coin des affaires", href: "/business-corner" }
 ];
 export default function Header() {
   const isLoggedIn = false;
-
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const panelRef = useRef<HTMLDivElement | null>(null);
 
@@ -43,7 +44,13 @@ export default function Header() {
             {/* Desktop nav */}
             <nav className="hidden md:flex md:gap-4 lg:gap-8 text-base">
               {NAV_ITEMS.map((item) => (
-                <Link key={item.href} href={item.href}>
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={`${
+                    pathname === item.href ? "text-primary underline" : ""
+                  }`}
+                >
                   {item.label}
                 </Link>
               ))}

@@ -19,6 +19,17 @@ const platformIcons: Record<SocialPost["platform"], JSX.Element> = {
   "X (Twitter)": <TwitterIcon className="w-4 h-4 text-muted-foreground" />
 };
 
+type Props = {
+  platform: SocialPost["platform"];
+  username: string;
+  contentMain: string;
+  contentHighlight?: string;
+  image: string;
+  likes: number;
+  comments?: number;
+  retweets?: number;
+};
+
 export default function SocialPostCard({
   platform,
   username,
@@ -28,7 +39,7 @@ export default function SocialPostCard({
   likes,
   comments,
   retweets
-}: SocialPost) {
+}: Props) {
   return (
     <div className="flex flex-col gap-3 h-full">
       <div className="flex gap-5 lg:items-center lg:flex-row flex-col w-full">

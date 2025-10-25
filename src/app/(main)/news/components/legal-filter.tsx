@@ -88,7 +88,7 @@ export const LegalFilter = ({ onFilterChange }: Props) => {
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-[200px] p-2 rounded-md shadow-md border  bg-background">
-          <Command className="border-0 shadow-none">
+          <Command className="border-0 shadow-none rounded-sm">
             <CommandInput
               placeholder={`Search ${label.toLowerCase()}`}
               className="placeholder:text-muted-foreground"
@@ -131,7 +131,7 @@ export const LegalFilter = ({ onFilterChange }: Props) => {
   };
 
   return (
-    <div className="flex flex-col lg:flex-row  gap-3">
+    <div className="flex flex-col lg:flex-row  gap-3 lg:items-center">
       <span className="text-md text-muted-foreground font-medium ">
         Filter by
       </span>

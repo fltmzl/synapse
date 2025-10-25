@@ -1,12 +1,18 @@
 "use client";
 
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { NewsItem } from "@/types/news.type";
 import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
-export default function LatestCard({ category, date, title, image }: NewsItem) {
+type Props = {
+  category: string;
+  date: string;
+  title: string;
+  image: string;
+};
+
+export default function LatestCard({ category, date, title, image }: Props) {
   return (
     <Card className="w-full max-w-sm shrink-0 overflow-hidden">
       <CardHeader>
