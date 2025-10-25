@@ -34,7 +34,7 @@ export default function Header() {
 
   return (
     <div className="bg-background sticky top-0 z-10">
-      <header className="flex flex-col w-full max-w-[1310px] mx-auto px-6 py-8 ">
+      <header className="flex flex-col w-full max-w-[1310px] mx-auto px-6 py-8">
         <div>
           <div className="flex items-center justify-between">
             {/* Logo */}
@@ -79,7 +79,7 @@ export default function Header() {
               overflow: "hidden",
               transition: "height 280ms ease"
             }}
-            className="mt-4 md:hidden"
+            className="md:hidden"
           >
             <div className="py-12 flex flex-col gap-10">
               <div className=" px-6 flex flex-col items-center gap-8">

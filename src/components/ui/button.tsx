@@ -15,8 +15,9 @@ const buttonVariants = cva(
           "bg-destructive-dark text-white shadow-xs hover:bg-destructive-dark/90 focus-visible:ring-destructive-dark/20 dark:focus-visible:ring-destructive-dark/40 dark:bg-destructive-dark/60",
         outline:
           "border bg-background hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50",
-        secondary:
-          "border border-primary bg-background text-primary shadow-xs hover:bg-secondary/80",
+        "outline-hover-primary":
+          "border bg-background dark:bg-input/30 dark:border-input hover:border-primary hover:text-primary",
+        secondary: "border border-primary bg-background text-primary shadow-xs",
         ghost:
           "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
         link: "text-primary underline-offset-4 hover:underline",
@@ -28,7 +29,8 @@ const buttonVariants = cva(
         default: "py-2.5 px-5 rounded-md has-[>svg]:px-4",
         sm: "py-2.5 px-4 rounded-md gap-1.5 has-[>svg]:px-3 text-xs",
         md: "py-2.5 px-6 rounded-md gap-1.5 has-[>svg]:px-3 text-xs",
-        lg: "h-12 py-3.5 px-6 rounded-lg has-[>svg]:px-4",
+        lg: "h-12 py-3.5 px-6 rounded-md has-[>svg]:px-4",
+        xl: "py-4 px-6 rounded-md has-[>svg]:px-4 text-base",
         icon: "size-9"
       }
     },

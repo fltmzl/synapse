@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import clsx from "clsx";
+import SectionContainer from "@/components/container/section-container";
+import HeaderLegal from "../components/header-legal";
 
 const sections = [
   { id: "introduction", title: "1. Introduction" },
@@ -64,57 +66,72 @@ export default function TermsOfServicePage() {
   }, []);
 
   return (
-    <div className="flex flex-col md:flex-row gap-8 px-8 py-10 max-w-6xl mx-auto">
-      {/* Content */}
-      <div className="flex-1 space-y-16">
-        <h1 className="text-3xl font-bold mb-6">Our Terms of Service</h1>
-        {sections.map((section) => (
-          <section key={section.id} id={section.id} className="scroll-mt-28">
-            <h2 className="text-lg font-semibold mb-2">{section.title}</h2>
-            <p className="text-muted-foreground">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut
-              orci et leo viverra aliquam. Curabitur sed orci in sapien volutpat
-              gravida. Cras sed elit nec sapien interdum suscipit. Lorem, ipsum
-              dolor sit amet consectetur adipisicing elit. Id facilis nam eaque
-              perspiciatis ad voluptas voluptatibus libero accusamus ipsam.
-              Tempora cupiditate eum dicta veritatis sapiente maxime debitis
-              alias cumque tenetur. Nemo nobis doloremque quam illum
-              perspiciatis explicabo reprehenderit modi! Modi eligendi vitae,
-              officia non autem, impedit necessitatibus ratione neque
-              perspiciatis, amet sunt atque. Nam, odit quia, eos, temporibus
-              error debitis earum id doloremque praesentium dignissimos dolore
-              a? Laudantium, ullam dicta repudiandae accusamus ipsa eum aliquid
-              qui quas explicabo officia nisi eligendi! Architecto esse ab quo
-              ipsum debitis incidunt ducimus accusantium quisquam ipsa, rerum
-              cupiditate iure at voluptate quaerat recusandae odit?
-            </p>
-          </section>
-        ))}
-      </div>
-
-      {/* Table of Contents */}
-      <aside className="w-64 sticky top-24 h-fit border-l pl-4">
-        <h3 className="text-sm font-semibold mb-2 text-muted-foreground">
-          Table of contents
-        </h3>
-        <ul className="space-y-2 text-sm">
-          {sections.map((section) => (
-            <li key={section.id}>
-              <a
-                href={`#${section.id}`}
-                className={clsx(
-                  "block hover:text-primary transition-colors",
-                  activeId === section.id
-                    ? "text-primary"
-                    : "text-muted-foreground"
-                )}
+    <div className="w-full max-w-7xl px-6 lg:px-10 mx-auto py-12 lg:py-20">
+      <HeaderLegal currentPage="terms-of-service" />
+      <SectionContainer className="p-6 lg:p-10">
+        <div className="flex flex-col md:flex-row gap-8">
+          {/* Content */}
+          <main className="flex-1 space-y-16">
+            <div>
+              <h1 className="text-xl lg:text-[2.5rem] font-medium tracking-tighter">
+                Our Terms of Service
+              </h1>
+              <p className="mt-4">Latest update: August 24, 2025</p>
+            </div>
+            {sections.map((section) => (
+              <section
+                key={section.id}
+                id={section.id}
+                className="scroll-mt-28"
               >
-                {section.title}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </aside>
+                <h2 className="text-lg font-semibold mb-2">{section.title}</h2>
+                <p className="text-muted-foreground">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
+                  ut orci et leo viverra aliquam. Curabitur sed orci in sapien
+                  volutpat gravida. Cras sed elit nec sapien interdum suscipit.
+                  Lorem, ipsum dolor sit amet consectetur adipisicing elit. Id
+                  facilis nam eaque perspiciatis ad voluptas voluptatibus libero
+                  accusamus ipsam. Tempora cupiditate eum dicta veritatis
+                  sapiente maxime debitis alias cumque tenetur. Nemo nobis
+                  doloremque quam illum perspiciatis explicabo reprehenderit
+                  modi! Modi eligendi vitae, officia non autem, impedit
+                  necessitatibus ratione neque perspiciatis, amet sunt atque.
+                  Nam, odit quia, eos, temporibus error debitis earum id
+                  doloremque praesentium dignissimos dolore a? Laudantium, ullam
+                  dicta repudiandae accusamus ipsa eum aliquid qui quas
+                  explicabo officia nisi eligendi! Architecto esse ab quo ipsum
+                  debitis incidunt ducimus accusantium quisquam ipsa, rerum
+                  cupiditate iure at voluptate quaerat recusandae odit?
+                </p>
+              </section>
+            ))}
+          </main>
+
+          {/* Table of Contents */}
+          <aside className="w-64 sticky top-24 h-fit border-l pl-4">
+            <h3 className="text-sm font-semibold mb-2 text-muted-foreground">
+              Table of contents
+            </h3>
+            <ul className="space-y-2 text-sm">
+              {sections.map((section) => (
+                <li key={section.id}>
+                  <a
+                    href={`#${section.id}`}
+                    className={clsx(
+                      "block hover:text-primary transition-colors",
+                      activeId === section.id
+                        ? "text-primary"
+                        : "text-muted-foreground"
+                    )}
+                  >
+                    {section.title}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </aside>
+        </div>
+      </SectionContainer>
     </div>
   );
 }
