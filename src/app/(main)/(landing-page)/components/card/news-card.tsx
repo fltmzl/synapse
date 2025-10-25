@@ -19,8 +19,13 @@ export default function NewsCard({ category, date, title, image }: NewsItem) {
       </div>
       <div className="flex flex-col gap-2">
         <div className="flex items-center">
-          <H2 className=" border-r pr-3">{category}</H2>
-          <H2 className="pl-3"> {date}</H2>
+          <span className="text-base tracking-[-0.01em] leading-[150%] text-muted-foreground font-medium">
+            {category}
+          </span>
+          <span className="mx-3 w-px h-[14px] bg-border" />
+          <span className=" text-base tracking-[-0.01em] leading-[150%] text-muted-foreground font-medium">
+            {date}
+          </span>
         </div>
         <H1>{title}</H1>
       </div>

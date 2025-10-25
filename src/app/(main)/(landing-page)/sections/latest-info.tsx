@@ -66,7 +66,9 @@ export default function LatestInfo() {
                           className="py-4 first:pt-0 last:pb-0 flex flex-col gap-3"
                         >
                           <div className="flex flex-col gap-2">
-                            <H3 className="text-foreground">{news.title}</H3>
+                            <h2 className="text-lg tracking-[-0.02em] leading-[130%] text-foreground font-medium">
+                              {news.title}
+                            </h2>
                             <P className="line-clamp-2 text-sm text-muted-foreground tracking-[-0.01em] leading-snug">
                               {news.description}
                             </P>

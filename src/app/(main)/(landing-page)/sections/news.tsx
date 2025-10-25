@@ -2,7 +2,7 @@ import { H2 } from "@/components/typography/h2";
 import { Title } from "@/components/typography/title";
 import { Button } from "@/components/ui/button";
 import { newsData } from "@/data/news-data";
-import NewsCard from "../(landing-page)/components/card/news-card";
+import NewsCard from "../components/card/news-card";
 
 export default function NewsSection() {
   return (
@@ -16,10 +16,10 @@ export default function NewsSection() {
             <Title>Top du jour</Title>
           </div>
           <div className=" max-w-md flex flex-col gap-4 items-center lg:items-start">
-            <H2 className="text-center lg:text-left">
+            <p className="text-base tracking-[-0.01em] leading-[150%] text-muted-foreground font-regular text-center lg:text-left">
               Synapse est une base informationnelle, économique, politique,
               sociale et citoyenne dédiée aux Outre-Mer
-            </H2>
+            </p>
             <Button className="w-max" size={"default"}>
               Accéder
             </Button>
@@ -29,7 +29,7 @@ export default function NewsSection() {
 
       {/* News Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-10 ">
-        {newsData.map((news, index) => (
+        {newsData.slice(0, 3).map((news, index) => (
           <NewsCard
             key={index}
             category={news.category}

@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 
 const NAV_ITEMS = [
-  { label: "Actualité", href: "/actualite" },
+  { label: "Actualité", href: "/news" },
   { label: "Base de données", href: "/base-de-donnees" },
   { label: "Acteurs", href: "/acteurs" },
   { label: "Structure", href: "/structure" },
@@ -33,7 +33,7 @@ export default function Header() {
   }, [open]);
 
   return (
-    <header className="flex flex-col w-full max-w-7xl mx-auto px-6 py-8">
+    <header className="flex flex-col w-full max-w-[1440px] mx-auto px-6 py-8">
       <div>
         <div className="flex items-center justify-between">
           {/* Logo */}
