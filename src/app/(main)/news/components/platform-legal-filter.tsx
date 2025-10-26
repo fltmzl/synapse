@@ -3,14 +3,14 @@
 import { Button } from "@/components/ui/button";
 import { InstagramIcon } from "@/icons/instagram-icon";
 import { InstagramIconFlat } from "@/icons/instagram-icon-flat";
-import { LayoutGridIcon } from "@/icons/layout-grid-icon";
 import { FacebookIcon } from "@/icons/facebook-icon";
 import { TwitterIcon } from "@/icons/twitter-icon";
 import { LinkedinOutlineIcon } from "@/icons/linkedin-outline-icon";
 import { cn } from "@/lib/utils";
+import { Layout2Icon } from "@/icons/layout-2-icon";
 
 const categories = [
-  { label: "All", icon: <LayoutGridIcon /> },
+  { label: "All", icon: <Layout2Icon /> },
   { label: "Instagram", icon: <InstagramIconFlat /> },
   { label: "Facebook", icon: <FacebookIcon /> },
   { label: "LinkedIn", icon: <LinkedinOutlineIcon /> },

@@ -13,8 +13,8 @@ export default function SearchSocialNetwork({ onSearch }: SearchBarProps) {
   const [value, setValue] = useState("");
 
   return (
-    <div className="max-w-md  justify-center flex gap-2 w-full flex-col lg:flex-row ">
-      <div className="w-full">
+    <div className=" justify-center flex gap-2 w-full flex-col lg:flex-row  ">
+      <div className=" w-[428px] relative">
         <SearchIcon className="absolute ml-3 mt-3 h-4 w-4 text-muted-foreground" />
         <Input
           placeholder="Try 'tax reform', or 'elections'..."

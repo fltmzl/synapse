@@ -62,7 +62,7 @@ export default function SocialPostCard({
             />
           </div>
 
-          <div className="flex flex-col gap-5 lg:gap-0 lg:justify-between h-full w-full">
+          <div className="flex flex-col gap-5 lg:gap-0 lg:justify-between h-[150px] w-full">
             <div className="flex flex-col gap-2">
               <div className="flex items-center gap-2 text-sm text-muted-foreground font-regular mb-1">
                 {platformIcons[platform]}
