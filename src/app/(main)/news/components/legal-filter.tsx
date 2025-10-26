@@ -1,24 +1,22 @@
 "use client";
 
-import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Command,
+  CommandEmpty,
+  CommandInput,
+  CommandItem,
+  CommandList
+} from "@/components/ui/command";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger
 } from "@/components/ui/popover";
-import {
-  Command,
-  CommandInput,
-  CommandItem,
-  CommandList,
-  CommandEmpty
-} from "@/components/ui/command";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { ChevronDownIcon, Ghost } from "lucide-react";
-import { ArrowUpIcon } from "@/icons/arrow-up-icon";
-import { Chevron } from "react-day-picker";
+import { ChevronDownIcon } from "lucide-react";
+import { useState } from "react";
 
 type Props = {
   onFilterChange: (filter: string, value: string[]) => void;
@@ -87,18 +85,21 @@ export default function LegalFilter({ onFilterChange }: Props) {
             <ChevronDownIcon className="size-4" />
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-[200px] p-2 rounded-md shadow-md border  bg-background">
+        <PopoverContent
+          align="start"
+          className="w-[232px] p-1 rounded-md shadow-md border bg-background"
+        >
           <Command className="border-0 shadow-none rounded-sm">
             <CommandInput
               placeholder={`Search ${label.toLowerCase()}`}
               className="placeholder:text-muted-foreground"
             />
-            <div className="flex items-center justify-between text-xs py-1 text-muted-foreground">
+            <div className="flex items-center justify-between text-sm p-2 text-muted-foreground">
               <span>{count} selected</span>
               {count > 0 && (
                 <button
                   onClick={() => handleClear(type)}
-                  className="text-primary hover:underline"
+                  className="text-primary"
                 >
                   Clear filter
                 </button>
@@ -108,19 +109,18 @@ export default function LegalFilter({ onFilterChange }: Props) {
               <CommandEmpty>No results found.</CommandEmpty>
               <div className="flex flex-col gap-1">
                 {options.map((item) => (
-                  <div key={item} className="flex flex-col">
-                    <CommandItem
-                      className="justify-between flex items-center gap-2 cursor-pointer text-sm"
-                      onSelect={() => handleToggle(type, item)}
-                    >
-                      <span>{item}</span>
-                      <Checkbox
-                        checked={selected[type].includes(item)}
-                        onCheckedChange={() => handleToggle(type, item)}
-                        className="rounded-sm"
-                      />
-                    </CommandItem>
-                  </div>
+                  <CommandItem
+                    key={item}
+                    className="justify-between flex items-center gap-2 cursor-pointer text-base p-2 pl-4"
+                    onSelect={() => handleToggle(type, item)}
+                  >
+                    <span>{item}</span>
+                    <Checkbox
+                      checked={selected[type].includes(item)}
+                      onCheckedChange={() => handleToggle(type, item)}
+                      className="rounded-sm"
+                    />
+                  </CommandItem>
                 ))}
               </div>
             </CommandList>
@@ -131,7 +131,7 @@ export default function LegalFilter({ onFilterChange }: Props) {
   };
 
   return (
-    <div className="flex flex-col lg:flex-row  gap-3 lg:items-center">
+    <div className="flex flex-col lg:flex-row gap-3 lg:items-center">
       <span className="text-md text-muted-foreground font-medium ">
         Filter by
       </span>

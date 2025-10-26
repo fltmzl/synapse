@@ -1,11 +1,11 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { InstagramIcon } from "@/icons/instagram-icon";
-import { InstagramIconFlat } from "@/icons/instagram-icon-flat";
 import { FacebookIcon } from "@/icons/facebook-icon";
-import { TwitterIcon } from "@/icons/twitter-icon";
+import { InstagramIconFlat } from "@/icons/instagram-icon-flat";
+import { LayoutGridIcon } from "@/icons/layout-grid-icon";
 import { LinkedinOutlineIcon } from "@/icons/linkedin-outline-icon";
+import { TwitterIcon } from "@/icons/twitter-icon";
 import { cn } from "@/lib/utils";
 import { Layout2Icon } from "@/icons/layout-2-icon";
 
@@ -27,6 +27,7 @@ export default function PlatformFilter({ selected, onSelect }: Props) {
     <div className="flex items-center gap-3 overflow-x-auto hide-scrollbar">
       {categories.map(({ label, icon }) => {
         const isActive = selected === label;
+
         return (
           <Button
             key={label}
@@ -34,26 +35,24 @@ export default function PlatformFilter({ selected, onSelect }: Props) {
             variant="ghost"
             className={cn(
               "hover:bg-transparent group flex items-center gap-2 rounded-md pl-4 pr-6 py-3 text-md font-medium border transition-all duration-200 leading-[140%] tracking-tighter",
-              isActive
-                ? "border-primary text-primary bg-background"
-                : "border-border text-foreground bg-background hover:border-primary hover:text-primary"
+              {
+                "border-primary text-primary bg-background": isActive,
+                "border-border text-foreground bg-background hover:border-primary hover:text-primary":
+                  !isActive
+              }
             )}
           >
             <span
-              className={cn(
-                isActive
-                  ? "text-primary"
-                  : "text-muted-foreground group-hover:text-primary"
-              )}
+              className={cn("text-muted-foreground group-hover:text-primary", {
+                "text-primary": isActive
+              })}
             >
               {icon}
             </span>
             <span
-              className={cn(
-                isActive
-                  ? "text-primary"
-                  : "text-foreground group-hover:text-primary"
-              )}
+              className={cn("text-muted-foreground group-hover:text-primary", {
+                "text-primary": isActive
+              })}
             >
               {label}
             </span>

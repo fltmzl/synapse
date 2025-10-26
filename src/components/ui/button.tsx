@@ -26,11 +26,13 @@ const buttonVariants = cva(
           "bg-white/8 text-white hover:bg-white/12 border border-muted/10"
       },
       size: {
-        default: "py-2.5 px-5 rounded-md has-[>svg]:px-4",
-        sm: "py-2.5 px-4 rounded-md gap-1.5 has-[>svg]:px-3 text-xs",
-        md: "py-2.5 px-6 rounded-md gap-1.5 has-[>svg]:px-3 text-xs",
-        lg: "h-12 py-3.5 px-6 rounded-md has-[>svg]:px-4",
-        xl: "py-4 px-6 rounded-md has-[>svg]:px-4 text-base",
+        default: "py-2.5 px-5 rounded-md has-[>svg]:px-5",
+        sm: "py-2.5 px-4 rounded-md gap-1.5 has-[>svg]:px-4 text-xs",
+        md: "py-2.5 px-6 rounded-md gap-1.5 has-[>svg]:px-6 text-xs",
+        "2md":
+          "py-[0.6876rem] px-4 rounded-md gap-1.5 has-[>svg]:px-4 text-base",
+        lg: "h-12 py-3.5 px-6 rounded-md has-[>svg]:px-6",
+        xl: "py-4 px-6 rounded-md has-[>svg]:px-6 text-base",
         icon: "size-9"
       }
     },
