@@ -62,7 +62,7 @@ export default function ExploreArticle() {
       </h1>
 
       {/* Carousel wrapper */}
-      <div className="relative w-full overflow-x-auto hide-scrollbar scroll-smooth snap-x snap-mandatory h-[260px] lg:h-[364px]  ">
+      <div className="relative w-full overflow-x-auto hide-scrollbar scroll-smooth snap-x snap-mandatory h-[260px] lg:h-[364px] overflow-y-hidden ">
         <div
           className="flex transition-transform duration-700 ease-in-out gap-6"
           style={{

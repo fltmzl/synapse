@@ -50,7 +50,7 @@ export default function FilterMultipleWithSearch({
           size="2md"
           aria-expanded={open}
           className={cn(
-            "justify-center lg:justify-between h-fit gap-3 hover:text-foreground",
+            "leading-[140%] tracking-tighter justify-center lg:justify-between h-fit gap-3 hover:text-foreground",
             {
               "border-primary": isFiltered
             }

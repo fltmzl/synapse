@@ -52,7 +52,7 @@ export default function DataInsight() {
         </div>
 
         <div className="w-full max-w-[58rem] mx-auto ">
-          <div className="bg-section border rounded-[14px] px-[5px]">
+          <div className="bg-section border rounded-[14px] px-2">
             {/* Source Filter */}
             <div className="flex gap-2 px-4 py-4 pb-0 overflow-x-auto hide-scrollbar lg:overflow-x-hidden ">
               <h1 className="flex items-center justify-center text-muted-foreground">
@@ -61,14 +61,13 @@ export default function DataInsight() {
               {sources.map(({ name, icon: Icon }) => (
                 <Button
                   key={name}
-                  size="sm"
-                  variant={activeSource === name ? "default" : "outline"}
+                  variant="ghost"
                   onClick={() => setActiveSource(name)}
                   className={cn(
-                    "flex items-center justify-center gap-3 rounded-md transition-all h-10 bg-transparent",
+                    "!px-3 !py-2 flex items-center justify-center gap-3 rounded-md transition-all h-10",
                     activeSource === name
-                      ? "bg-primary/5 hover:bg-primary/5 border border-primary text-primary"
-                      : " border text-foreground"
+                      ? "bg-primary/5 border border-primary text-primary"
+                      : "border text-foreground"
                   )}
                 >
                   <div className="flex gap-1 items-center">
@@ -76,7 +75,7 @@ export default function DataInsight() {
                       className={cn(
                         "transition-colors size-5",
                         activeSource === name
-                          ? "text-primary"
+                          ? "text-primary/60"
                           : "text-muted-foreground/50"
                       )}
                     />
@@ -102,7 +101,7 @@ export default function DataInsight() {
               ))}
             </div>
             {/* Search Input */}
-            <div className="relative mt-4 ">
+            <div className="relative mt-4 mb-1 ">
               <textarea
                 ref={textareaRef}
                 value={value}

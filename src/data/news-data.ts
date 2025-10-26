@@ -13,11 +13,7 @@ export const newsData: NewsItem[] = [
     category: "Juridique",
     author: "Regional Council of Martinique",
     date: "May 25, 2025",
-    images: [
-      "/images/news/news-1.png",
-      "/images/news/news-2.png",
-      "/images/news/news-3.png"
-    ],
+    images: ["/images/news/news-1.png"],
     content: [
       {
         text: `Small and medium-sized enterprises (SMEs) across Martinique have received a significant boost in their drive toward sustainability, as a new €15 million funding package is launched to support green transition initiatives across the island.`

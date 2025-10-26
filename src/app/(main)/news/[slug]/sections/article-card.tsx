@@ -64,51 +64,60 @@ export default function ArticleContent() {
 
           {/* Hero Image with arrows */}
           <div className="relative w-full flex flex-col gap-4">
-            <div className=" overflow-hidden w-full py-0">
+            {/* Gambar utama */}
+            <div className="overflow-hidden w-full py-0">
               <Image
                 src={article.images[activeImage]}
                 alt={article.title}
                 width={1200}
                 height={600}
-                className="w-full h-auto object-fill transition-all duration-500"
+                className="w-full h-auto object-cover rounded-md transition-all duration-500"
               />
             </div>
 
-            <button
-              onClick={prevImage}
-              className="absolute top-1/2 left-5 -translate-y-1/2  text-background hover:text-primary bg-primary hover:bg-background hover:border-primary rounded-full p-2 shadow-md"
-            >
-              <ArrowLeftIcon className="w-5 h-5" />
-            </button>
-            <button
-              onClick={nextImage}
-              className="absolute top-1/2 right-5 text-background hover:text-primary -translate-y-1/2  bg-primary hover:bg-background hover:border-primary rounded-full p-2 shadow-md"
-            >
-              <ArrowRightIcon className=" w-5 h-5 " />
-            </button>
-            {/* Thumbnail carousel */}
-            <div className="flex gap-2 lg:gap-4">
-              {article.images.map((img, index) => (
+            {/* Kalau jumlah gambar lebih dari 1 baru tampilkan navigasi */}
+            {article.images.length > 1 && (
+              <>
+                {/* Tombol navigasi kiri-kanan */}
                 <button
-                  key={index}
-                  onClick={() => setActiveImage(index)}
-                  className={cn(
-                    "p-1 relative rounded-md overflow-x-auto hide-scrollbar border transition",
-                    activeImage === index
-                      ? "border-primary"
-                      : "border-transparent hover:border-muted"
-                  )}
+                  onClick={prevImage}
+                  className="absolute top-1/2 left-5 -translate-y-1/2 text-background hover:text-primary bg-primary hover:bg-background hover:border-primary rounded-full p-2 shadow-md transition"
                 >
-                  <Image
-                    src={img}
-                    alt={`Thumbnail ${index + 1}`}
-                    width={128}
-                    height={83}
-                    className="object-cover p-1 rounded-md"
-                  />
+                  <ArrowLeftIcon className="w-5 h-5" />
                 </button>
-              ))}
-            </div>
+
+                <button
+                  onClick={nextImage}
+                  className="absolute top-1/2 right-5 -translate-y-1/2 text-background hover:text-primary bg-primary hover:bg-background hover:border-primary rounded-full p-2 shadow-md transition"
+                >
+                  <ArrowRightIcon className="w-5 h-5" />
+                </button>
+
+                {/* Thumbnail carousel */}
+                <div className="flex gap-2 lg:gap-4">
+                  {article.images.map((img, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setActiveImage(index)}
+                      className={cn(
+                        "p-1 relative rounded-md overflow-x-auto hide-scrollbar border transition",
+                        activeImage === index
+                          ? "border-primary"
+                          : "border-transparent hover:border-muted"
+                      )}
+                    >
+                      <Image
+                        src={img}
+                        alt={`Thumbnail ${index + 1}`}
+                        width={128}
+                        height={83}
+                        className="object-cover p-1 rounded-md"
+                      />
+                    </button>
+                  ))}
+                </div>
+              </>
+            )}
           </div>
         </div>
 

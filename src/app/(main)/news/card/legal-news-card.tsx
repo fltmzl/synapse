@@ -33,7 +33,7 @@ export default function LegalCard({
 }: Props) {
   return (
     <article>
-      <Card className="gap-0 py-0 overflow-hidden transition-all border rounded-md  w-full ">
+      <Card className="gap-0 py-0 overflow-hidden transition-all border rounded-md  w-full h-full">
         <Link href="#" className="block w-full group">
           {/* Gambar */}
           <div className="relative w-full h-[264px] md:min-h-[120px] lg:min-h-[100px]">

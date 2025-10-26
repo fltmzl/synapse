@@ -9,18 +9,34 @@ import { H1 } from "@/components/typography/h1";
 import { Title } from "@/components/typography/title";
 import SearchAll from "../components/search-all-news";
 import NewsFilter from "../components/news-filter";
-import SortNews from "../components/sort-news";
+import SelectSingleItem from "@/components/select-single-item";
+import { parseAsString, useQueryState } from "nuqs";
 
 export default function AllNews() {
-  const [category, setCategory] = useState("Tout");
-  const [sort, setSort] = useState("Newest");
   const [query, setQuery] = useState("");
+
+  const sortBy = [
+    { label: "Date de parution", value: "Date de parution" },
+    { label: "Oldest", value: "Oldest" },
+    { label: "Le plus vu", value: "Le plus vu" },
+    { label: "Most Popular", value: "Most Popular" },
+    { label: "Editor's Pick", value: "Editor's Pick" }
+  ];
+  const [sort, setSort] = useQueryState(
+    "sort",
+    parseAsString.withDefault("Date de parution")
+  );
+
+  const [categories, setCategories] = useQueryState(
+    "categories",
+    parseAsString.withDefault("Tout")
+  );
 
   const filtered = newsData
     .filter((n) =>
-      category === "Tout"
+      categories === "Tout"
         ? true
-        : n.category.toLowerCase() === category.toLowerCase()
+        : n.category.toLowerCase() === categories.toLowerCase()
     )
     .filter((n) => n.title.toLowerCase().includes(query.toLowerCase()));
 
@@ -36,12 +52,16 @@ export default function AllNews() {
         </div>
 
         <div className="flex flex-wrap items-center justify-between gap-4">
-          <NewsFilter selected={category} onSelect={setCategory} />
+          <NewsFilter selected={categories} onSelect={setCategories} />
           <div className="flex items-center gap-4 ">
             <span className="text-md font-medium leading-[140%] tracking-tighter">
               Filtrer par
             </span>
-            <SortNews selected={sort} onChange={setSort} />
+            <SelectSingleItem
+              listItems={sortBy}
+              selected={sort}
+              onChange={setSort}
+            />
           </div>
         </div>
 

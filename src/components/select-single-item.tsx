@@ -28,7 +28,10 @@ export default function SelectSingleItem({
       <Button
         variant="outline"
         size="2md"
-        className={cn("w-[172px] flex justify-between", classNames?.button)}
+        className={cn(
+          "leading-[140%] tracking-tighter w-[172px] flex justify-between",
+          classNames?.button
+        )}
         asChild
       >
         <SelectTrigger>

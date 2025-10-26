@@ -122,17 +122,26 @@ export default function LegalNews() {
             </div>
           </div>
 
-          <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4">
-            {legalPost.map((news, index) => (
-              <div
-                key={index}
-                className={cn("break-inside-avoid mb-4", {
-                  "hidden sm:block": index >= 5
-                })}
-              >
-                <LegalCard {...news} />
-              </div>
-            ))}
+          <div className="lg:hidden">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+              {legalPost.map((news, idx) => (
+                <div key={idx} className={cn("w-full")}>
+                  <LegalCard {...news} />
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="hidden lg:block">
+            <div className="columns-4 gap-6">
+              {legalPost.map((news, idx) => (
+                <div
+                  key={idx}
+                  className="break-inside-avoid inline-block w-full"
+                >
+                  <LegalCard {...news} />
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 

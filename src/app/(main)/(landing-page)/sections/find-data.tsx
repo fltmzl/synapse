@@ -51,14 +51,13 @@ export default function FindDataPage() {
               {sources.map(({ name, icon: Icon }) => (
                 <Button
                   key={name}
-                  size="sm"
-                  variant={activeSource === name ? "default" : "outline"}
+                  variant="ghost"
                   onClick={() => setActiveSource(name)}
                   className={cn(
-                    "flex items-center justify-center gap-3 rounded-md transition-all h-10 bg-transparent",
+                    "!px-3 !py-2 flex items-center justify-center gap-3 rounded-md transition-all h-10",
                     activeSource === name
-                      ? "bg-primary/5 hover:bg-primary/5 border border-primary text-primary"
-                      : " border text-foreground"
+                      ? "bg-primary/5 border border-primary text-primary"
+                      : "border text-foreground"
                   )}
                 >
                   <div className="flex gap-1 items-center">
@@ -66,7 +65,7 @@ export default function FindDataPage() {
                       className={cn(
                         "transition-colors size-5",
                         activeSource === name
-                          ? "text-primary"
+                          ? "text-primary/60"
                           : "text-muted-foreground/50"
                       )}
                     />
@@ -92,7 +91,7 @@ export default function FindDataPage() {
               ))}
             </div>
             {/* Search Input */}
-            <div className="relative mt-4 mb-1">
+            <div className="relative mt-4 mb-1 ">
               <textarea
                 ref={textareaRef}
                 value={value}

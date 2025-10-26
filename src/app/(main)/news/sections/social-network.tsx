@@ -55,7 +55,11 @@ export default function SocialNetworkNews() {
         </div>
 
         <div className="flex justify-center gap-3 ">
-          <Button variant="outline" size="md" className="w-full lg:w-max">
+          <Button
+            variant="outline"
+            size="md"
+            className="w-full lg:w-max text-sm font-medium leading[140%] tracking-tighter"
+          >
             Show More
             <ChevronDown className="size-5 text-foreground" />
           </Button>

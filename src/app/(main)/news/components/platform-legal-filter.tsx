@@ -50,7 +50,7 @@ export default function PlatformFilter({ selected, onSelect }: Props) {
               {icon}
             </span>
             <span
-              className={cn("text-muted-foreground group-hover:text-primary", {
+              className={cn("text-foreground group-hover:text-primary", {
                 "text-primary": isActive
               })}
             >
