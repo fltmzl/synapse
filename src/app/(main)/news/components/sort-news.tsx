@@ -13,11 +13,11 @@ type Props = {
   onChange: (val: string) => void;
 };
 
-export const SortNews = ({ selected, onChange }: Props) => {
+export default function SortNews({ selected, onChange }: Props) {
   return (
     <div>
       <Select value={selected} onValueChange={onChange}>
-        <SelectTrigger className="p-4 flex gap-4 min-w-48 min-h-14">
+        <SelectTrigger className="text-base font-medium p-4 flex gap-4 min-w-48 min-h-14">
           <SelectValue placeholder="Filter par" />
         </SelectTrigger>
         <SelectContent>
@@ -30,4 +30,4 @@ export const SortNews = ({ selected, onChange }: Props) => {
       </Select>
     </div>
   );
-};
+}

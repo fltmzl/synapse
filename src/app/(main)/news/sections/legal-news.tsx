@@ -1,16 +1,14 @@
 import { useState } from "react";
-import { NewsFilter } from "../components/news-filter";
 import { legalPost, newsData } from "@/data/news-data";
 import { Button } from "@/components/ui/button";
-import NewsCard from "../card/news-card";
-import clsx from "clsx";
-import { array } from "zod";
 import { ChevronDown } from "lucide-react";
-import { SortLegal } from "../components/sort-legal";
-import { PlatformFilter } from "../components/platform-legal-filter";
-import { LegalFilter } from "../components/legal-filter";
-import { LegalCard } from "../card/legal-news-card";
+import SortLegal from "../components/sort-legal";
+import PlatformFilter from "../components/platform-legal-filter";
+import LegalCard from "../card/legal-news-card";
 import SectionContainer from "@/components/container/section-container";
+import SectionTitle from "@/components/typography/section-title";
+import LegalFilter from "../components/legal-filter";
+import { cn } from "@/lib/utils";
 
 export default function LegalNews() {
   const [category, setCategory] = useState("Tout");
@@ -26,13 +24,13 @@ export default function LegalNews() {
     .filter((n) => n.title.toLowerCase().includes(query.toLowerCase()));
 
   return (
-    <SectionContainer className="px-4 py-6 lg:p-20 max-7xl">
-      <div className="flex flex-col gap-6 lg:gap-16">
+    <SectionContainer className="px-4 py-6 lg:p-20">
+      <div className="flex flex-col gap-6 lg:gap-16 max-w-7xl mx-auto">
         <div className="flex flex-col items-center justify-center gap-8 w-full">
           <div className="flex flex-col gap-8 ">
-            <h1 className="text-3xl font-semibold text-center">
+            <SectionTitle className="text-center">
               Veille réseaux sociaux
-            </h1>
+            </SectionTitle>
           </div>
 
           <div className="flex flex-wrap items-center justify-center gap-4 w-full ">
@@ -59,10 +57,10 @@ export default function LegalNews() {
             {legalPost.map((news, index) => (
               <div
                 key={index}
-                className={`
-        break-inside-avoid mb-4
-        ${index >= 5 ? "hidden sm:block" : ""}
-      `}
+                className={cn(
+                  "break-inside-avoid mb-4",
+                  index >= 5 && "hidden sm:block"
+                )}
               >
                 <LegalCard {...news} />
               </div>
@@ -72,7 +70,7 @@ export default function LegalNews() {
 
         <div className="flex justify-center gap-3 ">
           <Button variant="outline" size="default" className="w-full lg:w-max">
-            More articles
+            Show More
             <ChevronDown className="size-5 text-foreground" />
           </Button>
         </div>

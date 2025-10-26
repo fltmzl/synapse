@@ -41,7 +41,7 @@ export type CategoryNews = {
   image: string;
 };
 
-export interface SocialPost {
+export type SocialPost = {
   platform: "Instagram" | "X (Twitter)";
   username: string;
   contentMain: string;
@@ -50,7 +50,7 @@ export interface SocialPost {
   likes: number;
   comments?: number;
   retweets?: number;
-}
+};
 
 export type LegalNewsItem = {
   category: string;

@@ -1,14 +1,15 @@
 import { useState } from "react";
-import { NewsFilter } from "../components/news-filter";
 import { newsData } from "@/data/news-data";
 import { Button } from "@/components/ui/button";
 import NewsCard from "../card/news-card";
 import clsx from "clsx";
-import { array } from "zod";
 import { ChevronDown } from "lucide-react";
-import { SearchAll } from "../components/search-all-news";
-import { SortNews } from "../components/sort-news";
 import SectionContainer from "@/components/container/section-container";
+import { H1 } from "@/components/typography/h1";
+import { Title } from "@/components/typography/title";
+import SearchAll from "../components/search-all-news";
+import NewsFilter from "../components/news-filter";
+import SortNews from "../components/sort-news";
 
 export default function AllNews() {
   const [category, setCategory] = useState("Tout");
@@ -24,10 +25,10 @@ export default function AllNews() {
     .filter((n) => n.title.toLowerCase().includes(query.toLowerCase()));
 
   return (
-    <SectionContainer className="px-4 py-5 lg:p-20 max-7xl">
-      <div className="flex flex-col gap-6 lg:gap-16">
+    <SectionContainer className="px-4 pt-10 pb-6 lg:p-20 ">
+      <div className="flex flex-col gap-6 lg:gap-16 max-w-7xl mx-auto">
         <div className="flex flex-col gap-8">
-          <h1 className="text-3xl font-semibold text-center">Actualité</h1>
+          <Title className="text-center">Actualité</Title>
 
           <div className="flex justify-center">
             <SearchAll onSearch={setQuery} />
@@ -64,7 +65,11 @@ export default function AllNews() {
         </div>
 
         <div className="flex justify-center gap-3 ">
-          <Button variant="outline" size="default" className="w-full lg:w-max">
+          <Button
+            variant="outline"
+            size="default"
+            className="px-5 py-[10px] w-full lg:w-max"
+          >
             More articles
             <ChevronDown className="size-5 text-foreground" />
           </Button>

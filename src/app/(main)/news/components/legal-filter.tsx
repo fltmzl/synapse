@@ -20,11 +20,11 @@ import { ChevronDownIcon, Ghost } from "lucide-react";
 import { ArrowUpIcon } from "@/icons/arrow-up-icon";
 import { Chevron } from "react-day-picker";
 
-interface Props {
+type Props = {
   onFilterChange: (filter: string, value: string[]) => void;
-}
+};
 
-export const LegalFilter = ({ onFilterChange }: Props) => {
+export default function LegalFilter({ onFilterChange }: Props) {
   const categories = [
     "Tax Law",
     "Labor Law",
@@ -140,4 +140,4 @@ export const LegalFilter = ({ onFilterChange }: Props) => {
       {renderPopover("Person", "person", persons)}
     </div>
   );
-};
+}

@@ -8,14 +8,14 @@ import { ArrowRight } from "lucide-react";
 import { H1 } from "@/components/typography/h1";
 import { P } from "@/components/typography/paragraph";
 
-interface ExploreCardProps {
+type ExploreCardProps = {
   title: string;
   category: string;
   date: string;
   images: string[];
   description?: string;
   className?: string;
-}
+};
 
 export default function ExploreCard({
   title,
