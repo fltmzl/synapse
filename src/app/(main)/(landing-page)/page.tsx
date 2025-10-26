@@ -9,7 +9,7 @@ import BusinessCorner from "./sections/business-corner";
 import { redirect } from "next/navigation";
 
 export default function Home() {
-  return redirect("/auth/login");
+  // return redirect("/auth/login");
 
   return (
     <div className="flex flex-col ">
