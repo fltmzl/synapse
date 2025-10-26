@@ -3,6 +3,7 @@
 import BrandLogo from "@/components/brand-logo";
 import { AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { Avatar } from "@radix-ui/react-avatar";
 import { Menu } from "lucide-react";
 import Link from "next/link";
@@ -47,9 +48,9 @@ export default function Header() {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`${
-                    pathname === item.href ? "text-primary underline" : ""
-                  }`}
+                  className={cn(
+                    pathname === item.href && "text-primary underline"
+                  )}
                 >
                   {item.label}
                 </Link>

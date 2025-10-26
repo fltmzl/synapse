@@ -23,7 +23,7 @@ type Props = {
 
 export default function PlatformFilter({ selected, onSelect }: Props) {
   return (
-    <div className="flex gap-3 overflow-x-auto hide-scrollbar">
+    <div className="flex items-center gap-3 overflow-x-auto hide-scrollbar">
       {categories.map(({ label, icon }) => {
         const isActive = selected === label;
 

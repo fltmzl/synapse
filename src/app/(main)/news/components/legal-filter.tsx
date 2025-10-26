@@ -18,11 +18,11 @@ import { cn } from "@/lib/utils";
 import { ChevronDownIcon } from "lucide-react";
 import { useState } from "react";
 
-interface Props {
+type Props = {
   onFilterChange: (filter: string, value: string[]) => void;
-}
+};
 
-export const LegalFilter = ({ onFilterChange }: Props) => {
+export default function LegalFilter({ onFilterChange }: Props) {
   const categories = [
     "Tax Law",
     "Labor Law",
@@ -140,4 +140,4 @@ export const LegalFilter = ({ onFilterChange }: Props) => {
       {renderPopover("Person", "person", persons)}
     </div>
   );
-};
+}

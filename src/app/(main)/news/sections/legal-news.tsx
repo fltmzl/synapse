@@ -1,15 +1,14 @@
 import SectionContainer from "@/components/container/section-container";
 import FilterMultipleWithSearch from "@/components/filter-multiple-with-search";
+import SelectSingleItem from "@/components/select-single-item";
+import SectionTitle from "@/components/typography/section-title";
 import { Button } from "@/components/ui/button";
-import { legalPost, newsData } from "@/data/news-data";
+import { legalPost } from "@/data/news-data";
 import { cn } from "@/lib/utils";
 import { ChevronDown } from "lucide-react";
 import { parseAsArrayOf, parseAsString, useQueryState } from "nuqs";
-import { useState } from "react";
-import { LegalCard } from "../card/legal-news-card";
+import LegalCard from "../card/legal-news-card";
 import PlatformFilter from "../components/platform-legal-filter";
-import { SortLegal } from "../components/sort-legal";
-import SelectSingleItem from "@/components/select-single-item";
 
 export default function LegalNews() {
   const filter = {
@@ -66,13 +65,13 @@ export default function LegalNews() {
   );
 
   return (
-    <SectionContainer className="px-4 py-6 lg:p-20 max-7xl">
-      <div className="flex flex-col gap-6 lg:gap-16">
+    <SectionContainer className="px-4 py-6 lg:p-20">
+      <div className="flex flex-col gap-6 lg:gap-16 max-w-7xl mx-auto">
         <div className="flex flex-col items-center justify-center gap-8 w-full">
           <div className="flex flex-col gap-8 ">
-            <h1 className="text-3xl font-semibold text-center">
+            <SectionTitle className="text-center">
               Veille réseaux sociaux
-            </h1>
+            </SectionTitle>
           </div>
 
           <div className="flex flex-wrap items-center justify-center gap-4 w-full">
@@ -139,7 +138,7 @@ export default function LegalNews() {
 
         <div className="flex justify-center gap-3 ">
           <Button variant="outline" size="default" className="w-full lg:w-max">
-            More articles
+            Show More
             <ChevronDown className="size-5 text-foreground" />
           </Button>
         </div>

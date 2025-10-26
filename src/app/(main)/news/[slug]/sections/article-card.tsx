@@ -23,6 +23,7 @@ import { LinkedinFillICon } from "@/icons/linkedin-fill-icon";
 import { LinkedinIconFlat } from "@/icons/linkedin-icon-flat";
 import { InstagramIconFlat } from "@/icons/instagram-icon-flat";
 import { FacebookFillIcon } from "@/icons/facebook-fill-icon";
+import { cn } from "@/lib/utils";
 
 export default function ArticleContent() {
   const { slug } = useParams(); // ambil slug dari URL
@@ -91,11 +92,12 @@ export default function ArticleContent() {
                 <button
                   key={index}
                   onClick={() => setActiveImage(index)}
-                  className={`p-1 relative  rounded-md overflow-x-auto hide-scrollbar border transition ${
+                  className={cn(
+                    "p-1 relative rounded-md overflow-x-auto hide-scrollbar border transition",
                     activeImage === index
                       ? "border-primary"
                       : "border-transparent hover:border-muted"
-                  }`}
+                  )}
                 >
                   <Image
                     src={img}

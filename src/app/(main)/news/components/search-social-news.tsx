@@ -9,7 +9,7 @@ type SearchBarProps = {
   onSearch: (value: string) => void;
 };
 
-export const SearchSocialNetwork = ({ onSearch }: SearchBarProps) => {
+export default function SearchSocialNetwork({ onSearch }: SearchBarProps) {
   const [value, setValue] = useState("");
 
   return (
@@ -26,4 +26,4 @@ export const SearchSocialNetwork = ({ onSearch }: SearchBarProps) => {
       <Button onClick={() => onSearch(value)}>Search</Button>
     </div>
   );
-};
+}
