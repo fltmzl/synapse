@@ -57,14 +57,15 @@ export default function ArticleContent() {
             <h1 className="text-2xl lg:text-[40px] font-medium leading-[110%] tracking-[-0.03em] ">
               {article.title}
             </h1>
-            <div className="flex ">
-              <p className="text-lg font-regular leading-[140%] text-muted-foreground ">
-                {article.author}
-              </p>
-              <p className="text-lg font-regular leading-[140%] text-muted-foreground">
-                {article.date}
-              </p>
-            </div>
+         <div className="flex items-center gap-3 text-muted-foreground">
+  <p className="text-lg font-regular leading-[140%]">{article.author}</p>
+
+  {/* Garis pemisah */}
+  <span className="w-px h-5 bg-muted-foreground/30" />
+
+  <p className="text-lg font-regular leading-[140%]">{article.date}</p>
+</div>
+
           </header>
 
           {/* Hero Image with arrows */}

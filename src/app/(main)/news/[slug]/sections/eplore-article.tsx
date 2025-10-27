@@ -57,7 +57,6 @@ export default function ExploreArticle() {
 
   return (
     <SectionContainer className="w-full flex flex-col gap-6 lg:gap-10 py-6 pl-4 lg:py-20 lg:pl-20 h-full">
-      <div className="max-w-7xl mx-autoa">
         <h1 className="font-medium text-2xl lg:text-[40px] text-left leading-[110%] tracking-[-0.02em]">
           Explore more articles
         </h1>
@@ -121,7 +120,6 @@ export default function ExploreArticle() {
             </button>
           </div>
         </div>
-      </div>
     </SectionContainer>
   );
 }
