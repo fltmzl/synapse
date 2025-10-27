@@ -10,13 +10,22 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
+// const NAV_ITEMS = [
+//   { label: "Actualité", href: "/news" },
+//   { label: "Base de données", href: "/database" },
+//   { label: "Acteurs", href: "/personality" },
+//   { label: "Structure", href: "/explore-directory" },
+//   { label: "Le coin des affaires", href: "/business-corner" }
+// ];
+
 const NAV_ITEMS = [
-  { label: "Actualité", href: "/news" },
-  { label: "Base de données", href: "/database" },
-  { label: "Acteurs", href: "/personality" },
-  { label: "Structure", href: "/explore-directory" },
-  { label: "Le coin des affaires", href: "/business-corner" }
+  { label: "Actualité", href: "/nav-1" },
+  { label: "Base de données", href: "/nav-2" },
+  { label: "Acteurs", href: "/nav-3" },
+  { label: "Structure", href: "/nav-4" },
+  { label: "Le coin des affaires", href: "/nav-5" }
 ];
+
 export default function Header() {
   const isLoggedIn = false;
   const pathname = usePathname();
