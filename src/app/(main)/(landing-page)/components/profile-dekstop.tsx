@@ -19,6 +19,7 @@ import useModal from "@/hooks/use-modal";
 import { LogoutIcon } from "@/icons/logout-icon";
 import { SettingsIcon, XIcon } from "lucide-react";
 import { useState } from "react";
+import ProfileForm from "./form/profile-form";
 
 type Props = {
   image: string;
@@ -71,7 +72,7 @@ export default function ProfileDekstop({ image, username }: Props) {
           </DialogHeader>
           <DialogContent
             showCloseButton={false}
-            className="flex flex-col lg:flex-row overflow-hidden"
+            className="flex flex-col lg:flex-row overflow-hidden lg:max-w-[822px]"
           >
             <aside className="p-4">
               <div className="">
@@ -79,7 +80,7 @@ export default function ProfileDekstop({ image, username }: Props) {
                   <XIcon size={24} className="text-muted-foreground" />
                 </DialogClose>
               </div>
-              <nav className="mt-4 flex flex-row gap-2 overflow-auto hide-scrollbar w-full">
+              <nav className="mt-4 flex flex-row lg:flex-col gap-2 overflow-auto hide-scrollbar w-full">
                 {settingMenus.map((menu, index) => (
                   <Button
                     key={index}
@@ -94,8 +95,12 @@ export default function ProfileDekstop({ image, username }: Props) {
                 ))}
               </nav>
             </aside>
-            <main>
-              <h2>Mon Profil</h2>
+
+            <main className="p-6 border-border border-t lg:border-t-0 lg:border-l w-full">
+              <h2 className="text-xl font-medium mb-6">Mon Profil</h2>
+              <div>
+                <ProfileForm />
+              </div>
             </main>
           </DialogContent>
         </Dialog>
