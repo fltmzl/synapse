@@ -1,3 +1,11 @@
+import AnswerPersonality from "./sections/answer-personality";
+import FindPersonality from "./sections/find-personality";
+
 export default function PersonalityPage() {
-  return <div>Personality Page</div>;
+  return (
+    <>
+      <FindPersonality />
+      <AnswerPersonality />
+    </>
+  );
 }
