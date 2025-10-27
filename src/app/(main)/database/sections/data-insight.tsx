@@ -14,8 +14,17 @@ import { ArrowUpIcon } from "@/icons/arrow-up-icon";
 import { ArrowUpRightIcon } from "@/icons/arrow-up-right";
 import { BuildingBankIcon } from "@/icons/building-bank-icon";
 import { BuildingSkyScraperIcon } from "@/icons/building-skyscraper-icon";
+import Link from "next/link";
 
-export default function FindDataPage() {
+const questions = [
+  "Education level in Guadeloupe",
+  "Healthcare access in Mayotte",
+  "Key industries in French Guiana",
+  "Population in workforce (all territories)",
+  "Tourism contribution to GDP"
+];
+
+export default function DataInsight() {
   const [activeSource, setActiveSource] = useState("All");
   const [activeInfo, setActiveInfo] = useState("person");
   const [value, setValue] = useState("");
@@ -30,14 +39,15 @@ export default function FindDataPage() {
   }, [value]);
 
   return (
-    <div className="bg-background">
-      <section className="max-w-7xl mx-auto py-16 lg:py-25 w-full px-6 flex flex-col gap-10 lg:gap-16">
+    <div>
+      <section className="max-w-7xl mx-auto py-12 lg:py-20 w-full px-6 flex flex-col gap-10 lg:gap-16">
         {/* Header */}
-        <div className="text-center flex flex-col gap-2">
-          <SectionTitle>Accéder à la base</SectionTitle>
+        <div className="text-center flex flex-col gap-4">
+          <h1 className="text-5xl font-medium leading-[110%] tracking-[-0.03em]">
+            Base de données
+          </h1>
           <P className="lg:text-[18px] lg:leading-[140%] lg:tracking-[-0.01em]">
-            Utiliser l&apos;IA pour recherche une information, une donnée, un
-            rapport ou une source de confiance
+            Rechercher une information ou un contenu relatif aux Outre-Mer
           </P>
         </div>
 
@@ -106,58 +116,21 @@ export default function FindDataPage() {
           </div>
         </div>
 
-        <hr className="w-full max-w-[826px] mx-auto" />
         {/* Specific Info Section */}
-        <div className=" text-center flex flex-col gap-8 items-center">
-          <H4>Le répertoire des territoires</H4>
+        <div className=" text-center flex flex-col gap-4 items-center">
+          <h2 className="text-lg font-medium leading-[140%] tracking-[-0.02em]">
+            Les questions les plus populaires
+          </h2>
 
-          <div className="max-w-5xl w-full grid grid-cols-1 md:grid-cols-3 gap-4">
-            {infoOptions.map((opt) => (
-              <div
-                key={opt.id}
-                className={cn(
-                  "group cursor-pointer transition-all rounded-xl border  hover:border-primary"
-                )}
+          <div className="flex flex-wrap justify-center gap-2 lg:gap-3 max-w-4xl">
+            {questions.map((q, i) => (
+              <Button
+                key={i}
+                variant="outline"
+                className="rounded-md bg-transparent border text-base font-regular leading-[150%] tracking-tighter text-foreground/70 hover:bg-muted transition py-2 px-4 lg:p-2"
               >
-                <div className="p-5 flex flex-col justify-between h-full gap-6">
-                  {/* Icon + Arrow */}
-                  <div className="flex items-start justify-between">
-                    <div
-                      className={cn(
-                        "w-8 h-8 rounded-sm flex items-center justify-center border transition-all duration-200",
-                        "bg-muted/50 text-foreground/80 group-hover:bg-primary group-hover:text-background group-hover:border-primary"
-                      )}
-                    >
-                      {opt.id === "person" && <User className="w-4 h-4" />}
-                      {opt.id === "company" && (
-                        <BuildingBankIcon className="w-4 h-4" />
-                      )}
-                      {opt.id === "directory" && (
-                        <BuildingSkyScraperIcon className="w-4 h-4" />
-                      )}
-                    </div>
-
-                    <div
-                      className={cn(
-                        "w-8 h-8 flex items-center justify-center rounded-full border transition-all duration-200",
-                        "text-foreground/80 group-hover:text-primary group-hover:border-primary group-hover:bg-primary/10"
-                      )}
-                    >
-                      <ArrowUpRightIcon className="w-4 h-4" />
-                    </div>
-                  </div>
-
-                  {/* Text */}
-                  <div className="text-left flex flex-col gap-2">
-                    <h4 className="text-[18px] font-medium text-foreground leading-6 tracking-[-0.02em]">
-                      {opt.title}
-                    </h4>
-                    <p className="text-base font-regular tracking-[-0.01em] leading-5 text-muted-foreground">
-                      {opt.desc}
-                    </p>
-                  </div>
-                </div>
-              </div>
+                <Link href="#">{q}</Link>
+              </Button>
             ))}
           </div>
         </div>

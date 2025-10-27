@@ -1,18 +1,36 @@
 import { useState } from "react";
-import { NewsFilter } from "../components/news-filter";
 import { newsData } from "@/data/news-data";
 import { Button } from "@/components/ui/button";
 import NewsCard from "../card/news-card";
 import clsx from "clsx";
-import { array } from "zod";
 import { ChevronDown } from "lucide-react";
-import { SearchAll } from "../components/search-all-news";
-import { SortNews } from "../components/sort-news";
+import SectionContainer from "@/components/container/section-container";
+import { H1 } from "@/components/typography/h1";
+import { Title } from "@/components/typography/title";
+import SearchAll from "../components/search-all-news";
+import NewsFilter from "../components/news-filter";
+import SelectSingleItem from "@/components/select-single-item";
+import { parseAsString, useQueryState } from "nuqs";
 
 export default function AllNews() {
-  const [category, setCategory] = useState("Tout");
-  const [sort, setSort] = useState("Newest");
   const [query, setQuery] = useState("");
+
+  const sortBy = [
+    { label: "Date de parution", value: "Date de parution" },
+    { label: "Oldest", value: "Oldest" },
+    { label: "Le plus vu", value: "Le plus vu" },
+    { label: "Most Popular", value: "Most Popular" },
+    { label: "Editor's Pick", value: "Editor's Pick" }
+  ];
+  const [sortDate, setSortDate] = useQueryState(
+    "sortDate",
+    parseAsString.withDefault("Date de parution")
+  );
+
+  const [category, setCategory] = useQueryState(
+    "category",
+    parseAsString.withDefault("Tout")
+  );
 
   const filtered = newsData
     .filter((n) =>
@@ -23,10 +41,10 @@ export default function AllNews() {
     .filter((n) => n.title.toLowerCase().includes(query.toLowerCase()));
 
   return (
-    <section className="bg-background px-4 py-5 lg:p-20 max-7xl border rounded-md">
-      <div className="flex flex-col gap-6 lg:gap-16">
+    <SectionContainer className="px-4 pt-10 pb-6 lg:p-20 ">
+      <div className="flex flex-col gap-6 lg:gap-16 max-w-7xl mx-auto">
         <div className="flex flex-col gap-8">
-          <h1 className="text-3xl font-semibold text-center">Actualité</h1>
+          <Title className="text-center">Actualité</Title>
 
           <div className="flex justify-center">
             <SearchAll onSearch={setQuery} />
@@ -39,7 +57,11 @@ export default function AllNews() {
             <span className="text-md font-medium leading-[140%] tracking-tighter">
               Filtrer par
             </span>
-            <SortNews selected={sort} onChange={setSort} />
+            <SelectSingleItem
+              listItems={sortBy}
+              selected={sortDate}
+              onChange={setSortDate}
+            />
           </div>
         </div>
 
@@ -56,19 +78,23 @@ export default function AllNews() {
                   !isLast && "pb-8 border-b border-border"
                 )}
               >
-                <NewsCard {...news} />
+                <NewsCard {...news} slug={news.slug ?? ""} />
               </div>
             );
           })}
         </div>
 
         <div className="flex justify-center gap-3 ">
-          <Button variant="outline" size="default" className="w-full lg:w-max">
+          <Button
+            variant="outline"
+            size="default"
+            className="px-5 py-[10px] w-full lg:w-max"
+          >
             More articles
             <ChevronDown className="size-5 text-foreground" />
           </Button>
         </div>
       </div>
-    </section>
+    </SectionContainer>
   );
 }
