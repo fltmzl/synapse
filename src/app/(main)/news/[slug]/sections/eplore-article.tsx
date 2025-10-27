@@ -56,66 +56,70 @@ export default function ExploreArticle() {
   }, []);
 
   return (
-    <SectionContainer className="w-full flex flex-col gap-6 lg:gap-10 py-6 pl-4 lg:py-20 lg:pl-20">
-      <h1 className="font-medium text-2xl lg:text-[40px] text-left leading-[110%] tracking-[-0.02em]">
-        Explore more articles
-      </h1>
+    <SectionContainer className="w-full flex flex-col gap-6 lg:gap-10 py-6 pl-4 lg:py-20 lg:pl-20 h-full">
+      <div className="max-w-7xl mx-autoa">
+        <h1 className="font-medium text-2xl lg:text-[40px] text-left leading-[110%] tracking-[-0.02em]">
+          Explore more articles
+        </h1>
 
-      {/* Carousel wrapper */}
-      <div className="relative w-full overflow-x-auto hide-scrollbar scroll-smooth snap-x snap-mandatory h-[260px] lg:h-[364px] overflow-y-hidden ">
-        <div
-          className="flex transition-transform duration-700 ease-in-out gap-6"
-          style={{
-            transform: `translateX(-${activeIndex * (100 / visibleCount)}%)`
-          }}
-        >
-          {newsData.map((news, i) => (
-            <div key={i}>
-              <ExploreCard {...news} />
-            </div>
-          ))}
+        {/* Carousel wrapper */}
+        <div className="relative w-full overflow-hidden overflow-x-auto hide-scrollbar scroll-smooth snap-x snap-mandatory ">
+          <div
+            className="flex transition-transform duration-700 ease-in-out gap-6 h-full"
+            style={{
+              transform: `translateX(-${activeIndex * (100 / visibleCount)}%)`
+            }}
+          >
+            {newsData.map((news, i) => (
+              <div key={i} className="snap-start flex-shrink-0 h-full">
+                <ExploreCard {...news} />
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
 
-      {/* Controls + Dots */}
-      <div className="flex justify-between items-center w-full pr-10">
-        {/* Dots */}
-        <div className="flex gap-2">
-          {Array.from({ length: totalItems - visibleCount + 1 }).map((_, i) => (
-            <span
-              key={i}
+        {/* Controls + Dots */}
+        <div className="flex justify-between items-center w-full pr-10">
+          {/* Dots */}
+          <div className="flex gap-2">
+            {Array.from({ length: totalItems - visibleCount + 1 }).map(
+              (_, i) => (
+                <span
+                  key={i}
+                  className={clsx(
+                    "h-1.5 rounded-full transition-all duration-300",
+                    activeIndex === i ? "bg-primary w-6" : "bg-border w-2"
+                  )}
+                />
+              )
+            )}
+          </div>
+
+          {/* Controls */}
+          <div className="flex gap-3">
+            <button
+              onClick={handlePrev}
+              disabled={activeIndex === 0}
               className={clsx(
-                "h-1.5 rounded-full transition-all duration-300",
-                activeIndex === i ? "bg-primary w-6" : "bg-border w-2"
+                "bg-background rounded-full w-10 h-10 border grid place-content-center",
+                activeIndex === 0 && "opacity-40 cursor-not-allowed"
               )}
-            />
-          ))}
-        </div>
+            >
+              <ArrowLeftIcon className="w-5 h-5" />
+            </button>
 
-        {/* Controls */}
-        <div className="flex gap-3">
-          <button
-            onClick={handlePrev}
-            disabled={activeIndex === 0}
-            className={clsx(
-              "bg-background rounded-full w-10 h-10 border grid place-content-center",
-              activeIndex === 0 && "opacity-40 cursor-not-allowed"
-            )}
-          >
-            <ArrowLeftIcon className="w-5 h-5" />
-          </button>
-
-          <button
-            onClick={handleNext}
-            disabled={activeIndex >= totalItems - visibleCount}
-            className={clsx(
-              "bg-background rounded-full w-10 h-10 border grid place-content-center",
-              activeIndex >= totalItems - visibleCount &&
-                "opacity-40 cursor-not-allowed"
-            )}
-          >
-            <ArrowRightIcon className="w-5 h-5" />
-          </button>
+            <button
+              onClick={handleNext}
+              disabled={activeIndex >= totalItems - visibleCount}
+              className={clsx(
+                "bg-background rounded-full w-10 h-10 border grid place-content-center",
+                activeIndex >= totalItems - visibleCount &&
+                  "opacity-40 cursor-not-allowed"
+              )}
+            >
+              <ArrowRightIcon className="w-5 h-5" />
+            </button>
+          </div>
         </div>
       </div>
     </SectionContainer>

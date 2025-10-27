@@ -6,10 +6,7 @@ export type NewsItem = {
   title: string;
   author: string;
   images: string[];
-  content: {
-    heading?: string;
-    text: string;
-  }[];
+  content: string;
 };
 
 export type productionDataType = {

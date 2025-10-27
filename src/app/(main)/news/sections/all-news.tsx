@@ -22,21 +22,21 @@ export default function AllNews() {
     { label: "Most Popular", value: "Most Popular" },
     { label: "Editor's Pick", value: "Editor's Pick" }
   ];
-  const [sort, setSort] = useQueryState(
-    "sort",
+  const [sortDate, setSortDate] = useQueryState(
+    "sortDate",
     parseAsString.withDefault("Date de parution")
   );
 
-  const [categories, setCategories] = useQueryState(
-    "categories",
+  const [category, setCategory] = useQueryState(
+    "category",
     parseAsString.withDefault("Tout")
   );
 
   const filtered = newsData
     .filter((n) =>
-      categories === "Tout"
+      category === "Tout"
         ? true
-        : n.category.toLowerCase() === categories.toLowerCase()
+        : n.category.toLowerCase() === category.toLowerCase()
     )
     .filter((n) => n.title.toLowerCase().includes(query.toLowerCase()));
 
@@ -52,15 +52,15 @@ export default function AllNews() {
         </div>
 
         <div className="flex flex-wrap items-center justify-between gap-4">
-          <NewsFilter selected={categories} onSelect={setCategories} />
+          <NewsFilter selected={category} onSelect={setCategory} />
           <div className="flex items-center gap-4 ">
             <span className="text-md font-medium leading-[140%] tracking-tighter">
               Filtrer par
             </span>
             <SelectSingleItem
               listItems={sortBy}
-              selected={sort}
-              onChange={setSort}
+              selected={sortDate}
+              onChange={setSortDate}
             />
           </div>
         </div>

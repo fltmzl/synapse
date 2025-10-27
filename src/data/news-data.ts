@@ -14,48 +14,45 @@ export const newsData: NewsItem[] = [
     author: "Regional Council of Martinique",
     date: "May 25, 2025",
     images: ["/images/news/news-1.png"],
-    content: [
-      {
-        text: `Small and medium-sized enterprises (SMEs) across Martinique have received a significant boost in their drive toward sustainability, as a new €15 million funding package is launched to support green transition initiatives across the island.`
-      },
-      {
-        text: `The program — spearheaded by the French Development Agency (AFD) in partnership with the European Green Growth Fund (EGGF) and the Regional Council of Martinique — aims to accelerate the island’s economic transformation by promoting renewable energy, eco-innovation, and low-carbon development within local industries.`
-      },
-      {
-        heading: "Empowering local businesses for a sustainable future",
-        text: `The fund will primarily target Martinique’s agriculture, construction, tourism, and transport sectors, which together account for nearly 70% of the island’s carbon emissions. Through the initiative, eligible SMEs will receive a combination of low-interest loans, innovation grants, and technical support to help them modernize operations and reduce environmental impact.`
-      },
-      {
-        text: `“This investment is not just about funding projects,” said Isabelle Moreau, Regional Delegate for Economic Cooperation. “It’s about empowering local entrepreneurs to take the lead in building a more resilient and sustainable Martinique — one that creates jobs while protecting our natural heritage.”`
-      },
-      {
-        text: `The new funding will also help SMEs transition to renewable energy sources, such as solar, wind, and bioenergy, with several pilot installations already planned across the island. In Fort-de-France, for instance, food-processing cooperatives will receive financial and technical assistance to install solar panels and energy-efficient cooling systems, reducing operational emissions by up to 35%.`
-      },
-      {
-        heading: "Supporting innovation and green jobs",
-        text: `A portion of the fund — approximately €3 million — has been earmarked for innovation and research, encouraging startups and small firms to develop sustainable technologies tailored to the Caribbean climate. The initiative will also support vocational training programs to equip local workers with the skills needed in emerging green sectors.`
-      },
-      {
-        text: `“The transition to a greener economy will only succeed if it’s inclusive,” said Jean-Luc Pierre, President of the Chamber of Commerce of Martinique. “We must ensure that small businesses, farmers, and artisans all benefit from this transformation, not just large corporations.”`
-      },
-      {
-        text: `By 2030, the project aims to reduce Martinique’s SME carbon emissions by 40% and create over 1,200 green jobs, while fostering cross-island partnerships with Guadeloupe and Saint Lucia to share sustainable development expertise.`
-      },
-      {
-        heading: "Part of a broader regional effort",
-        text: `This initiative is part of the French Overseas Green Pact, a national policy framework launched in 2023 to support environmental transition across France’s overseas territories. The program prioritizes islands such as Martinique, Réunion, and Guadeloupe, which face unique climate challenges due to their reliance on imported energy and vulnerability to extreme weather events.`
-      },
-      {
-        text: `Experts believe the €15 million investment could mark a turning point in how overseas territories approach sustainability — not as an obligation, but as an opportunity.`
-      },
-      {
-        text: `“Martinique can become a regional model for the green economy,” said Dr. Claire Bérard, environmental economist at the University of the French Antilles. “If the private sector continues to innovate at this pace, the island could achieve carbon neutrality well before 2040.”`
-      }
-    ]
+    content: `
+      <h1>Martinique launches €15 million green transition fund for local SMEs</h1>
+      <p>Small and medium-sized enterprises (SMEs) across Martinique have received a significant boost in their drive toward sustainability, as a new €15 million funding package is launched to support green transition initiatives across the island.</p>
+
+      <h2>Overview of the program</h2>
+      <p>The program — spearheaded by the French Development Agency (AFD) in partnership with the European Green Growth Fund (EGGF) and the Regional Council of Martinique — aims to accelerate the island’s economic transformation by promoting renewable energy, eco-innovation, and low-carbon development within local industries.</p>
+
+      <h3>Key objectives</h3>
+      <ul>
+        <li>Provide low-interest loans for green investments.</li>
+        <li>Offer innovation grants to startups and SMEs developing sustainable tech.</li>
+        <li>Deliver technical assistance and training to local businesses.</li>
+      </ul>
+
+      <h3>Targeted sectors</h3>
+      <p>The fund will primarily target Martinique’s agriculture, construction, tourism, and transport sectors, which together account for nearly 70% of the island’s carbon emissions.</p>
+
+      <h4>Grants and loans breakdown</h4>
+      <ol>
+        <li>€3M reserved for innovation and R&amp;D projects.</li>
+        <li>€8M allocated as low-interest loans for capital expenditures (solar, HVAC, etc.).</li>
+        <li>€4M for technical assistance, training and pilot installations.</li>
+      </ol>
+
+      <h4>Case studies & quotes</h4>
+      <p>“This investment is not just about funding projects,” said Isabelle Moreau, Regional Delegate for Economic Cooperation. “It’s about empowering local entrepreneurs to take the lead in building a more resilient and sustainable Martinique — one that creates jobs while protecting our natural heritage.”</p>
+
+      <h5>Implementation timeline</h5>
+      <p>Pilot installations are scheduled across the island within the first 12 months, with a rolling grant application process to follow.</p>
+
+      <h6>Expected outcomes</h6>
+      <p>By 2030, the project aims to reduce Martinique’s SME carbon emissions by 40% and create over 1,200 green jobs.</p>
+    `
   },
+
   {
     slug: "martinique-smes-secure-15m-funding",
-    title: "Martinique SMEs secure €15M funding for green transition projects",
+    title:
+      "Martinique SMEs secure €15M funding for green transition projects (analysis)",
     category: "Analyse",
     author: "Citizen",
     date: "Aug 29, 2025",
@@ -64,20 +61,22 @@ export const newsData: NewsItem[] = [
       "/images/news/news-3.png",
       "/images/news/news-4.png"
     ],
-    content: [
-      {
-        text: `Small and medium-sized enterprises (SMEs) across Martinique have received over €15 million in funding to support their green transition efforts. The initiative will help companies reduce emissions and modernize production processes.`
-      },
-      {
-        heading: "Empowering local businesses for sustainability",
-        text: `The funding program encourages entrepreneurs to invest in renewable energy, waste management, and eco-friendly logistics. It is expected to create more than 400 green jobs across the island.`
-      },
-      {
-        heading: "Regional collaboration",
-        text: `This initiative is part of a broader Caribbean-wide green development plan, aligning Martinique with global sustainability goals.`
-      }
-    ]
+    content: `
+      <h1>Analysis: What €15M means for Martinique's SMEs</h1>
+      <p>Small and medium-sized enterprises (SMEs) across Martinique have received over €15 million in funding to support their green transition efforts. The initiative will help companies reduce emissions and modernize production processes.</p>
+
+      <h2>Main pillars of the funding</h2>
+      <ul>
+        <li>Renewable energy adoption</li>
+        <li>Waste reduction and circular economy measures</li>
+        <li>Skills & training for green jobs</li>
+      </ul>
+
+      <h3>Projected impact</h3>
+      <p>Experts estimate the fund could enable more than 400 new green jobs and stimulate investment in local manufacturing and services aimed at sustainability.</p>
+    `
   },
+
   {
     slug: "mayotte-exports-increase-h1-2025",
     title:
@@ -90,19 +89,22 @@ export const newsData: NewsItem[] = [
       "/images/news/news-4.png",
       "/images/news/news-5.png"
     ],
-    content: [
-      {
-        text: `Mayotte’s export volume increased by 5% in the first half of 2025, driven primarily by agricultural products and artisanal goods. The rise highlights growing demand from European and East African markets.`
-      },
-      {
-        heading: "Agriculture and trade innovation",
-        text: `Farmers in Mayotte have adopted new digital supply chain systems to manage exports more efficiently. The regional government also introduced incentives for sustainable farming practices.`
-      },
-      {
-        text: `The local Chamber of Commerce stated that this growth represents “a strong signal of economic diversification.”`
-      }
-    ]
+    content: `
+      <h1>Mayotte's exports rise by 5% in H1 2025</h1>
+      <p>Mayotte’s export volume increased by 5% in the first half of 2025, driven primarily by agricultural products and artisanal goods.</p>
+
+      <h2>Drivers of growth</h2>
+      <ul>
+        <li>Improved logistics and port facilities</li>
+        <li>Higher demand from European and East African markets</li>
+        <li>Support programs for export-oriented SMEs</li>
+      </ul>
+
+      <h3>Quotes</h3>
+      <p>“The growth underscores the potential of Mayotte’s agro-food sector to compete internationally,” the Chamber of Commerce said.</p>
+    `
   },
+
   {
     slug: "overseas-territories-representation-parliament",
     title:
@@ -115,19 +117,22 @@ export const newsData: NewsItem[] = [
       "/images/news/news-5.png",
       "/images/news/news-6.png"
     ],
-    content: [
-      {
-        text: `A growing political debate has emerged regarding how France’s overseas territories are represented in the national parliament. Lawmakers argue that the current system underrepresents island populations.`
-      },
-      {
-        heading: "Proposals for change",
-        text: `Several parliament members have suggested new representation models that better reflect demographic realities and ensure stronger local voices in decision-making.`
-      },
-      {
-        text: `Citizens’ groups across Guadeloupe and Réunion have called for public consultations to ensure transparency and participation.`
-      }
-    ]
+    content: `
+      <h1>Representation debate for France's overseas territories</h1>
+      <p>A growing political debate has emerged regarding how France’s overseas territories are represented in the national parliament.</p>
+
+      <h2>Proposals on the table</h2>
+      <ol>
+        <li>Adjust seat allocation to reflect demographic shifts</li>
+        <li>Create advisory seats for territorial councils</li>
+        <li>Introduce regular public consultations</li>
+      </ol>
+
+      <h3>Community response</h3>
+      <p>Local citizens' groups across Guadeloupe and Réunion have called for transparent consultations to ensure any changes reflect local needs.</p>
+    `
   },
+
   {
     slug: "unified-judicial-system-french-overseas",
     title: "Unified judicial system proposed for French overseas territories",
@@ -139,19 +144,22 @@ export const newsData: NewsItem[] = [
       "/images/news/news-1.png",
       "/images/news/news-2.png"
     ],
-    content: [
-      {
-        text: `Legal experts are advocating for a unified judicial system across France’s overseas territories to improve efficiency and reduce administrative disparities.`
-      },
-      {
-        heading: "Legal consistency across territories",
-        text: `The reform would align judicial processes and court structures with those in mainland France, while maintaining consideration for local customs.`
-      },
-      {
-        text: `Critics, however, fear that such centralization might erode the autonomy of local courts and overlook specific regional issues.`
-      }
-    ]
+    content: `
+      <h1>Proposal: Unified judicial system for overseas territories</h1>
+      <p>Legal experts are advocating for a unified judicial system across France’s overseas territories to improve efficiency.</p>
+
+      <h2>Benefits claimed</h2>
+      <ul>
+        <li>Consistency in legal procedures</li>
+        <li>Better resource allocation</li>
+        <li>Improved training & mobility for judges</li>
+      </ul>
+
+      <h3>Concerns raised</h3>
+      <p>Critics warn that centralization may erode local autonomy and fail to reflect regional cultural specificities.</p>
+    `
   },
+
   {
     slug: "legal-experts-call-unified-judicial-system",
     title:
@@ -164,19 +172,20 @@ export const newsData: NewsItem[] = [
       "/images/news/news-2.png",
       "/images/news/news-3.png"
     ],
-    content: [
-      {
-        text: `A coalition of legal scholars and government advisors has reiterated calls for a unified legal framework governing all French overseas territories.`
-      },
-      {
-        heading: "Addressing inequality and efficiency",
-        text: `The proposal seeks to streamline administrative processes, improve case management, and ensure equal access to justice across regions.`
-      },
-      {
-        heading: "Political implications",
-        text: `While the government has shown interest, some local representatives caution that any reform must respect territorial autonomy and cultural diversity.`
-      }
-    ]
+    content: `
+      <h1>Coalition calls for a single legal framework</h1>
+      <p>A coalition of legal scholars and advisors has reiterated calls for a unified legal framework governing all French overseas territories.</p>
+
+      <h2>Key recommendations</h2>
+      <ol>
+        <li>Standardize court procedures</li>
+        <li>Create shared case management systems</li>
+        <li>Increase training and resource sharing</li>
+      </ol>
+
+      <h3>Next steps</h3>
+      <p>Policymakers have suggested a phased approach with pilot regions and regular impact assessments.</p>
+    `
   }
 ];
 
