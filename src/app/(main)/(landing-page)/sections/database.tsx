@@ -40,9 +40,9 @@ export default function DatabasePage() {
                 />
               </div>
 
-              <div className="flex items-center">
+              <div className="flex items-center divide-x">
                 <H2 className="text-muted-foreground pr-4">Année</H2>
-                <div className="flex items-center border-l pl-4">
+                <div className="flex items-center pl-1">
                   <Select value={year} onValueChange={setYear}>
                     <SelectTrigger className="border-none text-foreground font-medium text-base leading-6 tracking-[-0.02em]">
                       <SelectValue placeholder="2024" />

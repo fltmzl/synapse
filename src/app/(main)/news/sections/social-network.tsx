@@ -3,19 +3,21 @@ import { socialPosts } from "@/data/news-data";
 import { Button } from "@/components/ui/button";
 import clsx from "clsx";
 import { ChevronDown } from "lucide-react";
-import { SearchSocialNetwork } from "../components/search-social-news";
 import SocialPostCard from "../card/social-news-card";
+import SectionContainer from "@/components/container/section-container";
+import SectionTitle from "@/components/typography/section-title";
+import SearchSocialNetwork from "../components/search-social-news";
 
 export default function SocialNetworkNews() {
   const [query, setQuery] = useState("");
 
   return (
-    <section className="bg-background px-4 py-5 lg:p-20 max-7xl border rounded-md">
-      <div className="flex flex-col gap-6 lg:gap-16">
+    <SectionContainer className="px-4 py-5 lg:p-20 ">
+      <div className="flex flex-col gap-6 lg:gap-16 max-w-7xl mx-auto">
         <div className="flex flex-col gap-8">
-          <h1 className="text-3xl font-semibold text-center">
+          <SectionTitle className="text-center">
             Actualité citoyenne
-          </h1>
+          </SectionTitle>
 
           <div className="flex justify-center">
             <SearchSocialNetwork onSearch={setQuery} />
@@ -53,12 +55,16 @@ export default function SocialNetworkNews() {
         </div>
 
         <div className="flex justify-center gap-3 ">
-          <Button variant="outline" size="default" className="w-full lg:w-max">
+          <Button
+            variant="outline"
+            size="md"
+            className="w-full lg:w-max text-sm font-medium leading[140%] tracking-tighter"
+          >
             Show More
             <ChevronDown className="size-5 text-foreground" />
           </Button>
         </div>
       </div>
-    </section>
+    </SectionContainer>
   );
 }

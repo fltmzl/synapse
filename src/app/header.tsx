@@ -3,20 +3,32 @@
 import BrandLogo from "@/components/brand-logo";
 import { AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { Avatar } from "@radix-ui/react-avatar";
 import { Menu } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import ProfileDekstop from "./(main)/(landing-page)/components/profile-dekstop";
 
+// const NAV_ITEMS = [
+//   { label: "Actualité", href: "/news" },
+//   { label: "Base de données", href: "/database" },
+//   { label: "Acteurs", href: "/personality" },
+//   { label: "Structure", href: "/explore-directory" },
+//   { label: "Le coin des affaires", href: "/business-corner" }
+// ];
+
 const NAV_ITEMS = [
-  { label: "Actualité", href: "/news" },
-  { label: "Base de données", href: "/base-de-donnees" },
-  { label: "Acteurs", href: "/acteurs" },
-  { label: "Structure", href: "/structure" },
-  { label: "Le coin des affaires", href: "/le-coin-des-affaires" }
+  { label: "Actualité", href: "/nav-1" },
+  { label: "Base de données", href: "/nav-2" },
+  { label: "Acteurs", href: "/nav-3" },
+  { label: "Structure", href: "/nav-4" },
+  { label: "Le coin des affaires", href: "/nav-5" }
 ];
+
 export default function Header() {
+  const pathname = usePathname();
   const isLoggedIn = true;
 
   const [open, setOpen] = useState(false);
@@ -44,7 +56,13 @@ export default function Header() {
             {/* Desktop nav */}
             <nav className="hidden md:flex md:gap-4 lg:gap-8 text-base">
               {NAV_ITEMS.map((item) => (
-                <Link key={item.href} href={item.href}>
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={cn(
+                    pathname === item.href && "text-primary underline"
+                  )}
+                >
                   {item.label}
                 </Link>
               ))}

@@ -28,16 +28,27 @@ export default function DesktopCarousel() {
   useEffect(() => {
     const updateDots = () => {
       const el = desktopRef.current;
-      if (!el) return;
-      const cardWidth = el.querySelector("div > div")?.clientWidth || 300;
-      const visibleCards = Math.floor(el.clientWidth / cardWidth) || 1;
+      if (!el || el.children.length === 0) return;
+
+      const firstCard = el.children[0] as HTMLElement;
+      const cardWidth = firstCard.getBoundingClientRect().width;
+
+      if (!cardWidth) return;
+
+      const visibleCards = Math.max(1, Math.floor(el.clientWidth / cardWidth));
       const totalPages = Math.ceil(productionData.length / visibleCards);
+
       setDotCount(totalPages);
     };
 
-    updateDots();
+    // Delay a bit so layout is ready
+    const timeout = setTimeout(updateDots, 50);
+
     window.addEventListener("resize", updateDots);
-    return () => window.removeEventListener("resize", updateDots);
+    return () => {
+      clearTimeout(timeout);
+      window.removeEventListener("resize", updateDots);
+    };
   }, []);
 
   /** Track scroll to update active dot */
@@ -46,9 +57,12 @@ export default function DesktopCarousel() {
     if (!el) return;
 
     const handleScroll = () => {
-      const totalWidth = el.scrollWidth - el.clientWidth;
-      const scrollRatio = el.scrollLeft / totalWidth;
-      const newIndex = Math.round(scrollRatio * (dotCount - 1));
+      const el = desktopRef.current;
+      if (!el) return;
+
+      const firstCard = el.children[0] as HTMLElement;
+      const cardWidth = firstCard.clientWidth;
+      const newIndex = Math.round(el.scrollLeft / cardWidth);
       setActiveIndex(newIndex);
     };
 
@@ -57,7 +71,7 @@ export default function DesktopCarousel() {
   }, [dotCount]);
 
   return (
-    <div className="hidden h-full md:flex items-start gap-10">
+    <div className="hidden h-full md:flex items-start gap-16 md:justify-end 2xl:translate-x-20 3xl:justify-center">
       <div className="flex flex-col justify-between h-full items-start w-full max-w-xs shrink-0">
         <SectionTitle>Les dernières publications</SectionTitle>
 
@@ -96,14 +110,14 @@ export default function DesktopCarousel() {
       {/* SCROLL AREA */}
       <div
         ref={desktopRef}
-        className="flex gap-8 overflow-x-auto scroll-smooth hide-scrollbar w-full snap-x snap-mandatory"
-        style={{ WebkitOverflowScrolling: "touch" }}
+        className="flex gap-6 overflow-x-auto scroll-smooth hide-scrollbar w-fit snap-x snap-mandatory md:pr-6"
+        style={{ WebkitOverflowScrolling: "touch", overflowX: "scroll" }}
       >
         {productionData.map((news, i) => (
           <ProductionCard
             key={i}
-            data={news}
-            className="snap-start flex-shrink-0 w-[320px]"
+            {...news}
+            className="snap-start flex-shrink-0"
             variant="desktop"
           />
         ))}

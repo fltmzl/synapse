@@ -9,6 +9,7 @@ html {
 }
 
 @theme inline {
+  --breakpoint-3xl: 160rem;
   --text-3xl: 2rem;
   --color-success: #16A34A;
   --color-background: var(--background);
@@ -174,11 +175,27 @@ html {
 .scrollbar-custom::-webkit-scrollbar-thumb {
   background-color: #D9D9D9;
   border-radius: 30px;
+  max-height: 10px;
 }
 
 .scrollbar-custom::-webkit-scrollbar-thumb:hover {
   background: #c7c7c7
 }
+
+.scrollbar-custom-sm::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+.scrollbar-custom-primary::-webkit-scrollbar-thumb {
+  background-color: var(--primary);
+  border-radius: 30px;
+}
+
+.scrollbar-custom-primary::-webkit-scrollbar-thumb:hover {
+  background: var(--primary)
+}
+
 /* End of Custom Scrollbar */
 
 /* Start of hide default icon type password */
