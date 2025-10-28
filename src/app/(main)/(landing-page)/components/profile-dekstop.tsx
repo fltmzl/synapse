@@ -20,17 +20,22 @@ import { LogoutIcon } from "@/icons/logout-icon";
 import { SettingsIcon, XIcon } from "lucide-react";
 import { useState } from "react";
 import ProfileForm from "./form/profile-form";
+import { cn } from "@/lib/utils";
+import ChangePasswordForm from "./form/change-password-form";
+import BillingForm from "./form/billing-form";
 
 type Props = {
   image: string;
   username: string;
 };
 
+export type SettingMenuType = "profile" | "security" | "billing";
+
 export default function ProfileDekstop({ image, username }: Props) {
   const { closeModal, isOpen, openModal, setIsOpen } = useModal(true);
-  const [activeMenu, setActiveMenu] = useState("profile");
+  const [activeMenu, setActiveMenu] = useState<SettingMenuType>("profile");
 
-  const settingMenus = [
+  const settingMenus: { slug: SettingMenuType; title: string }[] = [
     {
       slug: "profile",
       title: "My profile"
@@ -44,6 +49,33 @@ export default function ProfileDekstop({ image, username }: Props) {
       title: "Offre et facturation"
     }
   ];
+
+  const getActiveMenuTitle = (activeMenu: SettingMenuType) => {
+    switch (activeMenu) {
+      case "profile":
+        return "Mon Profil";
+      case "security":
+        return "Changer mon mot de passe";
+      case "billing":
+        return "Offre et facturation";
+      default:
+        return "";
+    }
+  };
+
+  const getActiveMenuComponent = (activeMenu: SettingMenuType) => {
+    switch (activeMenu) {
+      case "profile":
+        return <ProfileForm />;
+      case "security":
+        return <ChangePasswordForm />;
+      case "billing":
+        return "Coming Soon";
+        return <BillingForm />;
+      default:
+        return null;
+    }
+  };
 
   return (
     <>
@@ -74,7 +106,7 @@ export default function ProfileDekstop({ image, username }: Props) {
             showCloseButton={false}
             className="flex flex-col lg:flex-row overflow-hidden lg:max-w-[822px]"
           >
-            <aside className="p-4">
+            <aside className="p-4 min-w-56">
               <div className="">
                 <DialogClose>
                   <XIcon size={24} className="text-muted-foreground" />
@@ -88,7 +120,13 @@ export default function ProfileDekstop({ image, username }: Props) {
                     variant={
                       activeMenu === menu.slug ? "outline-gray" : "ghost"
                     }
-                    className="font-normal"
+                    onClick={() => setActiveMenu(menu.slug)}
+                    className={cn(
+                      "font-normal md:flex md:justify-start md:px-2.5",
+                      {
+                        "border border-transparent": activeMenu !== menu.slug
+                      }
+                    )}
                   >
                     {menu.title}
                   </Button>
@@ -97,10 +135,10 @@ export default function ProfileDekstop({ image, username }: Props) {
             </aside>
 
             <main className="p-6 border-border border-t lg:border-t-0 lg:border-l w-full">
-              <h2 className="text-xl font-medium mb-6">Mon Profil</h2>
-              <div>
-                <ProfileForm />
-              </div>
+              <h2 className="text-xl font-medium mb-6">
+                {getActiveMenuTitle(activeMenu)}
+              </h2>
+              <div>{getActiveMenuComponent(activeMenu)}</div>
             </main>
           </DialogContent>
         </Dialog>
