@@ -1,47 +1,45 @@
 "use client";
 
-
 import { parseAsArrayOf, parseAsString, useQueryState } from "nuqs";
-import SearchPersonality from "../card/search-personality";
 import { useState } from "react";
+
+import FilterMultipleWithSearch from "@/components/filter-multiple-with-search";
+import SearchPersonality from "../components/search-personality";
 
 export default function FindPersonality() {
   const [query, setQuery] = useState("");
 
-  const filter = {
-    categories: [
-      { label: "Tax Law", value: "Tax Law" },
-      { label: "Labor Law", value: "Labor Law" },
-      { label: "Environment", value: "Environment" },
-      { label: "Immigration", value: "Immigration" },
-      { label: "Indigenous Rights", value: "Indigenous Rights" }
-    ],
-    territories: [
+  const filters = {
+    territory: [
       { label: "Martinique", value: "Martinique" },
       { label: "Guadeloupe", value: "Guadeloupe" },
       { label: "Réunion", value: "Réunion" },
       { label: "Mayotte", value: "Mayotte" },
       { label: "French Guiana", value: "French Guiana" }
     ],
-    persons: [
-      { label: "Éric Dubois", value: "Éric Dubois" },
-      { label: "Sophie Laurent", value: "Sophie Laurent" },
-      { label: "Marc Rivière", value: "Marc Rivière" },
-      { label: "Jean-Paul Lévy", value: "Jean-Paul Lévy" },
-      { label: "Louise Morel", value: "Louise Morel" }
+    role: [
+      { label: "Government", value: "Government" },
+      { label: "Business Leaders", value: "Business Leaders" }
+    ],
+    category: [
+      { label: "Economy", value: "Economy" },
+      { label: "Government", value: "Government" },
+      { label: "Health", value: "Health" },
+      { label: "Education", value: "Education" },
+      { label: "Environment", value: "Environment" }
     ]
   };
 
-  const [territories, setTerritories] = useQueryState(
-    "territories",
+  const [territory, setTerritory] = useQueryState(
+    "territory",
     parseAsArrayOf(parseAsString).withDefault([])
   );
-  const [positions, setPositions] = useQueryState(
-    "positions",
+  const [role, setRole] = useQueryState(
+    "role",
     parseAsArrayOf(parseAsString).withDefault([])
   );
-  const [categories, setCategories] = useQueryState(
-    "categories",
+  const [category, setCategory] = useQueryState(
+    "category",
     parseAsArrayOf(parseAsString).withDefault([])
   );
 
@@ -59,12 +57,32 @@ export default function FindPersonality() {
       <div className="w-full lg:max-w-[840px] h-16 rounded-md">
         <SearchPersonality onSearch={setQuery} />
       </div>
-      <div className="flex flex-col lg:flex-row lg:items-center gap-3">
-        <span className="text-md text-muted-foreground font-medium ">
-         Recherche par
+      <div className="flex flex-col lg:flex-row items-center justify-center gap-3 w-full">
+        <span className="text-md text-muted-foreground font-regular leading-[150%] tracking-tighter ">
+          Recherche par
         </span>
+        <FilterMultipleWithSearch
+          buttonLabel="Territoire"
+          setValue={setTerritory}
+          value={territory}
+          placeholder="Search location"
+          listItems={filters.territory}
+        />
+        <FilterMultipleWithSearch
+          buttonLabel="Role"
+          setValue={setRole}
+          value={role}
+          placeholder="Search role"
+          listItems={filters.role}
+        />
 
-        
+        <FilterMultipleWithSearch
+          buttonLabel="Catégorie"
+          setValue={setCategory}
+          value={category}
+          placeholder="Search category"
+          listItems={filters.category}
+        />
       </div>
     </section>
   );

@@ -50,7 +50,7 @@ export default function FilterMultipleWithSearch({
           size="2md"
           aria-expanded={open}
           className={cn(
-            "leading-[140%] tracking-tighter justify-center lg:justify-between h-fit gap-3 hover:text-foreground",
+            "w-full lg:w-max leading-[140%] tracking-tighter justify-center lg:justify-between h-fit gap-3 hover:text-foreground",
             {
               "border-primary": isFiltered
             }
@@ -60,7 +60,10 @@ export default function FilterMultipleWithSearch({
           <ChevronDown className="size-5" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent align="start" className="w-[232px] p-0">
+      <PopoverContent
+        align="start"
+        className="min-w-[var(--radix-popover-trigger-width)] w-full p-0"
+      >
         <Command className="p-1">
           <CommandInput
             placeholder={placeholder || "Search..."}

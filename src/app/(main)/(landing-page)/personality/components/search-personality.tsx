@@ -6,7 +6,11 @@ import { useState } from "react";
 import { SearchIcon, X } from "lucide-react";
 import { on } from "events";
 
-export default function SearchPersonality({ onSearch }: { onSearch: (value: string) => void }) {
+export default function SearchPersonality({
+  onSearch
+}: {
+  onSearch: (value: string) => void;
+}) {
   const [value, setValue] = useState("");
 
   const clearInput = () => {
@@ -32,9 +36,8 @@ export default function SearchPersonality({ onSearch }: { onSearch: (value: stri
 
       {/* Tombol Search */}
       <Button
-        size="icon"
         onClick={() => onSearch(value)}
-        className="absolute right-1 top-1/2 -translate-y-1/2 rounded-md bg-primary hover:bg-background hover:border-primary w-10 h-10 flex items-center justify-center"
+        className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md bg-primary hover:bg-background hover:border-primary w-10 h-10 flex items-center justify-center"
       >
         <SearchIcon className="h-4 w-4 text-white hover:text-primary " />
       </Button>
