@@ -15,7 +15,11 @@ import {
   ChevronRight,
   X,
   SlidersHorizontal,
-  Filter
+  Filter,
+  ArrowRight,
+  SortAsc,
+  SortDesc,
+  SortDescIcon
 } from "lucide-react";
 import SidebarFilters from "@/components/filter-sidebar";
 import { parseAsArrayOf, parseAsString, useQueryState } from "nuqs";
@@ -30,6 +34,10 @@ import {
 } from "@/components/ui/drawer";
 import Pagination from "@/components/pagination";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
+import { ArrowRightIcon } from "@/icons/arrow-right-icon";
+import { SortDescendingIcon } from "@/icons/sort-desc-icon";
+import { FilterIcon } from "@/icons/filter-icon";
+import NoResult from "./no-result";
 
 export default function AnswerPersonality() {
   const [territory, setTerritory] = useQueryState(
@@ -47,6 +55,10 @@ export default function AnswerPersonality() {
   const [sort, setSort] = useQueryState(
     "sort",
     parseAsString.withDefault("Newest")
+  );
+  const [search, setSearch] = useQueryState(
+    "search",
+    parseAsString.withDefault("")
   );
 
   const people = [
@@ -89,6 +101,14 @@ export default function AnswerPersonality() {
       territory: "Guadeloupe, France",
       category: "Government",
       image: "/images/avatar5.jpg"
+    },
+    {
+      name: "Claire Dubois",
+      title: "CEO, BlueWave Logistics",
+      affiliation: "Regional Trade Association",
+      territory: "Guadeloupe, France",
+      category: "Government",
+      image: "/images/avatar6.jpg"
     }
   ];
 
@@ -147,11 +167,34 @@ export default function AnswerPersonality() {
     setRole(null);
     setCategory(null);
   };
+  const filteredPeople = people.filter((p) => {
+    const matchSearch =
+      !search ||
+      p.name.toLowerCase().includes(search.toLowerCase()) ||
+      p.title.toLowerCase().includes(search.toLowerCase());
 
+    const matchTerritory =
+      territory.length === 0 || territory.includes(p.territory);
+
+    const matchRole = role.length === 0 || role.includes(p.category);
+
+    const matchCategory =
+      category.length === 0 || category.includes(p.category);
+
+    return matchSearch && matchTerritory && matchRole && matchCategory;
+  });
   const [openFilter, setOpenFilter] = useState(false);
   const [page, setPage] = useState(0);
-  const [pageSize, setPageSize] = useState(10);
-  const paginatedPeople = people.slice(page * pageSize, (page + 1) * pageSize);
+  const [pageSize, setPageSize] = useState(5);
+  const paginatedPeople = filteredPeople.slice(
+    page * pageSize,
+    (page + 1) * pageSize
+  );
+  //   if (filteredPeople.length === 0) {
+  //   return (
+  //     <NoResult />
+  //   );
+  // }
 
   return (
     <section className="bg-background">
@@ -182,12 +225,14 @@ export default function AnswerPersonality() {
           {/* MAIN CONTENT */}
           <main className="flex-1">
             {/* HEADER */}
-            <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 mb-2">
+            <div className="flex items-center justify-between gap-3 mb-6 flex-wrap">
               <div className="flex gap-1 items-center">
                 <p className="text-base text-muted-foreground">
-                  Showing {people.length} results for{" "}
+                  Showing {filteredPeople.length} results for{" "}
                 </p>
-                <span className="text-base font-medium">&quot;Marie&quot;</span>
+                <span className="text-base font-medium">
+                  {search ? `"${search}"` : `"All"`}
+                </span>
               </div>
 
               {/* Desktop sort */}
@@ -205,11 +250,12 @@ export default function AnswerPersonality() {
               {/* Mobile icons */}
               <div className="flex lg:hidden items-center gap-2 ml-auto">
                 {/* Sort button */}
-                <Select onValueChange={setSort} defaultValue={sort}>
-                  <SelectTrigger className="w-10 h-10 rounded-lg">
-                    <SlidersHorizontal className="w-4 h-4" />
+                <Select value={sort} onValueChange={setSort}>
+                  <SelectTrigger className="p-3 rounded-lg justify-center [&>*:last-child]:hidden">
+                    <SortDescendingIcon className="size-6 text-foreground" />
                   </SelectTrigger>
-                  <SelectContent>
+
+                  <SelectContent align="end">
                     {sortBy.map((sortOption) => (
                       <SelectItem
                         key={sortOption.value}
@@ -232,9 +278,9 @@ export default function AnswerPersonality() {
                     <Button
                       variant="outline"
                       size="icon"
-                      className="w-10 h-10 rounded-lg lg:hidden"
+                      className="p-6 rounded-lg lg:hidden "
                     >
-                      <Filter className="w-4 h-4" />
+                      <FilterIcon className="size-6 " />
                     </Button>
                   </DrawerTrigger>
 
@@ -245,7 +291,11 @@ export default function AnswerPersonality() {
                   >
                     <DrawerTitle className="font-semibold text-2xl leading-[110%] tracking-[-0.02em] p-5 border-b">
                       Filter by
-                      <X className="h-6 w-6 absolute top-5 right-4 cursor-pointer items-center" />
+                      <DrawerClose asChild>
+                        <button>
+                          <X className="h-6 w-6 absolute top-5 right-4 cursor-pointer" />
+                        </button>
+                      </DrawerClose>{" "}
                     </DrawerTitle>
                     <div className=" max-h-[75vh] overflow-y-auto border-b">
                       <SidebarFilters
@@ -278,28 +328,30 @@ export default function AnswerPersonality() {
 
             {/* ACTIVE FILTERS */}
             {activeValues.length > 0 && (
-              <div className="flex flex-wrap items-center gap-2 mb-4">
-                {activeValues.map((activeFilter) => (
-                  <div
-                    key={activeFilter}
-                    className="flex items-center gap-2 border py-2 px-[10px] rounded-[6px] text-sm"
-                  >
-                    <span>{activeFilter}</span>
-                    <button
-                      aria-label={`Remove ${activeFilter}`}
-                      onClick={() => removeActiveValue(activeFilter)}
-                      className="p-1"
+              <div className="flex flex-row max-h-full">
+                <div className="flex whitespace-nowrap overflow-x-auto hide-scrollbar gap-2">
+                  {activeValues.map((activeFilter) => (
+                    <div
+                      key={activeFilter}
+                      className="flex items-center gap-2 border py-2 px-[10px] rounded-[6px] text-sm"
                     >
-                      <X className="h-3 w-3" />
-                    </button>
-                  </div>
-                ))}
-                <button
-                  className="text-sm text-primary underline ml-2"
-                  onClick={clearAll}
-                >
-                  Clear filter
-                </button>
+                      <span>{activeFilter}</span>
+                      <button
+                        aria-label={`Remove ${activeFilter}`}
+                        onClick={() => removeActiveValue(activeFilter)}
+                        className="p-1"
+                      >
+                        <X className="h-3 w-3" />
+                      </button>
+                    </div>
+                  ))}
+                  <button
+                    className="text-sm text-primary underline ml-2"
+                    onClick={clearAll}
+                  >
+                    Clear filter
+                  </button>
+                </div>
               </div>
             )}
 
@@ -361,9 +413,10 @@ export default function AnswerPersonality() {
 
                   <Button
                     variant="ghost"
-                    className="text-primary text-sm hover:bg-transparent"
+                    className="text-primary hover:underline text-sm hover:bg-transparent"
                   >
-                    View profile →
+                    Profil
+                    <ArrowRightIcon className="w-5 h-5 size-5" />
                   </Button>
                 </article>
               ))}
@@ -371,7 +424,7 @@ export default function AnswerPersonality() {
 
             {/* PAGINATION */}
             <Pagination
-              totalRows={people.length}
+              totalRows={filteredPeople.length}
               page={page}
               pageSize={pageSize}
               onPageChange={setPage}

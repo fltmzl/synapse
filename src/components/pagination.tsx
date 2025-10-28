@@ -8,7 +8,7 @@ import {
   SelectItem
 } from "@/components/ui/select";
 
-interface PaginationProps {
+type PaginationProps = {
   totalRows: number;
   page: number; // zero-based
   pageSize: number;
@@ -103,7 +103,7 @@ export default function Pagination({
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            {[6, 12, 24].map((size) => (
+            {[5, 25, 50].map((size) => (
               <SelectItem key={size} value={String(size)}>
                 {size}
               </SelectItem>

@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/accordion";
 import { ChevronDown, ChevronUp } from "lucide-react";
 
-interface Props {
+type Props = {
   groups: Record<string, { label: string; value: string }[]>;
   value: string[] | null;
   setValue: (
