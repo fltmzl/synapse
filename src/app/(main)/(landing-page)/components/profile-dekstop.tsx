@@ -32,7 +32,7 @@ type Props = {
 export type SettingMenuType = "profile" | "security" | "billing";
 
 export default function ProfileDekstop({ image, username }: Props) {
-  const { closeModal, isOpen, openModal, setIsOpen } = useModal(true);
+  const { closeModal, isOpen, openModal, setIsOpen } = useModal(false);
   const [activeMenu, setActiveMenu] = useState<SettingMenuType>("profile");
 
   const settingMenus: { slug: SettingMenuType; title: string }[] = [
