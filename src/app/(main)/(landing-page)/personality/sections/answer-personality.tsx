@@ -10,17 +10,7 @@ import {
   SelectItem
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import {
-  ChevronLeft,
-  ChevronRight,
-  X,
-  SlidersHorizontal,
-  Filter,
-  ArrowRight,
-  SortAsc,
-  SortDesc,
-  SortDescIcon
-} from "lucide-react";
+import {X} from "lucide-react";
 import SidebarFilters from "@/components/filter-sidebar";
 import { parseAsArrayOf, parseAsString, useQueryState } from "nuqs";
 import SelectSingleItem from "@/components/select-single-item";
@@ -38,8 +28,10 @@ import { ArrowRightIcon } from "@/icons/arrow-right-icon";
 import { SortDescendingIcon } from "@/icons/sort-desc-icon";
 import { FilterIcon } from "@/icons/filter-icon";
 import NoResult from "./no-result";
+import { useAutoCloseDrawer } from "@/hooks/use-auto-close-drawer";
 
 export default function AnswerPersonality() {
+  
   const [territory, setTerritory] = useQueryState(
     "territory",
     parseAsArrayOf(parseAsString).withDefault([])
@@ -184,15 +176,18 @@ export default function AnswerPersonality() {
     return matchSearch && matchTerritory && matchRole && matchCategory;
   });
   const [openFilter, setOpenFilter] = useState(false);
+
+useAutoCloseDrawer(openFilter, () => setOpenFilter(false));
+
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(5);
   const paginatedPeople = filteredPeople.slice(
     page * pageSize,
     (page + 1) * pageSize
   );
-  if (filteredPeople.length === 0) {
-    return <NoResult />;
-  }
+  // if (filteredPeople.length === 0) {
+  //   return <NoResult />;
+  // }
 
   return (
     <section className="bg-background">
@@ -223,7 +218,7 @@ export default function AnswerPersonality() {
           {/* MAIN CONTENT */}
           <main className="flex-1">
             {/* HEADER */}
-            <div className="flex items-center justify-between gap-3 mb-6 flex-wrap">
+            <div className="flex items-center justify-between gap-3 flex-wrap">
               <div className="flex gap-1 items-center">
                 <p className="text-base text-muted-foreground">
                   Showing {filteredPeople.length} results for{" "}
@@ -324,98 +319,143 @@ export default function AnswerPersonality() {
               </div>
             </div>
 
-            {/* ACTIVE FILTERS */}
-            {activeValues.length > 0 && (
-              <div className="flex flex-row max-h-full">
-                <div className="flex whitespace-nowrap overflow-x-auto hide-scrollbar gap-2">
-                  {activeValues.map((activeFilter) => (
-                    <div
-                      key={activeFilter}
-                      className="flex items-center gap-2 border py-2 px-[10px] rounded-[6px] text-sm"
-                    >
-                      <span>{activeFilter}</span>
-                      <button
-                        aria-label={`Remove ${activeFilter}`}
-                        onClick={() => removeActiveValue(activeFilter)}
-                        className="p-1"
-                      >
-                        <X className="h-3 w-3" />
-                      </button>
-                    </div>
-                  ))}
-                  <button
-                    className="text-sm text-primary underline ml-2"
-                    onClick={clearAll}
-                  >
-                    Clear filter
-                  </button>
-                </div>
-              </div>
-            )}
+         {activeValues.length > 0 && (
+  <>
+    {/* 🖥️ DESKTOP */}
+    <div className="hidden lg:flex flex-wrap justify-between w-full max-h-full pt-4">
+      <div className="flex flex-wrap gap-2 max-w-[85%]">
+        {activeValues.map((activeFilter) => (
+          <div
+            key={activeFilter}
+            className="flex gap-2 border py-2 px-[10px] rounded-[6px] text-sm"
+          >
+            <span>{activeFilter}</span>
+            <button
+              aria-label={`Remove ${activeFilter}`}
+              onClick={() => removeActiveValue(activeFilter)}
+              className="p-1"
+            >
+              <X className="h-3 w-3" />
+            </button>
+          </div>
+        ))}
+      </div>
+
+      <button
+        className="text-sm text-primary underline"
+        onClick={clearAll}
+      >
+        Clear filter
+      </button>
+    </div>
+
+    {/* 📱 MOBILE */}
+    <div className="flex flex-col gap-4 lg:hidden pt-4">
+      <div className="flex flex-row max-h-full">
+        <div className="flex whitespace-nowrap overflow-x-auto hide-scrollbar gap-2">
+          {activeValues.map((activeFilter) => (
+            <div
+              key={activeFilter}
+              className="flex gap-2 border py-2 px-[10px] rounded-[6px] text-sm"
+            >
+              <span>{activeFilter}</span>
+              <button
+                aria-label={`Remove ${activeFilter}`}
+                onClick={() => removeActiveValue(activeFilter)}
+                className="p-1"
+              >
+                <X className="h-3 w-3" />
+              </button>
+            </div>
+          ))}
+        </div>
+      </div>
+      <button
+        className="text-sm text-primary underline text-start"
+        onClick={clearAll}
+      >
+        Clear filter
+      </button>
+    </div>
+  </>
+)}
+
 
             {/* LIST */}
-            <div className="space-y-6 divide-y">
+            <div className="space-y-6 divide-y px-2">
               {paginatedPeople.map((person, index) => (
                 <article
                   key={index}
-                  className="flex justify-between items-center py-6 border-b"
+                  className="w-full flex justify-between items-center py-8 border-b mb-0"
                 >
-                  <div className="flex gap-4 items-center">
-                    <Avatar className="h-14 w-14">
-                      <AvatarImage
-                        className="rounded-full"
-                        src="https://github.com/shadcn.png"
-                        alt="@shadcn"
-                      />
-                      <AvatarFallback className="bg-muted-foreground/20 font-semibold text-sm">
-                        {person.name
-                          .split(" ")
-                          .map((word) => word[0])
-                          .join("")
-                          .slice(0, 2)}
-                      </AvatarFallback>
-                    </Avatar>
+                  <div className="flex flex-col gap-5 w-full">
+                    <div className="flex gap-4 items-center w-full">
+                      <Avatar className="h-16 w-16">
+                        <AvatarImage
+                          className="rounded-full"
+                          src="https://github.com/shadcn.png"
+                          alt="@shadcn"
+                        />
+                        <AvatarFallback className="bg-muted-foreground/20 font-semibold text-sm">
+                          {person.name
+                            .split(" ")
+                            .map((word) => word[0])
+                            .join("")
+                            .slice(0, 2)}
+                        </AvatarFallback>
+                      </Avatar>
 
-                    <div>
-                      <h3 className="font-semibold text-base text-foreground">
-                        {person.name}
-                      </h3>
-                      <p className="text-sm text-muted-foreground">
-                        {person.title}
-                      </p>
-
-                      <div className="flex gap-12 mt-4 text-xs">
-                        <div className="text-muted-foreground">
-                          <div className="font-medium text-foreground">
-                            Affiliation
-                          </div>
-                          {person.affiliation}
-                        </div>
-
-                        <div className="text-muted-foreground">
-                          <div className="font-medium text-foreground">
-                            Territory
-                          </div>
-                          {person.territory}
-                        </div>
-
-                        <div className="text-muted-foreground">
-                          <div className="font-medium text-foreground">
-                            Category
-                          </div>
-                          {person.category}
-                        </div>
+<div className="flex justify-between w-full">
+                      <div className="flex flex-col gap-2">
+                        <h3 className="font-semibold text-xl text-foreground leading-[110%] tracking-[-0.02em]">
+                          {person.name}
+                        </h3>
+                        <p className="text-base leading-[110%] text-muted-foreground">
+                          {person.title}
+                        </p>
                       </div>
-                    </div>
-                  </div>
-
+                      
                   <Button
                     variant="ghost"
-                    className="text-primary hover:underline text-sm hover:bg-transparent"
+                    className="text-primary hover:underline text-base font-regular leading-[140%] tracking-[-0.01em] hover:bg-transparent"
                   >
                     Profil
                     <ArrowRightIcon className="w-5 h-5 size-5" />
                   </Button>
+                  </div>
+                                          </div>
+
+
+                      <div className="flex gap-16 pl-20 text-xs">
+                        <div className="flex flex-col gap-2">
+                          <div className="font-regular text-muted-foreground text-sm leading-[110%] tracking-[-0.01em]">
+                            Affiliation
+                          </div>
+                          <div className="font-regular text-foreground text-base leading-[110%] tracking-[-0.01em]">
+                            {person.affiliation}
+                          </div>
+                        </div>
+
+                        <div className="flex flex-col gap-2">
+                          <div className="font-regular text-muted-foreground text-sm leading-[110%] tracking-[-0.01em]">
+                            Territory
+                          </div>
+                          <div className="font-regular text-foreground text-base leading-[110%] tracking-[-0.01em]">
+                          {person.territory}
+                          </div>
+                        </div>
+
+                        <div className="flex flex-col gap-2">
+                          <div className="font-regular text-muted-foreground text-sm leading-[110%] tracking-[-0.01em]">
+                            Category
+                          </div>
+                          <div className="font-regular text-foreground text-base leading-[110%] tracking-[-0.01em]">
+                          {person.category}
+                          </div>
+                        </div>
+                      </div>
+                  </div>
+
                 </article>
               ))}
             </div>

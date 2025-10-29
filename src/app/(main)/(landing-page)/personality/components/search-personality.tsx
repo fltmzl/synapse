@@ -49,7 +49,7 @@ export default function SearchPersonality({
       {/* Tombol Search */}
       <Button
         onClick={handleSubmit}
-        className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md bg-primary hover:bg-background hover:border-primary w-10 h-10 flex items-center justify-center"
+        className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md bg-primary hover:bg-primary/90 hover:border-primary w-10 h-10 flex items-center justify-center"
       >
         <SearchIcon className="h-4 w-4 text-white hover:text-primary " />
       </Button>

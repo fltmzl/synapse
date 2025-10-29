@@ -1,11 +1,10 @@
-import { NoResultIcon } from "@/icons/no-result-icon";
-
+import CvvIcon from "../../../../../../public/assets/icon/cvv-icon.svg";
 export default function NoResult() {
   return (
     <section className="bg-background">
       <div className="max-w-7xl mx-auto py-20 lg:py-30 px-6 flex flex-col gap-8 items-center" >
         <div className="border p-5 rounded-[12px] ">
-        <NoResultIcon className="  size-9 text-primary  " />
+        <img src={CvvIcon.src} alt="CVV Icon" className="size-9 text-primary  " />
         </div>
         <div className="flex flex-col gap-2 items-center">
         <h5 className="text-xl lg:text-2xl font-medium leading-[110%] tracking-[-0.03em]">

@@ -28,7 +28,7 @@ export default function ExploreCard({
   return (
     <Card
       className={clsx(
-        "h-[260px] lg:h-[364px] flex flex-col gap-5 bg-transparent py-0 flex-none min-w-[216px] max-w-[216px] lg:min-w-[380px] lg:max-w-[380px] overflow-hidden border-none",
+        "h-full lg:h-[364px] gap-10 flex flex-col gap-5 bg-transparent py-0 flex-none min-w-[216px] max-w-[216px] lg:min-w-[380px] lg:max-w-[380px] overflow-hidden border-none",
         className
       )}
     >

@@ -8,14 +8,16 @@ import SectionContainer from "@/components/container/section-container";
 import SectionTitle from "@/components/typography/section-title";
 import SearchSocialNetwork from "../components/search-social-news";
 import { cn } from "@/lib/utils";
+import { SocialPost } from "@/types/news.type";
 
-function chunkArray(arr: any[], size: number) {
-  const result: any[] = [];
+function chunkArray(arr: SocialPost[], size: number): SocialPost[][] {
+  const result: SocialPost[][] = [];
   for (let i = 0; i < arr.length; i += size) {
     result.push(arr.slice(i, i + size));
   }
   return result;
 }
+
 export default function SocialNetworkNews() {
   const [query, setQuery] = useState("");
   const rows = chunkArray(socialPosts, 2);
@@ -23,7 +25,7 @@ export default function SocialNetworkNews() {
   return (
     <SectionContainer className="px-4 py-6 lg:p-20 ">
       <div className=" max-w-7xl mx-auto">
-        <div className="flex flex-col gap-6 lg:gap-16 ">
+        <div className="flex flex-col lg:gap-16 ">
           <div className="flex flex-col gap-8">
             <SectionTitle className="text-center">
               Actualité citoyenne
@@ -46,12 +48,12 @@ export default function SocialNetworkNews() {
                     key={index}
                     className={cn(
                       // === MOBILE ===
-                      index !== 0 && "border-t pt-8 lg:border-t-0 lg:pt-0",
-                      !isLastItem && "pb-8 lg:pb-0",
+                      index !== 0 && "border-t pt-6 lg:border-t-0 lg:pt-0",
+                      !isLastItem && "pb-6 lg:pb-0",
                       // === DESKTOP ===
                       // Tambahkan border bawah antar row
                       rowIndex !== rows.length - 1 &&
-                        "lg:border-b lg:border-border lg:pb-8",
+                        "lg:border-b lg:border-border lg:pb-10",
                       // Tambahkan jarak atas untuk semua item di row kedua ke bawah
                       !isFirstRow && "lg:pt-8",
                       // Spasi horizontal antar kolom

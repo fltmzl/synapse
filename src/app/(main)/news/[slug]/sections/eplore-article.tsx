@@ -1,121 +1,122 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import clsx from "clsx";
-import { newsData, productionData } from "@/data/news-data";
-import SectionTitle from "@/components/typography/section-title";
+import { newsData } from "@/data/news-data";
+import SectionContainer from "@/components/container/section-container";
+import ExploreCard from "../card/explore-card";
 import { ArrowLeftIcon } from "@/icons/arrow-left-icon";
 import { ArrowRightIcon } from "@/icons/arrow-right-icon";
-import ExploreCard from "../card/explore-card";
-import SectionContainer from "@/components/container/section-container";
-import { H4 } from "@/components/typography/h4";
 
 export default function ExploreArticle() {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const visibleCount = 3;
-  const totalItems = newsData.length;
-  const containerRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const [activeDot, setActiveDot] = useState(0);
+  const [dotCount, setDotCount] = useState(1);
 
-  const scrollToIndex = (index: number) => {
-    if (!containerRef.current) return;
-    const cardWidth = containerRef.current.children[0].clientWidth + 24; // width + gap
-    containerRef.current.scrollTo({
-      left: index * cardWidth,
-      behavior: "smooth"
+  // Scroll kanan / kiri
+  const scroll = (dir: "left" | "right") => {
+    const el = containerRef.current;
+    if (!el) return;
+    const scrollWidth = el.clientWidth;
+    el.scrollBy({
+      left: dir === "left" ? -scrollWidth : scrollWidth,
+      behavior: "smooth",
     });
   };
 
-  const handleNext = () => {
-    if (activeIndex < totalItems - visibleCount) {
-      const next = activeIndex + 1;
-      setActiveIndex(next);
-      scrollToIndex(next);
-    }
-  };
-
-  const handlePrev = () => {
-    if (activeIndex > 0) {
-      const prev = activeIndex - 1;
-      setActiveIndex(prev);
-      scrollToIndex(prev);
-    }
-  };
-
+  // Hitung jumlah dots berdasarkan total scrollable area
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
 
-    const updateIndex = () => {
-      const cardWidth = el.children[0].clientWidth + 24;
-      const newIndex = Math.round(el.scrollLeft / cardWidth);
-      setActiveIndex(newIndex);
+    const updateDots = () => {
+      const scrollWidth = el.scrollWidth;
+      const viewWidth = el.clientWidth;
+      const totalPages = Math.ceil(scrollWidth / viewWidth);
+      setDotCount(totalPages);
     };
 
-    el.addEventListener("scroll", updateIndex);
-    return () => el.removeEventListener("scroll", updateIndex);
+    updateDots();
+    window.addEventListener("resize", updateDots);
+    return () => window.removeEventListener("resize", updateDots);
   }, []);
 
+  // Update dot aktif saat scroll
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    const handleScroll = () => {
+      const scrollLeft = el.scrollLeft;
+      const totalScrollable = el.scrollWidth - el.clientWidth;
+      if (totalScrollable <= 0) return;
+
+      const progress = scrollLeft / totalScrollable;
+      const index = Math.round(progress * (dotCount - 1));
+      setActiveDot(index);
+    };
+
+    el.addEventListener("scroll", handleScroll);
+    return () => el.removeEventListener("scroll", handleScroll);
+  }, [dotCount]);
+
   return (
-    <SectionContainer className="w-full flex flex-col gap-6 lg:gap-16 py-6 pl-4 lg:py-20 lg:pl-20 h-full">
-      <h1 className="font-medium text-2xl lg:text-[40px] text-left leading-[110%] tracking-[-0.03em]">
+    <SectionContainer
+      className="
+        w-full flex flex-col gap-6 lg:gap-16 py-6 pl-4 lg:py-20 lg:pl-20 h-full
+        3xl:items-center 3xl:pl-0 3xl:text-center
+      "
+    >
+      {/* Title */}
+      <h1 className="font-medium text-2xl lg:text-[40px] text-left 3xl:text-left leading-[110%] tracking-[-0.03em]">
         Explore more articles
       </h1>
 
       {/* Carousel wrapper */}
-      <div className=" w-full flex flex-col lg:gap-10">
-        <div className="relative w-full overflow-hidden overflow-x-auto hide-scrollbar scroll-smooth snap-x snap-mandatory">
-          <div
-            className="flex transition-transform duration-700 ease-in-out gap-6 h-full"
-            style={{
-              transform: `translateX(-${activeIndex * (100 / visibleCount)}%)`
-            }}
-          >
-            {newsData.map((news, i) => (
-              <div key={i} className="snap-start flex-shrink-0 h-full">
-                <ExploreCard {...news} />
-              </div>
-            ))}
-          </div>
-
-          {/* Controls + Dots */}
+      <div className="w-full flex flex-col gap-10 3xl:max-w-[1400px] 3xl:mx-auto 3xl:items-center">
+        {/* SCROLL AREA */}
+        <div
+          ref={containerRef}
+          className="flex gap-6 overflow-x-auto scroll-smooth snap-x snap-mandatory hide-scrollbar"
+        >
+          {newsData.map((news, i) => (
+            <div
+              key={i}
+              className="snap-start flex-shrink-0 h-full"
+              style={{ scrollSnapAlign: "start" }}
+            >
+              <ExploreCard {...news} />
+            </div>
+          ))}
         </div>
+
+        {/* DOTS + ARROWS */}
         <div className="flex justify-between items-center w-full pr-10">
           {/* Dots */}
           <div className="flex gap-2">
-            {Array.from({ length: totalItems - visibleCount + 1 }).map(
-              (_, i) => (
-                <span
-                  key={i}
-                  className={clsx(
-                    "h-1.5 rounded-full transition-all duration-300",
-                    activeIndex === i ? "bg-primary w-6" : "bg-border w-2"
-                  )}
-                />
-              )
-            )}
+            {Array.from({ length: dotCount }).map((_, i) => (
+              <span
+                key={i}
+                className={clsx(
+                  "h-1.5 rounded-full transition-all duration-300",
+                  activeDot === i ? "bg-primary w-6" : "bg-border w-2"
+                )}
+              />
+            ))}
           </div>
 
-          {/* Controls */}
+          {/* Arrows (tanpa disable) */}
           <div className="flex gap-3">
             <button
-              onClick={handlePrev}
-              disabled={activeIndex === 0}
-              className={clsx(
-                "bg-background rounded-full w-10 h-10 border grid place-content-center",
-                activeIndex === 0 && "opacity-40 cursor-not-allowed"
-              )}
+              onClick={() => scroll("left")}
+              className="bg-background rounded-full w-10 h-10 border grid place-content-center hover:border-primary transition"
             >
               <ArrowLeftIcon className="w-5 h-5" />
             </button>
 
             <button
-              onClick={handleNext}
-              disabled={activeIndex >= totalItems - visibleCount}
-              className={clsx(
-                "bg-background rounded-full w-10 h-10 border grid place-content-center",
-                activeIndex >= totalItems - visibleCount &&
-                  "opacity-40 cursor-not-allowed"
-              )}
+              onClick={() => scroll("right")}
+              className="bg-background rounded-full w-10 h-10 border grid place-content-center hover:border-primary transition"
             >
               <ArrowRightIcon className="w-5 h-5" />
             </button>

@@ -51,8 +51,8 @@ export default function ArticleContent() {
 
   return (
     <SectionContainer className="lg:pt-10 lg:pb-16  py-8 flex justify-center ">
-      <article className="w-full flex flex-col gap-10  max-w-7xl mx-auto">
-        <div className=" py-0 px-4 lg:px-10">
+      <article className="w-full flex flex-col gap-10 px-6 max-w-7xl mx-auto">
+        <div className=" py-0 lg:px-10">
           <header className="flex flex-col gap-6 lg:gap-8 text-left py-0 px-0 lg:pt-16 pb-6 lg:pb-10 lg:px-[140px]">
             <h1 className="text-2xl lg:text-[40px] font-medium leading-[110%] tracking-[-0.03em] ">
               {article.title}
