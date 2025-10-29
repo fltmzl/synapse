@@ -27,7 +27,7 @@ export default function NewsFilter({ selected, onSelect }: Props) {
             onClick={() => onSelect(label)}
             variant="ghost"
             className={cn(
-              "hover:bg-background rounded-md px-6 py-4 text-md font-medium border transition-all leading-[140%] tracking-tighter hover:border-primary",
+              "hover:bg-background rounded-md px-6 py-3 text-md font-medium border transition-all leading-[140%] tracking-tighter hover:border-primary",
               isActive ? "border-primary bg-background" : "border bg-background"
             )}
           >

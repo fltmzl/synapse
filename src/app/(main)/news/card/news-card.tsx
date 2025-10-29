@@ -37,12 +37,14 @@ export default function NewsCard({
             <span className="text-base tracking-normal leading-[150%] text-muted-foreground font-regular">
               {category}
             </span>
-            <span className="mx-3 w-px h-[14px] bg-border" />
+            <span className="mx-3 w-[2px] h-[14px] bg-border" />
             <span className=" text-base tracking-normal leading-[150%] text-muted-foreground font-regular">
               {date}
             </span>
           </div>
-          <H4 className="group-hover:text-primary">{title}</H4>
+          <H4 className="leading-[140%] tracking-[-0.02em] group-hover:text-primary">
+            {title}
+          </H4>
         </div>
         <div className="flex items-center">
           <button className="group-hover:border-primary rounded-full w-12 h-12 border  grid place-content-center ">

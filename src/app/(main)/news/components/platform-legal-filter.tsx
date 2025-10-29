@@ -34,9 +34,9 @@ export default function PlatformFilter({ selected, onSelect }: Props) {
             onClick={() => onSelect(label)}
             variant="ghost"
             className={cn(
-              "hover:bg-transparent group flex items-center gap-2 rounded-md pl-4 pr-6 py-3 text-md font-medium border transition-all duration-200 leading-[140%] tracking-tighter",
+              "hover:bg-transparent group flex items-center  rounded-md pl-4 pr-6 py-3 text-md font-medium border transition-all duration-200 leading-[140%] tracking-tighter gap-[10px]",
               {
-                "border-primary text-primary bg-background": isActive,
+                "border-primary  text-primary bg-background": isActive,
                 "border-border text-foreground bg-background hover:border-primary hover:text-primary":
                   !isActive
               }
@@ -44,7 +44,7 @@ export default function PlatformFilter({ selected, onSelect }: Props) {
           >
             <span
               className={cn("text-muted-foreground group-hover:text-primary", {
-                "text-primary": isActive
+                "text-primary leading-[140%] tracking-[0.01em]": isActive
               })}
             >
               {icon}

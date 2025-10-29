@@ -190,11 +190,9 @@ export default function AnswerPersonality() {
     page * pageSize,
     (page + 1) * pageSize
   );
-  //   if (filteredPeople.length === 0) {
-  //   return (
-  //     <NoResult />
-  //   );
-  // }
+  if (filteredPeople.length === 0) {
+    return <NoResult />;
+  }
 
   return (
     <section className="bg-background">

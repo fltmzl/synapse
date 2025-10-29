@@ -56,13 +56,14 @@ export default function ExploreArticle() {
   }, []);
 
   return (
-    <SectionContainer className="w-full flex flex-col gap-6 lg:gap-10 py-6 pl-4 lg:py-20 lg:pl-20 h-full">
-        <h1 className="font-medium text-2xl lg:text-[40px] text-left leading-[110%] tracking-[-0.02em]">
-          Explore more articles
-        </h1>
+    <SectionContainer className="w-full flex flex-col gap-6 lg:gap-16 py-6 pl-4 lg:py-20 lg:pl-20 h-full">
+      <h1 className="font-medium text-2xl lg:text-[40px] text-left leading-[110%] tracking-[-0.03em]">
+        Explore more articles
+      </h1>
 
-        {/* Carousel wrapper */}
-        <div className="relative w-full overflow-hidden overflow-x-auto hide-scrollbar scroll-smooth snap-x snap-mandatory ">
+      {/* Carousel wrapper */}
+      <div className=" w-full flex flex-col lg:gap-10">
+        <div className="relative w-full overflow-hidden overflow-x-auto hide-scrollbar scroll-smooth snap-x snap-mandatory">
           <div
             className="flex transition-transform duration-700 ease-in-out gap-6 h-full"
             style={{
@@ -75,9 +76,9 @@ export default function ExploreArticle() {
               </div>
             ))}
           </div>
-        </div>
 
-        {/* Controls + Dots */}
+          {/* Controls + Dots */}
+        </div>
         <div className="flex justify-between items-center w-full pr-10">
           {/* Dots */}
           <div className="flex gap-2">
@@ -120,6 +121,7 @@ export default function ExploreArticle() {
             </button>
           </div>
         </div>
+      </div>
     </SectionContainer>
   );
 }

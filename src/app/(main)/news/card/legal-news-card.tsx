@@ -91,7 +91,7 @@ export default function LegalCard({
                   {/* publisher left, date right */}
                 </div>
               </div>
-              <div className="text-sm text-muted-foreground flex justify-between items-center">
+              <div className="text-sm text-muted-foreground flex justify-between items-center leading-[140%] tracking-tighter">
                 <span>{publisher}</span>
                 <span>{date}</span>
               </div>

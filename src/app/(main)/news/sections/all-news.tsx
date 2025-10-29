@@ -46,7 +46,7 @@ export default function AllNews() {
         <div className="flex flex-col gap-8">
           <Title className="text-center">Actualité</Title>
 
-          <div className="flex justify-center">
+          <div className="flex justify-center ">
             <SearchAll onSearch={setQuery} />
           </div>
         </div>
@@ -88,7 +88,7 @@ export default function AllNews() {
           <Button
             variant="outline"
             size="default"
-            className="px-5 py-[10px] w-full lg:w-max"
+            className="text-base leading-[130%] tracking-[-0.02em] px-5 py-[10px] w-full lg:w-max"
           >
             More articles
             <ChevronDown className="size-5 text-foreground" />

@@ -14,9 +14,11 @@ import { TwitterIcon } from "@/icons/twitter-icon";
 import { ArrowUpRightIcon } from "@/icons/arrow-up-right";
 import { RefreshIcon } from "@/icons/refresh-icon";
 import Link from "next/link";
+import { InstagramIcon } from "@/icons/instagram-icon";
+import { InstagramIconFlat } from "@/icons/instagram-icon-flat";
 
 const platformIcons: Record<SocialPost["platform"], JSX.Element> = {
-  Instagram: <Instagram className="w-4 h-4 text-muted-foreground" />,
+  Instagram: <InstagramIconFlat className="w-4 h-4 text-muted-foreground" />,
   "X (Twitter)": <TwitterIcon className="w-4 h-4 text-muted-foreground" />
 };
 
@@ -64,13 +66,13 @@ export default function SocialPostCard({
 
           <div className="flex flex-col gap-5 lg:gap-0 lg:justify-between h-[150px] w-full">
             <div className="flex flex-col gap-2">
-              <div className="flex items-center gap-2 text-sm text-muted-foreground font-regular mb-1">
+              <div className="flex items-center gap-[6px] text-sm text-muted-foreground font-regular ">
                 {platformIcons[platform]}
-                <span className="text-base tracking-[-0.01em] leading-[150%] text-muted-foreground font-regular">
+                <span className="text-base tracking-[-0.01em] leading-[150%] text-muted-foreground font-regular pr-[6px]">
                   {platform}
                 </span>
-                <span className="mx-1 text-border">|</span>
-                <span className="text-base tracking-[-0.01em] leading-[150%] text-muted-foreground font-regular">
+                <span className=" w-[1.5px] h-[14px] bg-border" />
+                <span className="text-base tracking-[-0.01em] leading-[150%] text-muted-foreground font-regular pl-[6px]">
                   {username}
                 </span>
               </div>
@@ -87,16 +89,16 @@ export default function SocialPostCard({
             <div className="flex text-muted-foreground justify-between items-center">
               <div className="flex gap-3">
                 <div className="flex items-center gap-[6px]">
-                  <Heart className="w-4 h-4" />
+                  <Heart className="w-4 h-4 text-muted-foreground/70 " />
                   <span className="text-sm font-regular leading-[140%] tracking-tighter">
                     {likes.toLocaleString("en-US")} Likes
                   </span>
                 </div>
 
                 {comments !== undefined && (
-                  <div className="flex items-center gap-2">
-                    <MessageCircle className="w-4 h-4" />
-                    <span className="text-sm tracking-[-0.01em] leading-[140%] text-muted-foreground font-regular">
+                  <div className="flex items-center gap-[6px]">
+                    <MessageCircle className="w-4 h-4 text-muted-foreground/70" />
+                    <span className="text-sm tracking-[-0.01em] leading-[140%]  font-regular">
                       {comments} Comments
                     </span>
                   </div>

@@ -50,22 +50,25 @@ export default function ArticleContent() {
     );
 
   return (
-    <SectionContainer className="lg:pt-40 lg:pb-16  py-8 flex justify-center ">
+    <SectionContainer className="lg:pt-10 lg:pb-16  py-8 flex justify-center ">
       <article className="w-full flex flex-col gap-10  max-w-7xl mx-auto">
         <div className=" py-0 px-4 lg:px-10">
           <header className="flex flex-col gap-6 lg:gap-8 text-left py-0 px-0 lg:pt-16 pb-6 lg:pb-10 lg:px-[140px]">
             <h1 className="text-2xl lg:text-[40px] font-medium leading-[110%] tracking-[-0.03em] ">
               {article.title}
             </h1>
-         <div className="flex items-center gap-3 text-muted-foreground">
-  <p className="text-lg font-regular leading-[140%]">{article.author}</p>
+            <div className="flex items-center gap-3 text-muted-foreground">
+              <p className="text-lg font-regular leading-[140%]">
+                {article.author}
+              </p>
 
-  {/* Garis pemisah */}
-  <span className="w-px h-5 bg-muted-foreground/30" />
+              {/* Garis pemisah */}
+              <span className="w-px h-5 bg-muted-foreground/30" />
 
-  <p className="text-lg font-regular leading-[140%]">{article.date}</p>
-</div>
-
+              <p className="text-lg font-regular leading-[140%]">
+                {article.date}
+              </p>
+            </div>
           </header>
 
           {/* Hero Image with arrows */}
@@ -140,12 +143,20 @@ export default function ArticleContent() {
           <div className="flex items-center gap-4 text-muted-foreground">
             <span className="text-lg leading-[140%]">Share</span>
             <div className="flex gap-2">
-              <Button variant="outline" size="icon" className="rounded-full">
+              <Button
+                variant="outline"
+                size="icon"
+                className="rounded-full w-[42px] h-[42px]"
+              >
                 <Link href="#">
                   <FacebookFillIcon className="size-[18px]" />
                 </Link>
               </Button>
-              <Button variant="outline" size="icon" className="rounded-full">
+              <Button
+                variant="outline"
+                size="icon"
+                className="rounded-full w-[42px] h-[42px]"
+              >
                 <Link href="#">
                   <InstagramIconFlat className="size-[18px]" />
                 </Link>

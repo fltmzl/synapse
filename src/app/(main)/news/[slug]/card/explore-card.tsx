@@ -46,11 +46,23 @@ export default function ExploreCard({
       <CardContent className="px-0 flex flex-col gap-3 text-left">
         <div className="flex flex-col gap-2">
           <div className="flex flex-row text-sm text-muted-foreground">
-            <P className="border-r pr-2">{category}</P>
-            <P className="pl-2">{date}</P>
+            <div className="flex items-center text-base leading-[150%] tracking-[-0.01em]">
+              <span className="text-base leading-[150%] tracking-[-0.01em]">
+                {category}
+              </span>
+
+              {/* Garis pemisah */}
+              <span className="inline-block w-[1.5px] h-[18px] bg-border mx-3" />
+
+              <span className="text-base leading-[150%] tracking-[-0.01em]">
+                {date}
+              </span>
+            </div>
           </div>
 
-          <H1 className="text-base font-semibold leading-snug">{title}</H1>
+          <h2 className="text-xl font-medium leading-[130%] tracking-tighter">
+            {title}
+          </h2>
         </div>
       </CardContent>
     </Card>

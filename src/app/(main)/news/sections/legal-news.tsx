@@ -65,10 +65,11 @@ export default function LegalNews() {
   );
 
   return (
-    <SectionContainer className="px-4 py-6 lg:p-20">
-      <div className="flex flex-col gap-6 lg:gap-16 max-w-7xl mx-auto">
+    <SectionContainer className="px-4 py-6 lg:px-20 lg:py-20">
+      <div className="flex flex-col max-w-7xl mx-auto">
+        {/* Header */}
         <div className="flex flex-col items-center justify-center gap-8 w-full">
-          <div className="flex flex-col gap-8 ">
+          <div className="flex flex-col gap-8">
             <SectionTitle className="text-center">
               Veille réseaux sociaux
             </SectionTitle>
@@ -78,11 +79,13 @@ export default function LegalNews() {
             <PlatformFilter selected={platform} onSelect={setPlatform} />
           </div>
         </div>
-        <div className="flex flex-col gap-6 lg:gap-10">
+
+        {/* Filter Bar */}
+        <div className="flex flex-col gap-3 lg:gap-10 mt-8">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 lg:gap-6">
             <div className="flex flex-col gap-3 w-full md:flex-row md:justify-between md:items-start">
               <div className="flex flex-col lg:flex-row lg:items-center gap-3">
-                <span className="text-md text-muted-foreground font-medium ">
+                <span className="text-md text-muted-foreground font-medium leading-[140%] tracking-[-0.01em] whitespace-nowrap">
                   Filter by
                 </span>
 
@@ -122,32 +125,40 @@ export default function LegalNews() {
             </div>
           </div>
 
+          {/* ====== MOBILE (1 column) ====== */}
           <div className="lg:hidden">
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+            <div className="flex flex-col gap-4 sm:gap-4">
               {legalPost.map((news, idx) => (
-                <div key={idx} className={cn("w-full")}>
+                <div key={idx} className="w-full">
                   <LegalCard {...news} />
                 </div>
               ))}
             </div>
+            {/* Jarak bawah khusus mobile */}
+            <div className="mt-6" /> {/* 24px jarak ke button */}
           </div>
+
+          {/* ====== DESKTOP (masonry style 4 kolom) ====== */}
           <div className="hidden lg:block">
-            <div className="columns-4 gap-6">
+            <div className="columns-4 gap-4 [column-gap:16px]">
               {legalPost.map((news, idx) => (
                 <div
                   key={idx}
-                  className="break-inside-avoid inline-block w-full"
+                  className="break-inside-avoid mb-4 inline-block w-full"
                 >
                   <LegalCard {...news} />
                 </div>
               ))}
             </div>
+            {/* Jarak bawah khusus desktop */}
+            <div className="mt-12" /> {/* 64px jarak ke button */}
           </div>
         </div>
 
-        <div className="flex justify-center gap-3 ">
-          <Button variant="outline" size="default" className="w-full lg:w-max">
-            Show More
+        {/* Show More Button */}
+        <div className="flex justify-center gap-3">
+          <Button variant="outline" className="w-full lg:w-max px-6">
+            Show more
             <ChevronDown className="size-5 text-foreground" />
           </Button>
         </div>

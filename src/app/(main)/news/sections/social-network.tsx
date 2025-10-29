@@ -7,62 +7,74 @@ import SocialPostCard from "../card/social-news-card";
 import SectionContainer from "@/components/container/section-container";
 import SectionTitle from "@/components/typography/section-title";
 import SearchSocialNetwork from "../components/search-social-news";
+import { cn } from "@/lib/utils";
 
+function chunkArray(arr: any[], size: number) {
+  const result: any[] = [];
+  for (let i = 0; i < arr.length; i += size) {
+    result.push(arr.slice(i, i + size));
+  }
+  return result;
+}
 export default function SocialNetworkNews() {
   const [query, setQuery] = useState("");
+  const rows = chunkArray(socialPosts, 2);
 
   return (
-    <SectionContainer className="px-4 py-5 lg:p-20 ">
-      <div className="flex flex-col gap-6 lg:gap-16 max-w-7xl mx-auto">
-        <div className="flex flex-col gap-8">
-          <SectionTitle className="text-center">
-            Actualité citoyenne
-          </SectionTitle>
+    <SectionContainer className="px-4 py-6 lg:p-20 ">
+      <div className=" max-w-7xl mx-auto">
+        <div className="flex flex-col gap-6 lg:gap-16 ">
+          <div className="flex flex-col gap-8">
+            <SectionTitle className="text-center">
+              Actualité citoyenne
+            </SectionTitle>
 
-          <div className="flex justify-center">
-            <SearchSocialNetwork onSearch={setQuery} />
+            <div className="flex justify-center w-full">
+              <SearchSocialNetwork onSearch={setQuery} />
+            </div>
           </div>
-        </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2">
-          {socialPosts.slice(0, 4).map((news, index, arr) => {
-            const totalRows = Math.ceil(arr.length / 2);
-            const currentRow = Math.floor(index / 2);
-            const isFirstRow = currentRow === 0;
-            const isLastRow = currentRow === totalRows - 1;
+          <div className="grid grid-cols-1 lg:grid-cols-2">
+            {rows.map((row, rowIndex) =>
+              row.map((news, colIndex) => {
+                const index = rowIndex * 2 + colIndex;
+                const isLastItem = index === socialPosts.length - 1;
+                const isFirstRow = rowIndex === 0;
 
-            const isFirstItemMobile = index === 0;
-            const isLastItemMobile = index === arr.length - 1;
+                return (
+                  <div
+                    key={index}
+                    className={cn(
+                      // === MOBILE ===
+                      index !== 0 && "border-t pt-8 lg:border-t-0 lg:pt-0",
+                      !isLastItem && "pb-8 lg:pb-0",
+                      // === DESKTOP ===
+                      // Tambahkan border bawah antar row
+                      rowIndex !== rows.length - 1 &&
+                        "lg:border-b lg:border-border lg:pb-8",
+                      // Tambahkan jarak atas untuk semua item di row kedua ke bawah
+                      !isFirstRow && "lg:pt-8",
+                      // Spasi horizontal antar kolom
+                      colIndex === 0 ? "lg:pr-8" : "lg:pl-8"
+                    )}
+                  >
+                    <SocialPostCard {...news} />
+                  </div>
+                );
+              })
+            )}
+          </div>
 
-            return (
-              <div
-                key={index}
-                className={clsx(
-                  "border-border",
-                  !isFirstItemMobile && "pt-8 border-t",
-                  !isLastItemMobile && "pb-8",
-                  "lg:border-none lg:pt-0 lg:pb-0",
-                  isFirstRow && "lg:pb-8 lg:border-b lg:border-border",
-                  !isFirstRow && "lg:pt-8",
-                  isLastRow && "lg:border-none lg:pb-0",
-                  index % 2 === 0 ? "lg:pr-8" : "lg:pl-8"
-                )}
-              >
-                <SocialPostCard {...news} />
-              </div>
-            );
-          })}
-        </div>
-
-        <div className="flex justify-center gap-3 ">
-          <Button
-            variant="outline"
-            size="md"
-            className="w-full lg:w-max text-sm font-medium leading[140%] tracking-tighter"
-          >
-            Show More
-            <ChevronDown className="size-5 text-foreground" />
-          </Button>
+          <div className="flex justify-center gap-3 ">
+            <Button
+              variant="outline"
+              size="md"
+              className="w-full lg:w-max text-sm font-medium leading[140%] tracking-tighter"
+            >
+              Show more
+              <ChevronDown className="size-5 text-foreground" />
+            </Button>
+          </div>
         </div>
       </div>
     </SectionContainer>
