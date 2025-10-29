@@ -15,6 +15,8 @@ const buttonVariants = cva(
           "bg-destructive-dark text-white shadow-xs hover:bg-destructive-dark/90 focus-visible:ring-destructive-dark/20 dark:focus-visible:ring-destructive-dark/40 dark:bg-destructive-dark/60",
         outline:
           "border bg-background hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50",
+        "outline-gray":
+          "border bg-muted/50 hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50",
         "outline-hover-primary":
           "border bg-background dark:bg-input/30 dark:border-input hover:border-primary hover:text-primary",
         secondary: "border border-primary bg-background text-primary shadow-xs",
@@ -26,13 +28,12 @@ const buttonVariants = cva(
           "bg-white/8 text-white hover:bg-white/12 border border-muted/10"
       },
       size: {
-        default: "py-2.5 px-5 rounded-md has-[>svg]:px-5",
-        sm: "py-2.5 px-4 rounded-md gap-1.5 has-[>svg]:px-4 text-xs",
-        md: "py-2.5 px-6 rounded-md gap-1.5 has-[>svg]:px-6 text-xs",
-        "2md":
-          "py-[0.6876rem] px-4 rounded-md gap-1.5 has-[>svg]:px-4 text-base",
-        lg: "h-12 py-3.5 px-6 rounded-md has-[>svg]:px-6",
-        xl: "py-4 px-6 rounded-md has-[>svg]:px-6 text-base",
+        default: "py-2.5 px-5 rounded-md",
+        sm: "py-2.5 px-4 rounded-md gap-1.5 text-sm",
+        md: "py-2.5 px-6 rounded-md gap-1.5 text-sm",
+        "2md": "py-[0.6876rem] px-4 rounded-md gap-1.5 text-base",
+        lg: "h-12 py-3.5 px-6 rounded-md",
+        xl: "py-4 px-6 rounded-md text-base",
         icon: "size-9"
       }
     },

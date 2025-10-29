@@ -97,7 +97,7 @@ export default function Footer() {
           <ul className="flex flex-col lg:flex-row gap-4 lg:gap-8">
             <li>
               <Link
-                href="/privacy-policy"
+                href="/legal/privacy-policy"
                 className="text-[#94A3B8] hover:text-[#CBD5E1] transition hover:underline"
               >
                 Privacy Policy
@@ -105,7 +105,7 @@ export default function Footer() {
             </li>
             <li>
               <Link
-                href="/terms-of-service"
+                href="/legal/terms-of-service"
                 className="text-[#94A3B8] hover:text-[#CBD5E1] transition hover:underline"
               >
                 Terms of Service
@@ -113,7 +113,7 @@ export default function Footer() {
             </li>
             <li>
               <Link
-                href="/cookie-policy"
+                href="/legal/cookie-policy"
                 className="text-[#94A3B8] hover:text-[#CBD5E1] transition hover:underline"
               >
                 Cookie policy

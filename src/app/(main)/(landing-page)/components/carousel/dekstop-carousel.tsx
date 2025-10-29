@@ -71,7 +71,7 @@ export default function DesktopCarousel() {
   }, [dotCount]);
 
   return (
-    <div className="hidden h-full md:flex items-start gap-16">
+    <div className="hidden h-full md:flex items-start gap-16 md:justify-end 2xl:translate-x-20 3xl:justify-center">
       <div className="flex flex-col justify-between h-full items-start w-full max-w-xs shrink-0">
         <SectionTitle>Les dernières publications</SectionTitle>
 
@@ -110,7 +110,7 @@ export default function DesktopCarousel() {
       {/* SCROLL AREA */}
       <div
         ref={desktopRef}
-        className="flex gap-6 overflow-x-auto scroll-smooth hide-scrollbar w-full snap-x snap-mandatory"
+        className="flex gap-6 overflow-x-auto scroll-smooth hide-scrollbar w-fit snap-x snap-mandatory md:pr-6"
         style={{ WebkitOverflowScrolling: "touch", overflowX: "scroll" }}
       >
         {productionData.map((news, i) => (

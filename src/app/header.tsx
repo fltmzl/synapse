@@ -9,17 +9,28 @@ import { Menu } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import ProfileDekstop from "./(main)/(landing-page)/components/profile-dekstop";
+
+// const NAV_ITEMS = [
+//   { label: "Actualité", href: "/news" },
+//   { label: "Base de données", href: "/database" },
+//   { label: "Acteurs", href: "/personality" },
+//   { label: "Structure", href: "/explore-directory" },
+//   { label: "Le coin des affaires", href: "/business-corner" }
+// ];
 
 const NAV_ITEMS = [
-  { label: "Actualité", href: "/news" },
-  { label: "Base de données", href: "/database" },
-  { label: "Acteurs", href: "/personality" },
-  { label: "Structure", href: "/explore-directory" },
-  { label: "Le coin des affaires", href: "/business-corner" }
+  { label: "Actualité", href: "/nav-1" },
+  { label: "Base de données", href: "/nav-2" },
+  { label: "Acteurs", href: "/nav-3" },
+  { label: "Structure", href: "/nav-4" },
+  { label: "Le coin des affaires", href: "/nav-5" }
 ];
+
 export default function Header() {
-  const isLoggedIn = false;
   const pathname = usePathname();
+  const isLoggedIn = true;
+
   const [open, setOpen] = useState(false);
   const panelRef = useRef<HTMLDivElement | null>(null);
 
@@ -59,10 +70,7 @@ export default function Header() {
 
             <div className="flex items-center gap-4">
               {isLoggedIn ? (
-                <Avatar className="hidden md:block w-8 h-8">
-                  <AvatarImage src="/avatar.jpg" alt="User" />
-                  <AvatarFallback></AvatarFallback>
-                </Avatar>
+                <ProfileDekstop image="/avatar.jpg" username="John Doe" />
               ) : (
                 <Button asChild className="hidden md:block py" size="md">
                   <Link href="/auth/login">Login</Link>
@@ -104,9 +112,9 @@ export default function Header() {
                     <AvatarFallback></AvatarFallback>
                   </Avatar>
                 ) : (
-                  <Link href="/auth/login" passHref>
-                    <Button>Login</Button>
-                  </Link>
+                  <Button asChild>
+                    <Link href="/auth/login">Login</Link>
+                  </Button>
                 )}
               </div>
             </div>
