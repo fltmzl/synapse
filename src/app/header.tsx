@@ -20,7 +20,7 @@ import ProfileDekstop from "./(main)/(landing-page)/components/profile-dekstop";
 // ];
 
 const NAV_ITEMS = [
-  { label: "Actualité", href: "/nav-1" },
+  { label: "Actualité", href: "/news" },
   { label: "Base de données", href: "/nav-2" },
   { label: "Acteurs", href: "/nav-3" },
   { label: "Structure", href: "/nav-4" },
