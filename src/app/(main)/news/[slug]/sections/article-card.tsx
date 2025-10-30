@@ -3,23 +3,12 @@
 import { useState } from "react";
 import Image from "next/image";
 import { useParams } from "next/navigation";
-import {
-  ChevronLeft,
-  ChevronRight,
-  Facebook,
-  Twitter,
-  Linkedin
-} from "lucide-react";
-import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import SectionContainer from "@/components/container/section-container";
 import { newsData } from "@/data/news-data";
 import { ArrowLeftIcon } from "@/icons/arrow-left-icon";
 import { ArrowRightIcon } from "@/icons/arrow-right-icon";
 import Link from "next/link";
-import { FacebookIcon } from "@/icons/facebook-icon";
-import { InstagramIcon } from "@/icons/instagram-icon";
-import { LinkedinFillICon } from "@/icons/linkedin-fill-icon";
 import { LinkedinIconFlat } from "@/icons/linkedin-icon-flat";
 import { InstagramIconFlat } from "@/icons/instagram-icon-flat";
 import { FacebookFillIcon } from "@/icons/facebook-fill-icon";
@@ -54,7 +43,7 @@ export default function ArticleContent() {
       <article className="w-full flex flex-col gap-10 px-6 max-w-7xl mx-auto">
         <div className=" py-0 lg:px-10">
           <header className="flex flex-col gap-6 lg:gap-8 text-left py-0 px-0 lg:pt-16 pb-6 lg:pb-10 lg:px-[140px]">
-            <h1 className="text-2xl lg:text-[40px] font-medium leading-[110%] tracking-[-0.03em] ">
+            <h1 className="text-2xl lg:text-[40px] font-medium leading-[110%] tracking-[-0.03em]">
               {article.title}
             </h1>
             <div className="flex items-center gap-3 text-muted-foreground">
@@ -135,7 +124,19 @@ export default function ArticleContent() {
         <div className="border-none shadow-none lg:px-[180px] flex flex-col gap-8">
           {/* Konten artikel pakai prose */}
           <article
-            className="prose prose-neutral dark:prose-invert max-w-none text-foreground prose-h1:text-3xl prose-h2:text-2xl prose-h3:text-xl prose-p:text-base prose-li:marker:text-muted-foreground"
+            className={cn(
+              "prose prose-neutral dark:prose-invert max-w-none",
+              "prose-headings:leading-[110%] prose-headings:tracking-[-0.03em] prose-headings:font-medium prose-headings:mb-4",
+              "prose-h1:text-2xl prose-h1:lg:text-[40px]",
+              "prose-h2:text-2xl prose-headings:mt-4",
+              "prose-h3:text-xl",
+              "prose-h4:text-lg",
+              "prose-h5:text-base",
+              "prose-h6:text-sm"
+            )}
+            // prose-h1:text-3xl prose-h2:text-2xl prose-h3:text-xl prose-p:text-base prose-li:marker:text-muted-foreground
+
+            // text-2xl lg:text-[40px] font-medium leading-[110%] tracking-[-0.03em]
             dangerouslySetInnerHTML={{ __html: article.content }}
           />
 
@@ -143,29 +144,70 @@ export default function ArticleContent() {
           <div className="flex items-center gap-4 text-muted-foreground">
             <span className="text-lg leading-[140%]">Share</span>
             <div className="flex gap-2">
-              <Button
-                variant="outline"
-                size="icon"
-                className="rounded-full w-[42px] h-[42px]"
-              >
-                <Link href="#">
-                  <FacebookFillIcon className="size-[18px]" />
-                </Link>
-              </Button>
-              <Button
-                variant="outline"
-                size="icon"
-                className="rounded-full w-[42px] h-[42px]"
-              >
-                <Link href="#">
-                  <InstagramIconFlat className="size-[18px]" />
-                </Link>
-              </Button>
-              <Button variant="outline" size="icon" className="rounded-full">
-                <Link href="#">
-                  <LinkedinIconFlat className="size-[18px]" />
-                </Link>
-              </Button>
+              {(() => {
+                const encodedUrl = encodeURIComponent(
+                  typeof window !== "undefined"
+                    ? window.location.href
+                    : "https://example.com"
+                );
+                const encodedTitle = encodeURIComponent(article.title);
+
+                const facebookShare = `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`;
+                const linkedinShare = `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`;
+                const instagramShare = `https://www.instagram.com/?url=${encodedUrl}`; // Instagram belum punya direct share resmi
+
+                return (
+                  <>
+                    {/* Facebook */}
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      className="rounded-full w-[42px] h-[42px]"
+                      asChild
+                    >
+                      <Link
+                        href={facebookShare}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <FacebookFillIcon className="size-[18px]" />
+                      </Link>
+                    </Button>
+
+                    {/* Instagram */}
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      className="rounded-full w-[42px] h-[42px]"
+                      asChild
+                    >
+                      <Link
+                        href={instagramShare}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <InstagramIconFlat className="size-[18px]" />
+                      </Link>
+                    </Button>
+
+                    {/* LinkedIn */}
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      className="rounded-full w-[42px] h-[42px]"
+                      asChild
+                    >
+                      <Link
+                        href={linkedinShare}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <LinkedinIconFlat className="size-[18px]" />
+                      </Link>
+                    </Button>
+                  </>
+                );
+              })()}
             </div>
           </div>
         </div>

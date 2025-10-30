@@ -32,7 +32,7 @@ export default function SearchPersonality({
         placeholder="Entrez un nom..."
         value={searchValue || ""}
         onChange={(e) => setSearchValue(e.target.value)}
-         onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
+        onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
         className="relative p-0 border-none focus-visible:ring-0 focus-visible:ring-offset-0"
       />
       {/* Tombol clear (X) */}
@@ -49,7 +49,7 @@ export default function SearchPersonality({
       {/* Tombol Search */}
       <Button
         onClick={handleSubmit}
-        className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md bg-primary hover:bg-primary/90 hover:border-primary w-10 h-10 flex items-center justify-center"
+        className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md bg-primary hover:bg-primary/90 hover:border-primary w-12 h-12 flex items-center justify-center"
       >
         <SearchIcon className="h-4 w-4 text-white hover:text-primary " />
       </Button>

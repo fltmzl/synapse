@@ -7,6 +7,7 @@ import { productionData } from "@/data/news-data";
 import ProductionCard from "../card/production-card";
 import { ArrowLeftIcon } from "@/icons/arrow-left-icon";
 import { ArrowRightIcon } from "@/icons/arrow-right-icon";
+import { cn } from "@/lib/utils";
 
 export default function DesktopCarousel() {
   const desktopRef = useRef<HTMLDivElement | null>(null);
@@ -28,22 +29,28 @@ export default function DesktopCarousel() {
   useEffect(() => {
     const updateDots = () => {
       const el = desktopRef.current;
-      if (!el || el.children.length === 0) return;
+      if (!el) return;
 
-      const firstCard = el.children[0] as HTMLElement;
-      const cardWidth = firstCard.getBoundingClientRect().width;
-
+      const cards = Array.from(el.children).filter(
+        (child) => !(child as HTMLElement).classList.contains("spacer")
+      );
+      const firstCard = cards[0] as HTMLElement;
+      const cardWidth = firstCard?.getBoundingClientRect?.().width || 0;
       if (!cardWidth) return;
 
       const visibleCards = Math.max(1, Math.floor(el.clientWidth / cardWidth));
-      const totalPages = Math.ceil(productionData.length / visibleCards);
+      const totalScrollableWidth =
+        cards.length * (cardWidth + 24) - 24 - el.clientWidth;
+      const totalPages = Math.max(
+        1,
+        Math.round(totalScrollableWidth / el.clientWidth + 1)
+      );
 
       setDotCount(totalPages);
+      setActiveIndex((prev) => Math.min(prev, totalPages - 1));
     };
 
-    // Delay a bit so layout is ready
     const timeout = setTimeout(updateDots, 50);
-
     window.addEventListener("resize", updateDots);
     return () => {
       clearTimeout(timeout);
@@ -57,16 +64,34 @@ export default function DesktopCarousel() {
     if (!el) return;
 
     const handleScroll = () => {
-      const el = desktopRef.current;
-      if (!el) return;
+      const cards = Array.from(el.children).filter(
+        (child) => !(child as HTMLElement).classList.contains("spacer")
+      ) as HTMLElement[];
 
-      const firstCard = el.children[0] as HTMLElement;
-      const cardWidth = firstCard.clientWidth;
-      const newIndex = Math.round(el.scrollLeft / cardWidth);
+      if (cards.length === 0) return;
+
+      const cardWidth = cards[0].clientWidth;
+      const gap = 24; // sesuai gap-6
+      const totalCardsWidth = cards.length * (cardWidth + gap) - gap;
+      const visibleCards = Math.max(1, Math.floor(el.clientWidth / cardWidth));
+      const pageWidth = visibleCards * (cardWidth + gap);
+      const totalPages = Math.ceil(cards.length / visibleCards);
+      const maxIndex = totalPages - 1;
+
+      const rawIndex = Math.round(el.scrollLeft / pageWidth);
+      const nearRightEnd =
+        el.scrollLeft + el.clientWidth >= totalCardsWidth - 10; // batas real tanpa spacer
+
+      const newIndex = nearRightEnd
+        ? maxIndex
+        : Math.min(Math.max(rawIndex, 0), maxIndex);
+
       setActiveIndex(newIndex);
     };
 
     el.addEventListener("scroll", handleScroll);
+    handleScroll();
+
     return () => el.removeEventListener("scroll", handleScroll);
   }, [dotCount]);
 
@@ -110,8 +135,12 @@ export default function DesktopCarousel() {
       {/* SCROLL AREA */}
       <div
         ref={desktopRef}
-        className="flex gap-6 overflow-x-auto scroll-smooth hide-scrollbar w-fit snap-x snap-mandatory md:pr-6"
-        style={{ WebkitOverflowScrolling: "touch", overflowX: "scroll" }}
+        className="flex gap-6 overflow-x-auto scroll-smooth hide-scrollbar lg:pr-14"
+        style={{
+          WebkitOverflowScrolling: "touch",
+          overflowX: "scroll",
+          scrollSnapType: "x mandatory"
+        }}
       >
         {productionData.map((news, i) => (
           <ProductionCard
@@ -121,6 +150,9 @@ export default function DesktopCarousel() {
             variant="desktop"
           />
         ))}
+
+        {/* Spacer kanan biar gak nempel layar */}
+        <div className="flex-shrink-0 w-[24px]" />
       </div>
     </div>
   );

@@ -17,7 +17,7 @@ type PaginationProps = {
   pageSize: number;
   onPageChange: (page: number) => void;
   onPageSizeChange: (size: number) => void;
-}
+};
 
 export default function Pagination({
   totalRows,
@@ -47,10 +47,9 @@ export default function Pagination({
   };
 
   return (
-      <div className="w-full pt-8 text-sm">
+    <div className="w-full pt-8 text-sm">
       {/* Top wrapper: stacks on mobile, row on desktop */}
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
-
         {/* Left on desktop, row (showing + mobile dropdown) on mobile */}
         <div className="flex items-center justify-between w-full lg:w-auto">
           <p className="text-muted-foreground text-sm leading-[140%] tracking-[-0.01em]">
@@ -60,7 +59,9 @@ export default function Pagination({
           {/* Mobile: show dropdown in the same row as "Showing" */}
           <div className="lg:hidden">
             <div className="flex items-center gap-2">
-              <span className="text-muted-foreground leading-[140%] tracking-[-0.01em]">Show</span>
+              <span className="text-muted-foreground leading-[140%] tracking-[-0.01em]">
+                Show
+              </span>
               <Select
                 value={String(pageSize)}
                 onValueChange={(value) => {
@@ -91,7 +92,7 @@ export default function Pagination({
               onClick={() => onPageChange(page - 1)}
               className="disabled:opacity-40 text-foreground"
             >
-              <ArrowLeftIcon className="size-8" />
+              <ArrowLeftIcon className="size-6" />
             </button>
 
             {generatePageNumbers().map((pages, i) =>
@@ -103,7 +104,11 @@ export default function Pagination({
                   variant="ghost"
                   size="icon"
                   onClick={() => onPageChange(pages)}
-                  className={`w-8 h-8 text-sm ${page === pages ? "border border-primary text-primary rounded-sm" : ""}`}
+                  className={`w-8 h-8 text-sm ${
+                    page === pages
+                      ? "border border-primary text-primary rounded-sm"
+                      : ""
+                  }`}
                 >
                   {pages + 1}
                 </Button>
@@ -115,14 +120,16 @@ export default function Pagination({
               onClick={() => onPageChange(page + 1)}
               className="disabled:opacity-40 text-foreground"
             >
-              <ArrowRightIcon className="size-8 text-foreground" />
+              <ArrowRightIcon className="size-6" />
             </button>
           </div>
         </div>
 
         {/* Right: dropdown on desktop */}
         <div className="hidden lg:flex items-center gap-2">
-          <span className="text-muted-foreground leading-[140%] tracking-[-0.01em]">Show</span>
+          <span className="text-muted-foreground leading-[140%] tracking-[-0.01em]">
+            Show
+          </span>
           <Select
             value={String(pageSize)}
             onValueChange={(value) => {

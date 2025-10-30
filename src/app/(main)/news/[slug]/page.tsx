@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import ExploreArticle from "./sections/eplore-article";
+import ExploreArticle from "./sections/explore-article";
 import { newsData } from "@/data/news-data";
 import ArticleContent from "./sections/article-card";
 
