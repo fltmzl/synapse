@@ -4,9 +4,9 @@ import { parseAsArrayOf, parseAsString, useQueryState } from "nuqs";
 import { useState } from "react";
 
 import FilterMultipleWithSearch from "@/components/filter-multiple-with-search";
-import SearchPersonality from "../components/search-personality";
+import SearchPersonality from "../components/search-actors";
 
-export default function FindPersonality() {
+export default function FindActors() {
   const [query, setQuery] = useState("");
 
   const filters = {

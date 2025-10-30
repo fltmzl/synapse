@@ -24,13 +24,13 @@ import {
 } from "@/components/ui/drawer";
 import Pagination from "@/components/pagination";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
-import { ArrowRightIcon } from "@/icons/arrow-right-icon";
+import { ArrowRightBoldIcon } from "@/icons/arrow-right-bold-icon";
 import { SortDescendingIcon } from "@/icons/sort-desc-icon";
 import { FilterIcon } from "@/icons/filter-icon";
 import NoResult from "./no-result";
 import { useAutoCloseDrawer } from "@/hooks/use-auto-close-drawer";
 
-export default function AnswerPersonality() {
+export default function AnswerActors() {
   const [territory, setTerritory] = useQueryState(
     "territory",
     parseAsArrayOf(parseAsString).withDefault([])
@@ -140,22 +140,22 @@ export default function AnswerPersonality() {
 
   const filters = {
     territory: [
-      { label: "Martinique", value: "territory:Martinique" },
-      { label: "Guadeloupe", value: "territory:Guadeloupe" },
-      { label: "Réunion", value: "territory:Réunion" },
-      { label: "Mayotte", value: "territory:Mayotte" },
-      { label: "French Guiana", value: "territory:French Guiana" }
+      { label: "Martinique", value: "Martinique" },
+      { label: "Guadeloupe", value: "Guadeloupe" },
+      { label: "Réunion", value: "Réunion" },
+      { label: "Mayotte", value: "Mayotte" },
+      { label: "French Guiana", value: "French Guiana" }
     ],
     role: [
-      { label: "Government", value: "role:Government" },
-      { label: "Business Leaders", value: "role:Business Leaders" }
+      { label: "Government", value: "Government" },
+      { label: "Business Leaders", value: "Business Leaders" }
     ],
     category: [
-      { label: "Economy", value: "category:Economy" },
-      { label: "Government", value: "category:Government" },
-      { label: "Health", value: "category:Health" },
-      { label: "Education", value: "category:Education" },
-      { label: "Environment", value: "category:Environment" }
+      { label: "Economy", value: "Economy" },
+      { label: "Government", value: "Government" },
+      { label: "Health", value: "Health" },
+      { label: "Education", value: "Education" },
+      { label: "Environment", value: "Environment" }
     ]
   };
 
@@ -167,24 +167,33 @@ export default function AnswerPersonality() {
     { label: "Editors Pick", value: "Editors Pick" }
   ];
 
-  const removeActiveValue = (val: string) => {
-    if (val.startsWith("territory:")) {
-      setTerritory((prev) => (prev ?? []).filter((v) => v !== val));
-    } else if (val.startsWith("role:")) {
-      setRole((prev) => (prev ?? []).filter((v) => v !== val));
-    } else if (val.startsWith("category:")) {
-      setCategory((prev) => (prev ?? []).filter((v) => v !== val));
-    }
-  };
-
-  // Gabung active values
   const activeValues = [
     ...(territory ?? []),
     ...(role ?? []),
     ...(category ?? [])
   ];
 
-  // Filter data
+  const removeActiveValue = (val: string) => {
+    if ((territory ?? []).includes(val)) {
+      setTerritory((prev) => (prev ?? []).filter((v) => v !== val));
+      return;
+    }
+    if ((role ?? []).includes(val)) {
+      setRole((prev) => (prev ?? []).filter((v) => v !== val));
+      return;
+    }
+    if ((category ?? []).includes(val)) {
+      setCategory((prev) => (prev ?? []).filter((v) => v !== val));
+      return;
+    }
+  };
+
+  const clearAll = () => {
+    setTerritory(null);
+    setRole(null);
+    setCategory(null);
+  };
+
   const filteredPeople = people.filter((p) => {
     const matchSearch =
       !search ||
@@ -205,15 +214,7 @@ export default function AnswerPersonality() {
     return matchSearch && matchTerritory && matchRole && matchCategory;
   });
 
-  // Clear semua filter
-  const clearAll = () => {
-    setTerritory(null);
-    setRole(null);
-    setCategory(null);
-  };
-
   const [openFilter, setOpenFilter] = useState(false);
-
   useAutoCloseDrawer(openFilter, () => setOpenFilter(false));
 
   const [page, setPage] = useState(0);
@@ -222,6 +223,7 @@ export default function AnswerPersonality() {
     page * pageSize,
     (page + 1) * pageSize
   );
+
   if (filteredPeople.length === 0) {
     return <NoResult />;
   }
@@ -231,7 +233,7 @@ export default function AnswerPersonality() {
       <div className="py-12 lg:py-20 px-6 max-w-7xl mx-auto">
         <div className="flex flex-col lg:flex-row gap-6">
           {/* SIDEBAR (desktop only) */}
-          <aside className=" hidden lg:block w-[336px] flex-shrink-0 border rounded-[12px]">
+          <aside className=" hidden lg:block w-[336px] flex-shrink-0 border rounded-[12px] h-max sticky top-28 self-start">
             <h3 className="font-semibold text-2xl leading-[110%] tracking-[-0.02em] p-5 border-b">
               Filter by
             </h3>
@@ -249,6 +251,7 @@ export default function AnswerPersonality() {
               groups={{ category: filters.category }}
               value={category ?? []}
               setValue={setCategory}
+              isLast
             />
           </aside>
 
@@ -303,7 +306,6 @@ export default function AnswerPersonality() {
                   onOpenChange={setOpenFilter}
                   shouldScaleBackground={false}
                 >
-                  {/* Trigger */}
                   <DrawerTrigger asChild>
                     <Button
                       variant="outline"
@@ -314,18 +316,14 @@ export default function AnswerPersonality() {
                     </Button>
                   </DrawerTrigger>
 
-                  {/* Drawer Body */}
-                  <DrawerContent
-                    className=" rounded-t-2xl p-0 backdrop-blur-lg
-    [&>*:first-child]:hidden"
-                  >
-                    <DrawerTitle className="font-semibold text-2xl leading-[110%] tracking-[-0.02em] p-5 border-b">
+                  <DrawerContent className=" rounded-t-2xl p-0 backdrop-blur-lg [&>*:first-child]:hidden">
+                    <DrawerTitle className="font-semibold text-2xl leading-[110%] tracking-[-0.02em] p-5 border-b relative">
                       Filter by
                       <DrawerClose asChild>
                         <button>
                           <X className="h-6 w-6 absolute top-5 right-4 cursor-pointer" />
                         </button>
-                      </DrawerClose>{" "}
+                      </DrawerClose>
                     </DrawerTitle>
                     <div className=" max-h-[75vh] overflow-y-auto border-b">
                       <SidebarFilters
@@ -345,7 +343,6 @@ export default function AnswerPersonality() {
                       />
                     </div>
 
-                    {/* Sticky Bottom Action */}
                     <div className="p-4 border-t bg-background sticky bottom-0">
                       <DrawerClose asChild>
                         <Button className="w-full">Apply Filters</Button>
@@ -356,153 +353,153 @@ export default function AnswerPersonality() {
               </div>
             </div>
 
+            {/* Active Filters */}
             {activeValues.length > 0 && (
               <>
-                {/* 🖥️ DESKTOP */}
-                <div className="hidden lg:grid grid-cols-[1fr_auto] gap-4 w-full pt-4">
-                  {/* daftar active filters */}
-                  <div className="flex flex-wrap gap-2">
-                    {activeValues.map((activeFilter) => (
-                      <div
-                        key={activeFilter}
-                        className="flex gap-2 border py-2 px-[10px] rounded-[6px] text-sm"
-                      >
-                        <span>{getLabelFromValue(activeFilter)}</span>
-                        <button
-                          aria-label={`Remove ${activeFilter}`}
-                          onClick={() => removeActiveValue(activeFilter)}
-                          className="p-1"
-                        >
-                          <X className="h-3 w-3" />
-                        </button>
-                      </div>
-                    ))}
-                  </div>
+{/* 🖥️ DESKTOP */}
+<div className="hidden lg:relative lg:block w-full pt-4">
+  {/* Tombol Clear filter (absolute, di luar flex flow) */}
+  <button
+    className="absolute right-0 top-4 text-sm text-primary underline"
+    onClick={clearAll}
+  >
+    Clear filter
+  </button>
 
-                  {/* tombol clear filter */}
-                  <div className="flex items-end">
-                    <button
-                      className="text-sm text-primary underline whitespace-nowrap"
-                      onClick={clearAll}
-                    >
-                      Clear filter
-                    </button>
-                  </div>
-                </div>
+  {/* Container chip dengan padding kanan agar ga ketabrak tombol */}
+  <div className="flex flex-wrap gap-2 pr-[100px]">
+    {activeValues.map((activeFilter, index) => (
+      <div
+        key={`${activeFilter}-${index}`}
+        className="flex gap-2 border py-2 px-[10px] rounded-[6px] text-sm"
+      >
+        <span>{activeFilter}</span>
+        <button
+          aria-label={`Remove ${activeFilter}`}
+          onClick={() => removeActiveValue(activeFilter)}
+          className="p-1"
+        >
+          <X className="h-3 w-3" />
+        </button>
+      </div>
+    ))}
+  </div>
+</div>
 
-                {/* 📱 MOBILE */}
-                <div className="flex flex-col gap-4 lg:hidden pt-4">
-                  <div className="flex flex-row max-h-full">
-                    <div className="flex whitespace-nowrap overflow-x-auto hide-scrollbar gap-2">
-                      {activeValues.map((activeFilter) => (
-                        <div
-                          key={activeFilter}
-                          className="flex gap-2 border py-2 px-[10px] rounded-[6px] text-sm"
-                        >
-                          <span>{getLabelFromValue(activeFilter)}</span>
-                          <button
-                            aria-label={`Remove ${activeFilter}`}
-                            onClick={() => removeActiveValue(activeFilter)}
-                            className="p-1"
-                          >
-                            <X className="h-3 w-3" />
-                          </button>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                  <button
-                    className="text-sm text-primary underline text-start"
-                    onClick={clearAll}
-                  >
-                    Clear filter
-                  </button>
-                </div>
+              {/* 📱 MOBILE */}
+<div className="flex flex-col gap-4 lg:hidden pt-4">
+  <div className="flex flex-row max-h-full">
+    <div className="flex whitespace-nowrap overflow-x-auto hide-scrollbar gap-2">
+      {activeValues.map((activeFilter, index) => (
+        <div
+          key={`${activeFilter}-${index}`}
+          className="flex gap-2 border py-2 px-[10px] rounded-[6px] text-sm"
+        >
+          <span>{activeFilter}</span>
+          <button
+            aria-label={`Remove ${activeFilter}`}
+            onClick={() => removeActiveValue(activeFilter)}
+            className="p-1"
+          >
+            <X className="h-3 w-3" />
+          </button>
+        </div>
+      ))}
+    </div>
+  </div>
+  <button
+    className="text-sm text-primary underline text-start"
+    onClick={clearAll}
+  >
+    Clear filter
+  </button>
+</div>
+
               </>
             )}
 
             {/* LIST */}
-            <div className="space-y-6 divide-y px-2">
-              {paginatedPeople.map((person, index) => (
-                <article
-                  key={index}
-                  className="w-full flex flex-col lg:flex-row justify-between py-8 border-b mb-0"
-                >
-                  {/* Kiri: Avatar + Info utama */}
-                  <div className="flex flex-col gap-4 w-full">
-                    {/* Bagian atas */}
-                    <div className="flex flex-col sm:flex-row md:items-start md:justify-between gap-4 w-full">
-                      <div className="flex items-center gap-4">
-                        <Avatar className="h-16 w-16">
-                          <AvatarImage
-                            className="rounded-full"
-                            src="https://github.com/shadcn.png"
-                            alt={person.name}
-                          />
-                          <AvatarFallback className="bg-muted-foreground/20 font-semibold text-sm">
-                            {person.name
-                              .split(" ")
-                              .map((word) => word[0])
-                              .join("")
-                              .slice(0, 2)}
-                          </AvatarFallback>
-                        </Avatar>
+           <div className="space-y-6 divide-y px-2">
+  {paginatedPeople.map((person, index) => {
+    // 🧩 Tambahkan log di sini
+    console.log("Person data:", { index, name: person.name, image: person.image });
 
-                        <div className="flex flex-col gap-2">
-                          <h3 className="font-semibold text-xl text-foreground leading-[110%] tracking-[-0.02em]">
-                            {person.name}
-                          </h3>
-                          <p className="text-base leading-[110%] text-muted-foreground">
-                            {person.title}
-                          </p>
-                        </div>
-                      </div>
+    return (
+      <article
+        key={index}
+        className="w-full flex flex-col lg:flex-row justify-between py-8 border-b mb-0"
+      >
+        <div className="flex flex-col gap-4 w-full">
+          <div className="flex flex-col sm:flex-row md:items-start md:justify-between gap-4 w-full">
+            <div className="flex items-center gap-4">
+              <Avatar className="h-16 w-16">
+                <AvatarImage
+                  className="rounded-full"
+                  src={person.image}
+                  alt={person.name}
+                />
+                <AvatarFallback className="bg-muted-foreground/20 font-semibold text-sm">
+                  {person.name
+                    .split(" ")
+                    .map((w) => w[0])
+                    .join("")
+                    .slice(0, 2)}
+                </AvatarFallback>
+              </Avatar>
 
-                      {/* Tombol profil */}
-                      <Button
-                        variant="ghost"
-                        className="text-primary hover:underline text-base font-regular leading-[140%] tracking-[-0.01em] hover:bg-transparent self-start sm:self-auto p-0"
-                      >
-                        <span className="inline top-0">Profil</span>
-                        <ArrowRightIcon className="w-5 h-5 size-5" />
-                      </Button>
-                    </div>
-
-                    {/* Informasi detail */}
-                    <div className="flex flex-col md:flex-row md:gap-16 pl-0 md:pl-20 text-xs gap-6">
-                      <div className="flex flex-col gap-2">
-                        <div className="font-regular text-muted-foreground text-sm leading-[110%] tracking-[-0.01em]">
-                          Affiliation
-                        </div>
-                        <div className="font-regular text-foreground text-base leading-[110%] tracking-[-0.01em]">
-                          {person.affiliation}
-                        </div>
-                      </div>
-
-                      <div className="flex flex-col gap-2">
-                        <div className="font-regular text-muted-foreground text-sm leading-[110%] tracking-[-0.01em]">
-                          Territory
-                        </div>
-                        <div className="font-regular text-foreground text-base leading-[110%] tracking-[-0.01em]">
-                          {person.territory}
-                        </div>
-                      </div>
-
-                      <div className="flex flex-col gap-2">
-                        <div className="font-regular text-muted-foreground text-sm leading-[110%] tracking-[-0.01em]">
-                          Category
-                        </div>
-                        <div className="font-regular text-foreground text-base leading-[110%] tracking-[-0.01em]">
-                          {person.category}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </article>
-              ))}
+              <div className="flex flex-col gap-2">
+                <h3 className="font-semibold text-xl text-foreground leading-[110%] tracking-[-0.02em]">
+                  {person.name}
+                </h3>
+                <p className="text-base leading-[110%] text-muted-foreground">
+                  {person.title}
+                </p>
+              </div>
             </div>
 
-            {/* PAGINATION */}
+            <Button
+              variant="ghost"
+              className="text-primary hover:underline text-base font-regular leading-[140%] tracking-[-0.01em] hover:bg-transparent self-start sm:self-auto p-0"
+            >
+              <span className="inline top-0">Profil</span>
+              <ArrowRightBoldIcon className="w-5 h-5 size-5 stroke-2" />
+            </Button>
+          </div>
+
+          <div className="flex flex-col md:flex-row md:gap-16 pl-0 md:pl-20 text-xs gap-6">
+            <div className="flex flex-col gap-2">
+              <div className="font-regular text-muted-foreground text-sm leading-[110%] tracking-[-0.01em]">
+                Affiliation
+              </div>
+              <div className="font-regular text-foreground text-base leading-[110%] tracking-[-0.01em]">
+                {person.affiliation}
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <div className="font-regular text-muted-foreground text-sm leading-[110%] tracking-[-0.01em]">
+                Territory
+              </div>
+              <div className="font-regular text-foreground text-base leading-[110%] tracking-[-0.01em]">
+                {person.territory}
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <div className="font-regular text-muted-foreground text-sm leading-[110%] tracking-[-0.01em]">
+                Category
+              </div>
+              <div className="font-regular text-foreground text-base leading-[110%] tracking-[-0.01em]">
+                {person.category}
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+    );
+  })}
+</div>
+
             <Pagination
               totalRows={filteredPeople.length}
               page={page}

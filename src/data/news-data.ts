@@ -59,7 +59,13 @@ export const newsData: NewsItem[] = [
     images: [
       "/images/news/news-2.png",
       "/images/news/news-3.png",
-      "/images/news/news-4.png"
+      "/images/news/news-4.png",
+       "/images/news/news-2.png",
+      "/images/news/news-3.png",
+      "/images/news/news-4.png",
+       "/images/news/news-2.png",
+      "/images/news/news-3.png",
+      "/images/news/news-4.png",
     ],
     content: `
       <h1>Analysis: What €15M means for Martinique's SMEs</h1>

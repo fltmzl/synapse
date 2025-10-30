@@ -15,7 +15,7 @@ export function ArrowRightIcon(props: SVGProps<SVGSVGElement>) {
         stroke="currentColor"
         strokeLinecap="round"
         strokeLinejoin="round"
-        strokeWidth="1.5"
+        strokeWidth="1"
         d="M5 12h14m-6 6l6-6m-6-6l6 6"
       />
     </svg>

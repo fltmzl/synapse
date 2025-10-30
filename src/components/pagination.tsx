@@ -141,7 +141,7 @@ export default function Pagination({
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              {[5, 25, 50].map((size) => (
+              {[9, 36, 81].map((size) => (
                 <SelectItem key={size} value={String(size)}>
                   {size}
                 </SelectItem>
