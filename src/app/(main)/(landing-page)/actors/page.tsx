@@ -1,12 +1,11 @@
-import { Suspense } from "react";
-import AnswerPersonality from "./sections/answer-personality";
-import FindPersonality from "./sections/find-personality";
+import AnswerActors from "./sections/answer-actors";
+import FindActors from "./sections/find-actors";
 
-export default function PersonalityPage() {
+export default function ActorsPage() {
   return (
-    <Suspense fallback={null}>
-      <FindPersonality />
-      <AnswerPersonality />
-    </Suspense>
+    <div>
+      <FindActors />
+      <AnswerActors />
+    </div>
   );
 }

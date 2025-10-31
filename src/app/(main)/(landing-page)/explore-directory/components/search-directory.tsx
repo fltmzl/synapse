@@ -7,7 +7,7 @@ import { SearchIcon, X } from "lucide-react";
 import { on } from "events";
 import { useQueryState } from "nuqs";
 
-export default function SearchPersonality({
+export default function SearchDirectory({
   onSearch
 }: {
   onSearch: (value: string) => void;
