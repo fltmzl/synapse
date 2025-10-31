@@ -10,6 +10,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import ProfileDekstop from "./(main)/(landing-page)/components/profile-dekstop";
+import ProfileMobile from "./(main)/(landing-page)/components/profile-mobile";
 
 // const NAV_ITEMS = [
 //   { label: "Actualité", href: "/news" },
@@ -107,10 +108,7 @@ export default function Header() {
               </div>
               <div className="flex justify-center ">
                 {isLoggedIn ? (
-                  <Avatar className="w-12 h-12">
-                    <AvatarImage src="/avatar.jpg" alt="User" />
-                    <AvatarFallback></AvatarFallback>
-                  </Avatar>
+                  <ProfileMobile image="/avatar.jpg" username="John Doe" />
                 ) : (
                   <Button asChild>
                     <Link href="/auth/login">Login</Link>
