@@ -70,7 +70,6 @@ export default function ProfileDekstop({ image, username }: Props) {
       case "security":
         return <ChangePasswordForm />;
       case "billing":
-        return "Coming Soon";
         return <BillingForm />;
       default:
         return null;
@@ -104,7 +103,7 @@ export default function ProfileDekstop({ image, username }: Props) {
           </DialogHeader>
           <DialogContent
             showCloseButton={false}
-            className="flex flex-col lg:flex-row overflow-hidden lg:max-w-[822px]"
+            className="flex flex-col lg:flex-row overflow-hidden lg:max-w-[852px]"
           >
             <aside className="p-4 min-w-56">
               <div className="">
@@ -131,6 +130,15 @@ export default function ProfileDekstop({ image, username }: Props) {
                     {menu.title}
                   </Button>
                 ))}
+
+                <Button
+                  variant="ghost"
+                  className={cn(
+                    "text-destructive hover:text-destructive font-normal md:flex md:justify-start md:px-2.5"
+                  )}
+                >
+                  Logout
+                </Button>
               </nav>
             </aside>
 
