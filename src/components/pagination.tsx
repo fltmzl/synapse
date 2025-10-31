@@ -137,7 +137,7 @@ export default function Pagination({
               onPageChange(0);
             }}
           >
-            <SelectTrigger className="w-[65px] h-8 text-sm pl-3 py-[6px] pr-2">
+            <SelectTrigger className="w-[65px] h-8 text-sm pl-3 py-[6px] pr-2 ">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>

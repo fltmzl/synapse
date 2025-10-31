@@ -29,7 +29,7 @@ export default function SearchDirectory({
   return (
     <div className="relative w-full h-full rounded-md flex justify-center pl-5 pr-2 py-2  border bg-background">
       <Input
-        placeholder="Entrez un nom..."
+        placeholder="Entrez le nom ou un mot clé..."
         value={searchValue || ""}
         onChange={(e) => setSearchValue(e.target.value)}
         onKeyDown={(e) => e.key === "Enter" && handleSubmit()}

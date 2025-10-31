@@ -356,149 +356,154 @@ export default function AnswerActors() {
             {/* Active Filters */}
             {activeValues.length > 0 && (
               <>
-{/* 🖥️ DESKTOP */}
-<div className="hidden lg:relative lg:block w-full pt-4">
-  {/* Tombol Clear filter (absolute, di luar flex flow) */}
-  <button
-    className="absolute right-0 top-4 text-sm text-primary underline"
-    onClick={clearAll}
-  >
-    Clear filter
-  </button>
+                {/* 🖥️ DESKTOP */}
+                <div className="hidden w-full pt-4 lg:flex lg:gap-5 items-start">
+                  {/* Container chip dengan padding kanan agar ga ketabrak tombol */}
+                  <div className="flex flex-wrap gap-2">
+                    {activeValues.map((activeFilter, index) => (
+                      <div
+                        key={`${activeFilter}-${index}`}
+                        className="flex gap-2 border py-2 px-[10px] rounded-[6px] text-sm"
+                      >
+                        <span>{activeFilter}</span>
+                        <button
+                          aria-label={`Remove ${activeFilter}`}
+                          onClick={() => removeActiveValue(activeFilter)}
+                          className="p-1"
+                        >
+                          <X className="h-3 w-3" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
 
-  {/* Container chip dengan padding kanan agar ga ketabrak tombol */}
-  <div className="flex flex-wrap gap-2 pr-[100px]">
-    {activeValues.map((activeFilter, index) => (
-      <div
-        key={`${activeFilter}-${index}`}
-        className="flex gap-2 border py-2 px-[10px] rounded-[6px] text-sm"
-      >
-        <span>{activeFilter}</span>
-        <button
-          aria-label={`Remove ${activeFilter}`}
-          onClick={() => removeActiveValue(activeFilter)}
-          className="p-1"
-        >
-          <X className="h-3 w-3" />
-        </button>
-      </div>
-    ))}
-  </div>
-</div>
+                  {/* Tombol Clear filter (absolute, di luar flex flow) */}
+                  <button
+                    className="text-sm text-primary  min-w-max py-2"
+                    onClick={clearAll}
+                  >
+                    Clear filter
+                  </button>
+                </div>
 
-              {/* 📱 MOBILE */}
-<div className="flex flex-col gap-4 lg:hidden pt-4">
-  <div className="flex flex-row max-h-full">
-    <div className="flex whitespace-nowrap overflow-x-auto hide-scrollbar gap-2">
-      {activeValues.map((activeFilter, index) => (
-        <div
-          key={`${activeFilter}-${index}`}
-          className="flex gap-2 border py-2 px-[10px] rounded-[6px] text-sm"
-        >
-          <span>{activeFilter}</span>
-          <button
-            aria-label={`Remove ${activeFilter}`}
-            onClick={() => removeActiveValue(activeFilter)}
-            className="p-1"
-          >
-            <X className="h-3 w-3" />
-          </button>
-        </div>
-      ))}
-    </div>
-  </div>
-  <button
-    className="text-sm text-primary underline text-start"
-    onClick={clearAll}
-  >
-    Clear filter
-  </button>
-</div>
-
+                {/* 📱 MOBILE */}
+                <div className="flex flex-col gap-4 lg:hidden pt-4">
+                  <div className="flex flex-row max-h-full">
+                    <div className="flex whitespace-nowrap overflow-x-auto hide-scrollbar gap-2">
+                      {activeValues.map((activeFilter, index) => (
+                        <div
+                          key={`${activeFilter}-${index}`}
+                          className="flex gap-2 border py-2 px-[10px] rounded-[6px] text-sm"
+                        >
+                          <span>{activeFilter}</span>
+                          <button
+                            aria-label={`Remove ${activeFilter}`}
+                            onClick={() => removeActiveValue(activeFilter)}
+                            className="p-1"
+                          >
+                            <X className="h-3 w-3" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  <button
+                    className="text-sm text-primary  text-start"
+                    onClick={clearAll}
+                  >
+                    Clear filter
+                  </button>
+                </div>
               </>
             )}
 
             {/* LIST */}
-           <div className="space-y-6 divide-y px-2">
-  {paginatedPeople.map((person, index) => {
-    // 🧩 Tambahkan log di sini
-    console.log("Person data:", { index, name: person.name, image: person.image });
+            <div className="space-y-6 divide-y px-2">
+              {paginatedPeople.map((person, index) => {
+                // 🧩 Tambahkan log di sini
+                // console.log("Person data:", {
+                //   index,
+                //   name: person.name,
+                //   image: person.image
+                // });
 
-    return (
-      <article
-        key={index}
-        className="w-full flex flex-col lg:flex-row justify-between py-8 border-b mb-0"
-      >
-        <div className="flex flex-col gap-4 w-full">
-          <div className="flex flex-col sm:flex-row md:items-start md:justify-between gap-4 w-full">
-            <div className="flex items-center gap-4">
-              <Avatar className="h-16 w-16">
-                <AvatarImage
-                  className="rounded-full"
-                  src={person.image}
-                  alt={person.name}
-                />
-                <AvatarFallback className="bg-muted-foreground/20 font-semibold text-sm">
-                  {person.name
-                    .split(" ")
-                    .map((w) => w[0])
-                    .join("")
-                    .slice(0, 2)}
-                </AvatarFallback>
-              </Avatar>
+                return (
+                  <article
+                    key={index}
+                    className="w-full flex flex-col lg:flex-row justify-between py-8 border-b mb-0"
+                  >
+                    <div className="flex flex-col gap-4 w-full">
+                      <div className="flex flex-col sm:flex-row md:items-start md:justify-between gap-4 w-full">
+                        <div className="flex items-center gap-4">
+                          <Avatar className="h-16 w-16">
+                            <AvatarImage
+                              className="rounded-full"
+                              src={person.image}
+                              alt={person.name}
+                            />
+                            <AvatarFallback className="bg-muted-foreground/20 font-semibold">
+                              <div className="w-16 h-16 bg-muted rounded-full grid place-content-center">
+                                {person.name
+                                  .split(" ")
+                                  .map((w) => w[0])
+                                  .join("")
+                                  .slice(0, 2)}
+                              </div>
+                            </AvatarFallback>
+                          </Avatar>
 
-              <div className="flex flex-col gap-2">
-                <h3 className="font-semibold text-xl text-foreground leading-[110%] tracking-[-0.02em]">
-                  {person.name}
-                </h3>
-                <p className="text-base leading-[110%] text-muted-foreground">
-                  {person.title}
-                </p>
-              </div>
+                          <div className="flex flex-col gap-2">
+                            <h3 className="font-semibold text-xl text-foreground leading-[110%] tracking-[-0.02em]">
+                              {person.name}
+                            </h3>
+                            <p className="text-base leading-[110%] text-muted-foreground">
+                              {person.title}
+                            </p>
+                          </div>
+                        </div>
+
+                        <Button
+                          variant="ghost"
+                          className="text-primary hover:underline text-base font-regular leading-[140%] tracking-[-0.01em] hover:bg-transparent self-start sm:self-auto p-0"
+                        >
+                          <span className="inline top-0">Profil</span>
+                          <ArrowRightBoldIcon className="w-5 h-5 size-5 stroke-2" />
+                        </Button>
+                      </div>
+
+                      <div className="flex flex-col md:flex-row md:gap-16 pl-0 md:pl-20 text-xs gap-6">
+                        <div className="flex flex-col gap-2">
+                          <div className="font-regular text-muted-foreground text-sm leading-[110%] tracking-[-0.01em]">
+                            Affiliation
+                          </div>
+                          <div className="font-regular text-foreground text-base leading-[110%] tracking-[-0.01em]">
+                            {person.affiliation}
+                          </div>
+                        </div>
+
+                        <div className="flex flex-col gap-2">
+                          <div className="font-regular text-muted-foreground text-sm leading-[110%] tracking-[-0.01em]">
+                            Territory
+                          </div>
+                          <div className="font-regular text-foreground text-base leading-[110%] tracking-[-0.01em]">
+                            {person.territory}
+                          </div>
+                        </div>
+
+                        <div className="flex flex-col gap-2">
+                          <div className="font-regular text-muted-foreground text-sm leading-[110%] tracking-[-0.01em]">
+                            Category
+                          </div>
+                          <div className="font-regular text-foreground text-base leading-[110%] tracking-[-0.01em]">
+                            {person.category}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </article>
+                );
+              })}
             </div>
-
-            <Button
-              variant="ghost"
-              className="text-primary hover:underline text-base font-regular leading-[140%] tracking-[-0.01em] hover:bg-transparent self-start sm:self-auto p-0"
-            >
-              <span className="inline top-0">Profil</span>
-              <ArrowRightBoldIcon className="w-5 h-5 size-5 stroke-2" />
-            </Button>
-          </div>
-
-          <div className="flex flex-col md:flex-row md:gap-16 pl-0 md:pl-20 text-xs gap-6">
-            <div className="flex flex-col gap-2">
-              <div className="font-regular text-muted-foreground text-sm leading-[110%] tracking-[-0.01em]">
-                Affiliation
-              </div>
-              <div className="font-regular text-foreground text-base leading-[110%] tracking-[-0.01em]">
-                {person.affiliation}
-              </div>
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <div className="font-regular text-muted-foreground text-sm leading-[110%] tracking-[-0.01em]">
-                Territory
-              </div>
-              <div className="font-regular text-foreground text-base leading-[110%] tracking-[-0.01em]">
-                {person.territory}
-              </div>
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <div className="font-regular text-muted-foreground text-sm leading-[110%] tracking-[-0.01em]">
-                Category
-              </div>
-              <div className="font-regular text-foreground text-base leading-[110%] tracking-[-0.01em]">
-                {person.category}
-              </div>
-            </div>
-          </div>
-        </div>
-      </article>
-    );
-  })}
-</div>
 
             <Pagination
               totalRows={filteredPeople.length}
