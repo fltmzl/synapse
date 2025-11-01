@@ -45,7 +45,6 @@ export default function BusinessForm() {
   });
 
   const onSubmit = (data: z.infer<typeof formSchema>) => {
-    console.log("Submitted:", data);
   };
 
   return (

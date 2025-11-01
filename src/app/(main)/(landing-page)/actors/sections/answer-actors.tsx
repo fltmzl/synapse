@@ -420,13 +420,7 @@ export default function AnswerActors() {
             {/* LIST */}
             <div className="space-y-6 divide-y px-2">
               {paginatedPeople.map((person, index) => {
-                // 🧩 Tambahkan log di sini
-                // console.log("Person data:", {
-                //   index,
-                //   name: person.name,
-                //   image: person.image
-                // });
-
+               
                 return (
                   <article
                     key={index}
