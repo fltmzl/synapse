@@ -13,13 +13,26 @@ import { ArrowLeftIcon } from "@/icons/arrow-left-icon";
 import { ArrowRightIcon } from "@/icons/arrow-right-icon";
 
 export default function AdministrationSimilars() {
-  const scrollRef = useRef<HTMLDivElement>(null);
+  // separate refs for desktop and mobile
+  const scrollRefDesktop = useRef<HTMLDivElement>(null);
+  const scrollRefMobile = useRef<HTMLDivElement>(null);
 
-  const scroll = (direction: "left" | "right") => {
-    if (!scrollRef.current) return;
+  const scrollDesktop = (direction: "left" | "right") => {
+    if (!scrollRefDesktop.current) return;
     const scrollAmount = 350;
-    scrollRef.current.scrollBy({
+    scrollRefDesktop.current.scrollBy({
       left: direction === "left" ? -scrollAmount : scrollAmount,
+      behavior: "smooth",
+    });
+  };
+
+  const scrollMobile = (direction: "left" | "right") => {
+    if (!scrollRefMobile.current) return;
+   
+    const el = scrollRefMobile.current;
+    const pageWidth = el.clientWidth; 
+    el.scrollBy({
+      left: direction === "left" ? -pageWidth : pageWidth,
       behavior: "smooth",
     });
   };
@@ -27,7 +40,6 @@ export default function AdministrationSimilars() {
   return (
     <section className="bg-background">
       <div className="py-12 lg:py-20 px-6 max-w-7xl mx-auto">
-        {/* 🖥 DESKTOP HEADER */}
         <div className="hidden lg:flex items-center justify-between mb-10">
           <h1 className="text-[28px] leading-[130%] tracking-[-0.02em] lg:text-[40px] font-medium lg:leading-[110%] lg:tracking-[-0.03em]">
             Administration similaire
@@ -35,14 +47,14 @@ export default function AdministrationSimilars() {
 
           <div className="flex gap-3">
             <button
-              onClick={() => scroll("left")}
+              onClick={() => scrollDesktop("left")}
               className="p-2 border rounded-full hover:bg-muted transition"
               aria-label="Scroll left"
             >
               <ArrowLeftIcon className="size-5 text-muted-foreground" />
             </button>
             <button
-              onClick={() => scroll("right")}
+              onClick={() => scrollDesktop("right")}
               className="p-2 border rounded-full hover:bg-muted transition"
               aria-label="Scroll right"
             >
@@ -51,116 +63,130 @@ export default function AdministrationSimilars() {
           </div>
         </div>
 
-        {/* 📱 MOBILE HEADER */}
-        <div className="flex lg:hidden flex-col mb-6">
-          <h1 className="text-[24px] leading-[130%] tracking-[-0.02em] font-medium mb-2">
+        <div className="flex flex-col lg:hidden mb-6">
+          <h1 className="text-[24px] font-semibold mb-4">
             Administration similaire
           </h1>
         </div>
 
-        {/* Card List */}
         <div
-          ref={scrollRef}
-          className="flex gap-4 overflow-x-auto hide-scrollbar scroll-smooth"
+          ref={scrollRefDesktop}
+          className="hidden lg:flex gap-4 overflow-x-auto hide-scrollbar scroll-smooth"
         >
           {directory.slice(0, 6).map((item) => (
-            <article
-              key={item.slug}
-              className="min-w-[320px] sm:min-w-[405px] border rounded-[12px] flex flex-col justify-between hover:shadow-sm transition-all"
-            >
-              {/* Header */}
-              <div className="flex items-center gap-4 py-6 px-5 border-b">
-                <div className="flex items-center justify-center w-16 h-16 bg-[#EEF6FF] rounded-full">
-                  <BuildingIcon className="text-primary size-8 mx-4 " />
-                </div>
-                <span className="font-medium text-lg leading-[130%] tracking-[-0.02em]">
-                  {item.name}
-                </span>
-              </div>
-
-              {/* Middle */}
-              <div className="p-6 space-y-4">
-                <div className="flex items-start gap-5">
-                  <div className="flex gap-2 items-center min-w-[108px]">
-                    <BuildingIcon className="size-5 text-muted-foreground" />
-                    <span className="text-muted-foreground leading-[150%] text-base tracking-[-0.01em]">
-                      Category
-                    </span>
-                  </div>
-                  <span className="text-[var(--font-navy)] leading-[150%] text-base tracking-[-0.01em] font-medium">
-                    {item.category}
-                  </span>
-                </div>
-
-                <div className="flex items-start gap-5">
-                  <div className="flex gap-2 items-center min-w-[108px]">
-                    <MapPin
-                      strokeWidth={1.5}
-                      className="size-5 text-muted-foreground/80"
-                    />
-                    <span className="text-muted-foreground leading-[150%] text-base tracking-[-0.01em]">
-                      Territory
-                    </span>
-                  </div>
-                  <span className="text-[var(--font-navy)] leading-[150%] text-base tracking-[-0.01em] font-medium">
-                    {item.territory}
-                  </span>
-                </div>
-
-                <div className="flex items-start gap-5">
-                  <div className="flex gap-2 items-center min-w-[108px]">
-                    <User
-                      strokeWidth={1}
-                      className="size-5 text-muted-foreground/80"
-                    />
-                    <span className="text-muted-foreground leading-[150%] text-base tracking-[-0.01em]">
-                      PIC
-                    </span>
-                  </div>
-                  <span className="text-[var(--font-navy)] leading-[150%] text-base tracking-[-0.01em] font-medium">
-                    {item.pic}
-                  </span>
-                </div>
-              </div>
-
-              {/* Footer */}
-              <div className="border-t py-4 px-6 flex items-center justify-between bg-[var(--body)] rounded-b-[12px]">
-                <div className="flex items-center gap-3 text-muted-foreground">
-                  <FacebookFillIcon className="size-[18px]" />
-                  <InstagramIconFlat className="size-[18px]" />
-                  <LinkedinIconFlat className="size-[18px]" />
-                </div>
-
-                <Link
-                  href={`/explore-directory/${item.slug}`}
-                  className="flex items-center gap-[6px]"
-                >
-                  <span className="text-primary text-sm font-medium">
-                    View detail
-                  </span>
-                  <ArrowRightBoldIcon className="size-[18px] text-primary" />
-                </Link>
-              </div>
-            </article>
+            <Card key={item.slug} item={item} />
           ))}
         </div>
 
-        {/* 📱 MOBILE SCROLL BUTTONS (under card) */}
-        <div className="flex lg:hidden  gap-3 mt-6">
-          <button
-            onClick={() => scroll("left")}
-            className="p-2 border rounded-full hover:bg-muted transition"
+        <div className="flex lg:hidden flex-col items-center">
+          <div
+            ref={scrollRefMobile}
+            className="flex gap-4 overflow-x-auto snap-x snap-mandatory hide-scrollbar scroll-smooth w-full"
           >
-            <ArrowLeftIcon className="size-5 text-muted-foreground" />
-          </button>
-          <button
-            onClick={() => scroll("right")}
-            className="p-2 border rounded-full hover:bg-muted transition"
-          >
-            <ArrowRightIcon className="size-5 text-muted-foreground" />
-          </button>
+            {Array.from({ length: Math.ceil(directory.length / 2) }).map(
+              (_, index) => {
+                const start = index * 2;
+                const pair = directory.slice(start, start + 2);
+                return (
+                  <div
+                    key={index}
+                    className="snap-center flex-shrink-0 w-full flex flex-col gap-4 px-4"
+                  >
+                    {pair.map((item) => (
+                      <Card key={item.slug} item={item} />
+                    ))}
+                  </div>
+                );
+              }
+            )}
+          </div>
+
+          {/* Tombol panah di bawah (mobile) */}
+          <div className="flex gap-4 mt-6">
+            <button
+              onClick={() => scrollMobile("left")}
+              className="p-3 border rounded-full hover:bg-muted transition"
+              aria-label="Scroll left"
+            >
+              <ArrowLeftIcon className="size-5 text-muted-foreground" />
+            </button>
+            <button
+              onClick={() => scrollMobile("right")}
+              className="p-3 border rounded-full hover:bg-muted transition"
+              aria-label="Scroll right"
+            >
+              <ArrowRightIcon className="size-5 text-muted-foreground" />
+            </button>
+          </div>
         </div>
       </div>
     </section>
+  );
+}
+
+function Card({ item }: { item: any }) {
+  return (
+    <article className="border rounded-[12px] flex flex-col justify-between hover:shadow-sm transition-all bg-white
+                        min-w-full lg:min-w-[405px]">
+      <div className="flex items-center gap-4 py-6 px-5 border-b">
+        <div className="flex items-center justify-center w-16 h-16 bg-[#EEF6FF] rounded-full">
+          <BuildingIcon className="text-primary size-8 mx-4" />
+        </div>
+        <span className="font-medium text-lg leading-[130%] tracking-[-0.02em]">
+          {item.name}
+        </span>
+      </div>
+
+      <div className="p-6 space-y-4">
+        <div className="flex items-start gap-5">
+          <div className="flex gap-2 items-center min-w-[108px]">
+            <BuildingIcon className="size-5 text-muted-foreground" />
+            <span className="text-muted-foreground leading-[150%] text-base tracking-[-0.01em]">
+              Category
+            </span>
+          </div>
+          <span className="text-[var(--font-navy)] leading-[150%] text-base tracking-[-0.01em] font-medium">
+            {item.category}
+          </span>
+        </div>
+
+        <div className="flex items-start gap-5">
+          <div className="flex gap-2 items-center min-w-[108px]">
+            <MapPin strokeWidth={1.5} className="size-5 text-muted-foreground/80" />
+            <span className="text-muted-foreground leading-[150%] text-base tracking-[-0.01em]">
+              Territory
+            </span>
+          </div>
+          <span className="text-[var(--font-navy)] leading-[150%] text-base tracking-[-0.01em] font-medium">
+            {item.territory}
+          </span>
+        </div>
+
+        <div className="flex items-start gap-5">
+          <div className="flex gap-2 items-center min-w-[108px]">
+            <User strokeWidth={1} className="size-5 text-muted-foreground/80" />
+            <span className="text-muted-foreground leading-[150%] text-base tracking-[-0.01em]">
+              PIC
+            </span>
+          </div>
+          <span className="text-[var(--font-navy)] leading-[150%] text-base tracking-[-0.01em] font-medium">
+            {item.pic}
+          </span>
+        </div>
+      </div>
+
+      <div className="border-t py-4 px-6 flex items-center justify-between bg-[var(--body)] rounded-b-[12px]">
+        <div className="flex items-center gap-3 text-muted-foreground">
+          <FacebookFillIcon className="size-[18px]" />
+          <InstagramIconFlat className="size-[18px]" />
+          <LinkedinIconFlat className="size-[18px]" />
+        </div>
+
+        <Link href={`/explore-directory/${item.slug}`} className="flex items-center gap-[6px]">
+          <span className="text-primary text-sm font-medium">View detail</span>
+          <ArrowRightBoldIcon className="size-[18px] text-primary" />
+        </Link>
+      </div>
+    </article>
   );
 }
