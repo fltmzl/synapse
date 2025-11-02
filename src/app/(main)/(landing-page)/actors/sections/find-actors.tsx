@@ -46,10 +46,10 @@ export default function FindActors() {
   return (
     <section className="py-12 lg:py-[164px] max-w-7xl mx-auto flex flex-col gap-10 items-center px-6">
       <div className="flex items-center flex-col justify-center w-full gap-4">
-        <h1 className="text-3xl lg:text-5xl font-medium leading-[110%] tracking-[-0.03em]">
+        <h1 className="text-center text-3xl lg:text-5xl font-medium leading-[110%] tracking-[-0.03em]">
           Les principaux acteurs
         </h1>
-        <p className="text-sm lg:text-base font-regular text-muted-foreground leading-[150%] tracking-[-0.01em]">
+        <p className="text-center text-sm lg:text-base font-regular text-muted-foreground leading-[150%] tracking-[-0.01em]">
           Use AI to discover profiles, connections, and organizational roles
           instantly.
         </p>

@@ -10,6 +10,7 @@ import {
 import { ArrowLeftIcon } from "@/icons/arrow-left-icon";
 import { Arrow } from "@radix-ui/react-dropdown-menu";
 import { ArrowRightIcon } from "@/icons/arrow-right-icon";
+import { PAGE_SIZE } from "@/constants/pagination.constant";
 
 type PaginationProps = {
   totalRows: number;
@@ -73,7 +74,7 @@ export default function Pagination({
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  {[5, 25, 50].map((size) => (
+                  {PAGE_SIZE.map((size) => (
                     <SelectItem key={size} value={String(size)}>
                       {size}
                     </SelectItem>
@@ -141,7 +142,7 @@ export default function Pagination({
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              {[9, 36, 81].map((size) => (
+              {PAGE_SIZE.map((size) => (
                 <SelectItem key={size} value={String(size)}>
                   {size}
                 </SelectItem>
