@@ -6,13 +6,22 @@ import { CircleOutlineIcon } from "@/icons/circle-outline-icon";
 import { ArrowUpIcon } from "@/icons/arrow-up-icon";
 import { useRef, useState } from "react";
 
-export default function FindData() {
+
+type FindDataProps = {
+  onSend: (message: string) => void;
+}
+export default function FindData({ onSend }: FindDataProps) {
 
       const [activeSource, setActiveSource] = useState("All");
       const [activeInfo, setActiveInfo] = useState("person");
       const [value, setValue] = useState("");
       const textareaRef = useRef<HTMLTextAreaElement>(null);
     
+        const handleSend = (): void => {
+    if (!value.trim()) return;
+    onSend(value);
+    setValue("");
+  };
   return (
      <div className="w-full max-w-5xl mx-auto ">
               <div className="bg-section border rounded-[14px] px-2">
@@ -72,7 +81,7 @@ export default function FindData() {
                     placeholder="Entrez votre requête...."
                     className="bg-background w-full min-h-[212px] max-h-[400px] resize-none rounded-xl shadow-sm p-4 text-sm text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary transition-all scrollbar-custom"
                   />
-                  <button className="absolute bottom-6 right-4 w-10 h-10 rounded-full flex items-center justify-center shadow-sm bg-primary">
+                  <button  onClick={handleSend} className="absolute bottom-6 right-4 w-10 h-10 rounded-full flex items-center justify-center shadow-sm bg-primary">
                     <ArrowUpIcon className="w-6 h-6 text-background" />
                   </button>
                 </div>
