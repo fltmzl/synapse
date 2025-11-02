@@ -11,6 +11,7 @@ import { ArrowRightBoldIcon } from "@/icons/arrow-right-bold-icon";
 import { useRef } from "react";
 import { ArrowLeftIcon } from "@/icons/arrow-left-icon";
 import { ArrowRightIcon } from "@/icons/arrow-right-icon";
+import { DirectoryItem } from "@/types/directory.type";
 
 export default function AdministrationSimilars() {
   // separate refs for desktop and mobile
@@ -22,18 +23,18 @@ export default function AdministrationSimilars() {
     const scrollAmount = 350;
     scrollRefDesktop.current.scrollBy({
       left: direction === "left" ? -scrollAmount : scrollAmount,
-      behavior: "smooth",
+      behavior: "smooth"
     });
   };
 
   const scrollMobile = (direction: "left" | "right") => {
     if (!scrollRefMobile.current) return;
-   
+
     const el = scrollRefMobile.current;
-    const pageWidth = el.clientWidth; 
+    const pageWidth = el.clientWidth;
     el.scrollBy({
       left: direction === "left" ? -pageWidth : pageWidth,
-      behavior: "smooth",
+      behavior: "smooth"
     });
   };
 
@@ -124,10 +125,12 @@ export default function AdministrationSimilars() {
   );
 }
 
-function Card({ item }: { item: any }) {
+function Card({ item }: { item: DirectoryItem }) {
   return (
-    <article className="border rounded-[12px] flex flex-col justify-between hover:shadow-sm transition-all bg-white
-                        min-w-full lg:min-w-[405px]">
+    <article
+      className="border rounded-[12px] flex flex-col justify-between hover:shadow-sm transition-all bg-white
+                        min-w-full lg:min-w-[405px]"
+    >
       <div className="flex items-center gap-4 py-6 px-5 border-b">
         <div className="flex items-center justify-center w-16 h-16 bg-[#EEF6FF] rounded-full">
           <BuildingIcon className="text-primary size-8 mx-4" />
@@ -152,7 +155,10 @@ function Card({ item }: { item: any }) {
 
         <div className="flex items-start gap-5">
           <div className="flex gap-2 items-center min-w-[108px]">
-            <MapPin strokeWidth={1.5} className="size-5 text-muted-foreground/80" />
+            <MapPin
+              strokeWidth={1.5}
+              className="size-5 text-muted-foreground/80"
+            />
             <span className="text-muted-foreground leading-[150%] text-base tracking-[-0.01em]">
               Territory
             </span>
@@ -182,7 +188,10 @@ function Card({ item }: { item: any }) {
           <LinkedinIconFlat className="size-[18px]" />
         </div>
 
-        <Link href={`/explore-directory/${item.slug}`} className="flex items-center gap-[6px]">
+        <Link
+          href={`/explore-directory/${item.slug}`}
+          className="flex items-center gap-[6px]"
+        >
           <span className="text-primary text-sm font-medium">View detail</span>
           <ArrowRightBoldIcon className="size-[18px] text-primary" />
         </Link>
