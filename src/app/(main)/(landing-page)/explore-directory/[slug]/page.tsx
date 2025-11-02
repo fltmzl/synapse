@@ -4,14 +4,15 @@ import { DirectoryItem } from "@/types/directory.type";
 import DetailDirectorySection from "./sections/detail-page";
 import AdministrationSimilars from "./sections/similars";
 
-
-export default function DirectoryDetailPage({
-  params,
+export default async function DirectoryDetailPage({
+  params
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
+  const { slug } = await params;
+
   const item: DirectoryItem | undefined = directory.find(
-    (i) => i.slug === params.slug
+    (i) => i.slug === slug
   );
 
   if (!item) return notFound();
@@ -19,7 +20,7 @@ export default function DirectoryDetailPage({
   return (
     <>
       <DetailDirectorySection item={item} />
-      <AdministrationSimilars  />
+      <AdministrationSimilars />
     </>
   );
 }
