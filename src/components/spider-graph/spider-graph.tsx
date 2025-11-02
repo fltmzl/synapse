@@ -15,7 +15,7 @@ import {
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import { MaximizeIcon, MinusIcon, XIcon } from "lucide-react";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Button } from "../ui/button";
 import { Card } from "../ui/card";
 import { Input } from "../ui/input";
@@ -25,6 +25,7 @@ import CustomEdge from "./custom-element/custom-edge";
 import FloatingConnectionLine from "./custom-element/floating-connection-line";
 import FloatingEdge from "./custom-element/floating-edge";
 import { GroupNode } from "./custom-element/group-node";
+import useELK from "@/hooks/use-elk";
 
 type Props = {
   initialNodes: Node[];
@@ -45,7 +46,7 @@ const edgeTypes = {
 export default function SpiderGraph({ initialEdges, initialNodes }: Props) {
   const [isInfoShowed, setIsInfoShowed] = useState(true);
 
-  const [nodes, , onNodesChange] = useNodesState(initialNodes);
+  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
   const onConnect = useCallback(
     (params: Parameters<typeof addEdge>[0]) =>
@@ -87,7 +88,7 @@ export default function SpiderGraph({ initialEdges, initialNodes }: Props) {
         opacity: selectedNode
           ? isConnected || isNodeInsideGroupSelected
             ? 1
-            : 0.2 // redupkan node yang tidak berhubungan
+            : 0.3 // redupkan node yang tidak berhubungan
           : 1,
         transition: "opacity 0.3s ease"
       }
@@ -104,11 +105,53 @@ export default function SpiderGraph({ initialEdges, initialNodes }: Props) {
           connectedNodeIds.includes(edge.source) &&
           connectedNodeIds.includes(edge.target)
         )
-          ? 0.2
+          ? 0.3
           : 1,
       transition: "opacity 0.3s ease"
     }
   }));
+
+  // const runElkLayout = useCallback(async () => {
+  //   if (!elk) return;
+
+  //   const graph = {
+  //     id: "root",
+  //     layoutOptions: {
+  //       algorithm: "radial", // <--- ini kuncinya
+  //       "elk.direction": "DOWN",
+  //       "elk.layered.spacing.nodeNodeBetweenLayers": "100",
+  //       "elk.spacing.nodeNode": "60"
+  //     },
+  //     children: nodes.map((n) => ({
+  //       id: n.id,
+  //       width: 100,
+  //       height: 60
+  //     })),
+  //     edges: edges.map((e) => ({
+  //       id: e.id,
+  //       sources: [e.source],
+  //       targets: [e.target]
+  //     }))
+  //   };
+
+  //   const layout = await elk.layout(graph);
+
+  //   // apply posisi hasil ELK ke node React Flow
+  //   const laidOutNodes = nodes.map((node) => {
+  //     const layoutNode = layout?.children?.find((n) => n.id === node.id);
+
+  //     return {
+  //       ...node,
+  //       position: { x: layoutNode.x, y: layoutNode.y }
+  //     } as Node;
+  //   });
+
+  //   setNodes(laidOutNodes);
+  // }, [nodes, edges, elk]);
+
+  // useEffect(() => {
+  //   runElkLayout();
+  // }, [runElkLayout]);
 
   return (
     <div className="relative w-full h-[677px] lg:h-[403px] lg:aspect-video border-2 border-border rounded-2lg transition duration-1000">
@@ -120,6 +163,7 @@ export default function SpiderGraph({ initialEdges, initialNodes }: Props) {
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
+        onPaneClick={() => setSelectedNode(null)}
         fitView
         onNodeClick={(_, node) => {
           setSelectedNode((prev) => {

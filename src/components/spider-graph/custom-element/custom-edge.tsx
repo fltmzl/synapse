@@ -189,6 +189,7 @@ export default function CustomEdge({
         cx={circleCx}
         cy={circleCy}
         r={circleRadius}
+        opacity={style.opacity}
         fill="rgba(36, 71, 213, 1)"
         stroke="white"
         strokeWidth={1}
@@ -197,7 +198,11 @@ export default function CustomEdge({
       {label && (
         <EdgeLabelRenderer>
           <div
-            style={{ ...defaultStyle, ...getDynamicPosition(edgePosition) }}
+            style={{
+              ...defaultStyle,
+              ...getDynamicPosition(edgePosition),
+              opacity: style.opacity
+            }}
             className="nodrag nopan text-[11px] bg-body"
           >
             {label}
