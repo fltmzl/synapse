@@ -1,11 +1,12 @@
+import { Suspense } from "react";
 import AnswerDirectory from "./sections/answer-directory";
 import FindDirectory from "./sections/find-directory";
 
 export default function PersonalityPage() {
   return (
-    <div >
+    <Suspense fallback={null}>
       <FindDirectory />
       <AnswerDirectory />
-    </div>
+    </Suspense>
   );
 }

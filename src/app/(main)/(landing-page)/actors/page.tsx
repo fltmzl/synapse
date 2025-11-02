@@ -1,11 +1,12 @@
+import { Suspense } from "react";
 import AnswerActors from "./sections/answer-actors";
 import FindActors from "./sections/find-actors";
 
 export default function ActorsPage() {
   return (
-    <div>
+    <Suspense fallback={null}>
       <FindActors />
       <AnswerActors />
-    </div>
+    </Suspense>
   );
 }
