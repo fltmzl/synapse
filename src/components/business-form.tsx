@@ -48,14 +48,7 @@ export default function BusinessForm() {
   };
 
   return (
-    <div className="p-6 border rounded-xl bg-background flex flex-col gap-6">
-      <div className="flex flex-col gap-3">
-        <H4>Services complémentaires</H4>
-        <P>
-          Je souhaite un chiffrage pour la réalisation d&apos;une prestation par
-          Synapse
-        </P>
-      </div>
+      
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -169,6 +162,5 @@ export default function BusinessForm() {
           </div>
         </form>
       </Form>
-    </div>
   );
 }

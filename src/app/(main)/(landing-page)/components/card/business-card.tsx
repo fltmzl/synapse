@@ -16,7 +16,7 @@ export default function BusinessCard() {
       />
 
       <div>
-        {businessPosts.slice(1).map((post, i) => (
+        {businessPosts.slice(0, 2).map((post, i) => (
           <NewsCornerSmallCard
             key={post.title + i}
             title={post.title}
