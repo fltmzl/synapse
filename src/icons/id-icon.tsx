@@ -1,6 +1,6 @@
 import { SVGProps } from "react";
 
-export function ArrowLeftIcon(props: SVGProps<SVGSVGElement>) {
+export function IdIcon(props: SVGProps<SVGSVGElement>) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -10,14 +10,16 @@ export function ArrowLeftIcon(props: SVGProps<SVGSVGElement>) {
       {...props}
     >
       {/* Icon from Tabler Icons by Paweł Kuna - https://github.com/tabler/tabler-icons/blob/master/LICENSE */}
-      <path
+      <g
         fill="none"
         stroke="currentColor"
         strokeLinecap="round"
         strokeLinejoin="round"
-        strokeWidth={props.strokeWidth || 1}
-        d="M5 12h14M5 12l6 6m-6-6l6-6"
-      />
+        strokeWidth="1.5"
+      >
+        <path d="M3 7a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3z" />
+        <path d="M7 10a2 2 0 1 0 4 0a2 2 0 1 0-4 0m8-2h2m-2 4h2M7 16h10" />
+      </g>
     </svg>
   );
 }

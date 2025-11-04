@@ -38,7 +38,6 @@ export function FancyMultiSelect({
 
   React.useEffect(() => {
     onValueChange(selected);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selected]);
 
   const handleUnselect = React.useCallback((option: Option) => {
