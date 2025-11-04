@@ -14,8 +14,8 @@ export default function RequestService() {
                 Prestations complémentaires
               </h1>
               <p className="text-muted-foreground text-base leading[150px] tracking-[-0.01em] lg:w-[391px]">
-                Je souhaite un chiffrage pour la réalisation d'une prestation
-                complémentaire ou spécifique par Synapse
+                Je souhaite un chiffrage pour la réalisation d&lsquo;une
+                prestation complémentaire ou spécifique par Synapse
               </p>
             </div>
             <div className="flex flex-col gap-8">

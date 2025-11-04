@@ -15,6 +15,7 @@ export default function FindData() {
 
   const handleSend = (): void => {
     if (!value.trim()) return;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const globalSend = (window as any).handleSend;
     if (globalSend) {
       globalSend(value);

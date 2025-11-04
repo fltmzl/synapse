@@ -15,15 +15,19 @@ export default function Opportunities() {
             Opportunities
           </h1>
           <p className="text-lg text-center leading-[150%] tracking-[-0.01em] text-muted-foreground">
-            Reprise d'entreprises
+            Reprise d&apos;entreprises
           </p>
         </div>
         <div className="flex flex-col">
           {businessPosts.slice(0, 5).map((post, i) => (
             <Link href="#" className="block group" key={post.title + i}>
-              <article className={`flex gap-5 lg:gap-6 lg:items-center lg:flex-row flex-col pt-8 ${
-          i !== businessPosts.slice(0, 5).length - 1 ? "border-b pb-8" : ""
-        }`}>
+              <article
+                className={`flex gap-5 lg:gap-6 lg:items-center lg:flex-row flex-col pt-8 ${
+                  i !== businessPosts.slice(0, 5).length - 1
+                    ? "border-b pb-8"
+                    : ""
+                }`}
+              >
                 <div className="relative w-full flex-shrink-0 h-[200px] lg:w-[240px] lg:h-[150px] rounded-md">
                   <Image
                     src={post.img}

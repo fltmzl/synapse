@@ -51,8 +51,6 @@ export default function FilesDropzone({
         })
       )
     );
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const { fileRejections, getRootProps, getInputProps } = useDropzone({

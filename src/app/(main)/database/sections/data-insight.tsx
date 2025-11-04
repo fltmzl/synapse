@@ -45,6 +45,7 @@ export default function DataInsight() {
 
   // Expose handleSend ke window supaya bisa dipanggil dari FindData
   useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (window as any).handleSend = handleSend;
   }, []);
 
