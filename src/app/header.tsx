@@ -22,8 +22,8 @@ import ProfileMobile from "./(main)/(landing-page)/components/profile-mobile";
 
 const NAV_ITEMS = [
   { label: "Actualité", href: "/news" },
-  { label: "Base de données", href: "/nav-2" },
-  { label: "Acteurs", href: "/nav-3" },
+  { label: "Base de données", href: "/database" },
+  { label: "Acteurs", href: "/actors" },
   { label: "Structure", href: "/nav-4" },
   { label: "Le coin des affaires", href: "/nav-5" }
 ];

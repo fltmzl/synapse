@@ -34,6 +34,7 @@ import { BuildingIcon } from "@/icons/building-icon";
 import { FacebookFillIcon } from "@/icons/facebook-fill-icon";
 import Link from "next/link";
 import FilterPopover from "../components/popover-filter";
+import { directory } from "@/data/directory-data";
 
 export default function AnswerDirectory() {
   const [territory, setTerritory] = useQueryState(
@@ -59,114 +60,6 @@ export default function AnswerDirectory() {
 
   const removePrefix = (value: string) => value.split(":")[1] ?? value;
   const getLabelFromValue = (value: string) => removePrefix(value);
-
-  const directory = [
-    {
-      name: "Direction des Finances Publiques de Martinique",
-      category: "Government",
-      territory: "Martinique, France",
-      pic: "Jean-Luc Moreau",
-      image: "/images/logo1.png"
-    },
-    {
-      name: "Chambre de Commerce et d’Industrie de Guadeloupe (CCI)",
-      category: "Business / Trade",
-      territory: "Guadeloupe",
-      pic: "Sophie Laurent",
-      image: "/images/logo2.png"
-    },
-    {
-      name: "Agence Régionale de Santé Réunion (ARS Réunion)",
-      category: "Health / Public Service",
-      territory: "Réunion",
-      pic: "Jean-Luc Moreau",
-      image: "/images/logo3.png"
-    },
-    {
-      name: "Préfecture de Mayotte",
-      category: "Government",
-      territory: "Mayotte",
-      pic: "Nadia Ibrahim",
-      image: "/images/logo4.png"
-    },
-    {
-      name: "Collectivité Territoriale de Guyane (CTG)",
-      category: "Local Government",
-      territory: "French Guiana",
-      pic: "Antoine Pierre-Louis",
-      image: "/images/logo5.png"
-    },
-    {
-      name: "Office de Tourisme de Nouvelle-Calédonie",
-      category: "Tourism / Business",
-      territory: "New Caledonia",
-      pic: "Henri Wamytan",
-      image: "/images/logo6.png"
-    },
-    {
-      name: "Chambre d’Agriculture de Martinique",
-      category: "Agriculture",
-      territory: "Martinique",
-      pic: "Claire Dufresne",
-      image: "/images/logo7.png"
-    },
-    {
-      name: "Conseil Départemental de la Réunion",
-      category: "Government",
-      territory: "Réunion",
-      pic: "Patrick Fontaine",
-      image: "/images/logo8.png"
-    },
-    {
-      name: "Direction de l’Environnement et du Logement (DEAL) Guadeloupe",
-      category: "Tourism / Business",
-      territory: "Guadeloupe",
-      pic: "Henri Wamytan",
-      image: "/images/logo9.png"
-    },
-    {
-      name: "Ministère de l’Économie et des Finances",
-      category: "Government",
-      territory: "Martinique",
-      pic: "Camille Robert",
-      image: "/images/logo10.png"
-    },
-    {
-      name: "Université des Antilles",
-      category: "Education / Research",
-      territory: "Guadeloupe",
-      pic: "Sophie Laurent",
-      image: "/images/logo11.png"
-    },
-    {
-      name: "Chambre de Métiers et de l’Artisanat de Mayotte",
-      category: "Business / Trade",
-      territory: "Mayotte",
-      pic: "Nadia Ibrahim",
-      image: "/images/logo12.png"
-    },
-    {
-      name: "Agence de Développement Économique de Guyane (ADEG)",
-      category: "Economy / Development",
-      territory: "French Guiana",
-      pic: "Antoine Pierre-Louis",
-      image: "/images/logo13.png"
-    },
-    {
-      name: "Office National des Forêts de Réunion",
-      category: "Environment",
-      territory: "Réunion",
-      pic: "Patrick Fontaine",
-      image: "/images/logo14.png"
-    },
-    {
-      name: "Chambre de Commerce et d’Industrie de Nouvelle-Calédonie",
-      category: "Business / Trade",
-      territory: "New Caledonia",
-      pic: "Henri Wamytan",
-      image: "/images/logo15.png"
-    }
-  ];
 
   const filters = {
     territory: [
@@ -440,12 +333,6 @@ export default function AnswerDirectory() {
             {/* LIST */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 py-8">
               {paginatedDirectory.map((directoryItem, index) => {
-                console.log("Directory item data:", {
-                  index,
-                  name: directoryItem.name,
-                  image: directoryItem.image
-                });
-
                 return (
                   <article
                     key={index}
@@ -517,7 +404,7 @@ export default function AnswerDirectory() {
                         <LinkedinIconFlat className="ri-linkedin-box-line text-xl"></LinkedinIconFlat>
                       </div>
 
-                      <Link href="#" className="flex items-center gap-[6px]">
+                      <Link href={`/explore-directory/${directoryItem.slug}`} className="flex items-center gap-[6px]">
                         <span className="text-primary text-sm font-medium leading-5 tracking-[-0.01em] ">
                           View detail
                         </span>

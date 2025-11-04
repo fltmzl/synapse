@@ -4,7 +4,8 @@ import SectionTitle from "@/components/typography/section-title";
 import { H4 } from "@/components/typography/h4";
 import BusinessCard from "../components/card/business-card";
 import BusinessForecast from "../components/card/forecast-card";
-import BusinessForm from "../components/form/business-form";
+import { P } from "@/components/typography/paragraph";
+import BusinessForm from "@/components/business-form";
 
 export default function BusinessCorner() {
   return (
@@ -38,7 +39,16 @@ export default function BusinessCorner() {
 
           {/* RIGHT: FORM */}
           <aside className="flex-1 lg:max-w-96 xl:max-w-[470px]">
-            <BusinessForm />
+            <div className="p-6 border rounded-[12px] bg-background flex flex-col gap-6 h-full">
+              <div className="flex flex-col gap-3">
+                <H4>Services complémentaires</H4>
+                <P>
+                  Je souhaite un chiffrage pour la réalisation d&apos;une
+                  prestation par Synapse
+                </P>
+              </div>
+              <BusinessForm />
+            </div>
           </aside>
         </div>
       </div>

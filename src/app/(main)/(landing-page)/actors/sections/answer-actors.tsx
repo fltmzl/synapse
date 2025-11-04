@@ -345,7 +345,9 @@ export default function AnswerActors() {
 
                     <div className="p-4 border-t bg-background sticky bottom-0">
                       <DrawerClose asChild>
-                        <Button className="w-full">Apply Filters</Button>
+                        <Button className="w-full">Apply
+
+                        </Button>
                       </DrawerClose>
                     </div>
                   </DrawerContent>
@@ -420,13 +422,7 @@ export default function AnswerActors() {
             {/* LIST */}
             <div className="space-y-6 divide-y px-2">
               {paginatedPeople.map((person, index) => {
-                // 🧩 Tambahkan log di sini
-                // console.log("Person data:", {
-                //   index,
-                //   name: person.name,
-                //   image: person.image
-                // });
-
+               
                 return (
                   <article
                     key={index}
@@ -472,7 +468,7 @@ export default function AnswerActors() {
                       </div>
 
                       <div className="flex flex-col md:flex-row md:gap-16 pl-0 md:pl-20 text-xs gap-6">
-                        <div className="flex flex-col gap-2">
+                        <div className="flex flex-col gap-2 lg:w-[193px] w-full">
                           <div className="font-regular text-muted-foreground text-sm leading-[110%] tracking-[-0.01em]">
                             Affiliation
                           </div>
@@ -481,7 +477,7 @@ export default function AnswerActors() {
                           </div>
                         </div>
 
-                        <div className="flex flex-col gap-2">
+                        <div className="flex flex-col gap-2 lg:w-[143px] w-full">
                           <div className="font-regular text-muted-foreground text-sm leading-[110%] tracking-[-0.01em]">
                             Territory
                           </div>
