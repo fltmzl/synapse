@@ -15,7 +15,13 @@ import {
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import { MaximizeIcon, MinusIcon, XIcon } from "lucide-react";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useState
+} from "react";
 import { Button } from "../ui/button";
 import { Card } from "../ui/card";
 import { Input } from "../ui/input";
@@ -45,6 +51,53 @@ const edgeTypes = {
 
 export default function SpiderGraph({ initialEdges, initialNodes }: Props) {
   const [isInfoShowed, setIsInfoShowed] = useState(true);
+  const elk = useELK();
+
+  const elkOptions = {
+    "elk.algorithm": "radial",
+    "elk.layered.spacing.nodeNodeBetweenLayers": "80", // Mengatur jarak antar node
+    // "elk.layered.spacing.nodeNode": "60", // Mengatur jarak antar node dalam satu layer
+    "elk.spacing.nodeNode": "20" // Jarak antar node secara keseluruhan
+  };
+
+  const getLayoutedElements = useCallback(
+    (nodes: Node[], edges: Edge[], options: Record<string, string> = {}) => {
+      if (!elk) return null;
+
+      const isHorizontal = options?.["elk.direction"] === "RIGHT";
+      const graph = {
+        id: "root",
+        layoutOptions: options,
+        children: nodes.map((node) => ({
+          ...node,
+          // Adjust the target and source handle positions based on the layout
+          // direction.
+          targetPosition: isHorizontal ? "left" : "top",
+          sourcePosition: isHorizontal ? "right" : "bottom",
+
+          // Hardcode a width and height for elk to use when layouting.
+          width: node.type === "centerNode" ? 165 : 32,
+          height: node.type === "centerNode" ? 48 : 32
+        })),
+        edges: edges
+      };
+
+      return elk
+        .layout(graph)
+        .then((layoutedGraph) => ({
+          nodes: layoutedGraph.children.map((node) => ({
+            ...node,
+            // React Flow expects a position property on the node instead of `x`
+            // and `y` fields.
+            position: { x: node.x, y: node.y }
+          })),
+
+          edges: layoutedGraph.edges
+        }))
+        .catch(console.error);
+    },
+    [elk]
+  );
 
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
@@ -153,9 +206,40 @@ export default function SpiderGraph({ initialEdges, initialNodes }: Props) {
   //   runElkLayout();
   // }, [runElkLayout]);
 
+  const onLayout = useCallback(
+    ({ direction, useInitialNodes = false }) => {
+      const opts = { "elk.direction": direction, ...elkOptions };
+      const ns = useInitialNodes ? initialNodes : nodes;
+      const es = useInitialNodes ? initialEdges : edges;
+
+      getLayoutedElements(ns, es, opts).then(
+        ({ nodes: layoutedNodes, edges: layoutedEdges }) => {
+          setNodes(layoutedNodes);
+          setEdges(layoutedEdges);
+          fitView();
+        }
+      );
+    },
+    [nodes, edges, getLayoutedElements]
+  );
+
+  useLayoutEffect(() => {
+    if (!elk) return;
+    onLayout({ direction: "DOWN", useInitialNodes: true });
+  }, [elk]);
+
+  console.log({ elk });
+
+  if (!elk) return <>Loading Spider...</>;
+
   return (
     <div className="relative w-full h-[677px] lg:h-[403px] lg:aspect-video border-2 border-border rounded-2lg transition duration-1000">
       <ReactFlow
+        fitView
+        fitViewOptions={{
+          padding: 8
+          // maxZoom: 0.5
+        }}
         nodes={styledNodes}
         edges={styledEdges}
         nodeTypes={nodeTypes}
@@ -164,7 +248,6 @@ export default function SpiderGraph({ initialEdges, initialNodes }: Props) {
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
         onPaneClick={() => setSelectedNode(null)}
-        fitView
         onNodeClick={(_, node) => {
           setSelectedNode((prev) => {
             if (node.type === "groupNode") return null;
@@ -220,7 +303,6 @@ export default function SpiderGraph({ initialEdges, initialNodes }: Props) {
           </Card>
         )}
       </div>
-
       <div className="absolute bottom-5 right-5 flex flex-col gap-6">
         <div className="flex flex-col gap-1">
           <Button

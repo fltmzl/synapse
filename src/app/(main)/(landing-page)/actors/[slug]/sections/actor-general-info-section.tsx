@@ -111,7 +111,7 @@ export default function ActorGeneralInfoSection() {
         </div>
       </div>
       <hr />
-      <div className="py-6 px-4 lg:py-8 lg:px-8 grid lg:grid-cols-4 gap-6 lg:gap-20">
+      <div className="py-6 px-4 lg:py-8 lg:px-8 flex flex-col lg:flex-row gap-6 lg:gap-20">
         {generalInfomations.map((info) => (
           <GeneralInfo
             key={info.id}

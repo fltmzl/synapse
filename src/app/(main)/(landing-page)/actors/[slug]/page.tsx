@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeftIcon } from "@/icons/arrow-left-icon";
 import Link from "next/link";
 import ActorDetailMobile from "./actor-detail-mobile";
+import ActorDetailDekstop from "./actor-detail-dekstop";
 
 export default function DetailActorPage() {
   return (
@@ -17,7 +18,12 @@ export default function DetailActorPage() {
         </Link>
       </Button>
 
-      <ActorDetailMobile />
+      <div className="lg:hidden">
+        <ActorDetailMobile />
+      </div>
+      <div className="hidden lg:block">
+        <ActorDetailDekstop />
+      </div>
     </div>
   );
 }

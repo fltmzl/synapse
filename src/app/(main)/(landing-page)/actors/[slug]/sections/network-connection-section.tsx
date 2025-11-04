@@ -3,6 +3,7 @@
 import SpiderGraph from "@/components/spider-graph/spider-graph";
 import { initialElements } from "@/components/spider-graph/utils/initialElements";
 import useIsClient from "@/hooks/use-is-client";
+import { Node } from "@xyflow/react";
 import React from "react";
 
 export default function NetworkConnectionSection() {

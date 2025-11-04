@@ -44,7 +44,7 @@ export default function AssociationSection() {
       <div className="p-5 lg:px-6 border-b">
         <h2 className="text-xl font-medium">Associations</h2>
       </div>
-      <div className="px-5 lg:px-6 py-6 space-y-6">
+      <div className="px-5 lg:px-6 py-6 gap-6 grid lg:grid-cols-2">
         {associations.map((association) => (
           <AssociationInfo
             key={association.association.name + association.id}

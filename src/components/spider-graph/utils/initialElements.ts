@@ -5,7 +5,8 @@ import { Position, MarkerType, type Node, type Edge } from "@xyflow/react";
 // of the line between the center of the intersectionNode and the target node
 function getNodeIntersection(intersectionNode: any, targetNode: any) {
   // https://math.stackexchange.com/questions/1724792/an-algorithm-for-finding-the-intersection-point-between-a-center-of-vision-and-a
-  const { width: intersectionNodeWidth, height: intersectionNodeHeight } = intersectionNode.measured;
+  const { width: intersectionNodeWidth, height: intersectionNodeHeight } =
+    intersectionNode.measured;
   const intersectionNodePosition = intersectionNode.internals.positionAbsolute;
   const targetPosition = targetNode.internals.positionAbsolute;
 
@@ -66,7 +67,7 @@ export function getEdgeParams(source: any, target: any) {
     tx: targetIntersectionPoint.x,
     ty: targetIntersectionPoint.y,
     sourcePos,
-    targetPos,
+    targetPos
   };
 }
 
@@ -74,6 +75,13 @@ export function initialElements() {
   const nodes: Node[] = [];
   const edges: Edge[] = [];
   const center = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+
+  nodes.push({
+    id: "target",
+    data: { label: "Target" },
+    type: "centerNode",
+    position: center
+  });
 
   nodes.push({
     id: `group-1`,
@@ -84,8 +92,8 @@ export function initialElements() {
       width: "auto", // biarkan auto
       height: "auto", // biarkan auto
       minWidth: 300,
-      minHeight: 200,
-    },
+      minHeight: 200
+    }
   });
   nodes.push({
     id: `shopie`,
@@ -93,7 +101,7 @@ export function initialElements() {
     data: { label: `Shopie Laurent` },
     position: { x: 10, y: 10 },
     parentId: "group-1",
-    extent: "parent",
+    extent: "parent"
   });
   nodes.push({
     id: `lucien`,
@@ -101,21 +109,34 @@ export function initialElements() {
     data: { label: `Lucien Moreau` },
     position: { x: 20, y: 20 },
     parentId: "group-1",
-    extent: "parent",
+    extent: "parent"
   });
-  nodes.push({ id: "target", data: { label: "Target" }, type: "centerNode", position: center });
 
   edges.push({
     id: "5-shopie",
     source: "5",
     target: "shopie",
-    type: "customEdge",
+    type: "customEdge"
   });
   edges.push({
     id: "5-lucien",
     source: "5",
     target: "lucien",
-    type: "customEdge",
+    type: "customEdge"
+  });
+
+  edges.push({
+    id: "shopie-group-1",
+    source: "shopie",
+    target: "group-1",
+    type: "customEdge"
+  });
+
+  edges.push({
+    id: "lucien-group-1",
+    source: "lucien",
+    target: "group-1",
+    type: "customEdge"
   });
 
   for (let i = 0; i < 8; i++) {
@@ -124,7 +145,12 @@ export function initialElements() {
     const x = 250 * Math.cos(radians) + center.x;
     const y = 250 * Math.sin(radians) + center.y;
 
-    nodes.push({ id: `${i}`, data: { label: `Source ${i}` }, type: "circleBlueNode", position: { x, y } });
+    nodes.push({
+      id: `${i}`,
+      data: { label: `Source ${i}` },
+      type: "circleBlueNode",
+      position: { x: 0, y: 0 }
+    });
 
     edges.push({
       id: `edge-${i}`,
@@ -135,8 +161,8 @@ export function initialElements() {
       label: `Sustainability Consultant ${i}`,
       markerEnd: {
         type: MarkerType.ArrowClosed,
-        color: "rgba(36, 71, 213, 1)",
-      },
+        color: "rgba(36, 71, 213, 1)"
+      }
     });
   }
 

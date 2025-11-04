@@ -167,7 +167,11 @@ export default function ExperienceSection() {
               Show more <ArrowDownIcon />
             </Button>
           ) : (
-            <Button variant="text-secondary" onClick={toggleShowMore}>
+            <Button
+              variant="text-secondary"
+              size="2md"
+              onClick={toggleShowMore}
+            >
               Show less <ArrowUpIcon />
             </Button>
           )}

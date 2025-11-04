@@ -6,15 +6,22 @@ import EducationSection from "./sections/education-section";
 import AssociationSection from "./sections/association-section";
 import NetworkConnectionSection from "./sections/network-connection-section";
 
-export default function ActorDetailMobile() {
+export default function ActorDetailDekstop() {
   return (
-    <div className="grid gap-4">
+    <div className="space-y-4">
       <ActorGeneralInfoSection />
-      <ExperienceSection />
-      <PoliticalSection />
-      <EducationSection />
-      <AssociationSection />
-      {/* <NetworkConnectionSection /> */}
+
+      <div className="grid grid-cols-2 gap-4">
+        <div className="flex flex-col gap-4">
+          <ExperienceSection />
+          <EducationSection />
+        </div>
+        <div className="flex flex-col gap-4">
+          <PoliticalSection />
+          <AssociationSection />
+          {/* <NetworkConnectionSection /> */}
+        </div>
+      </div>
     </div>
   );
 }
