@@ -1,48 +1,35 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Button } from "@/components/ui/button";
-import { ArrowUp, MoveUpRight, User, Landmark, Building } from "lucide-react";
+import { User } from "lucide-react";
 import { cn } from "@/lib/utils";
 import SectionTitle from "@/components/typography/section-title";
 import { H4 } from "@/components/typography/h4";
 import { P } from "@/components/typography/paragraph";
-import { infoOptions, sources } from "@/data/find-data";
+import { infoOptions } from "@/data/find-data";
 import { ArrowUpRightIcon } from "@/icons/arrow-up-right";
 import { BuildingBankIcon } from "@/icons/building-bank-icon";
 import { BuildingSkyScraperIcon } from "@/icons/building-skyscraper-icon";
 import FindData from "@/components/find-data";
+import { ChatBubble } from "../../database/sections/chat-bubble";
+import ChatContainer from "../../database/sections/chat-container";
 
 export default function FindDataPage() {
-  const [activeSource, setActiveSource] = useState("All");
-  const [activeInfo, setActiveInfo] = useState("person");
-  const [value, setValue] = useState("");
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
-
-  // auto-resize textarea saat user mengetik
-  useEffect(() => {
-    const el = textareaRef.current;
-    if (!el) return;
-    el.style.height = "auto";
-    el.style.height = Math.min(el.scrollHeight, 300) + "px"; // max ~300px
-  }, [value]);
-
   return (
     <div className="bg-background">
       <section className="max-w-7xl mx-auto py-16 lg:py-25 w-full px-6 flex flex-col gap-10 lg:gap-16">
-        {/* Header */}
-        <div className="text-center flex flex-col gap-2">
-          <SectionTitle>Accéder à la base</SectionTitle>
-          <P className="lg:text-[18px] lg:leading-[140%] lg:tracking-[-0.01em]">
-            Utiliser l&apos;IA pour recherche une information, une donnée, un
-            rapport ou une source de confiance
-          </P>
+        {/* Chat Section */}
+        <div className="max-w-[909px] mx-auto w-full">
+          <ChatContainer />
         </div>
+
+        {/* Find Data Input */}
         <FindData />
 
         <hr className="w-full max-w-[826px] mx-auto" />
+
         {/* Specific Info Section */}
-        <div className=" text-center flex flex-col gap-8 items-center">
+        <div className="text-center flex flex-col gap-8 items-center">
           <H4>Le répertoire des territoires</H4>
 
           <div className="max-w-5xl w-full grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -50,7 +37,7 @@ export default function FindDataPage() {
               <div
                 key={opt.id}
                 className={cn(
-                  "group cursor-pointer transition-all rounded-xl border  hover:border-primary"
+                  "group cursor-pointer transition-all rounded-xl border hover:border-primary"
                 )}
               >
                 <div className="p-5 flex flex-col justify-between h-full gap-6">

@@ -23,7 +23,7 @@ export default function FindData() {
   };
 
   return (
-    <div className="w-full max-w-5xl mx-auto">
+    <div className="max-w-[909px] mx-auto">
       <div className="bg-section border rounded-[14px] px-2">
         {/* Source Filter */}
         <div className="flex gap-2 px-4 py-4 pb-0 overflow-x-auto hide-scrollbar lg:overflow-x-hidden">
