@@ -400,9 +400,15 @@ export default function AnswerDirectory() {
                     {/* Footer */}
                     <div className=" rounded-b-xl flex items-center justify-between border-t px-6 py-4 bg-[var(--body)]">
                       <div className="flex items-center gap-4 text-muted-foreground">
-                        <FacebookFillIcon className="ri-facebook-fill text-xl"></FacebookFillIcon>
-                        <InstagramIconFlat className="ri-instagram-line text-xl"></InstagramIconFlat>
-                        <LinkedinIconFlat className="ri-linkedin-box-line text-xl"></LinkedinIconFlat>
+                        <Link href={"#"}>
+                          <FacebookFillIcon className="ri-facebook-fill text-xl"></FacebookFillIcon>
+                        </Link>
+                        <Link href={"#"}>
+                          <InstagramIconFlat className="ri-instagram-line text-xl"></InstagramIconFlat>
+                        </Link>
+                        <Link href={"#"}>
+                          <LinkedinIconFlat className="ri-linkedin-box-line text-xl"></LinkedinIconFlat>
+                        </Link>
                       </div>
 
                       <Link href={`/explore-directory/${directoryItem.slug}`} className="flex items-center gap-[6px]">

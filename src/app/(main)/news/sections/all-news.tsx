@@ -11,6 +11,7 @@ import SearchAll from "../components/search-all-news";
 import NewsFilter from "../components/news-filter";
 import SelectSingleItem from "@/components/select-single-item";
 import { parseAsString, useQueryState } from "nuqs";
+import PostList from "@/components/post-list";
 
 export default function AllNews() {
   const [query, setQuery] = useState("");
@@ -64,8 +65,10 @@ export default function AllNews() {
             />
           </div>
         </div>
+        <PostList data={filtered} variant="news" />
 
-        <div className="flex flex-col divide-y divide-border">
+
+        {/* <div className="flex flex-col divide-y divide-border">
           {filtered.slice(0, 5).map((news, index, arr) => {
             const isFirst = index === 0;
             const isLast = index === arr.length - 1;
@@ -82,7 +85,7 @@ export default function AllNews() {
               </div>
             );
           })}
-        </div>
+        </div> */}
 
         <div className="flex justify-center gap-3 ">
           <Button
