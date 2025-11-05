@@ -3,6 +3,7 @@ import { directory } from "@/data/directory-data";
 import { DirectoryItem } from "@/types/directory.type";
 import DetailDirectorySection from "./sections/detail-page";
 import AdministrationSimilars from "./sections/similars";
+import { Suspense } from "react";
 
 export default async function DirectoryDetailPage({
   params
@@ -18,9 +19,9 @@ export default async function DirectoryDetailPage({
   if (!item) return notFound();
 
   return (
-    <>
+    <Suspense fallback={null}>
       <DetailDirectorySection item={item} />
       <AdministrationSimilars />
-    </>
+    </Suspense>
   );
 }

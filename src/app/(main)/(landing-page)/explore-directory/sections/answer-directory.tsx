@@ -26,7 +26,6 @@ import Pagination from "@/components/pagination";
 import { ArrowRightBoldIcon } from "@/icons/arrow-right-bold-icon";
 import { SortDescendingIcon } from "@/icons/sort-desc-icon";
 import { FilterIcon } from "@/icons/filter-icon";
-import NoResult from "./no-result";
 import { useAutoCloseDrawer } from "@/hooks/use-auto-close-drawer";
 import { InstagramIconFlat } from "@/icons/instagram-icon-flat";
 import { LinkedinIconFlat } from "@/icons/linkedin-icon-flat";
@@ -35,6 +34,8 @@ import { FacebookFillIcon } from "@/icons/facebook-fill-icon";
 import Link from "next/link";
 import FilterPopover from "../components/popover-filter";
 import { directory } from "@/data/directory-data";
+import NoResult from "@/components/no-result";
+import { DEFAULT_PAGE_SIZE } from "@/constants/pagination.constant";
 
 export default function AnswerDirectory() {
   const [territory, setTerritory] = useQueryState(
@@ -139,7 +140,7 @@ export default function AnswerDirectory() {
   useAutoCloseDrawer(openFilter, () => setOpenFilter(false));
 
   const [page, setPage] = useState(0);
-  const [pageSize, setPageSize] = useState(9);
+  const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
   const paginatedDirectory = filteredDirectory.slice(
     page * pageSize,
     (page + 1) * pageSize
