@@ -13,18 +13,13 @@ import { BuildingSkyScraperIcon } from "@/icons/building-skyscraper-icon";
 import FindData from "@/components/find-data";
 import { ChatBubble } from "../../database/sections/chat-bubble";
 import ChatContainer from "../../database/sections/chat-container";
+import ChatWrapper from "../../database/sections/chat-wrapper";
 
 export default function FindDataPage() {
   return (
     <div className="bg-background">
-      <section className="max-w-7xl mx-auto py-16 lg:py-25 w-full px-6 flex flex-col gap-10 lg:gap-16">
-        {/* Chat Section */}
-        <div className="max-w-[909px] mx-auto w-full">
-          <ChatContainer />
-        </div>
-
-        {/* Find Data Input */}
-        <FindData />
+      <section className=" max-w-7xl mx-auto py-16 lg:py-25 w-full px-6 flex flex-col gap-10 lg:gap-16">
+        <ChatWrapper initialShowPopular={false} />
 
         <hr className="w-full max-w-[826px] mx-auto" />
 
