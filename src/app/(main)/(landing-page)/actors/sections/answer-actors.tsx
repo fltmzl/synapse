@@ -27,8 +27,9 @@ import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import { ArrowRightBoldIcon } from "@/icons/arrow-right-bold-icon";
 import { SortDescendingIcon } from "@/icons/sort-desc-icon";
 import { FilterIcon } from "@/icons/filter-icon";
-import NoResult from "./no-result";
 import { useAutoCloseDrawer } from "@/hooks/use-auto-close-drawer";
+import NoResult from "@/components/no-result";
+import { DEFAULT_PAGE_SIZE } from "@/constants/pagination.constant";
 
 export default function AnswerActors() {
   const [territory, setTerritory] = useQueryState(
@@ -218,7 +219,7 @@ export default function AnswerActors() {
   useAutoCloseDrawer(openFilter, () => setOpenFilter(false));
 
   const [page, setPage] = useState(0);
-  const [pageSize, setPageSize] = useState(5);
+  const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
   const paginatedPeople = filteredPeople.slice(
     page * pageSize,
     (page + 1) * pageSize

@@ -10,6 +10,8 @@ export const newsData: NewsItem[] = [
   {
     slug: "martinique-green-transition-fund-2025",
     title: "Martinique SMEs secure €15M funding for green transition projects",
+    description:
+      "A new €15 million fund has been launched to support small and medium-sized enterprises (SMEs) in Martinique in their transition to sustainable practices.",
     category: "Juridique",
     author: "Regional Council of Martinique",
     date: "May 25, 2025",
@@ -56,6 +58,8 @@ export const newsData: NewsItem[] = [
     category: "Analyse",
     author: "Citizen",
     date: "Aug 29, 2025",
+    description:
+      "An in-depth analysis of the recently launched €15 million fund supporting Martinique's SMEs in their green transition efforts.",
     images: [
       "/images/news/news-2.png",
       "/images/news/news-3.png",
@@ -89,6 +93,7 @@ export const newsData: NewsItem[] = [
       "Mayotte reports 5% increase in export activities for first half of 2025",
     category: "Juridique",
     author: "Mayotte Trade Bureau",
+    description: "Mayotte's export activities have shown resilience amidst global economic challenges.",
     date: "Aug 25, 2025",
     images: [
       "/images/news/news-3.png",
@@ -118,6 +123,7 @@ export const newsData: NewsItem[] = [
     category: "Citoyenne",
     author: "Le Journal Outre-mer",
     date: "Sep 2, 2025",
+    description: "A political debate is intensifying over the representation of overseas territories in the French parliament.",  
     images: [
       "/images/news/news-4.png",
       "/images/news/news-5.png",
@@ -143,6 +149,7 @@ export const newsData: NewsItem[] = [
     slug: "unified-judicial-system-french-overseas",
     title: "Unified judicial system proposed for French overseas territories",
     category: "Politique",
+    description: "A proposal has been made to establish a unified judicial system for all French overseas territories.",
     author: "Le Monde Juridique",
     date: "Oct 29, 2025",
     images: [
@@ -171,6 +178,7 @@ export const newsData: NewsItem[] = [
     title:
       "Legal experts call for unified judicial system across French overseas territories",
     category: "Politique",
+    description: "Legal experts are advocating for a unified judicial system across all French overseas territories.",
     author: "France Info",
     date: "Oct 15, 2025",
     images: [

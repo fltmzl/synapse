@@ -12,9 +12,9 @@ export default function DescriptionCard({
               <CardTitle className="text-xl font-medium leading-[150%] tracking-[-0.01em]">Descriptif</CardTitle>
             </CardHeader>
             <CardContent className="px-5 py-6 lg:p-6">
-              <p className="text-base leading-[150%] tracking-[-0.01em] text-muted-foreground">
-                {item.description}
-              </p>
+              <p className="text-base leading-[150%] tracking-[-0.01em] text-muted-foreground"
+                dangerouslySetInnerHTML={{ __html: item.description || "" }}
+              />
             </CardContent>
           </Card>
   );
