@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Company } from "@/types/company.type";
 import { DirectoryItem } from "@/types/directory.type";
 import {
   ExternalLink,
@@ -14,11 +15,11 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 
-export default function ContactCard({ item }: { item: DirectoryItem }) {
+export default function ContactCard({ item }: { item: Company }) {
   return (
-    <Card className="rounded-[12px] gap-0 py-0">
+    <Card className="rounded-[12px] gap-0 py-0 min-w-[836px]">
       <CardHeader className="lg:py-5 lg:px-6 p-5">
-        <CardTitle className="text-xl font-medium">Contact</CardTitle>
+        <CardTitle className="text-xl leading-[110%] tracking-[-0.01em]  font-medium">Contact</CardTitle>
       </CardHeader>
       <CardContent className="p-6 min-w-full border-t">
         <div className="space-y-3 pb-6 flex gap-6 lg:gap-0 lg:justify-between  flex-col lg:flex-row">
@@ -28,10 +29,10 @@ export default function ContactCard({ item }: { item: DirectoryItem }) {
             </div>
             <div className="flex flex-col gap-1">
               <span className="text-sm leading-[140%] tracking-[-0.01em] text-muted-foreground">
-                Téléphone
+                Phone number
               </span>
               <span className="text-base leading-[150%] tracking-[-0.01em] ">
-                {item.contact?.phone}
+                +596 596 50 00 00{" "}
               </span>
             </div>
           </div>
@@ -44,7 +45,7 @@ export default function ContactCard({ item }: { item: DirectoryItem }) {
                 Email
               </span>
               <span className="text-base leading-[150%] tracking-[-0.01em] ">
-                {item.contact?.email}
+                contact@gbh.fr{" "}
               </span>
             </div>
           </div>
@@ -57,11 +58,11 @@ export default function ContactCard({ item }: { item: DirectoryItem }) {
                 Website
               </span>
               <Link
-                href={`https://${item.contact?.website}`}
+                href="https://www.gbh.fr/"
                 target="_blank"
                 className="text-base flex items-center gap-1 leading-[150%] tracking-[-0.01em] hover:text-primary"
               >
-                {item.contact?.website}
+                https://www.gbh.fr/
                 <ExternalLink className="size-[18px] text-primary" />
               </Link>
             </div>
@@ -70,23 +71,28 @@ export default function ContactCard({ item }: { item: DirectoryItem }) {
         <hr />
         <div className="space-y-3 pt-6">
           <div className="flex flex-col lg:flex-row items-start lg:items-end lg:gap-0 lg:justify-between gap-4">
-            <div className="flex gap-2">
-            <div className="h-10 w-10 p-[10px] border rounded-[6px]">
-              <MapPin strokeWidth={1.5} className="size-5 text-primary" />
-            </div>
-            <div className="w-full">
+            <div className="flex gap-2 items-center">
+              <div className="h-10 w-10 p-[10px] border rounded-[6px]">
+                <MapPin strokeWidth={1.5} className="size-5 text-primary" />
+              </div>
+              <div className="w-full">
                 <span className="text-sm leading-[140%] tracking-[-0.01em] text-muted-foreground">
                   Address
                 </span>
                 <div className="flex justify-between">
-              <span className="text-base leading-[150%] tracking-[-0.01em] ">{item.contact?.address}</span>
+                  <span className="text-base leading-[150%] tracking-[-0.01em] ">
+                    Zone de la Lézarde, 97232 Le Lamentin, Martinique, France
+                  </span>
+                </div>
               </div>
             </div>
-            </div>
-              <Button variant="outline" className="font-normal px-3 py-[10px] text-sm leading-[140%] tracking-[-0.01em]">
-                <MapPin className="size-5 text-muted-foreground" />
-                Show on map
-              </Button>
+            <Button
+              variant="outline"
+              className="font-normal px-3 py-[10px] text-sm leading-[140%] tracking-[-0.01em]"
+            >
+              <MapPin className="size-5 text-muted-foreground" />
+              Localiser{" "}
+            </Button>
           </div>
         </div>
       </CardContent>
