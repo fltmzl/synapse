@@ -40,8 +40,9 @@ export default function AdministrationSimilars() {
 
   return (
     <section className="bg-background">
-      <div className="py-12 lg:py-20 px-6 max-w-7xl mx-auto">
-        <div className="hidden lg:flex items-center justify-between mb-10">
+      <div className="py-12 lg:py-20 px-6 lg:pl-20 h-full
+        3xl:items-center 3xl:pl-0 ">
+        <div className="3xl:max-w-[1400px] 3xl:mx-auto hidden lg:flex items-center justify-between mb-10">
           <h1 className="text-[28px] leading-[130%] tracking-[-0.02em] lg:text-[40px] font-medium lg:leading-[110%] lg:tracking-[-0.03em]">
             Administration similaire
           </h1>
@@ -72,14 +73,14 @@ export default function AdministrationSimilars() {
 
         <div
           ref={scrollRefDesktop}
-          className="hidden lg:flex gap-4 overflow-x-auto hide-scrollbar scroll-smooth"
+          className="3xl:max-w-[1400px] 3xl:mx-auto hidden lg:flex gap-4 overflow-x-auto hide-scrollbar scroll-smooth pr-0 mr-0"
         >
           {directory.slice(0, 6).map((item) => (
             <Card key={item.slug} item={item} />
           ))}
         </div>
 
-        <div className="flex lg:hidden flex-col items-center">
+        <div className="flex lg:hidden flex-col">
           <div
             ref={scrollRefMobile}
             className="flex gap-4 overflow-x-auto snap-x snap-mandatory hide-scrollbar scroll-smooth w-full"
@@ -91,7 +92,7 @@ export default function AdministrationSimilars() {
                 return (
                   <div
                     key={index}
-                    className="snap-center flex-shrink-0 w-full flex flex-col gap-4 px-4"
+                    className="snap-center flex-shrink-0 w-full flex flex-col gap-4"
                   >
                     {pair.map((item) => (
                       <Card key={item.slug} item={item} />
@@ -183,9 +184,15 @@ function Card({ item }: { item: DirectoryItem }) {
 
       <div className="border-t py-4 px-6 flex items-center justify-between bg-[var(--body)] rounded-b-[12px]">
         <div className="flex items-center gap-3 text-muted-foreground">
+          <Link href={"#"}>
           <FacebookFillIcon className="size-[18px]" />
+          </Link>
+          <Link href={"#"}>
           <InstagramIconFlat className="size-[18px]" />
+          </Link>
+          <Link href={"#"}>
           <LinkedinIconFlat className="size-[18px]" />
+          </Link>
         </div>
 
         <Link

@@ -45,8 +45,8 @@ export default function FindDirectory() {
 
   return (
     <section className="py-12 lg:py-20 max-w-7xl mx-auto flex flex-col gap-10 items-center px-6">
-      <div className="flex items-center flex-col justify-center w-full gap-2 lg:gap-4">
-        <h1 className="text-3xl lg:text-5xl font-medium leading-[110%] tracking-[-0.03em]">
+      <div className="flex items-center text-center flex-col justify-center w-full gap-2 lg:gap-4">
+        <h1 className="text-3xl lg:text-5xl font-medium text-center items-center leading-[110%] tracking-[-0.03em]">
           Annuaire des administrations
         </h1>
         <p className="text-sm lg:text-base font-regular text-muted-foreground leading-[140%] tracking-[-0.01em] lg:leading-[110%]">

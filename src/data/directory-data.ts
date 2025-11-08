@@ -12,7 +12,7 @@ export const directory: DirectoryItem[] = [
     address: "Fort-de-France, Rue de la République",
     id: "#A00010",
     description:
-      "The Direction des Finances Publiques de Martinique oversees public financial management and taxation within the Martinique region. It supports local government entities in implementing fiscal policies and ensuring compliance with national tax regulations.",
+      "The <strong>Direction des Finances Publiques de Martinique</strong> oversees public financial management and taxation within the Martinique region. It supports local government entities in implementing fiscal policies and ensuring compliance with national tax regulations.",
     contact: {
       phone: "+596 596 123 456",
       email: "contact@dfip.mq",
@@ -66,7 +66,7 @@ export const directory: DirectoryItem[] = [
     address: "Saint-Denis, Avenue de la Santé",
     id: "#A00001",
     description:
-      "The Agence Régionale de Santé Réunion (ARS Réunion) is the official public health authority in Réunion. It coordinates healthcare networks and leads disease prevention initiatives.",
+      "The <span class=\"text-foreground/80 font-medium\">Agence Régionale de Santé Réunion (ARS Réunion)</span> is the official public health authority in Réunion. It coordinates healthcare networks and leads disease prevention initiatives.",
     contact: {
       phone: "+262 262 789 654",
       email: "ars.reunion@sante.fr",

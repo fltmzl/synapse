@@ -101,7 +101,11 @@ export default function Header() {
             <div className="py-12 flex flex-col gap-10">
               <div className=" px-6 flex flex-col items-center gap-8">
                 {NAV_ITEMS.map((item) => (
-                  <Link key={item.href} href={item.href}>
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={() => setOpen(false)}
+                  >
                     {item.label}
                   </Link>
                 ))}

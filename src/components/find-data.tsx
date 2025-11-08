@@ -8,23 +8,17 @@ import { CircleOutlineIcon } from "@/icons/circle-outline-icon";
 import { ArrowUpIcon } from "@/icons/arrow-up-icon";
 import { useRef, useState } from "react";
 
-export default function FindData() {
+type Props = {
+  handleSend: (userMessage: string) => void;
+};
+
+export default function FindData({ handleSend }: Props) {
   const [activeSource, setActiveSource] = useState("All");
   const [value, setValue] = useState("");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  const handleSend = (): void => {
-    if (!value.trim()) return;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const globalSend = (window as any).handleSend;
-    if (globalSend) {
-      globalSend(value);
-      setValue("");
-    }
-  };
-
   return (
-    <div className="w-full max-w-5xl mx-auto">
+    <div className="w-full max-w-[909px] mx-auto">
       <div className="bg-section border rounded-[14px] px-2">
         {/* Source Filter */}
         <div className="flex gap-2 px-4 py-4 pb-0 overflow-x-auto hide-scrollbar lg:overflow-x-hidden">
@@ -80,7 +74,10 @@ export default function FindData() {
             className="bg-background w-full min-h-[212px] max-h-[400px] resize-none rounded-xl shadow-sm p-4 text-sm text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary transition-all scrollbar-custom"
           />
           <button
-            onClick={handleSend}
+            onClick={() => {
+              handleSend(value);
+              setValue("");
+            }}
             className="absolute bottom-6 right-4 w-10 h-10 rounded-full flex items-center justify-center shadow-sm bg-primary"
           >
             <ArrowUpIcon className="w-6 h-6 text-background" />

@@ -6,8 +6,7 @@ export default function TheBusinessCorner() {
       <div className="w-full max-w-7xl mx-auto px-6">
       <div className="py-12 lg:py-20 px-6  flex items-center flex-col">
         <h1 className="text-3xl lg:text-5xl font-medium leading-[110%] tracking-[-0.03em] mb-4 text-center">
-          The Business Corner
-        </h1>
+Le coin des affaires        </h1>
         <p className="w-full lg:max-w-[560px] text-lg text-center leading-[150%] tracking-[-0.01em] text-muted-foreground">
           A dedicated space for businesses to unlock growth potential, guided by
           expert insights and market data.

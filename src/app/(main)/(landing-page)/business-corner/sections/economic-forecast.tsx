@@ -60,7 +60,7 @@ export default function EconomicForecastsPage() {
                 </div>
                 </div>
               </div>
-              <div className="relative w-full h-[160px]">
+              <div className="relative w-full h-[195px] lg:h-[220px]">
                 <Image
                   src={item.image}
                   alt={item.title}
