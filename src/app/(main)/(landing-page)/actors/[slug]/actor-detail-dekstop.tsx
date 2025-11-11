@@ -5,6 +5,7 @@ import PoliticalSection from "./sections/political-section";
 import EducationSection from "./sections/education-section";
 import AssociationSection from "./sections/association-section";
 import RelatedPersonalitySection from "./sections/related-personality-section";
+import NetworkConnectionSection from "./sections/network-connection-section";
 
 export default function ActorDetailDekstop() {
   return (
@@ -21,7 +22,7 @@ export default function ActorDetailDekstop() {
         <div className="flex flex-col gap-4">
           <PoliticalSection />
           <AssociationSection />
-          {/*<NetworkConnectionSection /> */}
+          <NetworkConnectionSection />
         </div>
       </div>
 
