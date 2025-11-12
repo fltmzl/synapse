@@ -9,7 +9,7 @@ export default function RepresentantCard({ item }: { item: DirectoryItem }) {
   return (
     <Card className="rounded-[12px] gap-0 py-0 ">
       <CardHeader className="px-5 py-6 lg:p-6 border-b">
-        <CardTitle className="text-lg font-semibold">Représentant</CardTitle>
+        <CardTitle className="text-xl font-medium">Représentant</CardTitle>
       </CardHeader>
       <CardContent className="flex flex-col px-5 py-6 lg:p-6 ">
           <Link href="#">
@@ -23,7 +23,7 @@ export default function RepresentantCard({ item }: { item: DirectoryItem }) {
                   }
                   alt={item.representative?.name || "Representative"}
                 />
-                <AvatarFallback className="bg-muted-foreground/20 font-semibold">
+                <AvatarFallback className="bg-muted-foreground/20 font-medium">
                   <div className="w-15 h-15 bg-muted rounded-full grid place-content-center">
                     {item.representative?.name
                       .split(" ")

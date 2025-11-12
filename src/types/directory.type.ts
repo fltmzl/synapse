@@ -1,11 +1,11 @@
-export interface ContactInfo {
+export type ContactInfo = {
   phone?: string;
   email?: string;
   website?: string;
   address?: string;
 }
 
-export interface Representative {
+export type Representative = {
   name: string;
   title?: string;
   email?: string;
@@ -14,7 +14,7 @@ export interface Representative {
   avatar?: string;
 }
 
-export interface DirectoryItem {
+export type DirectoryItem = {
   id: string;
   name: string;
   slug: string;

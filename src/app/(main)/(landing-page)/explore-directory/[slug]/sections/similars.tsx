@@ -66,7 +66,7 @@ export default function AdministrationSimilars() {
         </div>
 
         <div className="flex flex-col lg:hidden mb-6">
-          <h1 className="text-[24px] font-semibold mb-4">
+          <h1 className="text-[24px] font-medium mb-4">
             Administration similaire
           </h1>
         </div>

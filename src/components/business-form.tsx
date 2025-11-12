@@ -44,123 +44,120 @@ export default function BusinessForm() {
     }
   });
 
-  const onSubmit = (data: z.infer<typeof formSchema>) => {
-  };
+  const onSubmit = (data: z.infer<typeof formSchema>) => {};
 
   return (
-      
-
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-          {/* 🧩 First Name + Last Name (Responsive Grid) */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {/* First Name */}
-            <FormField
-              control={form.control}
-              name="firstName"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="label-required">Prénom</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Enter your first name" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            {/* Last Name */}
-            <FormField
-              control={form.control}
-              name="lastName"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="label-required">Nom</FormLabel>
-
-                  <FormControl>
-                    <Input placeholder="Enter your last name" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-
-          {/* Email */}
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        {/* 🧩 First Name + Last Name (Responsive Grid) */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {/* First Name */}
           <FormField
             control={form.control}
-            name="email"
+            name="firstName"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="label-required">Email</FormLabel>
-
+                <FormLabel className="label-required">Prénom</FormLabel>
                 <FormControl>
-                  <Input
-                    type="email"
-                    placeholder="Enter your email address"
-                    {...field}
-                  />
+                  <Input placeholder="Enter your first name" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
 
-          {/* Service Type */}
+          {/* Last Name */}
           <FormField
             control={form.control}
-            name="serviceType"
+            name="lastName"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>
-                  <FormLabel className="label-required">
-                    Type de service souhaité
-                  </FormLabel>
+                <FormLabel className="label-required">Nom</FormLabel>
+
+                <FormControl>
+                  <Input placeholder="Enter your last name" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+
+        {/* Email */}
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="label-required">Email</FormLabel>
+
+              <FormControl>
+                <Input
+                  type="email"
+                  placeholder="Enter your email address"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        {/* Service Type */}
+        <FormField
+          control={form.control}
+          name="serviceType"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>
+                <FormLabel className="label-required">
+                  Type de service souhaité
                 </FormLabel>
-                <FormControl>
-                  <Select onValueChange={field.onChange} value={field.value}>
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Select a service you want" />
-                    </SelectTrigger>
-                    <SelectContent className="select-content-width-full">
-                      <SelectItem value="data">Data report</SelectItem>
-                      <SelectItem value="consulting">Consulting</SelectItem>
-                      <SelectItem value="research">Research request</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+              </FormLabel>
+              <FormControl>
+                <Select onValueChange={field.onChange} value={field.value}>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select a service you want" />
+                  </SelectTrigger>
+                  <SelectContent className="select-content-width-full">
+                    <SelectItem value="data">Data report</SelectItem>
+                    <SelectItem value="consulting">Consulting</SelectItem>
+                    <SelectItem value="research">Research request</SelectItem>
+                  </SelectContent>
+                </Select>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-          {/* Description */}
-          <FormField
-            control={form.control}
-            name="description"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="label-required">Description</FormLabel>
+        {/* Description */}
+        <FormField
+          control={form.control}
+          name="description"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="label-required">Description</FormLabel>
 
-                <FormControl>
-                  <Textarea
-                    placeholder="Décrivez votre demande pour l'obtention d'un chiffrage"
-                    className="min-h-[120px] resize-none text-sm"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+              <FormControl>
+                <Textarea
+                  placeholder="Décrivez votre demande pour l'obtention d'un chiffrage"
+                  className="min-h-[120px] resize-none text-sm"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-          {/* Submit */}
-          <div className="pt-2 flex justify-end">
-            <Button type="submit" size="sm" variant="default">
-              Envoyer
-            </Button>
-          </div>
-        </form>
-      </Form>
+        {/* Submit */}
+        <div className="pt-2 flex justify-end">
+          <Button type="submit" size="sm" variant="default">
+            Envoyer
+          </Button>
+        </div>
+      </form>
+    </Form>
   );
 }
