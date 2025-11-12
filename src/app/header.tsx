@@ -12,20 +12,12 @@ import { useEffect, useRef, useState } from "react";
 import ProfileDekstop from "./(main)/(landing-page)/components/profile-dekstop";
 import ProfileMobile from "./(main)/(landing-page)/components/profile-mobile";
 
-// const NAV_ITEMS = [
-//   { label: "Actualité", href: "/news" },
-//   { label: "Base de données", href: "/database" },
-//   { label: "Acteurs", href: "/personality" },
-//   { label: "Structure", href: "/explore-directory" },
-//   { label: "Le coin des affaires", href: "/business-corner" }
-// ];
-
 const NAV_ITEMS = [
   { label: "Actualité", href: "/news" },
   { label: "Base de données", href: "/database" },
   { label: "Acteurs", href: "/actors" },
-  { label: "Structure", href: "/nav-4" },
-  { label: "Le coin des affaires", href: "/nav-5" }
+  { label: "Structure", href: "/explore-directory" },
+  { label: "Le coin des affaires", href: "/business-corner" }
 ];
 
 export default function Header() {
