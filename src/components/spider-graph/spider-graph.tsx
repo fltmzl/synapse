@@ -247,7 +247,7 @@ export default function SpiderGraph({ initialEdges, initialNodes }: Props) {
   if (!elk) return <>Loading Spider...</>;
 
   return (
-    <div className="relative w-full h-[677px] lg:h-[403px] lg:aspect-video border-2 border-border rounded-2lg transition duration-1000">
+    <div className="@container relative w-full h-[677px] lg:h-[403px] lg:aspect-video border-2 border-border rounded-2lg transition duration-1000">
       <ReactFlow
         fitView
         fitViewOptions={{
@@ -319,75 +319,77 @@ export default function SpiderGraph({ initialEdges, initialNodes }: Props) {
         )}
       </div>
 
-      <div className="absolute top-4 left-4 rounded-lg bg-background border w-full max-w-[300px] z-[2]">
-        <div className="p-4">
-          <div>
-            <Avatar className="w-10 h-10 rounded-sm border">
-              <AvatarImage
-                src={"http://placehold.jpw/100x100.png"}
-                alt={"actor"}
-              />
-              <AvatarFallback className="rounded-sm bg-body">
-                <BuildingIcon />
-              </AvatarFallback>
-            </Avatar>
+      {selectedNode && (
+        <div className="absolute top-4 left-4 rounded-lg bg-background border w-full max-w-[300px] z-[2]">
+          <div className="p-4">
+            <div>
+              <Avatar className="w-10 h-10 rounded-sm border">
+                <AvatarImage
+                  src={"http://placehold.jpw/100x100.png"}
+                  alt={"actor"}
+                />
+                <AvatarFallback className="rounded-sm bg-body">
+                  <BuildingIcon />
+                </AvatarFallback>
+              </Avatar>
 
-            <h3 className="font-medium mt-3">Caribbean Business Council</h3>
-            <span className="text-sm text-muted-foreground">
-              Business Organization
-            </span>
+              <h3 className="font-medium mt-3">Caribbean Business Council</h3>
+              <span className="text-sm text-muted-foreground">
+                Business Organization
+              </span>
+            </div>
+
+            <button className="absolute top-4 right-4">
+              <XIcon size={20} className="text-muted-foreground" />
+            </button>
           </div>
 
-          <button className="absolute top-4 right-4">
-            <XIcon size={20} className="text-muted-foreground" />
-          </button>
-        </div>
+          <hr />
 
-        <hr />
+          <div className="p-4">
+            <GeneralInfo
+              size="sm"
+              icon={MapPinIcon}
+              label="Location"
+              value="Bridgetown, Barbados"
+            />
 
-        <div className="p-4">
-          <GeneralInfo
-            size="sm"
-            icon={MapPinIcon}
-            label="Location"
-            value="Bridgetown, Barbados"
-          />
+            <p className="text-sm mt-4">
+              Regional business council supporting economic cooperation among
+              Caribbean territories.
+            </p>
+          </div>
 
-          <p className="text-sm mt-4">
-            Regional business council supporting economic cooperation among
-            Caribbean territories.
-          </p>
-        </div>
+          <hr />
 
-        <hr />
+          <div className="p-4">
+            <h3 className="font-medium">Connections with Isabelle</h3>
 
-        <div className="p-4">
-          <h3 className="font-medium">Connections with Isabelle</h3>
-
-          <div className="text-sm mt-4 space-y-4">
-            <div className="flex justify-between gap-2">
-              <span className="text-muted-foreground">Relation type</span>
-              <span>Affiliation</span>
-            </div>
-            <div className="flex justify-between gap-2">
-              <span className="text-muted-foreground">Role</span>
-              <span>Consultant</span>
-            </div>
-            <div className="flex justify-between gap-2">
-              <span className="text-muted-foreground">Period</span>
-              <span>2013-2017</span>
+            <div className="text-sm mt-4 space-y-4">
+              <div className="flex justify-between gap-2">
+                <span className="text-muted-foreground">Relation type</span>
+                <span>Affiliation</span>
+              </div>
+              <div className="flex justify-between gap-2">
+                <span className="text-muted-foreground">Role</span>
+                <span>Consultant</span>
+              </div>
+              <div className="flex justify-between gap-2">
+                <span className="text-muted-foreground">Period</span>
+                <span>2013-2017</span>
+              </div>
             </div>
           </div>
-        </div>
 
-        <hr />
+          <hr />
 
-        <div className="p-4">
-          <Button className="w-full" variant="outline">
-            View full profile <ArrowRightIcon />{" "}
-          </Button>
+          <div className="p-4">
+            <Button className="w-full" variant="outline">
+              View full profile <ArrowRightIcon />{" "}
+            </Button>
+          </div>
         </div>
-      </div>
+      )}
 
       <div className="absolute top-4 right-4 z-[1]">
         <Accordion

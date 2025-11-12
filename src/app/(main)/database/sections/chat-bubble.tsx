@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils";
 import { Copy, Files, Upload } from "lucide-react";
+import Image from "next/image";
 import { useState } from "react";
 
 type ChatBubbleProps = {
@@ -90,13 +91,15 @@ export function ChatBubble({
             className="flex items-center gap-2 mt-3 border rounded-sm py-[6px] pl-2 pr-3 hover:bg-muted/50 transition text-sm w-full lg:w-max h-max no-underline"
           >
             <div className="w-5 h-5 flex items-center justify-center">
-              <img
+              <Image
                 src="/images/prod-2.png"
                 alt="Source"
                 className="object-cover w-5 h-5 rounded-full"
               />
             </div>
-            <span className="hover:underline text-base leading-[150%] tracking-[-0.01em] text-foreground/70">{sourceName}</span>
+            <span className="hover:underline text-base leading-[150%] tracking-[-0.01em] text-foreground/70">
+              {sourceName}
+            </span>
           </a>
         )}
       </div>
