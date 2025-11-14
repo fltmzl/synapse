@@ -73,8 +73,8 @@ export default function DetailInformation({ item }: { item: Company }) {
           </div>
         </div>
 
-        <div className="space-y-6 w-full text-left text-sm px-5 py-6 lg:p-6">
-          <div className="flex items-center justify-between ">
+        <div className="space-y-4 lg:space-y-6 w-full text-left text-sm px-5 py-6 lg:p-6">
+          <div className="flex flex-col lg:flex-row gap-4 lg:gap-0 lg:justify-between ">
             <div className="flex gap-2 items-center">
               <div className="h-10 w-10 p-[10px] border rounded-[6px]">
                 <CalendarDue strokeWidth={1} className="size-5 text-primary" />
@@ -87,7 +87,7 @@ export default function DetailInformation({ item }: { item: Company }) {
               1960
             </span>
           </div>
-          <div className="flex items-center justify-between ">
+          <div className="flex flex-col lg:flex-row gap-4 lg:gap-0 lg:justify-between ">
             <div className="flex gap-2 items-center">
               <div className="h-10 w-10 p-[10px] border rounded-[6px]">
                 <Users className="size-5 text-primary" />
@@ -96,11 +96,11 @@ export default function DetailInformation({ item }: { item: Company }) {
                 Salariés
               </span>
             </div>
-            <span className="text-right text-base leading-[150%] tracking-[-0.01em]">
+            <span className="lg:text-right text-base leading-[150%] tracking-[-0.01em]">
               {">"}18,000
             </span>
           </div>
-          <div className="flex items-center justify-between ">
+          <div className="flex flex-col lg:flex-row gap-4 lg:gap-0 lg:justify-between ">
             <div className="flex gap-2 items-center">
               <div className="h-10 w-10 p-[10px] border rounded-[6px]">
                 <CoinIcon className="size-5 text-primary" />
@@ -116,7 +116,7 @@ export default function DetailInformation({ item }: { item: Company }) {
               <span className="text-sm text-muted-foreground"> (2024) </span>
             </div>
           </div>
-          <div className="flex items-center justify-between ">
+          <div className="flex flex-col lg:flex-row gap-4 lg:gap-0 lg:justify-between ">
             <div className="flex gap-2 items-center">
               <div className="h-10 w-10 p-[10px] border rounded-[6px]">
                 <Map2Icon strokeWidth={1.5} className="size-5 text-primary" />
@@ -125,11 +125,11 @@ export default function DetailInformation({ item }: { item: Company }) {
                 Implantation
               </span>
             </div>
-            <span className=" text-base leading-[150%] tracking-[-0.01em] text-end">
+            <span className=" text-base leading-[150%] tracking-[-0.01em] lg:text-end">
               Le Lamentin, Martinique, French Overseas
             </span>
           </div>
-          <div className="flex items-center justify-between ">
+          <div className="flex flex-col lg:flex-row gap-4 lg:gap-0 lg:justify-between ">
             <div className="flex gap-2 items-center">
               <div className="h-10 w-10 p-[10px] border rounded-[6px]">
                 <IdIcon strokeWidth={1.5} className="size-5 text-primary" />
@@ -142,7 +142,7 @@ export default function DetailInformation({ item }: { item: Company }) {
               #A00001
             </span>
           </div>
-          <div className="flex items-center justify-between ">
+          <div className="flex flex-col lg:flex-row gap-4 lg:gap-0 lg:justify-between ">
             <div className="flex gap-2 items-center">
               <div className="h-10 w-10 p-[10px] border rounded-[6px]">
                 <Settings strokeWidth={1.5} className="size-5 text-primary" />
@@ -155,7 +155,7 @@ export default function DetailInformation({ item }: { item: Company }) {
               Agroalimentaire
             </span>
           </div>
-          <div className="flex items-center justify-between ">
+          <div className="flex flex-col lg:flex-row gap-4 lg:gap-0 lg:justify-between ">
             <div className="flex gap-2 items-center">
               <div className="h-10 w-10 p-[10px] border rounded-[6px]">
                 <IdBadgeIcon strokeWidth={1.5} className="size-5 text-primary" />
