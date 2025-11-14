@@ -9,8 +9,12 @@ import { ChevronDown } from "lucide-react";
 import { parseAsArrayOf, parseAsString, useQueryState } from "nuqs";
 import LegalCard from "../card/legal-news-card";
 import PlatformFilter from "../components/platform-legal-filter";
+import SearchSocialNetwork from "../components/search-social-news";
+import { useState } from "react";
 
 export default function LegalNews() {
+  const [query, setQuery] = useState("");
+
   const filter = {
     categories: [
       { label: "Tax Law", value: "Tax Law" },
@@ -66,18 +70,21 @@ export default function LegalNews() {
 
   return (
     <SectionContainer className="px-4 py-6 lg:px-20 lg:py-20">
-      <div className="flex flex-col max-w-7xl mx-auto">
+      <section id="content-media" className="flex flex-col max-w-7xl mx-auto">
         {/* Header */}
         <div className="flex flex-col items-center justify-center gap-8 w-full">
           <div className="flex flex-col gap-8">
             <SectionTitle className="text-center">
-              Veille réseaux sociaux
+              Actualité citoyenne
             </SectionTitle>
           </div>
-
-          <div className="flex flex-wrap items-center justify-center gap-4 w-full">
-            <PlatformFilter selected={platform} onSelect={setPlatform} />
+          <div className="flex justify-center w-full">
+            <SearchSocialNetwork onSearch={setQuery} />
           </div>
+
+          {/* <div className="flex flex-wrap items-center justify-center gap-4 w-full">
+            <PlatformFilter selected={platform} onSelect={setPlatform} />
+          </div> */}
         </div>
 
         {/* Filter Bar */}
@@ -162,7 +169,7 @@ export default function LegalNews() {
             <ChevronDown className="size-5 text-foreground" />
           </Button>
         </div>
-      </div>
+      </section>
     </SectionContainer>
   );
 }

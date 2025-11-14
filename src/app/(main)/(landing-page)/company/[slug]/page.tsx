@@ -8,13 +8,8 @@ import ContactCard from "./card/contact";
 import PersonCard from "./card/person";
 import StructureCard from "./card/structure";
 
-
-export default function DetailCompany({
-  item,
-}: {
-  item: Company;
-}) {
-    return (
+export default function DetailCompany() {
+  return (
     <section className="max-w-7xl mx-auto py-10 px-6 lg:px-10">
       <div className="mb-4">
         <Link
@@ -27,14 +22,13 @@ export default function DetailCompany({
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        <DetailInformation item={item} />
-<div className="lg:col-span-2 space-y-4">
-        <ContactCard item={item} />
-        <PersonCard/>
-        <StructureCard/>
-        </div> 
+        <DetailInformation />
+        <div className="lg:col-span-2 space-y-4">
+          <ContactCard />
+          <PersonCard />
+          <StructureCard />
         </div>
-   
+      </div>
     </section>
   );
 }

@@ -35,12 +35,15 @@ export default function DataTableMain<TData, TValue>({
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
                 return (
-                  <TableHead key={header.id}>
+                  <TableHead
+                    key={header.id}
+                    className="bg-body text-foreground"
+                  >
                     {header.isPlaceholder ? null : (
                       <>
                         <div
                           className={clsx(
-                            "flex items-center justify-between gap-x-2",
+                            "flex items-center justify-between gap-x-2 py-1.5 text-sm font-medium",
                             {
                               "cursor-pointer select-none":
                                 header.column.getCanSort()
@@ -72,7 +75,7 @@ export default function DataTableMain<TData, TValue>({
                           </span>
                         </div>
 
-                        <div className="my-2">
+                        <div>
                           {header.column.getCanFilter() ? (
                             <HeaderFilter column={header.column} />
                           ) : null}
@@ -94,7 +97,7 @@ export default function DataTableMain<TData, TValue>({
                 data-state={row.getIsSelected() && "selected"}
               >
                 {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id} className="py-3">
+                  <TableCell key={cell.id} className="py-4 font-normal">
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 ))}

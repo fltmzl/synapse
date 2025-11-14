@@ -16,32 +16,33 @@ import { WaIcon } from "@/icons/wa-icon";
 import { WhatsappOutlineIcon } from "@/icons/whatsapp-outline-icon";
 import { Company } from "@/types/company.type";
 import { DirectoryItem } from "@/types/directory.type";
-import { Calendar, Calendar1, CalendarCog, CalendarFold, Coins, CoinsIcon, IdCard, IdCardIcon, IdCardLanyard, Map, MapIcon, MapPin, Settings, Users } from "lucide-react";
+import { Settings, Users } from "lucide-react";
 import Link from "next/link";
 
-export default function DetailInformation({ item }: { item: Company }) {
+export default function DetailInformation() {
   return (
-    <Card className="lg:col-span-1 rounded-[12px] pt-0 h-max py-0">
+    <Card className="lg:col-span-1 rounded-[12px] pt-0 h-max py-0 b">
       <CardContent className=" flex flex-col items-center text-center px-0">
-        <div className="gap-6 items-center flex flex-col py-8 px-5 lg:p-8 ">
+        <div className="gap-6 items-center flex flex-col py-8 px-5 lg:p-8 border-b w-full ">
           <div className="flex items-center justify-center w-20 h-20 bg-[#EEF6FF] rounded-full mb-0">
             <BuildingIcon className="text-primary size-10 mx-4 "></BuildingIcon>
           </div>
+          <div className="flex flex-col gap-3">
+            <h2 className="text-2xl font-medium leading-[110%] tracking-[-0.02em]">
+              Groupe Bernard Hayot
+            </h2>
 
-          <h2 className="text-2xl font-medium leading-[110%] tracking-[-0.02em]">
-            Groupe Bernard Hayot
-          </h2>
-
-          <div className="flex flex-wrap justify-center gap-2">
-            <span className="border bg-muted py-1 px-3 rounded-sm text-sm leading-[110%] tracking-[-0.01em] text-muted-foreground">
-              retail
-            </span>
-            <span className="border bg-muted py-1 px-3 rounded-sm text-sm leading-[110%] tracking-[-0.01em] text-muted-foreground">
-              distribution
-            </span>
-            <span className="border bg-muted py-1 px-3 rounded-sm text-sm leading-[110%] tracking-[-0.01em] text-muted-foreground">
-              automotive
-            </span>
+            <div className="flex flex-wrap justify-center gap-2">
+              <span className="border bg-muted py-1 px-3 rounded-sm text-sm leading-[110%] tracking-[-0.01em] text-muted-foreground">
+                Retail
+              </span>
+              <span className="border bg-muted py-1 px-3 rounded-sm text-sm leading-[110%] tracking-[-0.01em] text-muted-foreground">
+                Distribution
+              </span>
+              <span className="border bg-muted py-1 px-3 rounded-sm text-sm leading-[110%] tracking-[-0.01em] text-muted-foreground">
+                Automotive
+              </span>
+            </div>
           </div>
 
           <div className="flex justify-center gap-2">
@@ -106,7 +107,7 @@ export default function DetailInformation({ item }: { item: Company }) {
                 <CoinIcon className="size-5 text-primary" />
               </div>
               <span className="text-muted-foreground text-base leading-[150%] tracking-[-0.01em]">
-                Chiffre d'affaires
+                Chiffre d&apos;affaires
               </span>
             </div>
             <div>
@@ -148,7 +149,7 @@ export default function DetailInformation({ item }: { item: Company }) {
                 <Settings strokeWidth={1.5} className="size-5 text-primary" />
               </div>
               <span className="text-muted-foreground text-base leading-[150%] tracking-[-0.01em]">
-                Domaine d'activité
+                Domaine d&apos;activité
               </span>
             </div>
             <span className=" text-base leading-[150%] tracking-[-0.01em]">
@@ -158,7 +159,10 @@ export default function DetailInformation({ item }: { item: Company }) {
           <div className="flex flex-col lg:flex-row gap-4 lg:gap-0 lg:justify-between ">
             <div className="flex gap-2 items-center">
               <div className="h-10 w-10 p-[10px] border rounded-[6px]">
-                <IdBadgeIcon strokeWidth={1.5} className="size-5 text-primary" />
+                <IdBadgeIcon
+                  strokeWidth={1.5}
+                  className="size-5 text-primary"
+                />
               </div>
               <span className="text-muted-foreground text-base leading-[150%] tracking-[-0.01em]">
                 Code NAF

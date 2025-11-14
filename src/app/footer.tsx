@@ -21,15 +21,15 @@ export default function Footer() {
             <ul className="space-y-4">
               <li className="flex items-center gap-2">
                 <PhoneIcon size={20} />
-                <span>+33 1 23 45 67 89</span>
+                <span>+596 696 43 84 93</span>
               </li>
               <li className="flex items-center gap-2">
                 <MailIcon size={20} />
-                <span>contact@synapse.fr</span>
+                <span>contact@synapse-intelligence.com</span>
               </li>
               <li className="flex items-center gap-2">
                 <MapPinIcon size={20} />
-                <span>123 Avenue de la République, Paris, France</span>
+                <span>101 rue de Sèvres, 75006 Paris</span>
               </li>
             </ul>
           </div>
@@ -39,16 +39,19 @@ export default function Footer() {
               <h4 className="text-white mb-4 text-sm lg:text-base">Menu</h4>
               <ul className="space-y-4">
                 <li>
-                  <Link href="/news">News</Link>
+                  <Link href="/news">Actualité</Link>
                 </li>
                 <li>
-                  <Link href="/database">Database</Link>
+                  <Link href="/database">Base de données</Link>
                 </li>
                 <li>
-                  <Link href="/decision-markers">Decision Markers</Link>
+                  <Link href="/actors">Acteurs</Link>
                 </li>
                 <li>
-                  <Link href="/companies">Companies</Link>
+                  <Link href="/explore-directory">Structure</Link>
+                </li>
+                <li>
+                  <Link href="/business-corner">Le coin des affaires</Link>
                 </li>
               </ul>
             </div>
@@ -61,28 +64,28 @@ export default function Footer() {
               <div className="flex flex-col lg:flex-row lg:justify-between gap-4 lg:gap-20">
                 <ul className="space-y-4">
                   <li>
-                    <Link href="/politique">Politique</Link>
+                    <Link href="/#publications">Publications</Link>
                   </li>
                   <li>
-                    <Link href="/citoyenne">Citoyenne</Link>
+                    <Link href="/database">Données</Link>
                   </li>
                   <li>
-                    <Link href="/legislative">Législative</Link>
+                    <Link href="/news#content-media">Contenu média</Link>
                   </li>
                   <li>
-                    <Link href="/documentaire">Documentaire</Link>
+                    <Link href="/actors">Cartographie</Link>
                   </li>
                 </ul>
                 <ul className="space-y-4">
                   <li>
-                    <Link href="/opportunities">Opportunities</Link>
+                    <Link href="/">Opportunités</Link>
                   </li>
                   <li>
-                    <Link href="/economic-forecasts">Economic Forecasts</Link>
+                    <Link href="/#service-complementaires">Requête</Link>
                   </li>
                   <li>
-                    <Link href="/complementary-services">
-                      Complementary Services
+                    <Link href="/#business-corner-news">
+                      Projections économiques
                     </Link>
                   </li>
                 </ul>

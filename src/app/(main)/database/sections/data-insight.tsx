@@ -1,11 +1,5 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { Button } from "@/components/ui/button";
-import { P } from "@/components/typography/paragraph";
-import FindData from "@/components/find-data";
-import { ChatBubble } from "./chat-bubble";
-import ChatContainer from "./chat-container";
 import ChatWrapper from "./chat-wrapper";
 
 export default function DataInsight() {

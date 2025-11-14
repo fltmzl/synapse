@@ -1,6 +1,7 @@
+import { cn } from "@/lib/utils";
 import type { Node, NodeProps } from "@xyflow/react";
 import { Handle, Position, useReactFlow } from "@xyflow/react";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 
 type CircleBlueNode = Node<{ label: string }, "circleBlueNode">;
 
@@ -10,6 +11,7 @@ export default function CircleBlueNode({
   positionAbsoluteY,
   selected
 }: NodeProps<CircleBlueNode>) {
+  const [hovered, setHovered] = useState(false);
   const { getNodes } = useReactFlow();
 
   // Cek apakah node ini berada di atas center node
@@ -33,12 +35,21 @@ export default function CircleBlueNode({
         </div>
       )}
 
-      <div className="relative">
+      <div
+        className="relative"
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+      >
         <div className="bg-secondary w-4 h-4 rounded-full border-[1.2px] border-white shadow-sm shadow-black/35"></div>
 
-        {selected && (
-          <div className="bg-secondary/20 rounded-full w-4 h-4 scale-170 absolute top-0"></div>
-        )}
+        <div
+          className={cn(
+            "bg-secondary rounded-full w-4 h-4 scale-170 absolute top-0 opacity-0 transition",
+            {
+              "opacity-20": hovered || selected
+            }
+          )}
+        ></div>
       </div>
 
       {/* <HexagonNode /> */}

@@ -21,7 +21,7 @@ export default function FindData({ handleSend }: Props) {
     <div className="w-full max-w-[909px] mx-auto">
       <div className="bg-section border rounded-[14px] px-2">
         {/* Source Filter */}
-        <div className="flex gap-2 px-4 py-4 pb-0 overflow-x-auto hide-scrollbar lg:overflow-x-hidden">
+        {/* <div className="flex gap-2 px-4 py-4 pb-0 overflow-x-auto hide-scrollbar lg:overflow-x-hidden">
           <h1 className="flex items-center justify-center text-muted-foreground">
             Source
           </h1>
@@ -62,7 +62,7 @@ export default function FindData({ handleSend }: Props) {
               )}
             </Button>
           ))}
-        </div>
+        </div> */}
 
         {/* Search Input */}
         <div className="relative mt-4 mb-1">

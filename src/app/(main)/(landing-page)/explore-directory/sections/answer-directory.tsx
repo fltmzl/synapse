@@ -146,6 +146,8 @@ export default function AnswerDirectory() {
     (page + 1) * pageSize
   );
 
+  if (!search) return null;
+
   if (filteredDirectory.length === 0) {
     return <NoResult />;
   }
@@ -411,7 +413,10 @@ export default function AnswerDirectory() {
                         </Link>
                       </div>
 
-                      <Link href={`/explore-directory/${directoryItem.slug}`} className="flex items-center gap-[6px]">
+                      <Link
+                        href={`/explore-directory/${directoryItem.slug}`}
+                        className="flex items-center gap-[6px]"
+                      >
                         <span className="text-primary text-sm font-medium leading-5 tracking-[-0.01em] ">
                           View detail
                         </span>

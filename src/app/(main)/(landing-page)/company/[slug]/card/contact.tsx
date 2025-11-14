@@ -15,15 +15,17 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 
-export default function ContactCard({ item }: { item: Company }) {
+export default function ContactCard() {
   return (
-    <Card className="rounded-[12px] gap-0 py-0 min-w-[836px]">
+    <Card className="rounded-[12px] gap-0 py-0 w-full lg:min-w-[836px]">
       <CardHeader className="lg:py-5 lg:px-6 p-5">
-        <CardTitle className="text-xl leading-[110%] tracking-[-0.01em]  font-medium">Contact</CardTitle>
+        <CardTitle className="text-xl leading-[110%] tracking-[-0.01em]  font-medium">
+          Contact
+        </CardTitle>
       </CardHeader>
       <CardContent className="p-6 min-w-full border-t">
-        <div className="space-y-3 pb-6 flex gap-6 lg:gap-0 lg:justify-between  flex-col lg:flex-row">
-          <div className="flex items-center gap-3">
+        <div className="pb-6 flex gap-6 lg:gap-0 lg:justify-between  flex-col lg:flex-row">
+          <div className="flex items-center gap-3 h-max">
             <div className="h-10 w-10 p-[10px] border rounded-[6px]">
               <PhoneIcon strokeWidth={1.5} className="size-5 text-primary" />
             </div>

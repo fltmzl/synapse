@@ -10,7 +10,10 @@ import BusinessForm from "@/components/business-form";
 export default function BusinessCorner() {
   return (
     <section className="bg-section">
-      <div className="max-w-7xl mx-auto w-full px-6 xl:px-0 py-12 lg:py-25 flex flex-col gap-10 lg:gap-16">
+      <div
+        id="business-corner-news"
+        className="max-w-7xl mx-auto w-full px-6 xl:px-0 py-12 lg:py-25 flex flex-col gap-10 lg:gap-16 scroll-mt-20"
+      >
         {/* Header */}
         <div className="text-center lg:text-left">
           <SectionTitle>Le coin des affaires</SectionTitle>
@@ -38,8 +41,11 @@ export default function BusinessCorner() {
           </div>
 
           {/* RIGHT: FORM */}
-          <aside className="flex-1 lg:max-w-96 xl:max-w-[470px]">
-            <div className="p-6 border rounded-[12px] bg-background flex flex-col gap-6 h-full">
+          <aside
+            id="service-complementaires"
+            className="flex-1 lg:max-w-96 xl:max-w-[470px] scroll-mt-20"
+          >
+            <div className="p-6 border rounded-[12px] bg-background flex flex-col gap-6 h-fit">
               <div className="flex flex-col gap-3">
                 <H4>Services complémentaires</H4>
                 <P>
