@@ -43,7 +43,7 @@ export default function DataTableMain<TData, TValue>({
                       <>
                         <div
                           className={clsx(
-                            "flex items-center justify-between gap-x-2 py-1.5 text-sm font-medium",
+                            "flex items-center justify-between gap-x-2 py-1.5 text-sm font-medium tracking-tight",
                             {
                               "cursor-pointer select-none":
                                 header.column.getCanSort()
@@ -97,7 +97,7 @@ export default function DataTableMain<TData, TValue>({
                 data-state={row.getIsSelected() && "selected"}
               >
                 {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id} className="py-4 font-normal">
+                  <TableCell key={cell.id} className="py-4 font-normal text-sm">
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 ))}
