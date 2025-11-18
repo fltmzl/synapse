@@ -50,6 +50,7 @@ html {
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
+  --color-dark: var(--font-navy);
   --radius-2xs: calc(var(--radius) - 6px);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -195,6 +196,15 @@ html {
   background: var(--primary);
 }
 
+.scrollbar-custom-secondary::-webkit-scrollbar-thumb {
+  background-color: #bcdbff;
+  border-radius: 30px;
+}
+
+.scrollbar-custom-secondary::-webkit-scrollbar-thumb:hover {
+  background: #bcdbff;
+}
+
 /* End of Custom Scrollbar */
 
 /* Start of hide default icon type password */
@@ -311,6 +321,30 @@ input[type="password"] {
   }
   /* End of Hide Scrollbar */
 
+  .text-outline-stroke {
+    color: var(--primary);
+    text-shadow:
+      1.5px 1.5px 0 #fff,
+      -1.5px 1.5px 0 #fff,
+      -1.5px -1.5px 0 #fff,
+      1.5px -1.5px 0 #fff;
+  }
+
+  .custom-popup .leaflet-popup-content-wrapper,
+  .custom-popup .leaflet-popup-tip {
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  .custom-popup .leaflet-popup-content {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .custom-popup .leaflet-popup-close-button {
+    display: none !important;
+  }
+
   @media (min-width: 640px) {
     /* Start of Show Scrollbar */
     .hide-scrollbar {
@@ -361,3 +395,7 @@ input[type="password"] {
     clip-path: polygon(50% 0, 100% 100%, 0 100%);
   }
 }
+
+/*.leaflet-container {
+  height: 200px;
+}*/

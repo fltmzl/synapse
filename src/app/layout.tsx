@@ -1,12 +1,10 @@
+import { Toaster } from "@/components/ui/sonner";
 import ClientProviders from "@/providers/client-providers";
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import localFont from "next/font/local";
-import "./globals.css";
-import { Toaster } from "@/components/ui/sonner";
-import Script from "next/script";
 import Footer from "./footer";
-import Header from "./header";
+import "./globals.css";
+import "leaflet/dist/leaflet.css";
 
 const geist = Geist({
   variable: "--font-geist",
@@ -43,7 +41,6 @@ export default function RootLayout({
         <ClientProviders>{children}</ClientProviders>
         <Footer />
         <Toaster position="bottom-right" richColors={true} />
-        <Script src="https://player.vimeo.com/api/player.js" />
       </body>
     </html>
   );

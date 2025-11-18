@@ -32,6 +32,8 @@ type Props = {
   buttonSize?: "default" | "sm" | "md" | "2md" | "lg" | "xl" | "icon";
   buttonClassName?: string;
   buttonTextClassName?: string;
+  arrowDownClassName?: string;
+  popoverAlign?: "center" | "start" | "end";
 };
 
 export default function FilterMultipleWithSearch({
@@ -42,7 +44,9 @@ export default function FilterMultipleWithSearch({
   setValue,
   buttonSize = "2md",
   buttonClassName,
-  buttonTextClassName
+  buttonTextClassName,
+  arrowDownClassName,
+  popoverAlign = "start"
 }: Props) {
   const [open, setOpen] = React.useState(false);
   const isFiltered = React.useMemo(() => value.length > 0, [value]);
@@ -66,11 +70,11 @@ export default function FilterMultipleWithSearch({
           <span className={cn("min-w-18 lg:min-w-auto", buttonTextClassName)}>
             {buttonLabel}
           </span>
-          <ChevronDown className="size-5" />
+          <ChevronDown className={cn("size-5", arrowDownClassName)} />
         </Button>
       </PopoverTrigger>
       <PopoverContent
-        align="start"
+        align={popoverAlign}
         className="min-w-[var(--radix-popover-trigger-width)] w-full p-0"
       >
         <Command className="p-1">
