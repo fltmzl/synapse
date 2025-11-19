@@ -18,7 +18,7 @@ import { MapPinIcon } from "@/icons/map-pin-icon";
 import { SortDescendingIcon } from "@/icons/sort-desc-icon";
 import { Enterprise } from "@/types/enterprise.type";
 import { ColumnDef } from "@tanstack/react-table";
-import { Span } from "next/dist/trace";
+import Link from "next/link";
 import { parseAsString, useQueryState } from "nuqs";
 
 export default function TopEnterpriseSection() {
@@ -67,13 +67,12 @@ export default function TopEnterpriseSection() {
               <BuildingIcon />
             </AvatarFallback>
           </Avatar>
-          {/*<Link
+          <Link
             href={`/company/${row.original.name}`}
             className="hover:underline"
           >
             {row.original.structure.name}
-          </Link>*/}
-          <div>{row.original.structure.name}</div>
+          </Link>
         </div>
       )
     },

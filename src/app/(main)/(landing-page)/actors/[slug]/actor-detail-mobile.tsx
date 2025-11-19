@@ -5,6 +5,7 @@ import PoliticalSection from "./sections/political-section";
 import EducationSection from "./sections/education-section";
 import AssociationSection from "./sections/association-section";
 import RelatedPersonalitySection from "./sections/related-personality-section";
+import NetworkConnectionSection from "./sections/network-connection-section";
 
 export default function ActorDetailMobile() {
   return (
@@ -14,7 +15,7 @@ export default function ActorDetailMobile() {
       <PoliticalSection />
       <EducationSection />
       <AssociationSection />
-      {/* <NetworkConnectionSection /> */}
+      <NetworkConnectionSection />
       <div className="pb-9"></div>
       <RelatedPersonalitySection />
     </div>

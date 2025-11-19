@@ -207,7 +207,7 @@ export default function CustomEdge({
           >
             {label}
             {/* Debug: tampilkan posisi */}
-            <span className="ml-2 text-[8px]">({edgePosition})</span>
+            {/*<span className="ml-2 text-[8px]">({edgePosition})</span>*/}
           </div>
         </EdgeLabelRenderer>
       )}

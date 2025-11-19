@@ -1,5 +1,10 @@
 "use client";
 
+import GeneralInfo from "@/app/(main)/(landing-page)/actors/[slug]/components/general-info";
+import useELK from "@/hooks/use-elk";
+import { ArrowRightIcon } from "@/icons/arrow-right-icon";
+import { BuildingIcon } from "@/icons/building-icon";
+import { MapPinIcon } from "@/icons/map-pin-icon";
 import { PlusIcon } from "@/icons/plus-icon";
 import { SearchIcons } from "@/icons/search-icon";
 import {
@@ -8,55 +13,54 @@ import {
   MarkerType,
   Node,
   ReactFlow,
+  ReactFlowInstance,
   addEdge,
   useEdgesState,
   useNodesState,
   useReactFlow
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
+import { ElkExtendedEdge, ElkNode } from "elkjs/lib/elk-api";
 import { MaximizeIcon, MinusIcon, XIcon } from "lucide-react";
-import {
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useMemo,
-  useState
-} from "react";
-import { Button } from "../ui/button";
-import { Card } from "../ui/card";
-import { Input } from "../ui/input";
-import { CenterNode } from "./custom-element/center-node";
-import CircleBlueNode from "./custom-element/circle-blue-node";
-import CustomEdge from "./custom-element/custom-edge";
-import FloatingConnectionLine from "./custom-element/floating-connection-line";
-import FloatingEdge from "./custom-element/floating-edge";
-import { GroupNode } from "./custom-element/group-node";
-import useELK from "@/hooks/use-elk";
+import { useCallback, useLayoutEffect, useMemo, useState } from "react";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger
 } from "../ui/accordion";
-import CircleNode from "./custom-element/nodes/circle-node";
-import { Label } from "../ui/label";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { Button } from "../ui/button";
+import { Card } from "../ui/card";
 import { Checkbox } from "../ui/checkbox";
-import RoundedCircleIcon from "./custom-element/nodes/icons/rounded-circle-icon";
-import RoundedTriangleIcon from "./custom-element/nodes/icons/rounded-triangle-icon";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import { CenterNode } from "./custom-element/center-node";
+import CircleBlueNode from "./custom-element/circle-blue-node";
+import CustomEdge from "./custom-element/custom-edge";
+import FloatingConnectionLine from "./custom-element/floating-connection-line";
+import FloatingEdge from "./custom-element/floating-edge";
+import { GroupNode } from "./custom-element/group-node";
+import DiamondIcon from "./custom-element/nodes/icons/diamond-icon";
 import HexagonIcon from "./custom-element/nodes/icons/hexagon-icon";
 import PentagonIcon from "./custom-element/nodes/icons/pentagon-icon";
-import DiamondIcon from "./custom-element/nodes/icons/diamond-icon";
-import Image from "next/image";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { BuildingIcon } from "@/icons/building-icon";
-import GeneralInfo from "@/app/(main)/(landing-page)/actors/[slug]/components/general-info";
-import { MapPinIcon } from "@/icons/map-pin-icon";
-import { ArrowRightIcon } from "@/icons/arrow-right-icon";
-import { ElkExtendedEdge, ElkNode } from "elkjs/lib/elk-api";
+import RoundedCircleIcon from "./custom-element/nodes/icons/rounded-circle-icon";
+import RoundedTriangleIcon from "./custom-element/nodes/icons/rounded-triangle-icon";
+import { cn } from "@/lib/utils";
 
 type Props = {
   initialNodes: Node[];
   initialEdges: Edge[];
+  children: (props: {
+    isInfoShowed: boolean;
+    setIsInfoShowed: React.Dispatch<React.SetStateAction<boolean>>;
+    selectedNode: string | null;
+    setSelectedNode: React.Dispatch<React.SetStateAction<string | null>>;
+    reactFlowInstance: ReactFlowInstance<Node, Edge>;
+  }) => React.ReactNode;
+  classNames?: Partial<{
+    container?: string;
+  }>;
 };
 
 const nodeTypes = {
@@ -70,7 +74,12 @@ const edgeTypes = {
   floating: FloatingEdge
 };
 
-export default function SpiderGraph({ initialEdges, initialNodes }: Props) {
+export default function SpiderGraph({
+  initialEdges,
+  initialNodes,
+  children,
+  classNames
+}: Props) {
   const [isInfoShowed, setIsInfoShowed] = useState(true);
   const elk = useELK();
 
@@ -165,7 +174,7 @@ export default function SpiderGraph({ initialEdges, initialNodes }: Props) {
       ),
     [setEdges]
   );
-  const { zoomIn, fitView, zoomOut } = useReactFlow();
+  const reactFlowInstance = useReactFlow();
   const [selectedNode, setSelectedNode] = useState<string | null>(null);
   const [selectedParentNodeId, setSelectedParentNodeId] = useState<
     string | null
@@ -230,7 +239,7 @@ export default function SpiderGraph({ initialEdges, initialNodes }: Props) {
         ({ nodes: layoutedNodes, edges: layoutedEdges }) => {
           setNodes(layoutedNodes as unknown as Node[]);
           setEdges(layoutedEdges as unknown as Edge[]);
-          fitView();
+          reactFlowInstance.fitView();
         }
       );
     },
@@ -247,7 +256,12 @@ export default function SpiderGraph({ initialEdges, initialNodes }: Props) {
   if (!elk) return <>Loading Spider...</>;
 
   return (
-    <div className="@container relative w-full h-[677px] lg:h-[403px] lg:aspect-video border-2 border-border rounded-2lg transition duration-1000">
+    <div
+      className={cn(
+        "relative w-full h-[677px] lg:h-[403px] lg:aspect-video border-2 border-border rounded-2lg transition duration-1000",
+        classNames?.container
+      )}
+    >
       <ReactFlow
         fitView
         fitViewOptions={{
@@ -290,7 +304,15 @@ export default function SpiderGraph({ initialEdges, initialNodes }: Props) {
         />
       </ReactFlow>
 
-      <div className="absolute top-4 left-4 w-[290px]">
+      {children({
+        isInfoShowed,
+        setIsInfoShowed,
+        selectedNode,
+        setSelectedNode,
+        reactFlowInstance
+      })}
+
+      {/*<div className="absolute top-4 left-4 w-[290px]">
         <div className="relative">
           <Input placeholder="Find connection" className="h-10 pl-4 pr-13" />
           <Button
@@ -320,7 +342,7 @@ export default function SpiderGraph({ initialEdges, initialNodes }: Props) {
       </div>
 
       {selectedNode && (
-        <div className="absolute top-4 left-4 rounded-lg bg-background border w-full max-w-[300px] z-[2]">
+        <div className="absolute top-4 left-4 rounded-lg bg-background border w-full max-w-[300px] z-[2] @xl: bg-blue-400">
           <div className="p-4">
             <div>
               <Avatar className="w-10 h-10 rounded-sm border">
@@ -504,7 +526,7 @@ export default function SpiderGraph({ initialEdges, initialNodes }: Props) {
         >
           <MaximizeIcon />
         </Button>
-      </div>
+      </div>*/}
     </div>
   );
 }
