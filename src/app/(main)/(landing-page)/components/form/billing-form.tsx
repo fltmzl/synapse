@@ -25,7 +25,6 @@ export default function BillingForm() {
 
   return (
     <div className="space-y-6">
-      {/* Subscription */}
       <div>
         <h3 className="font-medium mb-2">Offre</h3>
         <Card className="p-4 rounded-sm">

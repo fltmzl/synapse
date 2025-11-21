@@ -105,7 +105,6 @@ export default function AdministrationSimilars() {
             )}
           </div>
 
-          {/* Tombol panah di bawah (mobile) */}
           <div className="flex gap-4 mt-6">
             <button
               onClick={() => scrollMobile("left")}

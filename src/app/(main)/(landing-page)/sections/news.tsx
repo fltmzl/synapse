@@ -2,14 +2,13 @@ import { Title } from "@/components/typography/title";
 import { Button } from "@/components/ui/button";
 import VideoPlayer from "@/components/video-player";
 import { newsData } from "@/data/news-data";
-import NewsCard from "../components/card/news-card";
 import Link from "next/link";
+import NewsCard from "../components/card/news-card";
 
 export default function NewsSection() {
   return (
     <div className="bg-background">
       <section className="w-full flex flex-col gap-10 lg:gap-16 pt-0 pb-12 lg:pb-25 px-6 max-w-7xl mx-auto">
-        {/* Banner */}
         <div className="w-full relativ flex flex-col gap-8">
           <VideoPlayer
             buttonPlayerType="largeBlur"
@@ -39,7 +38,6 @@ export default function NewsSection() {
           </div>
         </div>
 
-        {/* News Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 ">
           {newsData.slice(0, 3).map((news, index) => (
             <NewsCard

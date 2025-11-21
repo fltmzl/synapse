@@ -15,17 +15,15 @@ import PostList from "@/components/post-list";
 
 export default function AllNews() {
   const [query, setQuery] = useState("");
-
-  const sortBy = [
-    { label: "Date de parution", value: "Date de parution" },
-    { label: "Oldest", value: "Oldest" },
-    { label: "Le plus vu", value: "Le plus vu" },
-    { label: "Most Popular", value: "Most Popular" },
-    { label: "Editor's Pick", value: "Editor's Pick" }
+ const sortBy = [
+    { label: "Nouveauté", value: "Nouveauté" },
+    { label: "Durée", value: "Durée" },
+    { label: "Popularité", value: "Popularité" },
+    { label: "Pertinence", value: "Pertinence" }
   ];
   const [sortDate, setSortDate] = useQueryState(
     "sortDate",
-    parseAsString.withDefault("Date de parution")
+    parseAsString.withDefault("Nouveauté")
   );
 
   const [category, setCategory] = useQueryState(

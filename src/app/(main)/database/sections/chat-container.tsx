@@ -1,12 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
 import { P } from "@/components/typography/paragraph";
-import FindData from "@/components/find-data";
-import { ChatBubble } from "./chat-bubble";
 import SectionTitle from "@/components/typography/section-title";
 import { Message } from "@/types/database.type";
+import { ChatBubble } from "./chat-bubble";
 
 type Props = {
   title?: string;

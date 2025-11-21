@@ -1,21 +1,21 @@
 "use client";
 
-import { useState } from "react";
-import Image from "next/image";
-import { useParams } from "next/navigation";
-import { Button } from "@/components/ui/button";
 import SectionContainer from "@/components/container/section-container";
+import { Button } from "@/components/ui/button";
 import { newsData } from "@/data/news-data";
 import { ArrowLeftIcon } from "@/icons/arrow-left-icon";
 import { ArrowRightIcon } from "@/icons/arrow-right-icon";
-import Link from "next/link";
-import { LinkedinIconFlat } from "@/icons/linkedin-icon-flat";
-import { InstagramIconFlat } from "@/icons/instagram-icon-flat";
 import { FacebookFillIcon } from "@/icons/facebook-fill-icon";
+import { InstagramIconFlat } from "@/icons/instagram-icon-flat";
+import { LinkedinIconFlat } from "@/icons/linkedin-icon-flat";
 import { cn } from "@/lib/utils";
+import Image from "next/image";
+import Link from "next/link";
+import { useParams } from "next/navigation";
+import { useState } from "react";
 
 export default function ArticleContent() {
-  const { slug } = useParams(); // ambil slug dari URL
+  const { slug } = useParams();
   const article = newsData.find((item) => item.slug === slug);
 
   const [activeImage, setActiveImage] = useState(0);
@@ -51,7 +51,6 @@ export default function ArticleContent() {
                 {article.author}
               </p>
 
-              {/* Garis pemisah */}
               <span className="w-px h-5 bg-muted-foreground/30" />
 
               <p className="text-lg font-regular leading-[140%]">
@@ -60,9 +59,7 @@ export default function ArticleContent() {
             </div>
           </header>
 
-          {/* Hero Image with arrows */}
           <div className="relative w-full flex flex-col gap-4">
-            {/* Gambar utama */}
             <div className="relative w-full h-[200px] lg:h-[600px] overflow-hidden rounded-md">
               <Image
                 src={article.images[activeImage]}
@@ -72,7 +69,6 @@ export default function ArticleContent() {
                 priority
               />
 
-              {/* Navigasi kiri-kanan (overlay di atas gambar) */}
               {article.images.length > 1 && (
                 <>
                   <button
@@ -92,7 +88,6 @@ export default function ArticleContent() {
               )}
             </div>
 
-            {/* Thumbnail carousel */}
             {article.images.length > 1 && (
               <div className="flex gap-2 lg:gap-4 overflow-x-auto hide-scrollbar">
                 {article.images.map((img, index) => (
@@ -122,7 +117,6 @@ export default function ArticleContent() {
         </div>
 
         <div className="border-none shadow-none lg:px-[180px] flex flex-col gap-8">
-          {/* Konten artikel pakai prose */}
           <article
             className={cn(
               "prose prose-neutral dark:prose-invert max-w-none",
@@ -140,7 +134,6 @@ export default function ArticleContent() {
             dangerouslySetInnerHTML={{ __html: article.content }}
           />
 
-          {/* Bagian share button */}
           <div className="flex items-center gap-4 text-muted-foreground">
             <span className="text-lg leading-[140%]">Share</span>
             <div className="flex gap-2">
@@ -154,11 +147,10 @@ export default function ArticleContent() {
 
                 const facebookShare = `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`;
                 const linkedinShare = `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`;
-                const instagramShare = `https://www.instagram.com/?url=${encodedUrl}`; // Instagram belum punya direct share resmi
+                const instagramShare = `https://www.instagram.com/?url=${encodedUrl}`; 
 
                 return (
                   <>
-                    {/* Facebook */}
                     <Button
                       variant="outline"
                       size="icon"
@@ -174,7 +166,6 @@ export default function ArticleContent() {
                       </Link>
                     </Button>
 
-                    {/* Instagram */}
                     <Button
                       variant="outline"
                       size="icon"
@@ -190,7 +181,6 @@ export default function ArticleContent() {
                       </Link>
                     </Button>
 
-                    {/* LinkedIn */}
                     <Button
                       variant="outline"
                       size="icon"

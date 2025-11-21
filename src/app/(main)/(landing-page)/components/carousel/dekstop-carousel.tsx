@@ -1,13 +1,12 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
-import clsx from "clsx";
 import SectionTitle from "@/components/typography/section-title";
 import { productionData } from "@/data/news-data";
-import ProductionCard from "../card/production-card";
 import { ArrowLeftIcon } from "@/icons/arrow-left-icon";
 import { ArrowRightIcon } from "@/icons/arrow-right-icon";
-import { cn } from "@/lib/utils";
+import clsx from "clsx";
+import { useEffect, useRef, useState } from "react";
+import ProductionCard from "../card/production-card";
 
 export default function DesktopCarousel() {
   const desktopRef = useRef<HTMLDivElement | null>(null);
@@ -71,7 +70,7 @@ export default function DesktopCarousel() {
       if (cards.length === 0) return;
 
       const cardWidth = cards[0].clientWidth;
-      const gap = 24; // sesuai gap-6
+      const gap = 24; 
       const totalCardsWidth = cards.length * (cardWidth + gap) - gap;
       const visibleCards = Math.max(1, Math.floor(el.clientWidth / cardWidth));
       const pageWidth = visibleCards * (cardWidth + gap);
@@ -80,7 +79,7 @@ export default function DesktopCarousel() {
 
       const rawIndex = Math.round(el.scrollLeft / pageWidth);
       const nearRightEnd =
-        el.scrollLeft + el.clientWidth >= totalCardsWidth - 10; // batas real tanpa spacer
+        el.scrollLeft + el.clientWidth >= totalCardsWidth - 10; 
 
       const newIndex = nearRightEnd
         ? maxIndex
@@ -151,7 +150,6 @@ export default function DesktopCarousel() {
           />
         ))}
 
-        {/* Spacer kanan biar gak nempel layar */}
         <div className="flex-shrink-0 w-[24px]" />
       </div>
     </div>

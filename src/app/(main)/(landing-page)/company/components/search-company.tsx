@@ -15,12 +15,12 @@ export default function SearchCompany({
   const [searchValue, setSearchValue] = useQueryState("search");
 
   const filters = {
-    region: [
+    territoire: [
       { label: "Martinique", value: "Martinique" },
       { label: "Guadeloupe", value: "Guadeloupe" },
       { label: "Réunion", value: "Réunion" },
       { label: "Mayotte", value: "Mayotte" },
-      { label: "French Guiana", value: "French Guiana" }
+      { label: "Guyane", value: "Guyane" }
     ],
     sector: [
       { label: "Government", value: "Government" },
@@ -35,8 +35,8 @@ export default function SearchCompany({
     ]
   };
 
-  const [region, setRegion] = useQueryState(
-    "region",
+  const [territoire, setTerritoire] = useQueryState(
+    "territoire",
     parseAsArrayOf(parseAsString).withDefault([])
   );
   const [sector, setSector] = useQueryState(
@@ -79,11 +79,11 @@ export default function SearchCompany({
               buttonSize="sm"
               buttonClassName="py-2 px-3 w-fit"
               buttonTextClassName="min-w-auto"
-              buttonLabel="Région"
-              setValue={setRegion}
-              value={region}
+              buttonLabel="Territoire"
+              setValue={setTerritoire}
+              value={territoire}
               placeholder="Search location"
-              listItems={filters.region}
+              listItems={filters.territoire}
             />
             <FilterMultipleWithSearch
               buttonSize="sm"

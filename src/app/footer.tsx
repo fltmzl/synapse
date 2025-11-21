@@ -58,7 +58,7 @@ export default function Footer() {
 
             <div className="lg:basis-7/12">
               <h4 className="text-white mb-4 text-sm lg:text-base">
-                Categories
+                Catégories
               </h4>
 
               <div className="flex flex-col lg:flex-row lg:justify-between gap-4 lg:gap-20">

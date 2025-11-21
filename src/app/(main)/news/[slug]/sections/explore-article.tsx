@@ -1,19 +1,18 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
-import clsx from "clsx";
-import { newsData } from "@/data/news-data";
 import SectionContainer from "@/components/container/section-container";
-import ExploreCard from "../card/explore-card";
+import { newsData } from "@/data/news-data";
 import { ArrowLeftIcon } from "@/icons/arrow-left-icon";
 import { ArrowRightIcon } from "@/icons/arrow-right-icon";
+import clsx from "clsx";
+import { useEffect, useRef, useState } from "react";
+import ExploreCard from "../card/explore-card";
 
 export default function ExploreArticle() {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [activeDot, setActiveDot] = useState(0);
   const [dotCount, setDotCount] = useState(1);
 
-  // Scroll kanan / kiri
   const scroll = (dir: "left" | "right") => {
     const el = containerRef.current;
     if (!el) return;
@@ -24,7 +23,6 @@ export default function ExploreArticle() {
     });
   };
 
-  // Hitung jumlah dots
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
@@ -32,7 +30,6 @@ export default function ExploreArticle() {
     const updateDots = () => {
       const scrollWidth = el.scrollWidth;
       const viewWidth = el.clientWidth;
-      // ⛔ Fix: pastikan totalPages minimal 1 (supaya dots tidak hilang)
       const totalPages = Math.max(1, Math.ceil(scrollWidth / viewWidth));
       setDotCount(totalPages);
     };
@@ -42,7 +39,6 @@ export default function ExploreArticle() {
     return () => window.removeEventListener("resize", updateDots);
   }, []);
 
-  // Update dot aktif saat scroll
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
@@ -68,14 +64,11 @@ export default function ExploreArticle() {
       "
     >
       <div className="w-full flex flex-col gap-6 lg:gap-16 3xl:max-w-[1400px] 3xl:mx-auto">
-        {/* TITLE */}
         <h1 className="font-medium text-2xl lg:text-[40px] text-left leading-[110%] tracking-[-0.03em]">
           Explore more articles
         </h1>
 
-        {/* CAROUSEL */}
         <div className="w-full flex flex-col gap-10 3xl:max-w-[1400px] 3xl:mx-auto 3xl:items-center pr-6">
-          {/* SCROLL AREA */}
           <div
             ref={containerRef}
             className="flex gap-6 overflow-x-auto scroll-smooth snap-x snap-mandatory hide-scrollbar"
@@ -91,9 +84,7 @@ export default function ExploreArticle() {
             ))}
           </div>
 
-          {/* DOTS + ARROWS */}
           <div className="flex justify-between items-center w-full pr-10">
-            {/* Dots */}
             <div className="flex gap-2">
               {Array.from({ length: dotCount }).map((_, i) => (
                 <span
@@ -106,7 +97,6 @@ export default function ExploreArticle() {
               ))}
             </div>
 
-            {/* Arrows */}
             <div className="flex gap-3">
               <button
                 onClick={() => scroll("left")}

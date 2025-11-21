@@ -1,12 +1,7 @@
 import PostList from "@/components/post-list";
-import { H4 } from "@/components/typography/h4";
 import { Button } from "@/components/ui/button";
-import { businessPosts } from "@/data/business-data";
 import { newsData } from "@/data/news-data";
-import { ArrowUpRightIcon } from "@/icons/arrow-up-right";
 import { ChevronDown } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
 
 export default function Opportunities() {
   return (
@@ -28,7 +23,7 @@ Opportunités          </h1>
             size="default"
             className="text-base leading-[130%] tracking-[-0.02em] px-5 py-[10px] w-max"
           >
-            More articles
+Plus d&apos;articles
             <ChevronDown className="size-5 text-foreground" />
           </Button>
         </div>

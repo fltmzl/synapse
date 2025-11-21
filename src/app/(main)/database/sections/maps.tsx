@@ -11,7 +11,7 @@ export default function DataMaps() {
             Principaux chiffres relatifs à un territoire
           </p>
         </div>
-        <DatabaseMaps />
+        <DatabaseMaps showMoreBtn={false} />
       </div>
     </section>
   );

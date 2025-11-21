@@ -52,12 +52,9 @@ export default function SocialNetworkNews() {
                       isFirstRow && "pt-6 lg:pt-0",
                       !isLastItem && "pb-6 lg:pb-0",
                       // === DESKTOP ===
-                      // Tambahkan border bawah antar row
                       rowIndex !== rows.length - 1 &&
                         "lg:border-b lg:border-border lg:pb-10",
-                      // Tambahkan jarak atas untuk semua item di row kedua ke bawah
                       !isFirstRow && "lg:pt-8",
-                      // Spasi horizontal antar kolom
                       colIndex === 0 ? "lg:pr-8" : "lg:pl-8"
                     )}
                   >

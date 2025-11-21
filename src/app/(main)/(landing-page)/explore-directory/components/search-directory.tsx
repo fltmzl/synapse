@@ -1,10 +1,8 @@
 "use client";
 
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { Input } from "@/components/ui/input";
 import { SearchIcon, X } from "lucide-react";
-import { on } from "events";
 import { useQueryState } from "nuqs";
 
 export default function SearchDirectory({
@@ -14,7 +12,7 @@ export default function SearchDirectory({
 }) {
   const [searchValue, setSearchValue] = useQueryState("search");
   const handleChange = (value: string) => {
-    setSearchValue(value || null); // kosong → hapus param dari URL
+    setSearchValue(value || null); 
   };
 
   const handleSubmit = () => {
@@ -35,7 +33,6 @@ export default function SearchDirectory({
         onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
         className="relative p-0 border-none focus-visible:ring-0 focus-visible:ring-offset-0"
       />
-      {/* Tombol clear (X) */}
       {searchValue && (
         <button
           onClick={clearInput}
@@ -46,7 +43,6 @@ export default function SearchDirectory({
         </button>
       )}
 
-      {/* Tombol Search */}
       <Button
         onClick={handleSubmit}
         className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md bg-primary hover:bg-primary/90 hover:border-primary w-12 h-12 flex items-center justify-center"

@@ -82,7 +82,6 @@ export function ChatBubble({
           </a>
         )}
 
-        {/* Source link */}
         {sourceName && sourceUrl && (
           <a
             href={sourceUrl}

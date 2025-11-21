@@ -19,7 +19,11 @@ import Image from "next/image";
 import { databaseData } from "@/data/database-data";
 import Link from "next/link";
 
-export default function DatabaseMaps() {
+export default function DatabaseMaps({
+  showMoreBtn = true,
+}: {
+  showMoreBtn?: boolean;
+}) {
   const tabs = databaseData.map((data) => data.title);
   const [activeTab, setActiveTab] = useState<string>(tabs[0]);
   const [year, setYear] = useState("2024");
@@ -106,12 +110,15 @@ export default function DatabaseMaps() {
                   <span className="text-sm">Download slide</span>
                 </Button>
                 <button className="gap-2 text-primary text-sm font-medium leading-5 flex items-center py-[10px] px-4">
-                  <Link href="/database">
-                    <span className="flex items-center gap-2">
-                      Plus d&apos;informations
-                      <ArrowRightBoldIcon className="w-4 h-4 mt-0.5" />
-                    </span>
-                  </Link>
+                  {showMoreBtn && (
+                <Link
+                  href="/database"
+                  className="gap-2 text-primary text-sm font-medium leading-5 flex items-center py-[10px] px-4"
+                >
+                  Plus d&apos;informations
+                  <ArrowRightBoldIcon className="w-4 h-4 mt-0.5" />
+                </Link>
+              )}
                 </button>
               </div>
             </div>

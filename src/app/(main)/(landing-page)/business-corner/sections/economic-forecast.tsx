@@ -18,7 +18,6 @@ export default function EconomicForecastsPage() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // tampilkan 3 data kalau mobile, 6 data kalau desktop
   const displayedForecasts = isMobile
     ? economicForecasts.slice(0, 3)
     : economicForecasts.slice(0, 6);

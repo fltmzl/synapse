@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import ChatContainer from "./chat-container";
 import FindData from "@/components/find-data";
 import { Button } from "@/components/ui/button";
 import { Message } from "@/types/database.type";
+import { useState } from "react";
+import ChatContainer from "./chat-container";
 
 type Props = {
   initialShowPopular: boolean;

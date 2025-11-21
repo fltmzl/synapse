@@ -1,18 +1,12 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { User } from "lucide-react";
-import { cn } from "@/lib/utils";
-import SectionTitle from "@/components/typography/section-title";
 import { H4 } from "@/components/typography/h4";
-import { P } from "@/components/typography/paragraph";
 import { infoOptions } from "@/data/find-data";
 import { ArrowUpRightIcon } from "@/icons/arrow-up-right";
 import { BuildingBankIcon } from "@/icons/building-bank-icon";
 import { BuildingSkyScraperIcon } from "@/icons/building-skyscraper-icon";
-import FindData from "@/components/find-data";
-import { ChatBubble } from "../../database/sections/chat-bubble";
-import ChatContainer from "../../database/sections/chat-container";
+import { cn } from "@/lib/utils";
+import { User } from "lucide-react";
 import ChatWrapper from "../../database/sections/chat-wrapper";
 
 export default function FindDataPage() {
@@ -23,7 +17,6 @@ export default function FindDataPage() {
 
         <hr className="w-full max-w-[826px] mx-auto" />
 
-        {/* Specific Info Section */}
         <div className="text-center flex flex-col gap-8 items-center">
           <H4>La cartographie des territoires</H4>
 
@@ -36,7 +29,6 @@ export default function FindDataPage() {
                 )}
               >
                 <div className="p-5 flex flex-col justify-between h-full gap-6">
-                  {/* Icon + Arrow */}
                   <div className="flex items-start justify-between">
                     <div
                       className={cn(
@@ -63,7 +55,6 @@ export default function FindDataPage() {
                     </div>
                   </div>
 
-                  {/* Text */}
                   <div className="text-left flex flex-col gap-2">
                     <h4 className="text-[18px] font-medium text-foreground leading-6 tracking-[-0.02em]">
                       {opt.title}

@@ -18,31 +18,31 @@ interface FilterOption {
 }
 
 interface Filters {
-  territory: FilterOption[];
-  role: FilterOption[];
-  category: FilterOption[];
+  territoire: FilterOption[];
+  // role: FilterOption[];
+  catégorie: FilterOption[];
 }
 
 interface FilterPopoverProps {
   filters: Filters;
-  territory: string[];
-  setTerritory: (value: string[]) => void;
-  role: string[];
-  setRole: (value: string[]) => void;
-  category: string[];
-  setCategory: (value: string[]) => void;
+  territoire: string[];
+  setTerritoire: (value: string[]) => void;
+  // role: string[];
+  // setRole: (value: string[]) => void;
+  catégorie: string[];
+  setCatégorie  : (value: string[]) => void;
   activeValues: string[];
   clearAll: () => void;
 }
 
 export default function FilterPopover({
   filters,
-  territory,
-  setTerritory,
-  role,
-  setRole,
-  category,
-  setCategory,
+  territoire,
+  setTerritoire,
+  // role,
+  // setRole,
+  catégorie,
+  setCatégorie,
   activeValues,
   clearAll
 }: FilterPopoverProps) {
@@ -88,23 +88,23 @@ export default function FilterPopover({
         <div className="space-y-1">
           <NestedGroup
             label="Territoire"
-            options={filters.territory}
-            selected={territory}
-            setSelected={setTerritory}
+            options={filters.territoire}
+            selected={territoire}
+            setSelected={setTerritoire}
           />
 
-          <NestedGroup
+          {/* <NestedGroup
             label="Niveau"
             options={filters.role}
             selected={role}
             setSelected={setRole}
-          />
+          /> */}
 
           <NestedGroup
             label="Domaine"
-            options={filters.category}
-            selected={category}
-            setSelected={setCategory}
+            options={filters.catégorie}
+            selected={catégorie}
+            setSelected={setCatégorie}
           />
         </div>
       </PopoverContent>

@@ -4,12 +4,8 @@ import { DirectoryItem } from "@/types/directory.type";
 import {
   ExternalLink,
   Globe,
-  Mail,
   MailIcon,
   MapPin,
-  Phone,
-  PhoneCall,
-  PhoneCallIcon,
   PhoneIcon
 } from "lucide-react";
 import Link from "next/link";

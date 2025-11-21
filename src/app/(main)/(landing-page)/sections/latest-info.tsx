@@ -5,7 +5,7 @@ import { P } from "@/components/typography/paragraph";
 import SectionTitle from "@/components/typography/section-title";
 import { Button } from "@/components/ui/button";
 import { lastInfo } from "@/data/news-data";
-import { CategoryNews, NewsData } from "@/types/news.type";
+import { CategoryNews } from "@/types/news.type";
 import { Tabs, TabsContent } from "@radix-ui/react-tabs";
 import Image from "next/image";
 import Link from "next/link";
@@ -36,7 +36,6 @@ export default function LatestInfo() {
               />
             </div>
 
-            {/* Tabs Content */}
             {Object.entries(groupedNews).map(([category, items]) => (
               <TabsContent key={category} value={category}>
                 <div className="pt-8 grid grid-cols-1 gap-8 lg:grid-cols-[1fr_1.2fr_1fr] items-start">
@@ -65,7 +64,6 @@ export default function LatestInfo() {
                       />
                     </div>
 
-                    {/* Sub-articles (right of bottom row on md; right column on lg) */}
                     <div className="flex flex-col h-full divide-y divide-border">
                       {items.slice(1).map((news, i) => (
                         <article

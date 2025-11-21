@@ -24,7 +24,6 @@ export default function RequestService() {
               </h1>
 
               <div className="flex flex-col gap-5">
-                {/* Phone */}
                 <Link
                   href="tel:+33123456789"
                   className="flex items-start gap-4   hover:text-primary transition-colors"
@@ -48,7 +47,6 @@ export default function RequestService() {
                   </div>
                 </Link>
 
-                {/* Email */}
                 <Link
                   href="mailto:contact@synapse.fr"
                   className="flex items-start gap-4   hover:text-primary transition-colors"
@@ -69,7 +67,6 @@ export default function RequestService() {
                   </div>
                 </Link>
 
-                {/* Location */}
                 <Link
                   href="https://maps.google.com?q=123+Avenue+de+la+République,+Paris,+France"
                   target="_blank"

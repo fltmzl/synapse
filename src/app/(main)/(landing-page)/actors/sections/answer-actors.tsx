@@ -1,48 +1,45 @@
 "use client";
 
-import { useState } from "react";
-import Image from "next/image";
-import {
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectItem
-} from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
-import { X } from "lucide-react";
 import SidebarFilters from "@/components/filter-sidebar";
-import { parseAsArrayOf, parseAsString, useQueryState } from "nuqs";
+import NoResult from "@/components/no-result";
+import Pagination from "@/components/pagination";
 import SelectSingleItem from "@/components/select-single-item";
+import { Button } from "@/components/ui/button";
 import {
   Drawer,
   DrawerClose,
   DrawerContent,
-  DrawerHeader,
   DrawerTitle,
   DrawerTrigger
 } from "@/components/ui/drawer";
-import Pagination from "@/components/pagination";
-import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
-import { ArrowRightBoldIcon } from "@/icons/arrow-right-bold-icon";
-import { SortDescendingIcon } from "@/icons/sort-desc-icon";
-import { FilterIcon } from "@/icons/filter-icon";
-import { useAutoCloseDrawer } from "@/hooks/use-auto-close-drawer";
-import NoResult from "@/components/no-result";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger
+} from "@/components/ui/select";
 import { DEFAULT_PAGE_SIZE } from "@/constants/pagination.constant";
+import { useAutoCloseDrawer } from "@/hooks/use-auto-close-drawer";
+import { ArrowRightBoldIcon } from "@/icons/arrow-right-bold-icon";
+import { FilterIcon } from "@/icons/filter-icon";
+import { SortDescendingIcon } from "@/icons/sort-desc-icon";
+import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
+import { X } from "lucide-react";
 import Link from "next/link";
+import { parseAsArrayOf, parseAsString, useQueryState } from "nuqs";
+import { useState } from "react";
 
 export default function AnswerActors() {
-  const [territory, setTerritory] = useQueryState(
-    "territory",
+  const [territoire, setTerritoire] = useQueryState(
+    "territoire",
     parseAsArrayOf(parseAsString).withDefault([])
   );
   // const [role, setRole] = useQueryState(
   //   "role",
   //   parseAsArrayOf(parseAsString).withDefault([])
   // );
-  const [category, setCategory] = useQueryState(
-    "category",
+  const [catégorie, setCatégorie] = useQueryState(
+    "catégorie",
     parseAsArrayOf(parseAsString).withDefault([])
   );
   const [sort, setSort] = useQueryState(
@@ -62,86 +59,86 @@ export default function AnswerActors() {
       name: "Marie Claire",
       title: "Minister of Trade",
       affiliation: "Government of Martinique",
-      territory: "Martinique",
-      category: "Government",
+      territoire: "Martinique",
+      catégorie: "Government",
       image: "/images/avatar1.jpg"
     },
     {
       name: "Dubois Henri",
       title: "CEO, BlueWave Logistics",
       affiliation: "Martinique Business Association",
-      territory: "Martinique",
-      category: "Economy",
+      territoire: "Martinique",
+      catégorie: "Economy",
       image: "/images/avatar2.jpg"
     },
     {
       name: "Marie Lefevre",
       title: "Director of Education",
       affiliation: "Ministry of Education",
-      territory: "Guadeloupe",
-      category: "Education",
+      territoire: "Guadeloupe",
+      catégorie: "Education",
       image: "/images/avatar3.jpg"
     },
     {
       name: "Marie Bernard",
       title: "Chief Sustainability Officer",
       affiliation: "EcoFuture Foundation",
-      territory: "Réunion",
-      category: "Environment",
+      territoire: "Réunion",
+      catégorie: "Environment",
       image: "/images/avatar4.jpg"
     },
     {
       name: "Fontaine Lopez",
       title: "Minister of Health",
       affiliation: "Health Department of Mayotte",
-      territory: "Mayotte",
-      category: "Health",
+      territoire: "Mayotte",
+      catégorie: "Health",
       image: "/images/avatar5.jpg"
     },
     {
       name: "Claire Dubois",
       title: "President, Regional Chamber of Commerce",
       affiliation: "French Guiana Trade Council",
-      territory: "French Guiana",
-      category: "Business Leaders",
+      territoire: "French Guiana",
+      catégorie: "Business Leaders",
       image: "/images/avatar6.jpg"
     },
     {
       name: "Jean Martin",
       title: "Environmental Policy Advisor",
       affiliation: "Ministry of Environment",
-      territory: "Guadeloupe",
-      category: "Environment",
+      territoire: "Guadeloupe",
+      catégorie: "Environment",
       image: "/images/avatar7.jpg"
     },
     {
       name: "Sophie Laurent",
       title: "Dean, University of Réunion",
       affiliation: "University of Réunion",
-      territory: "Réunion",
-      category: "Education",
+      territoire: "Réunion",
+      catégorie: "Education",
       image: "/images/avatar8.jpg"
     },
     {
       name: "Paul Dubois",
       title: "CEO, Oceanic Exports",
       affiliation: "Mayotte Business Network",
-      territory: "Mayotte",
-      category: "Business Leaders",
+      territoire: "Mayotte",
+      catégorie: "Business Leaders",
       image: "/images/avatar9.jpg"
     },
     {
       name: "Claire Bernard",
       title: "Public Health Director",
       affiliation: "Government Health Agency",
-      territory: "French Guiana",
-      category: "Health",
+      territoire: "French Guiana",
+      catégorie: "Health",
       image: "/images/avatar10.jpg"
     }
   ];
 
   const filters = {
-    territory: [
+    territoire: [
       { label: "Martinique", value: "Martinique" },
       { label: "Guadeloupe", value: "Guadeloupe" },
       { label: "Réunion", value: "Réunion" },
@@ -152,7 +149,7 @@ export default function AnswerActors() {
     //   { label: "Government", value: "Government" },
     //   { label: "Business Leaders", value: "Business Leaders" }
     // ],
-    category: [
+    catégorie: [
       { label: "Economy", value: "Economy" },
       { label: "Government", value: "Government" },
       { label: "Health", value: "Health" },
@@ -169,30 +166,30 @@ export default function AnswerActors() {
   ];
 
   const activeValues = [
-    ...(territory ?? []),
+    ...(territoire ?? []),
     // ...(role ?? []),
-    ...(category ?? [])
+    ...(catégorie ?? [])
   ];
 
   const removeActiveValue = (val: string) => {
-    if ((territory ?? []).includes(val)) {
-      setTerritory((prev) => (prev ?? []).filter((v) => v !== val));
+    if ((territoire ?? []).includes(val)) {
+      setTerritoire((prev) => (prev ?? []).filter((v) => v !== val));
       return;
     }
     // if ((role ?? []).includes(val)) {
     //   setRole((prev) => (prev ?? []).filter((v) => v !== val));
     //   return;
     // }
-    if ((category ?? []).includes(val)) {
-      setCategory((prev) => (prev ?? []).filter((v) => v !== val));
+    if ((catégorie ?? []).includes(val)) {
+      setCatégorie((prev) => (prev ?? []).filter((v) => v !== val));
       return;
     }
   };
 
   const clearAll = () => {
-    setTerritory(null);
+    setTerritoire(null);
     // setRole(null);
-    setCategory(null);
+    setCatégorie(null);
   };
 
   const filteredPeople = people.filter((p) => {
@@ -202,15 +199,15 @@ export default function AnswerActors() {
       p.title.toLowerCase().includes(search.toLowerCase());
 
     const matchTerritory =
-      territory.length === 0 ||
-      territory.some((t) => removePrefix(t) === p.territory);
+      territoire.length === 0 ||
+      territoire.some((t) => removePrefix(t) === p.territoire);
 
     // const matchRole =
     //   role.length === 0 || role.some((r) => removePrefix(r) === p.category);
 
     const matchCategory =
-      category.length === 0 ||
-      category.some((c) => removePrefix(c) === p.category);
+      catégorie.length === 0 ||
+      catégorie.some((c) => removePrefix(c) === p.catégorie);
 
     return matchSearch && matchTerritory && matchCategory;
   });
@@ -239,9 +236,9 @@ export default function AnswerActors() {
               Recherche par
             </h3>
             <SidebarFilters
-              groups={{ territory: filters.territory }}
-              value={territory ?? []}
-              setValue={setTerritory}
+              groups={{ territoire: filters.territoire }}
+              value={territoire ?? []}
+              setValue={setTerritoire}
             />
             {/* <SidebarFilters
               groups={{ role: filters.role }}
@@ -249,16 +246,14 @@ export default function AnswerActors() {
               setValue={setRole}
             /> */}
             <SidebarFilters
-              groups={{ category: filters.category }}
-              value={category ?? []}
-              setValue={setCategory}
+              groups={{ catégorie: filters.catégorie }}
+              value={catégorie ?? []}
+              setValue={setCatégorie}
               isLast
             />
           </aside>
 
-          {/* MAIN CONTENT */}
           <main className="flex-1">
-            {/* HEADER */}
             <div className="flex items-center justify-between gap-3 flex-wrap">
               <div className="flex gap-1 items-center">
                 <p className="text-base text-muted-foreground">
@@ -325,9 +320,9 @@ export default function AnswerActors() {
                     </DrawerTitle>
                     <div className=" max-h-[75vh] overflow-y-auto border-b">
                       <SidebarFilters
-                        groups={{ territory: filters.territory }}
-                        value={territory ?? []}
-                        setValue={setTerritory}
+                        groups={{ territoire: filters.territoire }}
+                        value={territoire ?? []}
+                        setValue={setTerritoire}
                       />
                       {/* <SidebarFilters
                         groups={{ role: filters.role }}
@@ -335,9 +330,9 @@ export default function AnswerActors() {
                         setValue={setRole}
                       /> */}
                       <SidebarFilters
-                        groups={{ category: filters.category }}
-                        value={category ?? []}
-                        setValue={setCategory}
+                        groups={{ catégorie: filters.catégorie }}
+                        value={catégorie ?? []}
+                        setValue={setCatégorie}
                       />
                     </div>
 
@@ -477,7 +472,7 @@ export default function AnswerActors() {
                             Territoire
                           </div>
                           <div className="font-regular text-foreground text-base leading-[110%] tracking-[-0.01em]">
-                            {person.territory}
+                            {person.territoire}
                           </div>
                         </div>
 
@@ -486,7 +481,7 @@ export default function AnswerActors() {
                             Catégorie
                           </div>
                           <div className="font-regular text-foreground text-base leading-[110%] tracking-[-0.01em]">
-                            {person.category}
+                            {person.catégorie}
                           </div>
                         </div>
                       </div>

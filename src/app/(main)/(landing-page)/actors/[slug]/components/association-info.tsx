@@ -1,9 +1,7 @@
 import { ArrowUpRightIcon } from "@/icons/arrow-up-right";
-import { BuildingIcon } from "@/icons/building-icon";
 import { BuildingSkyScraperIcon } from "@/icons/building-skyscraper-icon";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
 
 type Props = {
   title?: string;

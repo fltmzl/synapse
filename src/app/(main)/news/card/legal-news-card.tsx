@@ -35,7 +35,6 @@ export default function LegalCard({
     <article>
       <Card className="gap-0 py-0 overflow-hidden transition-all border rounded-md  w-full h-full">
         <Link href="#" className="block w-full group">
-          {/* Gambar */}
           <div className="relative w-full h-[264px] md:min-h-[120px] lg:min-h-[100px]">
             <Image
               src={image || "https://placehold.co/400x300"}
@@ -88,7 +87,6 @@ export default function LegalCard({
                     ))}
                   </div>
 
-                  {/* publisher left, date right */}
                 </div>
               </div>
               <div className="text-sm text-muted-foreground flex justify-between items-center leading-[140%] tracking-tighter">
@@ -97,7 +95,6 @@ export default function LegalCard({
               </div>
             </div>
 
-            {/* badges: person & place */}
           </CardContent>
         </Link>
       </Card>

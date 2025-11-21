@@ -33,7 +33,6 @@ export default function TopEnterpriseSection() {
     item.structure.name.toLowerCase().includes(searchValue?.toLowerCase() || "")
   );
 
-  // add selection
   const columns: ColumnDef<Enterprise>[] = [
     {
       id: "select",

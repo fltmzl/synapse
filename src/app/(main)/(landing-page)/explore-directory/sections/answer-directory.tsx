@@ -1,58 +1,55 @@
 "use client";
 
-import { useState } from "react";
-import Image from "next/image";
-import {
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectItem
-} from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
-import { Building, MapPin, User, X } from "lucide-react";
 import SidebarFilters from "@/components/filter-sidebar";
-import { parseAsArrayOf, parseAsString, useQueryState } from "nuqs";
+import NoResult from "@/components/no-result";
+import Pagination from "@/components/pagination";
 import SelectSingleItem from "@/components/select-single-item";
+import { Button } from "@/components/ui/button";
 import {
   Drawer,
   DrawerClose,
   DrawerContent,
-  DrawerHeader,
   DrawerTitle,
   DrawerTrigger
 } from "@/components/ui/drawer";
-import Pagination from "@/components/pagination";
-import { ArrowRightBoldIcon } from "@/icons/arrow-right-bold-icon";
-import { SortDescendingIcon } from "@/icons/sort-desc-icon";
-import { FilterIcon } from "@/icons/filter-icon";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger
+} from "@/components/ui/select";
+import { DEFAULT_PAGE_SIZE } from "@/constants/pagination.constant";
+import { directory } from "@/data/directory-data";
 import { useAutoCloseDrawer } from "@/hooks/use-auto-close-drawer";
-import { InstagramIconFlat } from "@/icons/instagram-icon-flat";
-import { LinkedinIconFlat } from "@/icons/linkedin-icon-flat";
+import { ArrowRightBoldIcon } from "@/icons/arrow-right-bold-icon";
 import { BuildingIcon } from "@/icons/building-icon";
 import { FacebookFillIcon } from "@/icons/facebook-fill-icon";
+import { FilterIcon } from "@/icons/filter-icon";
+import { InstagramIconFlat } from "@/icons/instagram-icon-flat";
+import { LinkedinIconFlat } from "@/icons/linkedin-icon-flat";
+import { SortDescendingIcon } from "@/icons/sort-desc-icon";
+import { MapPin, User, X } from "lucide-react";
 import Link from "next/link";
+import { parseAsArrayOf, parseAsString, useQueryState } from "nuqs";
+import { useState } from "react";
 import FilterPopover from "../components/popover-filter";
-import { directory } from "@/data/directory-data";
-import NoResult from "@/components/no-result";
-import { DEFAULT_PAGE_SIZE } from "@/constants/pagination.constant";
 
 export default function AnswerDirectory() {
-  const [territory, setTerritory] = useQueryState(
-    "territory",
+  const [territoire, setTerritoire] = useQueryState(
+    "territoire",
     parseAsArrayOf(parseAsString).withDefault([])
   );
-  const [role, setRole] = useQueryState(
-    "role",
-    parseAsArrayOf(parseAsString).withDefault([])
-  );
-  const [category, setCategory] = useQueryState(
-    "category",
+  // const [role, setRole] = useQueryState(
+  //   "role",
+  //   parseAsArrayOf(parseAsString).withDefault([])
+  // );
+  const [catégorie, setCatégorie] = useQueryState(
+    " catégorie",
     parseAsArrayOf(parseAsString).withDefault([])
   );
   const [sort, setSort] = useQueryState(
     "sort",
-    parseAsString.withDefault("Newest")
+    parseAsString.withDefault("Nouveauté")
   );
   const [search, setSearch] = useQueryState(
     "search",
@@ -63,18 +60,18 @@ export default function AnswerDirectory() {
   const getLabelFromValue = (value: string) => removePrefix(value);
 
   const filters = {
-    territory: [
+    territoire: [
       { label: "Martinique", value: "Martinique" },
       { label: "Guadeloupe", value: "Guadeloupe" },
       { label: "Réunion", value: "Réunion" },
       { label: "Mayotte", value: "Mayotte" },
       { label: "Guyane", value: "Guyane" }
     ],
-    role: [
-      { label: "Government", value: "Government" },
-      { label: "Business Leaders", value: "Business Leaders" }
-    ],
-    category: [
+    // role: [
+    //   { label: "Government", value: "Government" },
+    //   { label: "Business Leaders", value: "Business Leaders" }
+    // ],
+      catégorie: [
       { label: "Economy", value: "Economy" },
       { label: "Government", value: "Government" },
       { label: "Health", value: "Health" },
@@ -83,39 +80,37 @@ export default function AnswerDirectory() {
     ]
   };
 
-  const sortBy = [
-    { label: "Newest", value: "Newest" },
-    { label: "Oldest", value: "Oldest" },
-    { label: "Most Relevant", value: "Most Relevant" },
-    { label: "Most Popular", value: "Most Popular" },
-    { label: "Editors Pick", value: "Editors Pick" }
+ const sortBy = [
+    { label: "Nouveauté", value: "Nouveauté" },
+    { label: "Durée", value: "Durée" },
+    { label: "Popularité", value: "Popularité" },
+    { label: "Pertinence", value: "Pertinence" }
   ];
 
   const activeValues = [
-    ...(territory ?? []),
-    ...(role ?? []),
-    ...(category ?? [])
+    ...(territoire ?? []),
+    // ...(role ?? []),
+    ...(catégorie ?? [])
   ];
 
   const removeActiveValue = (val: string) => {
-    if ((territory ?? []).includes(val)) {
-      setTerritory((prev) => (prev ?? []).filter((v) => v !== val));
+    if ((territoire ?? []).includes(val)) {
+      setTerritoire((prev) => (prev ?? []).filter((v) => v !== val));
       return;
     }
-    if ((role ?? []).includes(val)) {
-      setRole((prev) => (prev ?? []).filter((v) => v !== val));
-      return;
-    }
-    if ((category ?? []).includes(val)) {
-      setCategory((prev) => (prev ?? []).filter((v) => v !== val));
+    // if ((role ?? []).includes(val)) {
+    //   setRole((prev) => (prev ?? []).filter((v) => v !== val));
+    //   return;
+    // }
+    if ((catégorie ?? []).includes(val)) {
+      setCatégorie((prev) => (prev ?? []).filter((v) => v !== val));
       return;
     }
   };
 
   const clearAll = () => {
-    setTerritory(null);
-    setRole(null);
-    setCategory(null);
+    setTerritoire(null);
+    setCatégorie(null);
   };
 
   const filteredDirectory = directory.filter((p) => {
@@ -123,17 +118,17 @@ export default function AnswerDirectory() {
       !search || p.name.toLowerCase().includes(search.toLowerCase());
 
     const matchTerritory =
-      territory.length === 0 ||
-      territory.some((t) => removePrefix(t) === p.territory);
+      territoire.length === 0 ||
+      territoire.some((t) => removePrefix(t) === p.territory);
 
-    const matchRole =
-      role.length === 0 || role.some((r) => removePrefix(r) === p.category);
+    // const matchRole =
+    //   role.length === 0 || role.some((r) => removePrefix(r) === p.category);
 
     const matchCategory =
-      category.length === 0 ||
-      category.some((c) => removePrefix(c) === p.category);
+      catégorie.length === 0 ||
+      catégorie.some((c) => removePrefix(c) === p.category);
 
-    return matchSearch && matchTerritory && matchRole && matchCategory;
+    return matchSearch && matchTerritory && matchCategory;
   });
 
   const [openFilter, setOpenFilter] = useState(false);
@@ -156,9 +151,7 @@ export default function AnswerDirectory() {
     <section className="bg-background">
       <div className="py-12 lg:py-20 px-6 max-w-7xl mx-auto">
         <div className="flex flex-col lg:flex-row gap-6">
-          {/* MAIN CONTENT */}
           <main className="flex-1">
-            {/* HEADER */}
             <div className="flex items-center justify-between gap-3 flex-wrap px-2">
               <div className="flex gap-1 items-center">
                 <p className="text-sm lg:text-lg leading-[140%] tracking-[-0.01em] lg:leading-[110%] text-muted-foreground">
@@ -184,12 +177,12 @@ export default function AnswerDirectory() {
 
                 <FilterPopover
                   filters={filters}
-                  territory={territory}
-                  setTerritory={setTerritory}
-                  role={role}
-                  setRole={setRole}
-                  category={category}
-                  setCategory={setCategory}
+                  territoire={territoire}
+                  setTerritoire={setTerritoire}
+                  // role={role}
+                  // setRole={setRole}
+                  catégorie={catégorie}
+                  setCatégorie={setCatégorie}
                   activeValues={activeValues}
                   clearAll={clearAll}
                 />
@@ -240,19 +233,19 @@ export default function AnswerDirectory() {
                     </DrawerTitle>
                     <div className=" max-h-[75vh] overflow-y-auto border-b">
                       <SidebarFilters
-                        groups={{ territory: filters.territory }}
-                        value={territory ?? []}
-                        setValue={setTerritory}
+                        groups={{ territory: filters.territoire }}
+                        value={territoire ?? []}
+                        setValue={setTerritoire}
                       />
-                      <SidebarFilters
+                      {/* <SidebarFilters
                         groups={{ role: filters.role }}
                         value={role ?? []}
                         setValue={setRole}
-                      />
+                      /> */}
                       <SidebarFilters
-                        groups={{ category: filters.category }}
-                        value={category ?? []}
-                        setValue={setCategory}
+                        groups={{ catégorie: filters.catégorie   }}
+                        value={catégorie ?? []}
+                        setValue={setCatégorie}
                       />
                     </div>
 
@@ -270,7 +263,6 @@ export default function AnswerDirectory() {
               <>
                 {/* 🖥️ DESKTOP */}
                 <div className="hidden w-full pt-4 lg:flex lg:gap-5 items-start">
-                  {/* Container chip dengan padding kanan agar ga ketabrak tombol */}
                   <div className="flex flex-wrap gap-2">
                     {activeValues.map((activeFilter, index) => (
                       <div
@@ -291,7 +283,6 @@ export default function AnswerDirectory() {
                     ))}
                   </div>
 
-                  {/* Tombol Clear filter (absolute, di luar flex flow) */}
                   <button
                     className="text-sm text-primary  min-w-max py-[10px]"
                     onClick={clearAll}
@@ -332,7 +323,6 @@ export default function AnswerDirectory() {
               </>
             )}
 
-            {/* LIST */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 py-8">
               {paginatedDirectory.map((directoryItem, index) => {
                 return (
@@ -340,7 +330,6 @@ export default function AnswerDirectory() {
                     key={index}
                     className="border rounded-[12px] flex flex-col justify-between hover:shadow-sm transition-all w-full h-full"
                   >
-                    {/* Header */}
                     <div className="flex items-center gap-4 py-6 px-5 lg:px-6 border-b">
                       <div className="flex items-center justify-center w-16 h-16 bg-[#EEF6FF] rounded-full">
                         <BuildingIcon className="text-primary size-8 mx-4 "></BuildingIcon>
@@ -353,7 +342,6 @@ export default function AnswerDirectory() {
                       </div>
                     </div>
 
-                    {/* Info tengah */}
                     <div className="py-6 px-5 lg:px-6 space-y-4 ">
                       <div className="flex items-start gap-5">
                         <div className="flex gap-2 items-center min-w-[108px]">
@@ -398,7 +386,6 @@ export default function AnswerDirectory() {
                       </div>
                     </div>
 
-                    {/* Footer */}
                     <div className=" rounded-b-xl flex items-center justify-between border-t px-6 py-4 bg-[var(--body)]">
                       <div className="flex items-center gap-4 text-muted-foreground">
                         <Link href={"#"}>

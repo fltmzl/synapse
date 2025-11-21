@@ -16,7 +16,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 
 export default function RelatedPersonalitySection() {
-  // separate refs for desktop and mobile
   const scrollRefDesktop = useRef<HTMLDivElement>(null);
   const scrollRefMobile = useRef<HTMLDivElement>(null);
 
