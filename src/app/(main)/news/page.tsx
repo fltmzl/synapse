@@ -9,7 +9,7 @@ export default function NewsPage() {
     <Suspense fallback={null}>
       <section className="min-h-screen p-4 flex flex-col gap-8 lg:gap-4">
         <AllNews />
-        {/* <SocialNetworkNews /> */}
+        <SocialNetworkNews />
         <LegalNews />
       </section>
     </Suspense>

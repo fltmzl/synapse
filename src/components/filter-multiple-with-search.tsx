@@ -81,7 +81,7 @@ export default function FilterMultipleWithSearch({
                   onClick={() => setValue([])}
                   className="text-primary tracking-tight"
                 >
-                  Clear filter
+                  Effacer filtres
                 </button>
               </div>
 

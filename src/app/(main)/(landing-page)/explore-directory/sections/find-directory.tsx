@@ -15,18 +15,20 @@ export default function FindDirectory() {
       { label: "Guadeloupe", value: "Guadeloupe" },
       { label: "Réunion", value: "Réunion" },
       { label: "Mayotte", value: "Mayotte" },
-      { label: "French Guiana", value: "French Guiana" }
+      { label: "Guyane", value: "Guyane" }
     ],
-    role: [
-      { label: "Government", value: "Government" },
-      { label: "Business Leaders", value: "Business Leaders" }
-    ],
+    // role: [
+    //   { label: "Government", value: "Government" },
+    //   { label: "Business Leaders", value: "Business Leaders" }
+    // ],
     category: [
-      { label: "Economy", value: "Economy" },
-      { label: "Government", value: "Government" },
-      { label: "Health", value: "Health" },
-      { label: "Education", value: "Education" },
-      { label: "Environment", value: "Environment" }
+      { label: "Administration", value: "Administration" },
+      { label: "Artistique", value: "Artistique" },
+      { label: "Associatif", value: "Associatif" },
+      { label: "Economique", value: "Economique" },
+      { label: "Judiciaire", value: "Judiciaire" },
+      { label: "Médiatique", value: "Médiatique" },
+      { label: "Politique", value: "Politique" }
     ]
   };
 
@@ -34,10 +36,10 @@ export default function FindDirectory() {
     "territory",
     parseAsArrayOf(parseAsString).withDefault([])
   );
-  const [role, setRole] = useQueryState(
-    "role",
-    parseAsArrayOf(parseAsString).withDefault([])
-  );
+  // const [role, setRole] = useQueryState(
+  //   "role",
+  //   parseAsArrayOf(parseAsString).withDefault([])
+  // );
   const [category, setCategory] = useQueryState(
     "category",
     parseAsArrayOf(parseAsString).withDefault([])
@@ -47,7 +49,7 @@ export default function FindDirectory() {
     <section className="py-12 lg:py-20 max-w-7xl mx-auto flex flex-col gap-10 items-center px-6">
       <div className="flex items-center text-center flex-col justify-center w-full gap-2 lg:gap-4">
         <h1 className="text-3xl lg:text-5xl font-medium text-center items-center leading-[110%] tracking-[-0.03em]">
-          Annuaire des administrations
+          Cartographie des entreprises, structures et administrations
         </h1>
         <p className="text-sm lg:text-base font-regular text-muted-foreground leading-[140%] tracking-[-0.01em] lg:leading-[110%]">
           Je recherche une administration
@@ -64,22 +66,22 @@ export default function FindDirectory() {
           buttonLabel="Territoire"
           setValue={setTerritory}
           value={territory}
-          placeholder="Search location"
+          placeholder="Entrez recherche…"
           listItems={filters.territory}
         />
-        <FilterMultipleWithSearch
+        {/* <FilterMultipleWithSearch
           buttonLabel="Role"
           setValue={setRole}
           value={role}
           placeholder="Search role"
           listItems={filters.role}
-        />
+        /> */}
 
         <FilterMultipleWithSearch
           buttonLabel="Catégorie"
           setValue={setCategory}
           value={category}
-          placeholder="Search category"
+          placeholder="Entrez recherche…"
           listItems={filters.category}
         />
       </div>

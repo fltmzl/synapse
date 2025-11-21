@@ -36,17 +36,17 @@ export default function AnswerActors() {
     "territory",
     parseAsArrayOf(parseAsString).withDefault([])
   );
-  const [role, setRole] = useQueryState(
-    "role",
-    parseAsArrayOf(parseAsString).withDefault([])
-  );
+  // const [role, setRole] = useQueryState(
+  //   "role",
+  //   parseAsArrayOf(parseAsString).withDefault([])
+  // );
   const [category, setCategory] = useQueryState(
     "category",
     parseAsArrayOf(parseAsString).withDefault([])
   );
   const [sort, setSort] = useQueryState(
     "sort",
-    parseAsString.withDefault("Newest")
+    parseAsString.withDefault("Nouveauté")
   );
   const [search, setSearch] = useQueryState(
     "search",
@@ -145,12 +145,12 @@ export default function AnswerActors() {
       { label: "Guadeloupe", value: "Guadeloupe" },
       { label: "Réunion", value: "Réunion" },
       { label: "Mayotte", value: "Mayotte" },
-      { label: "French Guiana", value: "French Guiana" }
+      { label: "Guyane", value: "Guyane" }
     ],
-    role: [
-      { label: "Government", value: "Government" },
-      { label: "Business Leaders", value: "Business Leaders" }
-    ],
+    // role: [
+    //   { label: "Government", value: "Government" },
+    //   { label: "Business Leaders", value: "Business Leaders" }
+    // ],
     category: [
       { label: "Economy", value: "Economy" },
       { label: "Government", value: "Government" },
@@ -161,16 +161,15 @@ export default function AnswerActors() {
   };
 
   const sortBy = [
-    { label: "Newest", value: "Newest" },
-    { label: "Oldest", value: "Oldest" },
-    { label: "Most Relevant", value: "Most Relevant" },
-    { label: "Most Popular", value: "Most Popular" },
-    { label: "Editors Pick", value: "Editors Pick" }
+    { label: "Nouveauté", value: "Nouveauté" },
+    { label: "Durée", value: "Durée" },
+    { label: "Popularité", value: "Popularité" },
+    { label: "Pertinence", value: "Pertinence" }
   ];
 
   const activeValues = [
     ...(territory ?? []),
-    ...(role ?? []),
+    // ...(role ?? []),
     ...(category ?? [])
   ];
 
@@ -179,10 +178,10 @@ export default function AnswerActors() {
       setTerritory((prev) => (prev ?? []).filter((v) => v !== val));
       return;
     }
-    if ((role ?? []).includes(val)) {
-      setRole((prev) => (prev ?? []).filter((v) => v !== val));
-      return;
-    }
+    // if ((role ?? []).includes(val)) {
+    //   setRole((prev) => (prev ?? []).filter((v) => v !== val));
+    //   return;
+    // }
     if ((category ?? []).includes(val)) {
       setCategory((prev) => (prev ?? []).filter((v) => v !== val));
       return;
@@ -191,7 +190,7 @@ export default function AnswerActors() {
 
   const clearAll = () => {
     setTerritory(null);
-    setRole(null);
+    // setRole(null);
     setCategory(null);
   };
 
@@ -205,14 +204,14 @@ export default function AnswerActors() {
       territory.length === 0 ||
       territory.some((t) => removePrefix(t) === p.territory);
 
-    const matchRole =
-      role.length === 0 || role.some((r) => removePrefix(r) === p.category);
+    // const matchRole =
+    //   role.length === 0 || role.some((r) => removePrefix(r) === p.category);
 
     const matchCategory =
       category.length === 0 ||
       category.some((c) => removePrefix(c) === p.category);
 
-    return matchSearch && matchTerritory && matchRole && matchCategory;
+    return matchSearch && matchTerritory && matchCategory;
   });
 
   const [openFilter, setOpenFilter] = useState(false);
@@ -236,18 +235,18 @@ export default function AnswerActors() {
           {/* SIDEBAR (desktop only) */}
           <aside className=" hidden lg:block w-[336px] flex-shrink-0 border rounded-[12px] h-max sticky top-28 self-start">
             <h3 className="font-semibold text-2xl leading-[110%] tracking-[-0.02em] p-5 border-b">
-              Filter by
+              Recherche par
             </h3>
             <SidebarFilters
               groups={{ territory: filters.territory }}
               value={territory ?? []}
               setValue={setTerritory}
             />
-            <SidebarFilters
+            {/* <SidebarFilters
               groups={{ role: filters.role }}
               value={role ?? []}
               setValue={setRole}
-            />
+            /> */}
             <SidebarFilters
               groups={{ category: filters.category }}
               value={category ?? []}
@@ -269,10 +268,9 @@ export default function AnswerActors() {
                 </span>
               </div>
 
-              {/* Desktop sort */}
               <div className="hidden lg:flex items-center gap-3">
                 <span className="text-base font-medium text-foreground">
-                  Sort by
+                  Filtrer par
                 </span>
                 <SelectSingleItem
                   listItems={sortBy}
@@ -283,7 +281,6 @@ export default function AnswerActors() {
 
               {/* Mobile icons */}
               <div className="flex lg:hidden items-center gap-2 ml-auto">
-                {/* Sort button */}
                 <Select value={sort} onValueChange={setSort}>
                   <SelectTrigger className="p-3 rounded-lg justify-center [&>*:last-child]:hidden">
                     <SortDescendingIcon className="size-6 text-foreground" />
@@ -301,7 +298,6 @@ export default function AnswerActors() {
                   </SelectContent>
                 </Select>
 
-                {/* Filter button (bottom sheet) */}
                 <Drawer
                   open={openFilter}
                   onOpenChange={setOpenFilter}
@@ -319,7 +315,7 @@ export default function AnswerActors() {
 
                   <DrawerContent className=" rounded-t-2xl p-0 backdrop-blur-lg [&>*:first-child]:hidden">
                     <DrawerTitle className="font-semibold text-2xl leading-[110%] tracking-[-0.02em] p-5 border-b relative">
-                      Filter by
+                      Recherche par
                       <DrawerClose asChild>
                         <button>
                           <X className="h-6 w-6 absolute top-5 right-4 cursor-pointer" />
@@ -332,11 +328,11 @@ export default function AnswerActors() {
                         value={territory ?? []}
                         setValue={setTerritory}
                       />
-                      <SidebarFilters
+                      {/* <SidebarFilters
                         groups={{ role: filters.role }}
                         value={role ?? []}
                         setValue={setRole}
-                      />
+                      /> */}
                       <SidebarFilters
                         groups={{ category: filters.category }}
                         value={category ?? []}
@@ -346,9 +342,7 @@ export default function AnswerActors() {
 
                     <div className="p-4 border-t bg-background sticky bottom-0">
                       <DrawerClose asChild>
-                        <Button className="w-full">Apply
-
-                        </Button>
+                        <Button className="w-full">Apply</Button>
                       </DrawerClose>
                     </div>
                   </DrawerContent>
@@ -356,12 +350,10 @@ export default function AnswerActors() {
               </div>
             </div>
 
-            {/* Active Filters */}
             {activeValues.length > 0 && (
               <>
                 {/* 🖥️ DESKTOP */}
                 <div className="hidden w-full pt-4 lg:flex lg:gap-5 items-start">
-                  {/* Container chip dengan padding kanan agar ga ketabrak tombol */}
                   <div className="flex flex-wrap gap-2">
                     {activeValues.map((activeFilter, index) => (
                       <div
@@ -380,12 +372,11 @@ export default function AnswerActors() {
                     ))}
                   </div>
 
-                  {/* Tombol Clear filter (absolute, di luar flex flow) */}
                   <button
                     className="text-sm text-primary  min-w-max py-2"
                     onClick={clearAll}
                   >
-                    Clear filter
+                    Effacer filtres
                   </button>
                 </div>
 
@@ -423,7 +414,6 @@ export default function AnswerActors() {
             {/* LIST */}
             <div className="space-y-6 divide-y px-2">
               {paginatedPeople.map((person, index) => {
-               
                 return (
                   <article
                     key={index}
@@ -480,7 +470,7 @@ export default function AnswerActors() {
 
                         <div className="flex flex-col gap-2 lg:w-[143px] w-full">
                           <div className="font-regular text-muted-foreground text-sm leading-[110%] tracking-[-0.01em]">
-                            Territory
+                            Territoire
                           </div>
                           <div className="font-regular text-foreground text-base leading-[110%] tracking-[-0.01em]">
                             {person.territory}
@@ -489,7 +479,7 @@ export default function AnswerActors() {
 
                         <div className="flex flex-col gap-2">
                           <div className="font-regular text-muted-foreground text-sm leading-[110%] tracking-[-0.01em]">
-                            Category
+                            Catégorie
                           </div>
                           <div className="font-regular text-foreground text-base leading-[110%] tracking-[-0.01em]">
                             {person.category}

@@ -67,7 +67,6 @@ export default function AllNews() {
         </div>
         <PostList data={filtered} variant="news" />
 
-
         {/* <div className="flex flex-col divide-y divide-border">
           {filtered.slice(0, 5).map((news, index, arr) => {
             const isFirst = index === 0;
@@ -93,7 +92,7 @@ export default function AllNews() {
             size="default"
             className="text-base leading-[130%] tracking-[-0.02em] px-5 py-[10px] w-full lg:w-max"
           >
-            More articles
+            Plus d’articles
             <ChevronDown className="size-5 text-foreground" />
           </Button>
         </div>

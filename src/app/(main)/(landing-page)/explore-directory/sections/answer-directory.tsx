@@ -68,7 +68,7 @@ export default function AnswerDirectory() {
       { label: "Guadeloupe", value: "Guadeloupe" },
       { label: "Réunion", value: "Réunion" },
       { label: "Mayotte", value: "Mayotte" },
-      { label: "French Guiana", value: "French Guiana" }
+      { label: "Guyane", value: "Guyane" }
     ],
     role: [
       { label: "Government", value: "Government" },
@@ -158,7 +158,6 @@ export default function AnswerDirectory() {
           <main className="flex-1">
             {/* HEADER */}
             <div className="flex items-center justify-between gap-3 flex-wrap px-2">
-              {/* 🧾 Info jumlah hasil */}
               <div className="flex gap-1 items-center">
                 <p className="text-sm lg:text-lg leading-[140%] tracking-[-0.01em] lg:leading-[110%] text-muted-foreground">
                   Showing {filteredDirectory.length} results for{" "}
@@ -172,7 +171,7 @@ export default function AnswerDirectory() {
               <div className="hidden lg:flex gap-4 items-center">
                 <div className="flex items-center gap-3">
                   <span className="text-base font-medium text-foreground">
-                    Sort by
+                    Filtrer par
                   </span>
                   <SelectSingleItem
                     listItems={sortBy}
@@ -230,7 +229,7 @@ export default function AnswerDirectory() {
 
                   <DrawerContent className=" rounded-t-2xl p-0 backdrop-blur-lg [&>*:first-child]:hidden">
                     <DrawerTitle className="font-semibold text-2xl leading-[110%] tracking-[-0.02em] p-5 border-b relative">
-                      Filter by
+                      Recherche par
                       <DrawerClose asChild>
                         <button>
                           <X className="h-6 w-6 absolute top-5 right-4 cursor-pointer" />
@@ -295,7 +294,7 @@ export default function AnswerDirectory() {
                     className="text-sm text-primary  min-w-max py-[10px]"
                     onClick={clearAll}
                   >
-                    Clear filter
+                    Effacer filtres
                   </button>
                 </div>
 
@@ -325,7 +324,7 @@ export default function AnswerDirectory() {
                     className="text-sm text-primary underline text-start"
                     onClick={clearAll}
                   >
-                    Clear filter
+                    Effacer filtres
                   </button>
                 </div>
               </>
@@ -358,7 +357,7 @@ export default function AnswerDirectory() {
                         <div className="flex gap-2 items-center min-w-[108px]">
                           <BuildingIcon className="size-5 text-muted-foreground"></BuildingIcon>
                           <span className="text-muted-foreground leading-[150%] text-base tracking-[-0.01em]">
-                            Category
+                            Catégorie
                           </span>
                         </div>
                         <span className="leading-[150%] text-base tracking-[-0.01em] font-medium">
@@ -373,7 +372,7 @@ export default function AnswerDirectory() {
                             className="size-5 text-muted-foreground/80"
                           ></MapPin>
                           <span className="text-muted-foreground leading-[150%] text-base tracking-[-0.01em]">
-                            Territory
+                            Territoire
                           </span>
                         </div>
                         <span className=" leading-[150%] text-base tracking-[-0.01em] font-medium">
@@ -411,7 +410,10 @@ export default function AnswerDirectory() {
                         </Link>
                       </div>
 
-                      <Link href={`/explore-directory/${directoryItem.slug}`} className="flex items-center gap-[6px]">
+                      <Link
+                        href={`/explore-directory/${directoryItem.slug}`}
+                        className="flex items-center gap-[6px]"
+                      >
                         <span className="text-primary text-sm font-medium leading-5 tracking-[-0.01em] ">
                           View detail
                         </span>

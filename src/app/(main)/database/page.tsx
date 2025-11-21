@@ -6,8 +6,8 @@ import DataMaps from "./sections/maps";
 export default function DatabasePage() {
   return (
     <section className="min-h-screen flex flex-col">
-      <DataInsight />
       <DataMaps />
+      <DataInsight />
     </section>
   );
 }

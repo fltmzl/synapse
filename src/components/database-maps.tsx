@@ -1,10 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import {
-  Tabs,
-  TabsContent
-} from "@/components/ui/tabs";
+import { Tabs, TabsContent } from "@/components/ui/tabs";
 import {
   Select,
   SelectContent,
@@ -20,6 +17,7 @@ import { ArrowRightBoldIcon } from "@/icons/arrow-right-bold-icon";
 import { DownloadIcon } from "@/icons/download-icon";
 import Image from "next/image";
 import { databaseData } from "@/data/database-data";
+import Link from "next/link";
 
 export default function DatabaseMaps() {
   const tabs = databaseData.map((data) => data.title);
@@ -72,7 +70,7 @@ export default function DatabaseMaps() {
               />
 
               {/* Dot + Tooltip */}
-              <div className="absolute inset-0 flex items-center justify-center">
+              {/* <div className="absolute inset-0 flex items-center justify-center">
                 <div className="relative flex flex-col items-center">
                   <div className="lg:w-5 lg:h-5 w-3 h-3 rounded-full bg-primary border-4" />
                   <div className="relative mt-2 bg-background shadow-md rounded-md px-4 py-2 text-center">
@@ -85,7 +83,7 @@ export default function DatabaseMaps() {
                     <div className="absolute left-1/2 -top-1.5 -translate-x-1/2 w-2 h-2 rotate-45 bg-background border-l border-t border-border" />
                   </div>
                 </div>
-              </div>
+              </div> */}
             </div>
 
             {/* Stats */}
@@ -108,8 +106,12 @@ export default function DatabaseMaps() {
                   <span className="text-sm">Download slide</span>
                 </Button>
                 <button className="gap-2 text-primary text-sm font-medium leading-5 flex items-center py-[10px] px-4">
-                  More about {activeTab}
-                  <ArrowRightBoldIcon className="w-4 h-4 mt-0.5" />
+                  <Link href="/database">
+                    <span className="flex items-center gap-2">
+                      Plus d&apos;informations
+                      <ArrowRightBoldIcon className="w-4 h-4 mt-0.5" />
+                    </span>
+                  </Link>
                 </button>
               </div>
             </div>

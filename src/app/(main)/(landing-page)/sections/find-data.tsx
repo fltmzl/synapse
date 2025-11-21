@@ -25,7 +25,7 @@ export default function FindDataPage() {
 
         {/* Specific Info Section */}
         <div className="text-center flex flex-col gap-8 items-center">
-          <H4>Le répertoire des territoires</H4>
+          <H4>La cartographie des territoires</H4>
 
           <div className="max-w-5xl w-full grid grid-cols-1 md:grid-cols-3 gap-4">
             {infoOptions.map((opt) => (

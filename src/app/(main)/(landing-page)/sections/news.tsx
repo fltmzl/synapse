@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import VideoPlayer from "@/components/video-player";
 import { newsData } from "@/data/news-data";
 import NewsCard from "../components/card/news-card";
+import Link from "next/link";
 
 export default function NewsSection() {
   return (
@@ -31,7 +32,9 @@ export default function NewsSection() {
                 Synapse est une base informationnelle, économique, politique,
                 sociale et citoyenne dédiée aux Outre-Mer
               </p>
-              <Button className="w-max">Accéder</Button>
+              <Button className="w-max">
+                <Link href="/database">Accéder</Link>
+              </Button>
             </div>
           </div>
         </div>

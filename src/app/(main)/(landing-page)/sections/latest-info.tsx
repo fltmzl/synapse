@@ -96,7 +96,7 @@ export default function LatestInfo() {
         </div>
         <div className="w-full items-center justify-center hidden lg:flex">
           <Button variant={"outline"} size={"default"}>
-            Find more articles
+            <Link href="/news">Plus d&apos;articles</Link>
           </Button>
         </div>
       </section>

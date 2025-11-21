@@ -8,21 +8,20 @@ import { Button } from "@/components/ui/button";
 import { economicForecasts } from "@/data/business-data";
 import { useEffect, useState } from "react";
 
-
 export default function EconomicForecastsPage() {
-    const [isMobile, setIsMobile] = useState(false);
-    
-      useEffect(() => {
-        const handleResize = () => setIsMobile(window.innerWidth < 640);
-        handleResize(); // initial check
-        window.addEventListener("resize", handleResize);
-        return () => window.removeEventListener("resize", handleResize);
-      }, []);
-    
-      // tampilkan 3 data kalau mobile, 6 data kalau desktop
-      const displayedForecasts = isMobile
-        ? economicForecasts.slice(0, 3)
-        : economicForecasts.slice(0, 6);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 640);
+    handleResize(); // initial check
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // tampilkan 3 data kalau mobile, 6 data kalau desktop
+  const displayedForecasts = isMobile
+    ? economicForecasts.slice(0, 3)
+    : economicForecasts.slice(0, 6);
   return (
     <section className="w-full max-w-7xl mx-auto px-6 py-12 lg:py-25 flex flex-col">
       <div className="text-left pb-8 lg:pb-16">
@@ -46,18 +45,19 @@ export default function EconomicForecastsPage() {
                   {item.title}
                 </h2>
                 <div className="flex justify-between items-center">
-                <span className="text-sm leading-[140%] tracking-[-0.01em] text-muted-foreground">
-                  {item.date}
-                </span>
+                  <span className="text-sm leading-[140%] tracking-[-0.01em] text-muted-foreground">
+                    {item.date}
+                  </span>
 
-                <div className="mt-2">
-                  <Link
-                    href="#"
-                    className="text-primary text-sm font-medium inline-flex items-center gap-1 leading-[14px] tracking-[-0.01em] group-hover:underline"
-                  >
-                    View document <ArrowUpRightIcon className="w-[18px] h-[18px]" />
-                  </Link>
-                </div>
+                  <div className="mt-2">
+                    <Link
+                      href="#"
+                      className="text-primary text-sm font-medium inline-flex items-center gap-1 leading-[14px] tracking-[-0.01em] group-hover:underline"
+                    >
+                      View document{" "}
+                      <ArrowUpRightIcon className="w-[18px] h-[18px]" />
+                    </Link>
+                  </div>
                 </div>
               </div>
               <div className="relative w-full h-[195px] lg:h-[220px]">
@@ -76,9 +76,9 @@ export default function EconomicForecastsPage() {
 
       <div className="flex justify-center pt-6 lg:pt-14">
         <Button variant="outline" className="w-max px-6">
-            Show more
-            <ChevronDown className="size-5 text-foreground" />
-          </Button>
+          Plus de contenus
+          <ChevronDown className="size-5 text-foreground" />
+        </Button>
       </div>
     </section>
   );

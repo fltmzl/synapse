@@ -40,8 +40,10 @@ export default function AdministrationSimilars() {
 
   return (
     <section className="bg-background">
-      <div className="py-12 lg:py-20 px-6 lg:pl-20 h-full
-        3xl:items-center 3xl:pl-0 ">
+      <div
+        className="py-12 lg:py-20 px-6 lg:pl-20 h-full
+        3xl:items-center 3xl:pl-0 "
+      >
         <div className="3xl:max-w-[1400px] 3xl:mx-auto hidden lg:flex items-center justify-between mb-10">
           <h1 className="text-[28px] leading-[130%] tracking-[-0.02em] lg:text-[40px] font-medium lg:leading-[110%] lg:tracking-[-0.03em]">
             Administration similaire
@@ -146,7 +148,7 @@ function Card({ item }: { item: DirectoryItem }) {
           <div className="flex gap-2 items-center min-w-[108px]">
             <BuildingIcon className="size-5 text-muted-foreground" />
             <span className="text-muted-foreground leading-[150%] text-base tracking-[-0.01em]">
-              Category
+              Catégorie
             </span>
           </div>
           <span className="text-[var(--font-navy)] leading-[150%] text-base tracking-[-0.01em] font-medium">
@@ -161,7 +163,7 @@ function Card({ item }: { item: DirectoryItem }) {
               className="size-5 text-muted-foreground/80"
             />
             <span className="text-muted-foreground leading-[150%] text-base tracking-[-0.01em]">
-              Territory
+              Territoire
             </span>
           </div>
           <span className="text-[var(--font-navy)] leading-[150%] text-base tracking-[-0.01em] font-medium">
@@ -185,13 +187,13 @@ function Card({ item }: { item: DirectoryItem }) {
       <div className="border-t py-4 px-6 flex items-center justify-between bg-[var(--body)] rounded-b-[12px]">
         <div className="flex items-center gap-3 text-muted-foreground">
           <Link href={"#"}>
-          <FacebookFillIcon className="size-[18px]" />
+            <FacebookFillIcon className="size-[18px]" />
           </Link>
           <Link href={"#"}>
-          <InstagramIconFlat className="size-[18px]" />
+            <InstagramIconFlat className="size-[18px]" />
           </Link>
           <Link href={"#"}>
-          <LinkedinIconFlat className="size-[18px]" />
+            <LinkedinIconFlat className="size-[18px]" />
           </Link>
         </div>
 

@@ -25,7 +25,7 @@ export default function SearchSocialNetwork({ onSearch }: SearchBarProps) {
         />
       </div>
       <Button onClick={() => onSearch(value)} className="px-6">
-        Search
+        Recherchez
       </Button>
     </div>
   );

@@ -28,7 +28,7 @@ export default function SocialNetworkNews() {
         <div className="flex flex-col lg:gap-16 ">
           <div className="flex flex-col gap-8">
             <SectionTitle className="text-center">
-              Actualité citoyenne
+              Publications Synapse
             </SectionTitle>
 
             <div className="flex justify-center w-full">
@@ -49,6 +49,7 @@ export default function SocialNetworkNews() {
                     className={cn(
                       // === MOBILE ===
                       index !== 0 && "border-t pt-6 lg:border-t-0 lg:pt-0",
+                      isFirstRow && "pt-6 lg:pt-0",
                       !isLastItem && "pb-6 lg:pb-0",
                       // === DESKTOP ===
                       // Tambahkan border bawah antar row
@@ -73,7 +74,7 @@ export default function SocialNetworkNews() {
               size="md"
               className="w-full lg:w-max text-sm font-medium leading[140%] tracking-tighter"
             >
-              Show more
+              Plus de contenus
               <ChevronDown className="size-5 text-foreground" />
             </Button>
           </div>

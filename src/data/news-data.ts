@@ -64,12 +64,12 @@ export const newsData: NewsItem[] = [
       "/images/news/news-2.png",
       "/images/news/news-3.png",
       "/images/news/news-4.png",
-       "/images/news/news-2.png",
+      "/images/news/news-2.png",
       "/images/news/news-3.png",
       "/images/news/news-4.png",
-       "/images/news/news-2.png",
+      "/images/news/news-2.png",
       "/images/news/news-3.png",
-      "/images/news/news-4.png",
+      "/images/news/news-4.png"
     ],
     content: `
       <h1>Analysis: What €15M means for Martinique's SMEs</h1>
@@ -93,7 +93,8 @@ export const newsData: NewsItem[] = [
       "Mayotte reports 5% increase in export activities for first half of 2025",
     category: "Juridique",
     author: "Mayotte Trade Bureau",
-    description: "Mayotte's export activities have shown resilience amidst global economic challenges.",
+    description:
+      "Mayotte's export activities have shown resilience amidst global economic challenges.",
     date: "Aug 25, 2025",
     images: [
       "/images/news/news-3.png",
@@ -123,7 +124,8 @@ export const newsData: NewsItem[] = [
     category: "Citoyenne",
     author: "Le Journal Outre-mer",
     date: "Sep 2, 2025",
-    description: "A political debate is intensifying over the representation of overseas territories in the French parliament.",  
+    description:
+      "A political debate is intensifying over the representation of overseas territories in the French parliament.",
     images: [
       "/images/news/news-4.png",
       "/images/news/news-5.png",
@@ -149,7 +151,8 @@ export const newsData: NewsItem[] = [
     slug: "unified-judicial-system-french-overseas",
     title: "Unified judicial system proposed for French overseas territories",
     category: "Politique",
-    description: "A proposal has been made to establish a unified judicial system for all French overseas territories.",
+    description:
+      "A proposal has been made to establish a unified judicial system for all French overseas territories.",
     author: "Le Monde Juridique",
     date: "Oct 29, 2025",
     images: [
@@ -178,7 +181,8 @@ export const newsData: NewsItem[] = [
     title:
       "Legal experts call for unified judicial system across French overseas territories",
     category: "Politique",
-    description: "Legal experts are advocating for a unified judicial system across all French overseas territories.",
+    description:
+      "Legal experts are advocating for a unified judicial system across all French overseas territories.",
     author: "France Info",
     date: "Oct 15, 2025",
     images: [
@@ -305,6 +309,30 @@ export const lastInfo: CategoryNews[] = [
       "New digital tools are helping women from overseas territories launch and grow their own businesses.",
     date: "Feb 20, 2025",
     image: "/images/news/news-1.png"
+  },
+  {
+    category: "économique",
+    title: "Overseas territories see 4% GDP growth in 2024",
+    description:
+      "Economic reports indicate a steady growth rate driven by tourism, agriculture, and digital services sectors.",
+    date: "Jan 15, 2025",
+    image: "/images/news/news-4.png"
+  },
+  {
+    category: "économique",
+    title: "Investment in renewable energy soars",
+    description:
+      "Significant capital is being directed towards solar and wind projects across overseas territories.",
+    date: "Jan 10, 2025",
+    image: "/images/news/news-5.png"
+  },
+  {
+    category: "économique",
+    title: "SMEs lead job creation in overseas regions",
+    description:
+      "Small and medium enterprises are at the forefront of employment growth, particularly in tech and green industries.",
+    date: "Jan 5, 2025",
+    image: "/images/news/news-6.png"
   }
 ];
 

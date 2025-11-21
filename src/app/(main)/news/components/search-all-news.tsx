@@ -24,7 +24,7 @@ export default function SearchAll({ onSearch }: SearchBarProps) {
             className="pl-9"
           />
         </div>
-        <Button onClick={() => onSearch(value)}>Search</Button>
+        <Button onClick={() => onSearch(value)}>Recherchez</Button>
       </div>
     </div>
   );

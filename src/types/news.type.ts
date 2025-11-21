@@ -32,7 +32,7 @@ export type NewsData = {
 }[];
 
 export type CategoryNews = {
-  category: "politique" | "juridique" | "citoyenne";
+  category: "politique" | "juridique" | "citoyenne" | "économique";
   title: string;
   description: string;
   date: string;

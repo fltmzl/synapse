@@ -15,18 +15,20 @@ export default function FindActors() {
       { label: "Guadeloupe", value: "Guadeloupe" },
       { label: "Réunion", value: "Réunion" },
       { label: "Mayotte", value: "Mayotte" },
-      { label: "French Guiana", value: "French Guiana" }
+      { label: "Guyane", value: "Guyane" }
     ],
-    role: [
-      { label: "Government", value: "Government" },
-      { label: "Business Leaders", value: "Business Leaders" }
-    ],
+    // role: [
+    //   { label: "Government", value: "Government" },
+    //   { label: "Business Leaders", value: "Business Leaders" }
+    // ],
     category: [
-      { label: "Economy", value: "Economy" },
-      { label: "Government", value: "Government" },
-      { label: "Health", value: "Health" },
-      { label: "Education", value: "Education" },
-      { label: "Environment", value: "Environment" }
+      { label: "Administration", value: "Administration" },
+      { label: "Artistique", value: "Artistique" },
+      { label: "Associatif", value: "Associatif" },
+      { label: "Economique", value: "Economique" },
+      { label: "Judiciaire", value: "Judiciaire" },
+      { label: "Médiatique", value: "Médiatique" },
+      { label: "Politique", value: "Politique" }
     ]
   };
 
@@ -34,10 +36,10 @@ export default function FindActors() {
     "territory",
     parseAsArrayOf(parseAsString).withDefault([])
   );
-  const [role, setRole] = useQueryState(
-    "role",
-    parseAsArrayOf(parseAsString).withDefault([])
-  );
+  // const [role, setRole] = useQueryState(
+  //   "role",
+  //   parseAsArrayOf(parseAsString).withDefault([])
+  // );
   const [category, setCategory] = useQueryState(
     "category",
     parseAsArrayOf(parseAsString).withDefault([])
@@ -65,22 +67,22 @@ export default function FindActors() {
           buttonLabel="Territoire"
           setValue={setTerritory}
           value={territory}
-          placeholder="Search location"
+          placeholder="Entrez recherche…"
           listItems={filters.territory}
         />
-        <FilterMultipleWithSearch
+        {/* <FilterMultipleWithSearch
           buttonLabel="Role"
           setValue={setRole}
           value={role}
-          placeholder="Search role"
+          placeholder="Entrez recherche…"
           listItems={filters.role}
-        />
+        /> */}
 
         <FilterMultipleWithSearch
           buttonLabel="Catégorie"
           setValue={setCategory}
           value={category}
-          placeholder="Search category"
+          placeholder="Entrez recherche…"
           listItems={filters.category}
         />
       </div>

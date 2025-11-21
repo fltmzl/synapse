@@ -17,18 +17,18 @@ export default function LegalNews() {
 
   const filter = {
     categories: [
-      { label: "Tax Law", value: "Tax Law" },
-      { label: "Labor Law", value: "Labor Law" },
-      { label: "Environment", value: "Environment" },
-      { label: "Immigration", value: "Immigration" },
-      { label: "Indigenous Rights", value: "Indigenous Rights" }
+      { label: "Politique", value: "Politique" },
+      { label: "Economique", value: "Economique" },
+      { label: "Militant", value: "Militant" },
+      { label: "Citoyen", value: "Citoyen" },
+      { label: "Tendance", value: "Tendance" }
     ],
     territories: [
       { label: "Martinique", value: "Martinique" },
       { label: "Guadeloupe", value: "Guadeloupe" },
       { label: "Réunion", value: "Réunion" },
       { label: "Mayotte", value: "Mayotte" },
-      { label: "French Guiana", value: "French Guiana" }
+      { label: "Guyane", value: "Guyane" }
     ],
     persons: [
       { label: "Éric Dubois", value: "Éric Dubois" },
@@ -40,11 +40,10 @@ export default function LegalNews() {
   };
 
   const sortBy = [
-    { label: "Newest", value: "Newest" },
-    { label: "Oldest", value: "Oldest" },
-    { label: "Most Relevant", value: "Most Relevant" },
-    { label: "Most Popular", value: "Most Popular" },
-    { label: "Editors Pick", value: "Editors Pick" }
+    { label: "Nouveauté", value: "Nouveauté" },
+    { label: "Durée", value: "Durée" },
+    { label: "Popularité", value: "Popularité" },
+    { label: "Pertinence", value: "Pertinence" }
   ];
 
   const [categories, setCategories] = useQueryState(
@@ -65,7 +64,7 @@ export default function LegalNews() {
   );
   const [sort, setSort] = useQueryState(
     "sort",
-    parseAsString.withDefault("Newest")
+    parseAsString.withDefault("Nouveauté")
   );
 
   return (
@@ -100,21 +99,21 @@ export default function LegalNews() {
                   buttonLabel="Catégorie"
                   setValue={setCategories}
                   value={categories}
-                  placeholder="Search category"
+                  placeholder="Entrez recherche…"
                   listItems={filter.categories}
                 />
                 <FilterMultipleWithSearch
                   buttonLabel="Territoire"
                   setValue={setTerritories}
                   value={territories}
-                  placeholder="Search location"
+                  placeholder="Entrez recherche…"
                   listItems={filter.territories}
                 />
                 <FilterMultipleWithSearch
-                  buttonLabel="Person"
+                  buttonLabel="Personnalité"
                   setValue={setPersons}
                   value={persons}
-                  placeholder="Search person"
+                  placeholder="Entrez recherche…"
                   listItems={filter.persons}
                 />
               </div>
@@ -165,7 +164,7 @@ export default function LegalNews() {
         {/* Show More Button */}
         <div className="flex justify-center gap-3">
           <Button variant="outline" className="w-full lg:w-max px-6">
-            Show more
+            Plus de contenus
             <ChevronDown className="size-5 text-foreground" />
           </Button>
         </div>
