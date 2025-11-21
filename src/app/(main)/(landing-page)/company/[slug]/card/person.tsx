@@ -27,7 +27,7 @@ export default function PersonCard() {
               className="flex gap-3 border rounded-md p-4 justify-start hover:bg-muted transition group"
             >
               <Avatar className="w-10 h-10">
-                <AvatarImage src={p.image || ""} alt={p.name} />
+                <AvatarImage src={undefined} alt={p.name} />
                 <AvatarFallback>
                   {p.name
                     .split(" ")

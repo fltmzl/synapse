@@ -147,7 +147,6 @@ export function DataTable<TData, TValue>({
               }`}
             >
               {HeaderAction && <HeaderAction />}
-              <DataTableViewOptions table={table} />
             </div>
           )}
 
@@ -155,7 +154,7 @@ export function DataTable<TData, TValue>({
         </div>
       </div>
 
-      <div className="rounded-md overflow-auto">
+      <div className="overflow-auto">
         <DataTableMain table={table} columns={columns} isLoading={isLoading} />
       </div>
 

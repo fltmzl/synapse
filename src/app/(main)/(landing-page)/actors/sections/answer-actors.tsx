@@ -30,6 +30,7 @@ import { FilterIcon } from "@/icons/filter-icon";
 import { useAutoCloseDrawer } from "@/hooks/use-auto-close-drawer";
 import NoResult from "@/components/no-result";
 import { DEFAULT_PAGE_SIZE } from "@/constants/pagination.constant";
+import Link from "next/link";
 
 export default function AnswerActors() {
   const [territory, setTerritory] = useQueryState(
@@ -452,9 +453,12 @@ export default function AnswerActors() {
                         <Button
                           variant="ghost"
                           className="text-primary hover:underline text-base font-regular leading-[140%] tracking-[-0.01em] hover:bg-transparent self-start sm:self-auto p-0"
+                          asChild
                         >
-                          <span className="inline top-0">Profil</span>
-                          <ArrowRightBoldIcon className="w-5 h-5 size-5 stroke-2" />
+                          <Link href={`/actors/${person.name}`}>
+                            <span className="inline top-0">Profil</span>
+                            <ArrowRightBoldIcon className="w-5 h-5 size-5 stroke-2" />
+                          </Link>
                         </Button>
                       </div>
 

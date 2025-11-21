@@ -29,6 +29,11 @@ type Props = {
   ) => Promise<URLSearchParams>;
   placeholder?: string;
   buttonLabel: string;
+  buttonSize?: "default" | "sm" | "md" | "2md" | "lg" | "xl" | "icon";
+  buttonClassName?: string;
+  buttonTextClassName?: string;
+  arrowDownClassName?: string;
+  popoverAlign?: "center" | "start" | "end";
 };
 
 export default function FilterMultipleWithSearch({
@@ -36,7 +41,12 @@ export default function FilterMultipleWithSearch({
   placeholder,
   value,
   buttonLabel,
-  setValue
+  setValue,
+  buttonSize = "2md",
+  buttonClassName,
+  buttonTextClassName,
+  arrowDownClassName,
+  popoverAlign = "start"
 }: Props) {
   const [open, setOpen] = React.useState(false);
   const isFiltered = React.useMemo(() => value.length > 0, [value]);
@@ -47,21 +57,24 @@ export default function FilterMultipleWithSearch({
         <Button
           variant="outline-hover-primary"
           role="combobox"
-          size="2md"
+          size={buttonSize}
           aria-expanded={open}
           className={cn(
             "w-full lg:w-max leading-[140%] tracking-tighter justify-center lg:justify-between h-fit gap-3 py-3 hover:text-foreground",
+            buttonClassName,
             {
               "border-primary": isFiltered
             }
           )}
         >
-          <span className="min-w-18 lg:min-w-auto">{buttonLabel}</span>
-          <ChevronDown className="size-5" />
+          <span className={cn("min-w-18 lg:min-w-auto", buttonTextClassName)}>
+            {buttonLabel}
+          </span>
+          <ChevronDown className={cn("size-5", arrowDownClassName)} />
         </Button>
       </PopoverTrigger>
       <PopoverContent
-        align="start"
+        align={popoverAlign}
         className="min-w-[var(--radix-popover-trigger-width)] w-full p-0"
       >
         <Command className="p-1">

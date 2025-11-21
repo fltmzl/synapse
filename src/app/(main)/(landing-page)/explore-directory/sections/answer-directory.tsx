@@ -146,6 +146,8 @@ export default function AnswerDirectory() {
     (page + 1) * pageSize
   );
 
+  if (!search) return null;
+
   if (filteredDirectory.length === 0) {
     return <NoResult />;
   }
