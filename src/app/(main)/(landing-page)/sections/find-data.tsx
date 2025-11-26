@@ -7,6 +7,7 @@ import { BuildingBankIcon } from "@/icons/building-bank-icon";
 import { BuildingSkyScraperIcon } from "@/icons/building-skyscraper-icon";
 import { cn } from "@/lib/utils";
 import { User } from "lucide-react";
+import Link from "next/link";
 import ChatWrapper from "../../database/sections/chat-wrapper";
 
 export default function FindDataPage() {
@@ -22,8 +23,9 @@ export default function FindDataPage() {
 
           <div className="max-w-5xl w-full grid grid-cols-1 md:grid-cols-3 gap-4">
             {infoOptions.map((opt) => (
-              <div
+              <Link
                 key={opt.id}
+                href={opt.href}
                 className={cn(
                   "group cursor-pointer transition-all rounded-xl border hover:border-primary"
                 )}
@@ -64,7 +66,7 @@ export default function FindDataPage() {
                     </p>
                   </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>

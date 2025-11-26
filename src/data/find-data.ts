@@ -21,16 +21,19 @@ export const infoOptions: InfoOption[] = [
   {
     id: "person",
     title: "Je recherche un acteur",
-    desc: "Annuaire des acteurs économiques, politiques et citoyens"
+    desc: "Annuaire des acteurs économiques, politiques et citoyens",
+    href: "/actors"
   },
   {
     id: "company",
     title: "Je recherche une structure",
-    desc: "Informations relatives aux entreprises et organisations"
+    desc: "Informations relatives aux entreprises et organisations",
+    href: "/company"
   },
   {
     id: "directory",
     title: "Je recherche une administration",
-    desc: "Annuaire des services de l'Etat dans les Outre-Mer"
+    desc: "Annuaire des services de l'Etat dans les Outre-Mer",
+    href: "/explore-directory"
   }
 ];
