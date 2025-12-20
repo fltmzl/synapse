@@ -83,61 +83,61 @@ export function initialElements() {
     position: center
   });
 
-  nodes.push({
-    id: `group-1`,
-    type: "groupNode",
-    data: { label: `Distribution & Logistics` },
-    position: { x: 100, y: 100 },
-    style: {
-      width: "auto", // biarkan auto
-      height: "auto", // biarkan auto
-      minWidth: 300,
-      minHeight: 200
-    }
-  });
-  nodes.push({
-    id: `shopie`,
-    type: "circleBlueNode",
-    data: { label: `Shopie Laurent` },
-    position: { x: 10, y: 10 },
-    parentId: "group-1",
-    extent: "parent"
-  });
-  nodes.push({
-    id: `lucien`,
-    type: "circleBlueNode",
-    data: { label: `Lucien Moreau` },
-    position: { x: 20, y: 20 },
-    parentId: "group-1",
-    extent: "parent"
-  });
+  // nodes.push({
+  //   id: `group-1`,
+  //   type: "groupNode",
+  //   data: { label: `Distribution & Logistics` },
+  //   position: { x: 100, y: 100 },
+  //   style: {
+  //     width: "auto", // biarkan auto
+  //     height: "auto", // biarkan auto
+  //     minWidth: 300,
+  //     minHeight: 200
+  //   }
+  // });
+  // nodes.push({
+  //   id: `shopie`,
+  //   type: "circleBlueNode",
+  //   data: { label: `Shopie Laurent` },
+  //   position: { x: 10, y: 10 },
+  //   parentId: "group-1",
+  //   extent: "parent"
+  // });
+  // nodes.push({
+  //   id: `lucien`,
+  //   type: "circleBlueNode",
+  //   data: { label: `Lucien Moreau` },
+  //   position: { x: 20, y: 20 },
+  //   parentId: "group-1",
+  //   extent: "parent"
+  // });
 
-  edges.push({
-    id: "5-shopie",
-    source: "5",
-    target: "shopie",
-    type: "customEdge"
-  });
-  edges.push({
-    id: "5-lucien",
-    source: "5",
-    target: "lucien",
-    type: "customEdge"
-  });
+  // edges.push({
+  //   id: "5-shopie",
+  //   source: "5",
+  //   target: "shopie",
+  //   type: "customEdge"
+  // });
+  // edges.push({
+  //   id: "5-lucien",
+  //   source: "5",
+  //   target: "lucien",
+  //   type: "customEdge"
+  // });
 
-  edges.push({
-    id: "shopie-group-1",
-    source: "shopie",
-    target: "group-1",
-    type: "customEdge"
-  });
+  // edges.push({
+  //   id: "shopie-group-1",
+  //   source: "shopie",
+  //   target: "group-1",
+  //   type: "customEdge"
+  // });
 
-  edges.push({
-    id: "lucien-group-1",
-    source: "lucien",
-    target: "group-1",
-    type: "customEdge"
-  });
+  // edges.push({
+  //   id: "lucien-group-1",
+  //   source: "lucien",
+  //   target: "group-1",
+  //   type: "customEdge"
+  // });
 
   for (let i = 0; i < 8; i++) {
     const degrees = i * (360 / 8);

@@ -28,6 +28,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { EditIcon } from "@/icons/edit-icon";
 import { cn } from "@/lib/utils";
 import useCountryCodeDropdownData from "@/queries/use-country-code-dropdown-data";
+import useMyProfile from "@/queries/use-my-profile";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Check, ChevronDown } from "lucide-react";
 import Image from "next/image";
@@ -45,6 +46,7 @@ const formSchema = z.object({
 });
 
 export default function ProfileForm() {
+  const { data: myProfile } = useMyProfile();
   const {
     data: countryCodes,
     isLoading: isLoadingCountryCodes,

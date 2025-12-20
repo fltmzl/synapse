@@ -11,6 +11,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import ProfileDekstop from "./(main)/(landing-page)/components/profile-dekstop";
 import ProfileMobile from "./(main)/(landing-page)/components/profile-mobile";
+import { useAuthGlobal } from "@/stores/auth-global.store";
 
 const NAV_ITEMS = [
   { label: "Actualité", href: "/news" },
@@ -22,7 +23,8 @@ const NAV_ITEMS = [
 
 export default function Header() {
   const pathname = usePathname();
-  const isLoggedIn = true;
+  const { user } = useAuthGlobal();
+  const isLoggedIn = Boolean(user);
 
   const [open, setOpen] = useState(false);
   const panelRef = useRef<HTMLDivElement | null>(null);

@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input";
 import { EyeIcon } from "@/icons/eye-icon";
 import { EyeOffIcon } from "@/icons/eye-off-icon";
 import { GoogleIcon } from "@/icons/google-icon";
+import { AuthService } from "@/services/auth.api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -42,26 +43,27 @@ export default function LoginForm() {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     console.log("Submit");
-    // try {
-    //   const user = await AuthService.loginWithEmail({
-    //     email: values.email,
-    //     password: values.password
-    //   });
+    try {
+      const user = await AuthService.loginWithEmail({
+        email: values.email,
+        password: values.password
+      });
 
-    //   router.push("/onboarding");
-    // } catch (err) {
-    //   form.setError("password", { message: "Invalid email or password" });
-    // }
+      console.log({ user });
+      router.push("/");
+    } catch (err) {
+      form.setError("password", { message: "Invalid email or password" });
+    }
   };
 
   const handleGoogleLogin = async () => {
     console.log("Google Login");
-    // try {
-    //   const user = await AuthService.loginWithGoogle();
-    //   if (user) router.push("/onboarding");
-    // } catch (error) {
-    //   console.error("Google login error:", error);
-    // }
+    try {
+      const user = await AuthService.loginWithGoogle();
+      if (user) router.push("/");
+    } catch (error) {
+      console.error("Google login error:", error);
+    }
   };
 
   return (

@@ -1,18 +1,27 @@
 "use client";
 
-import { PanelRightClose } from "lucide-react";
 import * as React from "react";
-
-import { NavMenus } from "@/components/nav-menus";
-import { NavSecondary } from "@/components/nav-secondary";
-import { NavUser } from "@/components/nav-user";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
-  AlertDialog,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogHeader,
-  AlertDialogTitle
-} from "@/components/ui/alert-dialog";
+  ChevronRight,
+  LayoutDashboard,
+  Settings,
+  Users,
+  FileText,
+  BarChart3,
+  Package,
+  ShoppingCart,
+  Inbox,
+  UserCircle,
+  Bell,
+  HelpCircle,
+  Shield,
+  Database,
+  Ticket,
+  PanelLeft
+} from "lucide-react";
+
 import {
   Sidebar,
   SidebarContent,
@@ -20,48 +29,279 @@ import {
   SidebarHeader,
   SidebarMenu,
   SidebarMenuItem,
+  SidebarMenuButton,
+  SidebarMenuSub,
+  SidebarMenuSubItem,
+  SidebarMenuSubButton,
+  SidebarGroup,
+  SidebarGroupLabel,
+  SidebarGroupContent,
+  SidebarTrigger,
+  SidebarRail,
   useSidebar
 } from "@/components/ui/sidebar";
-import useIsClient from "@/hooks/use-is-client";
-import useModal from "@/hooks/use-modal";
-import { DashboardRoundedIcon } from "@/icons/dashboard-rounded-icon";
-import { EditIcon } from "@/icons/edit-icon";
-import { FlagIcon } from "@/icons/flag-icon";
-import { FoldersIcon } from "@/icons/folders-icon";
-import { MessageIcon } from "@/icons/message-icon";
-import { ReceiptIcon } from "@/icons/receipt-icon";
-import { Settings2Icon } from "@/icons/settings2-icon";
-import SuccessIcon from "@/icons/success-icon";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger
+} from "@/components/ui/collapsible";
 import { cn } from "@/lib/utils";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
 import BrandLogo from "./brand-logo";
-import { PinnedChat } from "./pinned-chat";
-import { H1 } from "./typography/h1";
-import { Button } from "./ui/button";
-import { Progress } from "./ui/progress";
-import { Separator } from "./ui/separator";
-import { Skeleton } from "./ui/skeleton";
 
 export type NavMenu = {
-  title?: string;
-  name?: string;
+  title: string;
   url: string;
-  icon: (props: React.SVGProps<SVGSVGElement>) => React.JSX.Element;
-  isActive: boolean;
+  icon: React.ComponentType<{ className?: string }>;
+  items: { title: string; url: string }[];
 };
 
+// Define menu structure with submenus
+const menuItems: NavMenu[] = [
+  // {
+  //   title: "Dashboard",
+  //   url: "/dashboard",
+  //   icon: LayoutDashboard,
+  //   items: [] // No submenu
+  // },
+  {
+    title: "Article",
+    url: "/dashboard/admin-panel/article",
+    icon: FileText,
+    items: []
+  }
+  // {
+  //   title: "Products",
+  //   url: "/dashboard/products",
+  //   icon: Package,
+  //   items: [
+  //     {
+  //       title: "All Products",
+  //       url: "/dashboard/admin-panel"
+  //     },
+  //     {
+  //       title: "Add Product",
+  //       url: "/dashboard/products/add"
+  //     },
+  //     {
+  //       title: "Categories",
+  //       url: "/dashboard/products/categories"
+  //     },
+  //     {
+  //       title: "Inventory",
+  //       url: "/dashboard/products/inventory"
+  //     }
+  //   ]
+  // }
+];
+
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const { toggleSidebar, state } = useSidebar();
+  const pathname = usePathname();
+  const { state } = useSidebar();
 
-  // const getIsActive = (url: string, exact = false) => {
-  //   if (exact) return pathname === url;
-  //   return pathname.includes(url);
-  // };
+  // Check if a menu item or its submenu is active
+  const isMenuActive = (item: (typeof menuItems)[0]) => {
+    // Exact match for Dashboard menu only
+    if (item.url === "/dashboard") {
+      return pathname === "/dashboard";
+    }
 
-  const data = [];
+    // For other menus, check exact match first
+    if (pathname === item.url) return true;
 
-  const isCollapsed = state === "collapsed";
+    // Check if any submenu is active
+    if (item.items.length > 0) {
+      return item.items.some((subItem) => pathname === subItem.url);
+    }
 
-  return null;
+    // Check if pathname starts with the menu url (for nested routes)
+    if (pathname.startsWith(item.url + "/")) return true;
+
+    return false;
+  };
+
+  // Check if submenu item is active
+  const isSubMenuActive = (url: string) => {
+    return pathname === url;
+  };
+
+  return (
+    <Sidebar collapsible="icon" {...props}>
+      <SidebarHeader className="border-b border-sidebar-border">
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <div className="flex items-center gap-2">
+              <SidebarMenuButton
+                size="lg"
+                asChild
+                className={cn("flex-1", { hidden: state === "collapsed" })}
+              >
+                <Link href="/dashboard">
+                  <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+                    <LayoutDashboard className="size-4" />
+                  </div>
+                  <div className="grid flex-1 text-left text-sm leading-tight">
+                    <span className="truncate font-semibold">Synapse</span>
+                    <span className="truncate text-xs text-muted-foreground">
+                      Admin Dashboard
+                    </span>
+                  </div>
+                </Link>
+              </SidebarMenuButton>
+              <SidebarTrigger className="ml-auto" />
+            </div>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarHeader>
+
+      <SidebarContent>
+        <SidebarGroup>
+          <SidebarGroupLabel className="text-xs font-semibold uppercase tracking-wider">
+            Main Menu
+          </SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {menuItems.map((item) => {
+                const isActive = isMenuActive(item);
+                const hasSubmenu = item.items.length > 0;
+
+                return (
+                  <SidebarMenuItem key={item.title}>
+                    {hasSubmenu ? (
+                      <Collapsible
+                        defaultOpen={isActive}
+                        className="group/collapsible"
+                      >
+                        <CollapsibleTrigger asChild>
+                          <SidebarMenuButton
+                            tooltip={item.title}
+                            isActive={isActive}
+                          >
+                            <item.icon className="size-4" />
+                            <span>{item.title}</span>
+                            <ChevronRight className="ml-auto size-4 transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                          </SidebarMenuButton>
+                        </CollapsibleTrigger>
+                        <CollapsibleContent>
+                          <SidebarMenuSub>
+                            {item.items.map((subItem) => {
+                              const isSubActive = isSubMenuActive(subItem.url);
+                              return (
+                                <SidebarMenuSubItem key={subItem.title}>
+                                  <SidebarMenuSubButton
+                                    asChild
+                                    isActive={isSubActive}
+                                  >
+                                    <Link href={subItem.url}>
+                                      <span>{subItem.title}</span>
+                                    </Link>
+                                  </SidebarMenuSubButton>
+                                </SidebarMenuSubItem>
+                              );
+                            })}
+                          </SidebarMenuSub>
+                        </CollapsibleContent>
+                      </Collapsible>
+                    ) : (
+                      <SidebarMenuButton
+                        asChild
+                        tooltip={item.title}
+                        isActive={isActive}
+                      >
+                        <Link href={item.url}>
+                          <item.icon className="size-4" />
+                          <span>{item.title}</span>
+                        </Link>
+                      </SidebarMenuButton>
+                    )}
+                  </SidebarMenuItem>
+                );
+              })}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
+        {/* Secondary Menu Group */}
+        {/* <SidebarGroup>
+          <SidebarGroupLabel className="text-xs font-semibold uppercase tracking-wider">
+            Support
+          </SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  asChild
+                  tooltip="Help Center"
+                  isActive={pathname === "/dashboard/help"}
+                  className={cn(
+                    "transition-all duration-200",
+                    pathname === "/dashboard/help" &&
+                      "bg-primary/10 text-primary font-semibold"
+                  )}
+                >
+                  <Link href="/dashboard/help">
+                    <HelpCircle className="size-4" />
+                    <span>Help Center</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  asChild
+                  tooltip="Notifications"
+                  isActive={pathname === "/dashboard/notifications"}
+                  className={cn(
+                    "transition-all duration-200",
+                    pathname === "/dashboard/notifications" &&
+                      "bg-primary/10 text-primary font-semibold"
+                  )}
+                >
+                  <Link href="/dashboard/notifications">
+                    <Bell className="size-4" />
+                    <span>Notifications</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup> */}
+      </SidebarContent>
+
+      <SidebarFooter className="border-t border-sidebar-border">
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              asChild
+              tooltip="Profile"
+              size="lg"
+              isActive={pathname === "/dashboard/profile"}
+              className={cn(
+                "transition-all duration-200",
+                pathname === "/dashboard/profile" &&
+                  "bg-primary/10 text-primary font-semibold"
+              )}
+            >
+              <Link href="/dashboard/profile" className="flex gap-5">
+                <UserCircle
+                  className={cn("size-5", {
+                    "mx-auto": state === "collapsed"
+                  })}
+                />
+                <div
+                  className={cn("flex flex-col gap-0.5 leading-none", {
+                    hidden: state === "collapsed"
+                  })}
+                >
+                  <span className="font-semibold">Admin User</span>
+                  <span className="text-xs text-muted-foreground">
+                    admin@synapse.com
+                  </span>
+                </div>
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarFooter>
+      <SidebarRail />
+    </Sidebar>
+  );
 }

@@ -9,8 +9,11 @@ import {
 } from "@/components/ui/dropdown-menu";
 import useModal from "@/hooks/use-modal";
 import { LogoutIcon } from "@/icons/logout-icon";
-import { SettingsIcon } from "lucide-react";
+import { LayoutDashboardIcon, SettingsIcon } from "lucide-react";
 import ProfileDialog from "./dialog/profile-dialog";
+import { useRouter } from "next/navigation";
+import { signOut } from "firebase/auth";
+import { auth } from "@/firebase/config";
 
 type Props = {
   image: string;
@@ -19,6 +22,23 @@ type Props = {
 
 export default function ProfileDekstop({ image, username }: Props) {
   const { isOpen, openModal, setIsOpen } = useModal(false);
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+
+      router.push("/auth/login");
+    } catch (err) {
+      const error = err as { message: string };
+
+      console.log(error.message);
+    }
+  };
+
+  const goToAdminPanel = () => {
+    router.push("/dashboard/admin-panel");
+  };
 
   return (
     <>
@@ -30,10 +50,17 @@ export default function ProfileDekstop({ image, username }: Props) {
           </Avatar>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-[146px] rounded-[4px]">
+          <DropdownMenuItem className="font-medium" onClick={goToAdminPanel}>
+            <LayoutDashboardIcon /> Admin Panel
+          </DropdownMenuItem>
           <DropdownMenuItem className="font-medium" onClick={openModal}>
             <SettingsIcon /> Setting
           </DropdownMenuItem>
-          <DropdownMenuItem variant="destructive" className="font-medium">
+          <DropdownMenuItem
+            variant="destructive"
+            className="font-medium"
+            onClick={handleLogout}
+          >
             <LogoutIcon />
             Logout
           </DropdownMenuItem>

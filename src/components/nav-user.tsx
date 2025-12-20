@@ -45,7 +45,7 @@ export function NavUser() {
     try {
       await signOut(auth);
 
-      router.push("/");
+      router.push("/auth/login");
     } catch (err) {
       const error = err as { message: string };
 
