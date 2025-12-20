@@ -1,0 +1,11 @@
+.tiptap.ProseMirror {
+  .tiptap-file-node-wrapper {
+    margin: 1rem 0;
+
+    &.ProseMirror-selectednode {
+      > div {
+        outline: 0.125rem solid var(--tt-brand-color-500);
+      }
+    }
+  }
+}

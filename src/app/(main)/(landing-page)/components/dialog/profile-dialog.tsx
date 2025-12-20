@@ -12,6 +12,9 @@ import { useState } from "react";
 import BillingForm from "../form/billing-form";
 import ChangePasswordForm from "../form/change-password-form";
 import ProfileForm from "../form/profile-form";
+import { signOut } from "firebase/auth";
+import { auth } from "@/firebase/config";
+import { useRouter } from "next/navigation";
 
 type Props = {
   isOpen: boolean;
@@ -22,6 +25,7 @@ export type SettingMenuType = "profile" | "security" | "billing";
 
 export default function ProfileDialog({ isOpen, setIsOpen }: Props) {
   const [activeMenu, setActiveMenu] = useState<SettingMenuType>("profile");
+  const router = useRouter();
 
   const settingMenus: { slug: SettingMenuType; title: string }[] = [
     {
@@ -64,6 +68,18 @@ export default function ProfileDialog({ isOpen, setIsOpen }: Props) {
     }
   };
 
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+
+      router.push("/auth/login");
+    } catch (err) {
+      const error = err as { message: string };
+
+      console.log(error.message);
+    }
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogHeader className="sr-only">
@@ -98,6 +114,7 @@ export default function ProfileDialog({ isOpen, setIsOpen }: Props) {
             ))}
 
             <Button
+              onClick={handleLogout}
               variant="ghost"
               className={cn(
                 "text-destructive hover:text-destructive font-normal md:flex md:justify-start md:px-2.5"

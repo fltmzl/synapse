@@ -1,0 +1,21 @@
+.tiptap.ProseMirror {
+  .tiptap-video-node-wrapper {
+    margin: 2rem 0;
+    display: block;
+    width: 100%;
+    max-width: 48rem; // max-w-2xl
+
+    video {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      border-radius: var(--tt-radius-xs, 0.25rem);
+    }
+
+    &.ProseMirror-selectednode {
+      .tiptap-video {
+        outline: 0.125rem solid var(--tt-brand-color-500);
+      }
+    }
+  }
+}

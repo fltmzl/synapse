@@ -29,13 +29,10 @@ export function NavMenus({ menus, ...props }: { menus: NavMenu[] }) {
       <SidebarGroupContent>
         <SidebarMenu>
           {menus.map((item) => (
-            <SidebarMenuItem key={item.name}>
+            <SidebarMenuItem key={item.title}>
               <SidebarMenuButton
                 className={cn(
-                  "text-muted-foreground text-sm font-semibold px-2.5",
-                  {
-                    "bg-secondary-light text-primary": item.isActive
-                  }
+                  "text-muted-foreground text-sm font-semibold px-2.5"
                 )}
                 asChild
               >
@@ -43,7 +40,7 @@ export function NavMenus({ menus, ...props }: { menus: NavMenu[] }) {
                   <div className="text-lg">
                     <item.icon />
                   </div>
-                  <span>{item.name}</span>
+                  <span>{item.title}</span>
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>

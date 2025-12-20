@@ -1,3 +1,5 @@
 export const QUERIES = {
-  COUNTRY_CODES: "country-codes"
+  COUNTRY_CODES: "country-codes",
+  ARTICLES: "articles",
+  MY_PROFILE: "my-profile"
 };

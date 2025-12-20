@@ -37,10 +37,7 @@ export function NavSecondary({
             <SidebarMenuItem key={item.title}>
               <SidebarMenuButton
                 className={cn(
-                  "text-muted-foreground text-sm font-semibold px-2.5",
-                  {
-                    "bg-secondary-light text-primary": item.isActive
-                  }
+                  "text-muted-foreground text-sm font-semibold px-2.5"
                 )}
                 asChild
               >
