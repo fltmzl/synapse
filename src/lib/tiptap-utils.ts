@@ -379,7 +379,7 @@ export const handleImageUpload = async (
 
   const timestamp = Date.now();
   const fileName = `${timestamp}-${file.name}`;
-  const path = `articles/${fileName}`;
+  const path = `images/${fileName}`;
 
   const fileUrl = await StorageService.uploadFile(file, path, (progress) => {
     if (abortSignal?.aborted) {

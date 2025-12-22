@@ -31,6 +31,8 @@ export class ArticleService {
     const docRef = doc(db, ArticleService.colName, id);
     const docSnap = await getDoc(docRef);
 
+    console.log(docSnap.data());
+
     if (docSnap.exists()) {
       return {
         id: docSnap.id,

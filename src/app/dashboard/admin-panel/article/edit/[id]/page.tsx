@@ -59,6 +59,7 @@ export default function EditArticlePage() {
         slug: article.slug,
         summary: article.summary,
         content: article.content,
+        coverImage: article.coverImage,
         tags: article.tags || []
       }}
       onSubmitAndSaveDraft={onSubmitAndSaveDraft}
