@@ -97,7 +97,7 @@ export default function DataTableMain<TData, TValue>({
                 data-state={row.getIsSelected() && "selected"}
               >
                 {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id} className="py-4 font-normal text-sm">
+                  <TableCell key={cell.id} className="font-normal text-sm">
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 ))}

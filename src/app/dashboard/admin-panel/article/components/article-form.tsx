@@ -15,14 +15,18 @@ import {
   FormMessage
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { ImageUpload } from "@/components/ui/image-upload";
 import { Skeleton } from "@/components/ui/skeleton";
 import { TagsInput } from "@/components/ui/tags-input";
 import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Save } from "lucide-react";
+import { ArrowLeft, Save } from "lucide-react";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import Link from "next/link";
+import { useUnsavedChanges } from "@/hooks/use-unsaved-changes";
+import { UnsavedChangesDialog } from "@/components/ui/unsaved-changes-dialog";
 
 const TITLE_MAX_LENGTH = 150;
 const SUMMARY_MAX_LENGTH = 300;
@@ -44,6 +48,7 @@ export const articleFormSchema = z.object({
       `Summary must not exceed ${SUMMARY_MAX_LENGTH} characters`
     ),
   tags: z.array(z.string()).optional(),
+  coverImage: z.string().optional(),
   content: z.string().min(1, "Content is required")
 });
 
@@ -73,6 +78,7 @@ export function ArticleForm({
       slug: "",
       summary: "",
       content: "",
+      coverImage: "",
       tags: []
     },
     mode: "all"
@@ -137,8 +143,17 @@ export function ArticleForm({
     }
   };
 
+  const { showPrompt, confirmNavigation, cancelNavigation } = useUnsavedChanges(
+    form.formState.isDirty
+  );
+
   return (
     <>
+      <UnsavedChangesDialog
+        open={showPrompt}
+        onConfirm={confirmNavigation}
+        onCancel={cancelNavigation}
+      />
       <DashboardHeader
         title={pageTitle}
         description={pageDescription}
@@ -177,6 +192,13 @@ export function ArticleForm({
             className="flex flex-col"
           >
             <div className="p-4 space-y-4 w-full max-w-3xl mx-auto">
+              <Link
+                href="/dashboard/admin-panel/article"
+                className="flex items-center text-secondary text-sm w-fit"
+              >
+                <ArrowLeft className="size-4 mr-2" />
+                Back to articles
+              </Link>
               <FormField
                 control={form.control}
                 name="title"
@@ -255,6 +277,26 @@ export function ArticleForm({
                   </FormItem>
                 )}
               />
+              <FormField
+                control={form.control}
+                name="coverImage"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="font-medium">Cover Image</FormLabel>
+                    <FormDescription>
+                      Upload a cover image for your article.
+                    </FormDescription>
+                    <FormControl>
+                      <ImageUpload
+                        value={field.value}
+                        onChange={field.onChange}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
               <FormField
                 control={form.control}
                 name="tags"

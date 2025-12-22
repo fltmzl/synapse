@@ -26,14 +26,22 @@ export default function ArticlePage() {
       <DashboardHeader
         title="Article"
         description="Create and manage articles"
+        actions={
+          <Button size="sm" asChild>
+            <Link href="/dashboard/admin-panel/article/new">
+              <Plus className="size-4 mr-2" />
+              New Article
+            </Link>
+          </Button>
+        }
       />
       <div className="flex flex-1 flex-col gap-4 p-4">
         <DataTable
-          tableTitle="Articles"
+          // tableTitle="Articles"
           searchPlaceholder="Search by title..."
           data={articles || []}
           columns={articleColumns}
-          headerAction={HeaderAction}
+          headerAction={() => <></>}
           search="title"
           isLoading={isLoading}
           toolbarComponent={() => <></>}

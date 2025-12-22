@@ -6,6 +6,7 @@ export type Article = {
   slug: string;
   summary: string;
   content: string;
+  coverImage?: string;
   tags?: string[];
   createdAt: Timestamp;
   updatedAt: Timestamp;
@@ -17,6 +18,7 @@ export type CreateArticleDto = {
   slug: string;
   summary: string;
   content: string;
+  coverImage?: string;
   tags?: string[];
   isPublished?: boolean;
 };

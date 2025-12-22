@@ -9,6 +9,14 @@ const nextConfig: NextConfig = {
         permanent: false
       }
     ];
+  },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "firebasestorage.googleapis.com"
+      }
+    ]
   }
 };
 
