@@ -34,10 +34,12 @@ export type RegisterPayload = {
 };
 
 export type CreateUserPayload = {
-  companyId: string;
   email: string;
-  name: string;
+  firstName: string;
+  lastName: string;
   role: Role;
+  phoneNumber: string;
+  countryCode?: string;
 };
 
 export class AuthService {

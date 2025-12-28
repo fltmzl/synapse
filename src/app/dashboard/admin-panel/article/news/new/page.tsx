@@ -4,7 +4,7 @@ import useArticleMutation from "@/mutations/use-article-mutation";
 import { useRouter } from "next/navigation";
 import { ArticleForm, ArticleFormValues } from "../components/article-form";
 
-export default function NewArticlePage() {
+export default function NewNewsPage() {
   const router = useRouter();
   const { createArticleMutation } = useArticleMutation();
 
@@ -16,7 +16,7 @@ export default function NewArticlePage() {
       {
         ...data,
         isPublished,
-        sectionCategory: "top_of_the_day",
+        sectionCategory: "news",
         viewCount: 0,
         shareCount: 0,
         bookmarkCount: 0,
@@ -25,7 +25,7 @@ export default function NewArticlePage() {
       },
       {
         onSuccess: () => {
-          router.push("/dashboard/admin-panel/article");
+          router.push("/dashboard/admin-panel/article/news");
         }
       }
     );
@@ -44,8 +44,8 @@ export default function NewArticlePage() {
       onSubmitAndSaveDraft={onSubmitAndSaveDraft}
       onSubmitAndPublish={onSubmitAndPublish}
       isMutationLoading={createArticleMutation.isPending}
-      pageTitle="New Post"
-      pageDescription="Create a new post"
+      pageTitle="New News Post"
+      pageDescription="Create a new news post"
     />
   );
 }

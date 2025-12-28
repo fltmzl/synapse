@@ -64,8 +64,26 @@ const menuItems: NavMenu[] = [
   //   items: [] // No submenu
   // },
   {
-    title: "Article",
+    title: "Top of the day",
     url: "/dashboard/admin-panel/article",
+    icon: FileText,
+    items: []
+  },
+  {
+    title: "Latest Publication",
+    url: "/dashboard/admin-panel/article/latest-publication",
+    icon: FileText,
+    items: []
+  },
+  {
+    title: "News",
+    url: "/dashboard/admin-panel/article/news",
+    icon: FileText,
+    items: []
+  },
+  {
+    title: "Business Corner",
+    url: "/dashboard/admin-panel/article/business-corner",
     icon: FileText,
     items: []
   }
@@ -105,16 +123,26 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       return pathname === "/dashboard";
     }
 
+    // Check if any submenu is active (exact match)
+    if (item.items.length > 0) {
+      if (item.items.some((subItem) => pathname === subItem.url)) return true;
+    }
+
     // For other menus, check exact match first
     if (pathname === item.url) return true;
 
-    // Check if any submenu is active
-    if (item.items.length > 0) {
-      return item.items.some((subItem) => pathname === subItem.url);
-    }
-
     // Check if pathname starts with the menu url (for nested routes)
-    if (pathname.startsWith(item.url + "/")) return true;
+    // But only if it's the most specific match.
+    // We check if there are other menu items that are more specific.
+    if (pathname.startsWith(item.url + "/")) {
+      const otherMatches = menuItems.filter(
+        (mi) =>
+          mi.url !== item.url &&
+          pathname.startsWith(mi.url) &&
+          mi.url.length > item.url.length
+      );
+      return otherMatches.length === 0;
+    }
 
     return false;
   };
@@ -156,7 +184,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel className="text-xs font-semibold uppercase tracking-wider">
-            Main Menu
+            Articles
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>

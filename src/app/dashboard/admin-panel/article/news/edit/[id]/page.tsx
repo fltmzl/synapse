@@ -6,7 +6,7 @@ import { useParams, useRouter } from "next/navigation";
 import { ArticleForm, ArticleFormValues } from "../../components/article-form";
 import { Spinner } from "@/components/spinner";
 
-export default function EditArticlePage() {
+export default function EditNewsPage() {
   const params = useParams();
   const id = params.id as string;
   const router = useRouter();
@@ -38,7 +38,7 @@ export default function EditArticlePage() {
       { id, data: { ...data, isPublished } },
       {
         onSuccess: () => {
-          router.push("/dashboard/admin-panel/article");
+          router.push("/dashboard/admin-panel/article/news");
         }
       }
     );
@@ -66,8 +66,8 @@ export default function EditArticlePage() {
       onSubmitAndSaveDraft={onSubmitAndSaveDraft}
       onSubmitAndPublish={onSubmitAndPublish}
       isMutationLoading={updateArticleMutation.isPending}
-      pageTitle="Edit Article"
-      pageDescription="Update your article"
+      pageTitle="Edit News Post"
+      pageDescription="Update your news post"
     />
   );
 }

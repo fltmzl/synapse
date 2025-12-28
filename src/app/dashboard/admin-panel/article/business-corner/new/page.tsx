@@ -4,7 +4,7 @@ import useArticleMutation from "@/mutations/use-article-mutation";
 import { useRouter } from "next/navigation";
 import { ArticleForm, ArticleFormValues } from "../components/article-form";
 
-export default function NewArticlePage() {
+export default function NewBusinessCornerPage() {
   const router = useRouter();
   const { createArticleMutation } = useArticleMutation();
 
@@ -16,7 +16,7 @@ export default function NewArticlePage() {
       {
         ...data,
         isPublished,
-        sectionCategory: "top_of_the_day",
+        sectionCategory: "business_corner",
         viewCount: 0,
         shareCount: 0,
         bookmarkCount: 0,
@@ -25,7 +25,7 @@ export default function NewArticlePage() {
       },
       {
         onSuccess: () => {
-          router.push("/dashboard/admin-panel/article");
+          router.push("/dashboard/admin-panel/article/business-corner");
         }
       }
     );
@@ -44,8 +44,8 @@ export default function NewArticlePage() {
       onSubmitAndSaveDraft={onSubmitAndSaveDraft}
       onSubmitAndPublish={onSubmitAndPublish}
       isMutationLoading={createArticleMutation.isPending}
-      pageTitle="New Post"
-      pageDescription="Create a new post"
+      pageTitle="New Business Corner Post"
+      pageDescription="Create a new business corner post"
     />
   );
 }

@@ -1,20 +1,22 @@
 import { adminDb, firebaseAdmin } from "@/firebase/firebase.admin";
 import { User } from "@/types/user.type";
 import { firestore } from "firebase-admin";
-import { AuthService, CreateUserPayload } from "./auth.api";
-import { MailService } from "./mail.api";
+import { AuthService, CreateUserPayload } from "../auth.api";
+import { MailService } from "../mail.api";
 
 export class AuthAdminService {
-  static async createUserByAdmin({
+  static async createUser({
     email,
-    name,
+    firstName,
+    lastName,
     role,
-    companyId
+    phoneNumber,
+    countryCode
   }: CreateUserPayload) {
     // 1. Create user in Firebase Auth (Admin SDK)
     const userRecord = await firebaseAdmin.auth().createUser({
       email,
-      displayName: name
+      displayName: `${firstName} ${lastName}`
     });
 
     // 2. Insert to Firestore (Admin SDK)
@@ -22,19 +24,21 @@ export class AuthAdminService {
       uid: userRecord.uid,
       email,
       role,
-      companyId,
-      firstName: name,
-      lastName: "",
-      phoneNumber: "",
-      createdAt: firestore.FieldValue.serverTimestamp(), // pakai Date di Admin SDK
-      createdBy: "superadmin"
+      firstName,
+      lastName,
+      phoneNumber,
+      countryCode,
+      createdAt: firestore.FieldValue.serverTimestamp()
     });
 
     // 3. Assign role via backend
     await AuthService.assignRole(userRecord.uid, role);
 
     // 4. Send email to user to set password
-    await AuthAdminService.sendSetPasswordLink({ email, name });
+    await AuthAdminService.sendSetPasswordLink({
+      email,
+      name: `${firstName} ${lastName}`
+    });
 
     return userRecord;
   }
@@ -68,7 +72,7 @@ export class AuthAdminService {
     await MailService.sendMail({
       to: [email],
       message: {
-        subject: "Brandiie - Welcome",
+        subject: "Synapse - Welcome",
         html: MailService.createClientUserWelcomeTemplate({
           firstName: name,
           passwordLink: setPasswordLink
@@ -91,7 +95,7 @@ export class AuthAdminService {
     await MailService.sendMail({
       to: [email],
       message: {
-        subject: "Brandiie - Reset Password",
+        subject: "Synapse - Reset Password",
         text: `Hi ${
           name || ""
         }, click this link to reset your password: ${setPasswordLink}`

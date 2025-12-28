@@ -1,5 +1,11 @@
 import { Timestamp } from "firebase/firestore";
 
+export type SectionCategory =
+  | "top_of_the_day"
+  | "latest_publication"
+  | "news"
+  | "business_corner";
+
 export type Article = {
   id: string;
   title: string;
@@ -11,6 +17,18 @@ export type Article = {
   createdAt: Timestamp;
   updatedAt: Timestamp;
   isPublished: boolean;
+  sectionCategory?: SectionCategory;
+  category?: string;
+
+  /** Analytics & Engagement */
+  viewCount: number;
+  shareCount: number;
+  bookmarkCount: number;
+  readTimeAvg: number;
+
+  engagementScore: number; // combined score: view + share + bookmark + read time
+
+  publishedAt?: Timestamp; // timestamp saat pertama kali dipublish
 };
 
 export type CreateArticleDto = {
@@ -20,7 +38,18 @@ export type CreateArticleDto = {
   content: string;
   coverImage?: string;
   tags?: string[];
-  isPublished?: boolean;
+  isPublished: boolean;
+  sectionCategory?: SectionCategory;
+  category?: string;
+
+  viewCount: number;
+  shareCount: number;
+  bookmarkCount: number;
+  readTimeAvg: number;
+
+  engagementScore: number;
+
+  publishedAt?: Timestamp;
 };
 
 export type UpdateArticleDto = Partial<CreateArticleDto>;

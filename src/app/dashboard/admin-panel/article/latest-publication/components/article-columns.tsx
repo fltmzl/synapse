@@ -15,7 +15,7 @@ export const articleColumns: ColumnDef<Article>[] = [
     header: "Title",
     cell: ({ row }) => (
       <Link
-        href={`/dashboard/admin-panel/article/edit/${row.original.id}`}
+        href={`/dashboard/admin-panel/latest-publication/edit/${row.original.id}`}
         className="font-medium max-w-[100px] truncate hover:underline"
       >
         {row.getValue("title")}

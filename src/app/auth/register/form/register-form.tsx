@@ -32,6 +32,7 @@ import { EyeOffIcon } from "@/icons/eye-off-icon";
 import { GoogleIcon } from "@/icons/google-icon";
 import { passwordValidation } from "@/lib/common-validation";
 import { cn } from "@/lib/utils";
+import { useRegister } from "@/mutations/use-register";
 import { CountryCodeService } from "@/services/country-code.api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery } from "@tanstack/react-query";
@@ -53,7 +54,7 @@ export default function RegisterForm({ onSuccess }: Props) {
   const [showPassword, setShowPassword] = useState(false);
   const [showRepeatPassword, setShowRepeatPassword] = useState(false);
 
-  // const registerMutation = useRegister();
+  const registerMutation = useRegister();
 
   const {
     data: countryCodes,
@@ -94,7 +95,6 @@ export default function RegisterForm({ onSuccess }: Props) {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log("register");
     onSuccess?.();
     // registerMutation.mutate(values, {
     //   onSuccess: () => {
@@ -111,16 +111,6 @@ export default function RegisterForm({ onSuccess }: Props) {
     //   }
     // });
   }
-
-  const handleGoogleLogin = async () => {
-    console.log("register with google");
-    // try {
-    //   const user = await AuthService.loginWithGoogle();
-    //   if (user) router.push("/onboarding");
-    // } catch (error) {
-    //   console.error("Google login error:", error);
-    // }
-  };
 
   return (
     <Form {...form}>
