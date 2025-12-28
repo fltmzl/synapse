@@ -9,17 +9,17 @@ import { DataTable } from "@/components/data-table/data-table";
 import { articleColumns } from "./components/article-columns";
 import useArticles from "@/queries/use-articles";
 
-export default function ArticlePage() {
-  const { data: articles, isLoading } = useArticles("top_of_the_day");
+export default function BusinessCornerPage() {
+  const { data: articles, isLoading } = useArticles("business_corner");
 
   return (
     <>
       <DashboardHeader
-        title="Top of the Day / Top du jour"
-        description="Create and manage articles"
+        title="Business Corner"
+        description="Create and manage business corner articles"
         actions={
           <Button size="sm" asChild>
-            <Link href="/dashboard/admin-panel/article/new">
+            <Link href="/dashboard/admin-panel/article/business-corner/new">
               <Plus className="size-4 mr-2" />
               New Post
             </Link>

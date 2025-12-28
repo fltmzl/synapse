@@ -9,19 +9,19 @@ import { DataTable } from "@/components/data-table/data-table";
 import { articleColumns } from "./components/article-columns";
 import useArticles from "@/queries/use-articles";
 
-export default function ArticlePage() {
-  const { data: articles, isLoading } = useArticles("top_of_the_day");
+export default function LatestPublicationPage() {
+  const { data: articles, isLoading } = useArticles("latest_publication");
 
   return (
     <>
       <DashboardHeader
-        title="Top of the Day / Top du jour"
-        description="Create and manage articles"
+        title="Latest Publication / Les dernières publications"
+        description="Create and manage latest publications"
         actions={
           <Button size="sm" asChild>
-            <Link href="/dashboard/admin-panel/article/new">
+            <Link href="/dashboard/admin-panel/latest-publication/new">
               <Plus className="size-4 mr-2" />
-              New Post
+              New Publication
             </Link>
           </Button>
         }

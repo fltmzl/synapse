@@ -6,20 +6,20 @@ import { Plus } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 import { DataTable } from "@/components/data-table/data-table";
-import { articleColumns } from "./components/article-columns";
+import { articleColumns } from "../components/article-columns";
 import useArticles from "@/queries/use-articles";
 
-export default function ArticlePage() {
-  const { data: articles, isLoading } = useArticles("top_of_the_day");
+export default function NewsPage() {
+  const { data: articles, isLoading } = useArticles("news");
 
   return (
     <>
       <DashboardHeader
-        title="Top of the Day / Top du jour"
-        description="Create and manage articles"
+        title="News / Actualité"
+        description="Create and manage news articles"
         actions={
           <Button size="sm" asChild>
-            <Link href="/dashboard/admin-panel/article/new">
+            <Link href="/dashboard/admin-panel/article/news/new">
               <Plus className="size-4 mr-2" />
               New Post
             </Link>

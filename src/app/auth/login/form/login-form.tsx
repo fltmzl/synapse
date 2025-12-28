@@ -1,5 +1,6 @@
 "use client";
 
+import { Spinner } from "@/components/spinner";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -42,7 +43,6 @@ export default function LoginForm() {
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log("Submit");
     try {
       const user = await AuthService.loginWithEmail({
         email: values.email,
@@ -57,7 +57,6 @@ export default function LoginForm() {
   };
 
   const handleGoogleLogin = async () => {
-    console.log("Google Login");
     try {
       const user = await AuthService.loginWithGoogle();
       if (user) router.push("/");
@@ -124,8 +123,9 @@ export default function LoginForm() {
           type="submit"
           size="lg"
           className="w-full mt-3"
-          disabled={!form.formState.isValid}
+          disabled={!form.formState.isValid || form.formState.isSubmitting}
         >
+          {form.formState.isSubmitting && <Spinner />}
           Sign in
         </Button>
       </form>
@@ -142,6 +142,7 @@ export default function LoginForm() {
           variant="outline"
           className="rounded-lg"
           onClick={handleGoogleLogin}
+          disabled={form.formState.isSubmitting}
         >
           <GoogleIcon />
           Google account

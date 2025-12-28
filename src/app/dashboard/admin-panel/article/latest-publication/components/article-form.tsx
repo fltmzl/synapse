@@ -212,11 +212,11 @@ export function ArticleForm({
           >
             <div className="p-4 space-y-4 w-full max-w-3xl mx-auto">
               <Link
-                href="/dashboard/admin-panel/article"
+                href="/dashboard/admin-panel/latest-publication"
                 className="flex items-center text-secondary text-sm w-fit"
               >
                 <ArrowLeft className="size-4 mr-2" />
-                Back to articles
+                Back to latest publications
               </Link>
               <FormField
                 control={form.control}

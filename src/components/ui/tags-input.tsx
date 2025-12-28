@@ -61,7 +61,7 @@ export function TagsInput({
   return (
     <div
       className={cn(
-        "flex flex-wrap items-center gap-2 rounded-md border border-input bg-background p-2",
+        "flex flex-wrap items-center gap-2 rounded-md border border-input bg-background px-3 py-2",
         disabled && "opacity-50"
       )}
     >
