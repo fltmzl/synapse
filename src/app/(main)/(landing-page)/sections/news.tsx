@@ -1,11 +1,21 @@
+"use client";
+
 import { Title } from "@/components/typography/title";
 import { Button } from "@/components/ui/button";
 import VideoPlayer from "@/components/video-player";
 import { newsData } from "@/data/news-data";
 import Link from "next/link";
 import NewsCard from "../components/card/news-card";
+import useArticles from "@/queries/use-articles";
+import NewsCardSkeleton from "../components/skeletons/news-card-skeleton";
+import { format } from "date-fns";
 
 export default function NewsSection() {
+  const { data: articles, isLoading } = useArticles({
+    sectionCategory: "top_of_the_day",
+    isPublished: true
+  });
+
   return (
     <div className="bg-background">
       <section className="w-full flex flex-col gap-10 lg:gap-16 pt-0 pb-12 lg:pb-25 px-6 max-w-7xl mx-auto">
@@ -38,16 +48,31 @@ export default function NewsSection() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 ">
-          {newsData.slice(0, 3).map((news, index) => (
-            <NewsCard
-              key={index}
-              category={news.category}
-              date={news.date}
-              title={news.title}
-              image={news.images[0]}
-            />
-          ))}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+          {Boolean(articles?.length) && !isLoading ? (
+            <>
+              {articles?.slice(0, 3).map((news, index) => (
+                <NewsCard
+                  key={index}
+                  category={news?.category || "No category"}
+                  date={
+                    news?.createdAt
+                      ? format(news?.createdAt.toDate(), "MMM dd, yyyy")
+                      : "Unknown date"
+                  }
+                  slug={news.slug}
+                  title={news?.title}
+                  image={news?.coverImage || ""}
+                />
+              ))}
+            </>
+          ) : (
+            <>
+              {Array.from({ length: 3 }).map((_, index) => (
+                <NewsCardSkeleton key={index} />
+              ))}
+            </>
+          )}
         </div>
       </section>
     </div>

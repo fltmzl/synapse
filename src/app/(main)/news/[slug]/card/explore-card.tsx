@@ -12,7 +12,7 @@ type ExploreCardProps = {
   title: string;
   category: string;
   date: string;
-  images: string[];
+  images: string[] | null;
   description?: string;
   className?: string;
 };
@@ -34,12 +34,16 @@ export default function ExploreCard({
     >
       <CardHeader className="p-0">
         <div className="relative w-full h-[147px] lg:h-[260px] rounded-md ">
-          <Image
-            src={images[0]}
-            alt={title}
-            fill
-            className="object-cover rounded-md "
-          />
+          {images && images.length > 0 ? (
+            <Image
+              src={images[0]}
+              alt={title}
+              fill
+              className="object-cover rounded-md "
+            />
+          ) : (
+            <div className="w-full h-full bg-muted-foreground rounded-md" />
+          )}
         </div>
       </CardHeader>
 

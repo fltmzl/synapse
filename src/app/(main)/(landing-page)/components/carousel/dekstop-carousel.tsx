@@ -1,14 +1,21 @@
 "use client";
 
 import SectionTitle from "@/components/typography/section-title";
-import { productionData } from "@/data/news-data";
 import { ArrowLeftIcon } from "@/icons/arrow-left-icon";
 import { ArrowRightIcon } from "@/icons/arrow-right-icon";
 import clsx from "clsx";
 import { useEffect, useRef, useState } from "react";
 import ProductionCard from "../card/production-card";
+import useArticles from "@/queries/use-articles";
+import NewsCardSkeleton from "../skeletons/news-card-skeleton";
+import { format } from "date-fns";
 
 export default function DesktopCarousel() {
+  const { data: productionData, isLoading } = useArticles({
+    sectionCategory: "latest_publication",
+    isPublished: true
+  });
+
   const desktopRef = useRef<HTMLDivElement | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const [dotCount, setDotCount] = useState(1);
@@ -70,7 +77,7 @@ export default function DesktopCarousel() {
       if (cards.length === 0) return;
 
       const cardWidth = cards[0].clientWidth;
-      const gap = 24; 
+      const gap = 24;
       const totalCardsWidth = cards.length * (cardWidth + gap) - gap;
       const visibleCards = Math.max(1, Math.floor(el.clientWidth / cardWidth));
       const pageWidth = visibleCards * (cardWidth + gap);
@@ -79,7 +86,7 @@ export default function DesktopCarousel() {
 
       const rawIndex = Math.round(el.scrollLeft / pageWidth);
       const nearRightEnd =
-        el.scrollLeft + el.clientWidth >= totalCardsWidth - 10; 
+        el.scrollLeft + el.clientWidth >= totalCardsWidth - 10;
 
       const newIndex = nearRightEnd
         ? maxIndex
@@ -141,14 +148,32 @@ export default function DesktopCarousel() {
           scrollSnapType: "x mandatory"
         }}
       >
-        {productionData.map((news, i) => (
-          <ProductionCard
-            key={i}
-            {...news}
-            className="snap-start flex-shrink-0"
-            variant="desktop"
-          />
-        ))}
+        {productionData && !isLoading ? (
+          <>
+            {productionData.map((news, i) => (
+              <ProductionCard
+                key={i}
+                className="snap-start flex-shrink-0"
+                variant="desktop"
+                title={news.title}
+                slug={news.slug}
+                image={news.coverImage}
+                category={news?.category || "Unknown category"}
+                date={
+                  news?.createdAt
+                    ? format(news.createdAt?.toDate(), "MMM d, yyyy")
+                    : "Unknown date"
+                }
+              />
+            ))}
+          </>
+        ) : (
+          <>
+            {Array.from({ length: 5 }).map((_, i) => (
+              <NewsCardSkeleton key={i} />
+            ))}
+          </>
+        )}
 
         <div className="flex-shrink-0 w-[24px]" />
       </div>

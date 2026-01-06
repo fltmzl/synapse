@@ -2,13 +2,14 @@
 
 import { TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
-import { NewsTabsHeader } from "@/types/news.type";
 
-export default function TabsHeader({
-  activeTab,
-  setActiveTab,
-  tabs
-}: NewsTabsHeader) {
+type Props = {
+  activeTab: string;
+  setActiveTab: (value: string) => void;
+  tabs: string[];
+};
+
+export default function TabsHeader({ activeTab, setActiveTab, tabs }: Props) {
   return (
     <TabsList className="flex  justify-start  rounded-none overflow-x-scroll hide-scrollbar w-full lg:w-max">
       {tabs.map((key) => (

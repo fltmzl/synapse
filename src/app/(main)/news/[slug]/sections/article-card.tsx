@@ -9,10 +9,12 @@ import { InstagramIconFlat } from "@/icons/instagram-icon-flat";
 import { LinkedinIconFlat } from "@/icons/linkedin-icon-flat";
 import { cn } from "@/lib/utils";
 import { Article } from "@/types/article.type";
+import { ImageOff } from "lucide-react";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { ArticleService } from "@/services/article.api";
 
 type Props = {
   articleDetail: Article | null;
@@ -26,10 +28,18 @@ export default function ArticleCard({ articleDetail }: Props) {
 
   const [activeImage, setActiveImage] = useState(0);
 
-  if (!article) {
+  if (!articleDetail) {
     return (
       <SectionContainer className="py-20 text-center text-muted-foreground">
-        Article not found.
+        <span>Article not found</span>
+        <div className="mt-10">
+          <Button variant="secondary" size="sm" asChild>
+            <Link href="/">
+              <ArrowLeftIcon className="w-4 h-4" />
+              Back to Home
+            </Link>
+          </Button>
+        </div>
       </SectionContainer>
     );
   }
@@ -43,6 +53,12 @@ export default function ArticleCard({ articleDetail }: Props) {
     setActiveImage((prev) =>
       prev === article.images.length - 1 ? 0 : prev + 1
     );
+
+  const handleShare = () => {
+    if (articleDetail?.id) {
+      ArticleService.incrementShare(articleDetail.id);
+    }
+  };
 
   return (
     <>
@@ -73,7 +89,9 @@ export default function ArticleCard({ articleDetail }: Props) {
                 <span className="w-px h-5 bg-muted-foreground/30" />
 
                 <p className="text-lg font-regular leading-[140%]">
-                  {article.createdAt?.toDate().toLocaleDateString()}
+                  {article.createdAt
+                    ? article.createdAt.toDate().toLocaleDateString()
+                    : "Unknown date"}
                 </p>
               </div>
             </header>
@@ -88,7 +106,12 @@ export default function ArticleCard({ articleDetail }: Props) {
                     className="object-cover transition-all duration-500"
                     priority
                   />
-                ) : null}
+                ) : (
+                  <div className="w-full h-[200px] lg:h-[600px] overflow-hidden rounded-md bg-muted text-muted-foreground grid place-content-center">
+                    <ImageOff size={34} className="mx-auto" />
+                    <p className="text-center mt-2">No Cover Image</p>
+                  </div>
+                )}
 
                 {article.images.length > 1 && (
                   <>
@@ -178,6 +201,7 @@ export default function ArticleCard({ articleDetail }: Props) {
                         variant="outline"
                         size="icon"
                         className="rounded-full w-[42px] h-[42px]"
+                        onClick={handleShare}
                         asChild
                       >
                         <Link
@@ -193,6 +217,7 @@ export default function ArticleCard({ articleDetail }: Props) {
                         variant="outline"
                         size="icon"
                         className="rounded-full w-[42px] h-[42px]"
+                        onClick={handleShare}
                         asChild
                       >
                         <Link
@@ -208,6 +233,7 @@ export default function ArticleCard({ articleDetail }: Props) {
                         variant="outline"
                         size="icon"
                         className="rounded-full w-[42px] h-[42px]"
+                        onClick={handleShare}
                         asChild
                       >
                         <Link

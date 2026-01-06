@@ -2,18 +2,23 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRightIcon } from "lucide-react";
+import { ArrowUpRightIcon, ImageOff } from "lucide-react";
 import { H4 } from "@/components/typography/h4";
 import { cn } from "@/lib/utils";
 import { NewsItem } from "@/types/news.type";
-
+import { Skeleton } from "./ui/skeleton";
 
 interface PostListProps {
   data: NewsItem[];
   variant?: "opportunity" | "news";
 }
 
-export default function PostList({ data, variant = "opportunity" }: PostListProps) {
+export default function PostList({
+  data,
+  variant = "opportunity"
+}: PostListProps) {
+  console.log({ data });
+
   return (
     <div
       className={cn(
@@ -38,18 +43,26 @@ export default function PostList({ data, variant = "opportunity" }: PostListProp
                   ? `pt-8 ${i !== arr.length - 1 ? "border-b pb-8" : ""}`
                   : [
                       !isFirst && "pt-8",
-                      !isLast && "pb-8 border-b border-border",
+                      !isLast && "pb-8 border-b border-border"
                     ]
               )}
             >
               <div className="relative w-full flex-shrink-0 h-[200px] lg:w-[240px] lg:h-[150px] rounded-md">
-                <Image
-                  src={post.images[0]}
-                  alt={post.title}
-                  fill
-                  className="object-cover rounded-[4px]"
-                  priority
-                />
+                {post.images ? (
+                  <Image
+                    src={post.images[0]}
+                    alt={post.title}
+                    fill
+                    className="object-cover rounded-[4px]"
+                    priority
+                  />
+                ) : (
+                  <div className="w-full h-full bg-muted rounded-[4px] grid place-content-center text-muted-foreground">
+                    <ImageOff className="mx-auto mb-2" />
+                    No Cover Image
+                  </div>
+                )}
+
                 {variant === "opportunity" && (
                   <button className="absolute top-3 right-3 rounded-full w-10 h-10 border bg-white/80 backdrop-blur-md border-gray-300 group-hover:border-primary grid place-content-center lg:hidden">
                     <ArrowUpRightIcon className="w-5 h-5 text-gray-700" />
@@ -85,7 +98,12 @@ export default function PostList({ data, variant = "opportunity" }: PostListProp
                 )}
               </div>
 
-              <div className={cn("items-center", variant === "opportunity" ? "hidden lg:flex" : "flex")}>
+              <div
+                className={cn(
+                  "items-center",
+                  variant === "opportunity" ? "hidden lg:flex" : "flex"
+                )}
+              >
                 <button className="group-hover:border-primary rounded-full w-12 h-12 border grid place-content-center">
                   <ArrowUpRightIcon className="w-6 h-6" />
                 </button>

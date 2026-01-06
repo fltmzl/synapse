@@ -19,7 +19,8 @@ import {
   Shield,
   Database,
   Ticket,
-  PanelLeft
+  PanelLeft,
+  Video
 } from "lucide-react";
 
 import {
@@ -57,12 +58,6 @@ export type NavMenu = {
 
 // Define menu structure with submenus
 const menuItems: NavMenu[] = [
-  // {
-  //   title: "Dashboard",
-  //   url: "/dashboard",
-  //   icon: LayoutDashboard,
-  //   items: [] // No submenu
-  // },
   {
     title: "Top of the day",
     url: "/dashboard/admin-panel/article",
@@ -86,30 +81,13 @@ const menuItems: NavMenu[] = [
     url: "/dashboard/admin-panel/article/business-corner",
     icon: FileText,
     items: []
+  },
+  {
+    title: "Video Reels",
+    url: "/dashboard/admin-panel/video-reels",
+    icon: Video,
+    items: []
   }
-  // {
-  //   title: "Products",
-  //   url: "/dashboard/products",
-  //   icon: Package,
-  //   items: [
-  //     {
-  //       title: "All Products",
-  //       url: "/dashboard/admin-panel"
-  //     },
-  //     {
-  //       title: "Add Product",
-  //       url: "/dashboard/products/add"
-  //     },
-  //     {
-  //       title: "Categories",
-  //       url: "/dashboard/products/categories"
-  //     },
-  //     {
-  //       title: "Inventory",
-  //       url: "/dashboard/products/inventory"
-  //     }
-  //   ]
-  // }
 ];
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
@@ -132,8 +110,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     if (pathname === item.url) return true;
 
     // Check if pathname starts with the menu url (for nested routes)
-    // But only if it's the most specific match.
-    // We check if there are other menu items that are more specific.
     if (pathname.startsWith(item.url + "/")) {
       const otherMatches = menuItems.filter(
         (mi) =>
@@ -184,7 +160,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel className="text-xs font-semibold uppercase tracking-wider">
-            Articles
+            Content Management
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
@@ -247,51 +223,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
-
-        {/* Secondary Menu Group */}
-        {/* <SidebarGroup>
-          <SidebarGroupLabel className="text-xs font-semibold uppercase tracking-wider">
-            Support
-          </SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton
-                  asChild
-                  tooltip="Help Center"
-                  isActive={pathname === "/dashboard/help"}
-                  className={cn(
-                    "transition-all duration-200",
-                    pathname === "/dashboard/help" &&
-                      "bg-primary/10 text-primary font-semibold"
-                  )}
-                >
-                  <Link href="/dashboard/help">
-                    <HelpCircle className="size-4" />
-                    <span>Help Center</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton
-                  asChild
-                  tooltip="Notifications"
-                  isActive={pathname === "/dashboard/notifications"}
-                  className={cn(
-                    "transition-all duration-200",
-                    pathname === "/dashboard/notifications" &&
-                      "bg-primary/10 text-primary font-semibold"
-                  )}
-                >
-                  <Link href="/dashboard/notifications">
-                    <Bell className="size-4" />
-                    <span>Notifications</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup> */}
       </SidebarContent>
 
       <SidebarFooter className="border-t border-sidebar-border">

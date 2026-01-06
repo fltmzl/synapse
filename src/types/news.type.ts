@@ -5,7 +5,7 @@ export type NewsItem = {
   date: string;
   title: string;
   author: string;
-  images: string[];
+  images: string[] | null;
   content: string;
   description: string;
 };
@@ -17,12 +17,6 @@ export type productionDataType = {
   image: string;
 };
 
-export type NewsTabsHeader = {
-  activeTab: string;
-  setActiveTab: (value: string) => void;
-  tabs: string[];
-};
-
 export type NewsData = {
   title: string;
   description: string;
@@ -31,13 +25,19 @@ export type NewsData = {
   category: string;
 }[];
 
-export type CategoryNews = {
-  category: "politique" | "juridique" | "citoyenne" | "économique";
-  title: string;
-  description: string;
-  date: string;
-  image: string;
-};
+export type CategoryNews =
+  | "Politique"
+  | "Juridique"
+  | "Citoyenne"
+  | "Economique";
+
+// export type CategoryNews = {
+//   category: "politique" | "juridique" | "citoyenne" | "économique";
+//   title: string;
+//   description: string;
+//   date: string;
+//   image: string;
+// };
 
 export type SocialPost = {
   platform: "Instagram" | "X (Twitter)";

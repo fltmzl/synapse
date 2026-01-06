@@ -10,13 +10,13 @@ type Props = {
   title: string;
   image: string;
   tags: string[];
-  territory: string;
+  territory?: string;
   excerpt?: string;
   place?: string;
-  publisher: string;
+  publisher?: string;
   date: string;
   person?: string;
-  category: string;
+  category?: string;
 };
 
 export default function LegalCard({
@@ -36,12 +36,11 @@ export default function LegalCard({
       <Card className="gap-0 py-0 overflow-hidden transition-all border rounded-md  w-full h-full">
         <Link href="#" className="block w-full group">
           <div className="relative w-full h-[264px] md:min-h-[120px] lg:min-h-[100px]">
-            <Image
-              src={image || "https://placehold.co/400x300"}
-              alt={title}
-              fill
-              className="object-cover"
-            />
+            {image ? (
+              <Image src={image} alt={title} fill className="object-cover" />
+            ) : (
+              <div className="w-full h-full bg-muted-foreground"></div>
+            )}
           </div>
 
           <CardContent className="flex flex-col p-4 gap-4">
@@ -59,23 +58,36 @@ export default function LegalCard({
                   )}
                 </div>
                 <div className="flex flex-wrap gap-2">
-                  <div className="rounded-sm flex flex-wrap gap-2 items-center ">
-                    {person && (
-                      <Badge
-                        variant="default"
-                        className="px-2 py-1 flex items-center gap-1 text-sm font-regular leading-[140%] tracking-tighter"
-                      >
-                        <User className="w-5 h-5 shrink-0" />
-                        {person}
-                      </Badge>
-                    )}
-                    {place && (
-                      <Badge className="px-2 py-1 bg-[var(--tags)] text-primary text-sm font-regular leading-[140%] tracking-tighter">
-                        <MapPin className="w-3 h-3" />
-                        {place}
-                      </Badge>
-                    )}
-                  </div>
+                  {(person || place || territory || category) && (
+                    <div className="rounded-sm flex flex-wrap gap-2 items-center ">
+                      {person && (
+                        <Badge
+                          variant="default"
+                          className="px-2 py-1 flex items-center gap-1 text-sm font-regular leading-[140%] tracking-tighter"
+                        >
+                          <User className="w-5 h-5 shrink-0" />
+                          {person}
+                        </Badge>
+                      )}
+                      {place && (
+                        <Badge className="px-2 py-1 bg-[var(--tags)] text-primary text-sm font-regular leading-[140%] tracking-tighter">
+                          <MapPin className="w-3 h-3" />
+                          {place}
+                        </Badge>
+                      )}
+                      {territory && (
+                        <Badge className="px-2 py-1 bg-[var(--tags)] text-primary text-sm font-regular leading-[140%] tracking-tighter">
+                          <MapPin className="w-3 h-3" />
+                          {territory}
+                        </Badge>
+                      )}
+                      {category && (
+                        <Badge className="px-2 py-1 bg-[var(--tags)] text-primary text-sm font-regular leading-[140%] tracking-tighter">
+                          {category}
+                        </Badge>
+                      )}
+                    </div>
+                  )}
                   <div className="flex flex-wrap gap-2 ">
                     {tags.map((tag) => (
                       <Badge
@@ -86,15 +98,13 @@ export default function LegalCard({
                       </Badge>
                     ))}
                   </div>
-
                 </div>
               </div>
               <div className="text-sm text-muted-foreground flex justify-between items-center leading-[140%] tracking-tighter">
-                <span>{publisher}</span>
+                {publisher && <span>{publisher}</span>}
                 <span>{date}</span>
               </div>
             </div>
-
           </CardContent>
         </Link>
       </Card>
