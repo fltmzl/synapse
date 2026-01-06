@@ -25,7 +25,7 @@ export default function NewLatestPublicationPage() {
       },
       {
         onSuccess: () => {
-          router.push("/dashboard/admin-panel/latest-publication");
+          router.push("/dashboard/admin-panel/article/latest-publication");
         }
       }
     );

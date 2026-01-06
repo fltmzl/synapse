@@ -1,43 +1,71 @@
-import { useState } from "react";
-import { newsData } from "@/data/news-data";
-import { Button } from "@/components/ui/button";
-import NewsCard from "../card/news-card";
-import clsx from "clsx";
-import { ChevronDown } from "lucide-react";
+"use client";
+
 import SectionContainer from "@/components/container/section-container";
-import { H1 } from "@/components/typography/h1";
-import { Title } from "@/components/typography/title";
-import SearchAll from "../components/search-all-news";
-import NewsFilter from "../components/news-filter";
-import SelectSingleItem from "@/components/select-single-item";
-import { parseAsString, useQueryState } from "nuqs";
 import PostList from "@/components/post-list";
+import SelectSingleItem from "@/components/select-single-item";
+import { Title } from "@/components/typography/title";
+import { Button } from "@/components/ui/button";
+import { ChevronDown } from "lucide-react";
+import { parseAsString, useQueryState } from "nuqs";
+import { useState } from "react";
+import NewsFilter from "../components/news-filter";
+import SearchAll from "../components/search-all-news";
+import useInfiniteArticles from "@/queries/use-infinite-articles";
+import { format } from "date-fns";
+import { NewsItem } from "@/types/news.type";
+import NoResult from "@/components/no-result";
+import { Spinner } from "@/components/spinner";
+import PostListSkeleton from "@/components/post-list-skeleton";
+import { ArticleSortOption } from "@/types/article.type";
 
 export default function AllNews() {
   const [query, setQuery] = useState("");
- const sortBy = [
-    { label: "Nouveauté", value: "Nouveauté" },
-    { label: "Durée", value: "Durée" },
-    { label: "Popularité", value: "Popularité" },
-    { label: "Pertinence", value: "Pertinence" }
+  const sortBy: { label: string; value: ArticleSortOption }[] = [
+    { label: "Nouveauté", value: "newest" },
+    { label: "Durée", value: "duration" },
+    { label: "Popularité", value: "popularity" },
+    { label: "Pertinence", value: "relevance" }
   ];
   const [sortDate, setSortDate] = useQueryState(
     "sortDate",
-    parseAsString.withDefault("Nouveauté")
+    parseAsString.withDefault("newest")
   );
 
   const [category, setCategory] = useQueryState(
     "category",
-    parseAsString.withDefault("Tout")
+    parseAsString.withDefault("All")
   );
 
-  const filtered = newsData
-    .filter((n) =>
-      category === "Tout"
-        ? true
-        : n.category.toLowerCase() === category.toLowerCase()
-    )
-    .filter((n) => n.title.toLowerCase().includes(query.toLowerCase()));
+  const {
+    data: articles,
+    isLoading,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage
+  } = useInfiniteArticles({
+    sectionCategory: "news",
+    isPublished: true,
+    category: category === "All" ? undefined : category,
+    search: query || undefined,
+    sortBy: sortDate as ArticleSortOption,
+    limit: 10 // Set a limit for pagination
+  });
+
+  const allArticles = articles?.pages.flatMap((page) => page.data) || [];
+
+  const mappedArticles: NewsItem[] = allArticles.map((article) => ({
+    id: article.id,
+    slug: article.slug,
+    category: article.category || "Actualité",
+    date: article.createdAt
+      ? format(article.createdAt.toDate(), "MMM dd, yyyy")
+      : "Date inconnue",
+    title: article.title,
+    author: "Synapse",
+    images: article.coverImage ? [article.coverImage] : null,
+    content: article.content,
+    description: article.summary
+  }));
 
   return (
     <SectionContainer className="px-4 pt-10 pb-6 lg:p-20 ">
@@ -63,37 +91,38 @@ export default function AllNews() {
             />
           </div>
         </div>
-        <PostList data={filtered} variant="news" />
 
-        {/* <div className="flex flex-col divide-y divide-border">
-          {filtered.slice(0, 5).map((news, index, arr) => {
-            const isFirst = index === 0;
-            const isLast = index === arr.length - 1;
+        {isLoading ? (
+          <PostListSkeleton />
+        ) : mappedArticles.length > 0 ? (
+          <PostList data={mappedArticles} variant="news" />
+        ) : (
+          <NoResult
+            title="No result found"
+            description="Try searching with another title."
+          />
+        )}
 
-            return (
-              <div
-                key={index}
-                className={clsx(
-                  !isFirst && " pt-8",
-                  !isLast && "pb-8 border-b border-border"
-                )}
-              >
-                <NewsCard {...news} slug={news.slug ?? ""} />
-              </div>
-            );
-          })}
-        </div> */}
-
-        <div className="flex justify-center gap-3 ">
-          <Button
-            variant="outline"
-            size="default"
-            className="text-base leading-[130%] tracking-[-0.02em] px-5 py-[10px] w-full lg:w-max"
-          >
-            Plus d’articles
-            <ChevronDown className="size-5 text-foreground" />
-          </Button>
-        </div>
+        {hasNextPage && (
+          <div className="flex justify-center gap-3 ">
+            <Button
+              variant="outline"
+              size="default"
+              className="text-base leading-[130%] tracking-[-0.02em] px-5 py-[10px] w-full lg:w-max"
+              onClick={() => fetchNextPage()}
+              disabled={isFetchingNextPage}
+            >
+              {isFetchingNextPage ? (
+                <Spinner fontSize={20} />
+              ) : (
+                <>
+                  Plus d’articles
+                  <ChevronDown className="size-5 text-foreground" />
+                </>
+              )}
+            </Button>
+          </div>
+        )}
       </div>
     </SectionContainer>
   );

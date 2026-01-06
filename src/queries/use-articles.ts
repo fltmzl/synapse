@@ -2,12 +2,15 @@
 
 import { QUERIES } from "@/constants/queries.constant";
 import { ArticleService } from "@/services/article.api";
-import { SectionCategory } from "@/types/article.type";
+import { ArticleQueryOptions } from "@/types/article.type";
 import { useQuery } from "@tanstack/react-query";
 
-export default function useArticles(sectionCategory?: SectionCategory) {
+export default function useArticles(options: ArticleQueryOptions = {}) {
   return useQuery({
-    queryKey: [QUERIES.ARTICLES, sectionCategory],
-    queryFn: () => ArticleService.getAll(sectionCategory)
+    queryKey: [QUERIES.ARTICLES, options],
+    queryFn: async () => {
+      const response = await ArticleService.getAll(options);
+      return response.data;
+    }
   });
 }

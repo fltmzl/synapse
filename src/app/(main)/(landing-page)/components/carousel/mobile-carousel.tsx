@@ -2,13 +2,19 @@
 
 import { useRef, useState, useEffect } from "react";
 import clsx from "clsx";
-import { productionData } from "@/data/news-data";
 import SectionTitle from "@/components/typography/section-title";
 import ProductionCard from "../card/production-card";
 import { ArrowLeftIcon } from "@/icons/arrow-left-icon";
 import { ArrowRightIcon } from "@/icons/arrow-right-icon";
+import useArticles from "@/queries/use-articles";
+import NewsCardSkeleton from "../skeletons/news-card-skeleton";
+import { format } from "date-fns";
 
 export default function MobileCarousel() {
+  const { data: productionData, isLoading } = useArticles({
+    sectionCategory: "latest_publication",
+    isPublished: true
+  });
   const mobileRef = useRef<HTMLDivElement | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const [dotCount, setDotCount] = useState(1);
@@ -38,7 +44,7 @@ export default function MobileCarousel() {
       if (!el) return;
       const cardWidth = el.querySelector(".flex > div")?.clientWidth || 300; //
       const visibleCards = Math.floor(el.clientWidth / cardWidth) || 1;
-      const totalPages = Math.ceil(productionData.length / visibleCards);
+      const totalPages = Math.ceil(productionData?.length || 0 / visibleCards);
       setDotCount(totalPages);
     };
 
@@ -73,15 +79,29 @@ export default function MobileCarousel() {
         style={{ WebkitOverflowScrolling: "touch" }}
       >
         <div className="flex gap-6">
-          {productionData.map((news, i) => (
-            <div key={i} className="snap-center flex-shrink-0 w-full">
-              <ProductionCard
-                className="snap-start flex-shrink-0 w-[320px]"
-                {...news}
-                variant="mobile"
-              />
-            </div>
-          ))}
+          {productionData && !isLoading ? (
+            <>
+              {productionData.map((news, i) => (
+                <div key={i} className="snap-center flex-shrink-0 w-full">
+                  <ProductionCard
+                    className="snap-start flex-shrink-0 w-[320px]"
+                    variant="mobile"
+                    title={news.title}
+                    slug={news.slug}
+                    category={news?.category || "Unknown category"}
+                    date={format(news.createdAt.toDate(), "MMM d, yyyy")}
+                    image={news.coverImage}
+                  />
+                </div>
+              ))}
+            </>
+          ) : (
+            <>
+              {Array.from({ length: 5 }).map((_, i) => (
+                <NewsCardSkeleton key={i} />
+              ))}
+            </>
+          )}
         </div>
       </div>
 
@@ -104,7 +124,7 @@ export default function MobileCarousel() {
 
         {/* Dots */}
         <div className="flex items-center justify-center gap-1 mt-4">
-          {productionData.map((_, i) => (
+          {productionData?.map((_, i) => (
             <span
               key={i}
               className={clsx(

@@ -10,7 +10,9 @@ import { articleColumns } from "./components/article-columns";
 import useArticles from "@/queries/use-articles";
 
 export default function ArticlePage() {
-  const { data: articles, isLoading } = useArticles("top_of_the_day");
+  const { data: articles, isLoading } = useArticles({
+    sectionCategory: "top_of_the_day"
+  });
 
   return (
     <>

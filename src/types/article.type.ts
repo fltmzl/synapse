@@ -1,4 +1,4 @@
-import { Timestamp } from "firebase/firestore";
+import { QueryDocumentSnapshot, Timestamp } from "firebase/firestore";
 
 export type SectionCategory =
   | "top_of_the_day"
@@ -9,6 +9,7 @@ export type SectionCategory =
 export type Article = {
   id: string;
   title: string;
+  searchKeywords?: string[];
   slug: string;
   summary: string;
   content: string;
@@ -33,6 +34,7 @@ export type Article = {
 
 export type CreateArticleDto = {
   title: string;
+  searchKeywords?: string[];
   slug: string;
   summary: string;
   content: string;
@@ -53,3 +55,19 @@ export type CreateArticleDto = {
 };
 
 export type UpdateArticleDto = Partial<CreateArticleDto>;
+
+export type ArticleSortOption =
+  | "newest"
+  | "duration"
+  | "popularity"
+  | "relevance";
+
+export type ArticleQueryOptions = {
+  sectionCategory?: SectionCategory;
+  category?: string;
+  limit?: number;
+  isPublished?: boolean;
+  search?: string;
+  sortBy?: ArticleSortOption;
+  lastVisible?: QueryDocumentSnapshot;
+};

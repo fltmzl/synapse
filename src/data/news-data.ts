@@ -236,105 +236,105 @@ export const productionData: productionDataType[] = [
   }
 ];
 
-export const lastInfo: CategoryNews[] = [
-  {
-    category: "politique",
-    title: "French Assembly debates overseas tax reform bill",
-    description:
-      "The French Assembly is debating a tax reform bill for overseas territories, aiming to adjust fiscal structures and revenue allocation to create fairer economic conditions.",
-    date: "April 3, 2025",
-    image: "/images/actualite.png"
-  },
-  {
-    category: "politique",
-    title: "French Senate reviews proposal on overseas economic autonomy",
-    description:
-      "The French Senate is reviewing a proposal to grant more autonomy to overseas territories, strengthening local governance and fiscal control.",
-    date: "April 3, 2025",
-    image: "/images/news/news-2.png"
-  },
-  {
-    category: "politique",
-    title:
-      "Debate intensifies over representation of overseas territories in parliament",
-    description:
-      "A growing debate centers on how overseas territories are represented in parliament, with calls for stronger voices from these regions.",
-    date: "April 3, 2025",
-    image: "/images/news/news-3.png"
-  },
-  {
-    category: "juridique",
-    title: "New legislation enhances worker rights in overseas regions",
-    description:
-      "The new bill aims to standardize labor protections across all French territories, ensuring fair conditions for workers.",
-    date: "March 20, 2025",
-    image: "/images/news/news-2.png"
-  },
-  {
-    category: "juridique",
-    title: "Court rules in favor of tax exemptions for SMEs",
-    description:
-      "A landmark court decision grants tax relief to small and medium enterprises operating in overseas French territories.",
-    date: "March 18, 2025",
-    image: "/images/news/news-3.png"
-  },
-  {
-    category: "juridique",
-    title: "Legal experts call for unified judicial system",
-    description:
-      "Legal professionals are urging the government to streamline the judicial system across overseas territories for consistency.",
-    date: "March 15, 2025",
-    image: "/images/news/news-1.png"
-  },
-  {
-    category: "citoyenne",
-    title: "Youth programs foster innovation in overseas territories",
-    description:
-      "Social initiatives are helping young people develop digital skills and connect with global markets.",
-    date: "Feb 28, 2025",
-    image: "/images/news/news-3.png"
-  },
-  {
-    category: "citoyenne",
-    title: "Community hubs expand in rural regions",
-    description:
-      "Local governments are opening new centers to strengthen social engagement and cultural identity.",
-    date: "Feb 22, 2025",
-    image: "/images/news/news-2.png"
-  },
-  {
-    category: "citoyenne",
-    title: "Online platforms empower women entrepreneurs",
-    description:
-      "New digital tools are helping women from overseas territories launch and grow their own businesses.",
-    date: "Feb 20, 2025",
-    image: "/images/news/news-1.png"
-  },
-  {
-    category: "économique",
-    title: "Overseas territories see 4% GDP growth in 2024",
-    description:
-      "Economic reports indicate a steady growth rate driven by tourism, agriculture, and digital services sectors.",
-    date: "Jan 15, 2025",
-    image: "/images/news/news-4.png"
-  },
-  {
-    category: "économique",
-    title: "Investment in renewable energy soars",
-    description:
-      "Significant capital is being directed towards solar and wind projects across overseas territories.",
-    date: "Jan 10, 2025",
-    image: "/images/news/news-5.png"
-  },
-  {
-    category: "économique",
-    title: "SMEs lead job creation in overseas regions",
-    description:
-      "Small and medium enterprises are at the forefront of employment growth, particularly in tech and green industries.",
-    date: "Jan 5, 2025",
-    image: "/images/news/news-6.png"
-  }
-];
+// export const lastInfo: CategoryNews[] = [
+//   {
+//     category: "politique",
+//     title: "French Assembly debates overseas tax reform bill",
+//     description:
+//       "The French Assembly is debating a tax reform bill for overseas territories, aiming to adjust fiscal structures and revenue allocation to create fairer economic conditions.",
+//     date: "April 3, 2025",
+//     image: "/images/actualite.png"
+//   },
+//   {
+//     category: "politique",
+//     title: "French Senate reviews proposal on overseas economic autonomy",
+//     description:
+//       "The French Senate is reviewing a proposal to grant more autonomy to overseas territories, strengthening local governance and fiscal control.",
+//     date: "April 3, 2025",
+//     image: "/images/news/news-2.png"
+//   },
+//   {
+//     category: "politique",
+//     title:
+//       "Debate intensifies over representation of overseas territories in parliament",
+//     description:
+//       "A growing debate centers on how overseas territories are represented in parliament, with calls for stronger voices from these regions.",
+//     date: "April 3, 2025",
+//     image: "/images/news/news-3.png"
+//   },
+//   {
+//     category: "juridique",
+//     title: "New legislation enhances worker rights in overseas regions",
+//     description:
+//       "The new bill aims to standardize labor protections across all French territories, ensuring fair conditions for workers.",
+//     date: "March 20, 2025",
+//     image: "/images/news/news-2.png"
+//   },
+//   {
+//     category: "juridique",
+//     title: "Court rules in favor of tax exemptions for SMEs",
+//     description:
+//       "A landmark court decision grants tax relief to small and medium enterprises operating in overseas French territories.",
+//     date: "March 18, 2025",
+//     image: "/images/news/news-3.png"
+//   },
+//   {
+//     category: "juridique",
+//     title: "Legal experts call for unified judicial system",
+//     description:
+//       "Legal professionals are urging the government to streamline the judicial system across overseas territories for consistency.",
+//     date: "March 15, 2025",
+//     image: "/images/news/news-1.png"
+//   },
+//   {
+//     category: "citoyenne",
+//     title: "Youth programs foster innovation in overseas territories",
+//     description:
+//       "Social initiatives are helping young people develop digital skills and connect with global markets.",
+//     date: "Feb 28, 2025",
+//     image: "/images/news/news-3.png"
+//   },
+//   {
+//     category: "citoyenne",
+//     title: "Community hubs expand in rural regions",
+//     description:
+//       "Local governments are opening new centers to strengthen social engagement and cultural identity.",
+//     date: "Feb 22, 2025",
+//     image: "/images/news/news-2.png"
+//   },
+//   {
+//     category: "citoyenne",
+//     title: "Online platforms empower women entrepreneurs",
+//     description:
+//       "New digital tools are helping women from overseas territories launch and grow their own businesses.",
+//     date: "Feb 20, 2025",
+//     image: "/images/news/news-1.png"
+//   },
+//   {
+//     category: "économique",
+//     title: "Overseas territories see 4% GDP growth in 2024",
+//     description:
+//       "Economic reports indicate a steady growth rate driven by tourism, agriculture, and digital services sectors.",
+//     date: "Jan 15, 2025",
+//     image: "/images/news/news-4.png"
+//   },
+//   {
+//     category: "économique",
+//     title: "Investment in renewable energy soars",
+//     description:
+//       "Significant capital is being directed towards solar and wind projects across overseas territories.",
+//     date: "Jan 10, 2025",
+//     image: "/images/news/news-5.png"
+//   },
+//   {
+//     category: "économique",
+//     title: "SMEs lead job creation in overseas regions",
+//     description:
+//       "Small and medium enterprises are at the forefront of employment growth, particularly in tech and green industries.",
+//     date: "Jan 5, 2025",
+//     image: "/images/news/news-6.png"
+//   }
+// ];
 
 export const socialPosts: SocialPost[] = [
   {

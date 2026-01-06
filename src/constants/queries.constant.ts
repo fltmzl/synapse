@@ -2,5 +2,10 @@ export const QUERIES = {
   COUNTRY_CODES: "country-codes",
   ARTICLES: "articles",
   MY_PROFILE: "my-profile",
-  CATEGORIES: "categories"
+  CATEGORIES: "categories",
+  CATEGORIES_WITH_COUNT: "categories-with-count",
+  TERRITORIES: "territories",
+  PLACES: "places",
+  PUBLISHERS: "publishers",
+  PERSONS: "persons"
 };

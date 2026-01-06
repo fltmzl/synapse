@@ -4,7 +4,7 @@ import Image from "next/image";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { H1 } from "@/components/typography/h1";
 import { H2 } from "@/components/typography/h2";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, ImageOff } from "lucide-react";
 import Link from "next/link";
 
 import clsx from "clsx";
@@ -14,9 +14,10 @@ type Props = {
   category: string;
   date: string;
   title: string;
-  image: string;
+  image?: string;
   variant: "mobile" | "desktop";
   className: string;
+  slug: string;
 };
 
 export default function ProductionCard({
@@ -25,12 +26,13 @@ export default function ProductionCard({
   title,
   image,
   variant = "desktop",
-  className
+  className,
+  slug
 }: Props) {
   if (variant === "desktop") {
     return (
       <article className="snap-center shrink-0 min-w-sm">
-        <Link href="#">
+        <Link href={`/news/${slug}`}>
           <Card
             className={clsx(
               "gap-5 py-0 bg-transparent max-w-sm border-none  overflow-hidden snap-center",
@@ -39,12 +41,19 @@ export default function ProductionCard({
           >
             <CardHeader className=" p-0">
               <div className="relative w-full h-[220px]">
-                <Image
-                  src={image}
-                  alt={title}
-                  fill
-                  className="object-cover rounded-md"
-                />
+                {image ? (
+                  <Image
+                    src={image}
+                    alt={title}
+                    fill
+                    className="object-cover rounded-md"
+                  />
+                ) : (
+                  <div className="w-full h-full overflow-hidden rounded-md bg-muted text-muted-foreground grid place-content-center">
+                    <ImageOff className="mx-auto mb-2" />
+                    No Cover Image
+                  </div>
+                )}
               </div>
             </CardHeader>
 
@@ -86,12 +95,19 @@ export default function ProductionCard({
         >
           <CardHeader className="p-0">
             <div className="relative w-full h-[300px]">
-              <Image
-                src={image}
-                alt={title}
-                fill
-                className="object-cover rounded-md"
-              />
+              {image ? (
+                <Image
+                  src={image}
+                  alt={title}
+                  fill
+                  className="object-cover rounded-md"
+                />
+              ) : (
+                <div className="w-full h-full overflow-hidden rounded-md bg-muted text-muted-foreground grid place-content-center">
+                  <ImageOff className="mx-auto mb-2" />
+                  No Cover Image
+                </div>
+              )}
             </div>
           </CardHeader>
 

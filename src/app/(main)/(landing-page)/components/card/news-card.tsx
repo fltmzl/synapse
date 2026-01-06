@@ -3,6 +3,7 @@
 import { H1 } from "@/components/typography/h1";
 import { H2 } from "@/components/typography/h2";
 import { NewsItem } from "@/types/news.type";
+import { ImageOff } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -11,21 +12,35 @@ type Props = {
   date: string;
   title: string;
   image: string;
+  slug: string;
 };
 
-export default function NewsCard({ category, date, title, image }: Props) {
+export default function NewsCard({
+  category,
+  date,
+  title,
+  image,
+  slug
+}: Props) {
   return (
     <article>
-      <Link href="#">
+      <Link href={`/news/${slug}`}>
         <div className="flex flex-col gap-5">
           <div className="relative w-full h-[260px] overflow-hidden rounded-md">
-            <Image
-              src={image}
-              alt={title}
-              fill
-              priority
-              className="object-cover "
-            />
+            {image ? (
+              <Image
+                src={image}
+                alt={title}
+                fill
+                priority
+                className="object-cover "
+              />
+            ) : (
+              <div className="w-full h-[260px] overflow-hidden rounded-md bg-muted text-muted-foreground grid place-content-center">
+                <ImageOff className="mx-auto mb-2" />
+                No Cover Image
+              </div>
+            )}
           </div>
           <div className="flex flex-col gap-2">
             <div className="flex items-center">

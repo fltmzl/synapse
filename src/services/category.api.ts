@@ -6,7 +6,10 @@ import {
   doc,
   getDocs,
   serverTimestamp,
-  Timestamp
+  Timestamp,
+  getCountFromServer,
+  query,
+  where
 } from "firebase/firestore";
 
 export type Category = {
@@ -14,6 +17,10 @@ export type Category = {
   name: string;
   createdAt?: Timestamp;
   updatedAt?: Timestamp;
+};
+
+export type CategoryWithCount = Category & {
+  totalArticles: number;
 };
 
 export type CreateCategoryPayload = {
@@ -47,6 +54,29 @@ export class CategoryService {
       id: doc.id,
       ...(doc.data() as Omit<Category, "id">)
     }));
+  }
+
+  static async getAllWithTotalArticles(): Promise<CategoryWithCount[]> {
+    const categories = await this.getAll();
+    const articlesCol = collection(db, "articles");
+
+    const categoriesWithCount = await Promise.all(
+      categories.map(async (category) => {
+        const q = query(
+          articlesCol,
+          where("category", "==", category.name),
+          where("sectionCategory", "==", "news"),
+          where("isPublished", "==", true)
+        );
+        const snapshot = await getCountFromServer(q);
+        return {
+          ...category,
+          totalArticles: snapshot.data().count
+        };
+      })
+    );
+
+    return categoriesWithCount.filter((cat) => cat.totalArticles > 0);
   }
 
   static async delete(id: string) {
