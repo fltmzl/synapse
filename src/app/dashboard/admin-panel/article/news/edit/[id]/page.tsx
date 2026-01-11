@@ -3,7 +3,10 @@
 import useArticle from "@/queries/use-article";
 import useArticleMutation from "@/mutations/use-article-mutation";
 import { useParams, useRouter } from "next/navigation";
-import { ArticleForm, ArticleFormValues } from "../../components/article-form";
+import {
+  ArticleForm,
+  ArticleFormValues
+} from "@/app/dashboard/admin-panel/article/components/article-form";
 import { Spinner } from "@/components/spinner";
 
 export default function EditNewsPage() {

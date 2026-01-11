@@ -2,7 +2,10 @@
 
 import useArticleMutation from "@/mutations/use-article-mutation";
 import { useRouter } from "next/navigation";
-import { ArticleForm, ArticleFormValues } from "../components/article-form";
+import {
+  ArticleForm,
+  ArticleFormValues
+} from "@/app/dashboard/admin-panel/article/components/article-form";
 
 export default function NewArticlePage() {
   const router = useRouter();
