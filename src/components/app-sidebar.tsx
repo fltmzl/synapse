@@ -20,7 +20,8 @@ import {
   Database,
   Ticket,
   PanelLeft,
-  Video
+  Video,
+  Building2
 } from "lucide-react";
 
 import {
@@ -92,6 +93,12 @@ const menuItems: NavMenu[] = [
     title: "Persons",
     url: "/dashboard/admin-panel/persons",
     icon: Users,
+    items: []
+  },
+  {
+    title: "Companies",
+    url: "/dashboard/admin-panel/companies",
+    icon: Building2,
     items: []
   }
 ];

@@ -679,12 +679,15 @@ export function PersonForm({
                                   value={field.value}
                                   onValueChange={field.onChange}
                                   onCreate={(name) => {
-                                    createCompanyMutation.mutate(name, {
-                                      onSuccess: (newCompany) => {
-                                        if (newCompany)
-                                          field.onChange(newCompany.id);
+                                    createCompanyMutation.mutate(
+                                      { name },
+                                      {
+                                        onSuccess: (newCompany) => {
+                                          if (newCompany)
+                                            field.onChange(newCompany.id);
+                                        }
                                       }
-                                    });
+                                    );
                                   }}
                                   placeholder="Select company"
                                   isCreating={createCompanyMutation.isPending}
