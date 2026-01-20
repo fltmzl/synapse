@@ -64,54 +64,54 @@ import useCompanyMutation from "@/mutations/use-company-mutation";
 
 const DESCRIPTION_MAX_LENGTH = 1000;
 
-export interface PersonFormValues {
-  name: string;
-  idNumber?: string;
-  code?: string;
-  phoneNumber?: string;
-  countryCode?: string;
-  email?: string;
-  description?: string;
-  profilePicture?: string;
-  currentJobPosition?: string;
-  categoryId?: string;
-  placeId?: string;
-  territoryId?: string;
-  socials?: {
-    whatsapp?: string;
-    linkedin?: string;
-    twitter?: string;
-    facebook?: string;
-    instagram?: string;
-  };
-  companies: {
-    companyId: string;
-    title?: string;
-    startDate?: string;
-    endDate?: string;
-    locationType?: string;
-    employmentType?: string;
-    description?: string;
-  }[];
-  educations: {
-    educationId: string;
-    major?: string;
-    startDate?: string;
-    endDate?: string;
-    gpa?: number;
-  }[];
-  associations: {
-    associationId: string;
-    startDate?: string;
-    endDate?: string;
-  }[];
-  politicalParties: {
-    politicalPartyId: string;
-    type: "supports" | "opposes";
-  }[];
-}
+// export interface PersonFormValues {
+//   name: string;
+//   idNumber?: string;
+//   code?: string;
+//   phoneNumber?: string;
+//   countryCode?: string;
+//   email?: string;
+//   description?: string;
+//   profilePicture?: string;
+//   currentJobPosition?: string;
+//   categoryId?: string;
+//   placeId?: string;
+//   territoryId?: string;
+//   socials?: {
+//     whatsapp?: string;
+//     linkedin?: string;
+//     twitter?: string;
+//     facebook?: string;
+//     instagram?: string;
+//   };
+//   companies: {
+//     companyId: string;
+//     title?: string;
+//     startDate?: string;
+//     endDate?: string;
+//     locationType?: string;
+//     employmentType?: string;
+//     description?: string;
+//   }[];
+//   educations: {
+//     educationId: string;
+//     major?: string;
+//     startDate?: string;
+//     endDate?: string;
+//     gpa?: number;
+//   }[];
+//   associations: {
+//     associationId: string;
+//     startDate?: string;
+//     endDate?: string;
+//   }[];
+//   politicalParties: {
+//     politicalPartyId: string;
+//     type: "supports" | "opposes";
+//   }[];
+// }
 
-export const personFormSchema: z.ZodType<PersonFormValues> = z.object({
+export const personFormSchema = z.object({
   name: z.string().min(1, "Name is required"),
   idNumber: z.string().optional(),
   code: z.string().optional(),
@@ -150,7 +150,7 @@ export const personFormSchema: z.ZodType<PersonFormValues> = z.object({
       major: z.string().optional(),
       startDate: z.string().optional(),
       endDate: z.string().optional(),
-      gpa: z.coerce.number().optional()
+      gpa: z.number().optional()
     })
   ),
   associations: z.array(
@@ -168,6 +168,8 @@ export const personFormSchema: z.ZodType<PersonFormValues> = z.object({
   )
 });
 
+export type PersonFormValues = z.infer<typeof personFormSchema>;
+
 type PersonFormProps = {
   initialValues?: PersonFormValues;
   isMutationLoading?: boolean;
@@ -183,8 +185,8 @@ export function PersonForm({
   pageTitle,
   pageDescription
 }: PersonFormProps) {
-  const form: UseFormReturn<PersonFormValues> = useForm<PersonFormValues>({
-    resolver: zodResolver(personFormSchema) as any,
+  const form = useForm<PersonFormValues>({
+    resolver: zodResolver(personFormSchema),
     defaultValues: initialValues || {
       name: "",
       idNumber: "",

@@ -55,36 +55,13 @@ import {
 
 const DESCRIPTION_MAX_LENGTH = 500;
 
-export interface CompanyFormValues {
-  name: string;
-  idNumber?: string;
-  code?: string;
-  phoneNumber?: string;
-  email?: string;
-  website?: string;
-  description?: string;
-  profilePicture?: string;
-  address?: string;
-  categoryId?: string;
-  placeId?: string;
-  territoryId?: string;
-  establishmentDate?: string;
-  socials?: {
-    whatsapp?: string;
-    linkedin?: string;
-    twitter?: string;
-    facebook?: string;
-    instagram?: string;
-  };
-}
-
-export const companyFormSchema: z.ZodType<CompanyFormValues> = z.object({
+export const companyFormSchema = z.object({
   name: z.string().min(1, "Name is required"),
   idNumber: z.string().optional(),
   code: z.string().optional(),
   phoneNumber: z.string().optional(),
-  email: z.string().email("Invalid email").optional().or(z.literal("")),
-  website: z.string().url("Invalid URL").optional().or(z.literal("")),
+  email: z.email("Invalid email").optional().or(z.literal("")),
+  website: z.url("Invalid URL").optional().or(z.literal("")),
   description: z.string().max(DESCRIPTION_MAX_LENGTH).optional(),
   profilePicture: z.string().optional(),
   address: z.string().optional(),
@@ -103,6 +80,8 @@ export const companyFormSchema: z.ZodType<CompanyFormValues> = z.object({
     .optional()
 });
 
+export type CompanyFormValues = z.infer<typeof companyFormSchema>;
+
 type CompanyFormProps = {
   initialValues?: CompanyFormValues;
   isMutationLoading?: boolean;
@@ -118,8 +97,8 @@ export function CompanyForm({
   pageTitle,
   pageDescription
 }: CompanyFormProps) {
-  const form: UseFormReturn<CompanyFormValues> = useForm<CompanyFormValues>({
-    resolver: zodResolver(companyFormSchema) as any,
+  const form = useForm<CompanyFormValues>({
+    resolver: zodResolver(companyFormSchema),
     defaultValues: initialValues || {
       name: "",
       idNumber: "",
