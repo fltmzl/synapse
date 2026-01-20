@@ -2,18 +2,47 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { QUERIES } from "@/constants/queries.constant";
 import { PersonService } from "@/services/person.api";
 import { toast } from "sonner";
+import {
+  CreatePersonDto,
+  UpdatePersonDto,
+  CreatePersonWithRelationsDto
+} from "@/types/person-relation.type";
 
 export default function usePersonMutation() {
   const queryClient = useQueryClient();
 
   const createPersonMutation = useMutation({
-    mutationFn: (name: string) => PersonService.create({ name }),
+    mutationFn: (data: CreatePersonDto) => PersonService.create(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QUERIES.PERSONS] });
       toast.success("Person created successfully");
     },
     onError: (error: Error) => {
       toast.error(error.message || "Failed to create person");
+    }
+  });
+
+  const createPersonWithRelationsMutation = useMutation({
+    mutationFn: (data: CreatePersonWithRelationsDto) =>
+      PersonService.createWithRelations(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [QUERIES.PERSONS] });
+      toast.success("Person and relations created successfully");
+    },
+    onError: (error: Error) => {
+      toast.error(error.message || "Failed to create person with relations");
+    }
+  });
+
+  const updatePersonMutation = useMutation({
+    mutationFn: ({ id, data }: { id: string; data: UpdatePersonDto }) =>
+      PersonService.update({ id, data }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [QUERIES.PERSONS] });
+      toast.success("Person updated successfully");
+    },
+    onError: (error: Error) => {
+      toast.error(error.message || "Failed to update person");
     }
   });
 
@@ -28,5 +57,10 @@ export default function usePersonMutation() {
     }
   });
 
-  return { createPersonMutation, deletePersonMutation };
+  return {
+    createPersonMutation,
+    createPersonWithRelationsMutation,
+    updatePersonMutation,
+    deletePersonMutation
+  };
 }

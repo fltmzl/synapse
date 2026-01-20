@@ -87,6 +87,12 @@ const menuItems: NavMenu[] = [
     url: "/dashboard/admin-panel/video-reels",
     icon: Video,
     items: []
+  },
+  {
+    title: "Persons",
+    url: "/dashboard/admin-panel/persons",
+    icon: Users,
+    items: []
   }
 ];
 
