@@ -11,14 +11,44 @@ import { Spinner } from "@/components/spinner";
 export default function EditPersonPage() {
   const router = useRouter();
   const params = useParams();
-  const id = params.id as string;
+  const slug = params.id as string;
 
-  const { data: person, isLoading } = usePerson(id);
+  const { data: person, isLoading } = usePerson(slug);
   const { updatePersonMutation } = usePersonMutation();
 
   const onSubmit = (data: PersonFormValues) => {
+    const {
+      companies,
+      educations,
+      associations,
+      politicalParties,
+      ...personData
+    } = data;
+
     updatePersonMutation.mutate(
-      { id, data },
+      {
+        id: person?.id || "",
+        data: {
+          person: personData,
+          companies: companies.map((c) => ({
+            ...c,
+            employmentType: c.employmentType as any,
+            startDate: c.startDate ? new Date(c.startDate) : undefined,
+            endDate: c.endDate ? new Date(c.endDate) : undefined
+          })),
+          educations: educations.map((e) => ({
+            ...e,
+            startDate: e.startDate ? new Date(e.startDate) : undefined,
+            endDate: e.endDate ? new Date(e.endDate) : undefined
+          })),
+          associations: associations.map((a) => ({
+            ...a,
+            startDate: a.startDate ? new Date(a.startDate) : undefined,
+            endDate: a.endDate ? new Date(a.endDate) : undefined
+          })),
+          politicalParties
+        }
+      },
       {
         onSuccess: () => {
           router.push("/dashboard/admin-panel/persons");
@@ -65,7 +95,7 @@ export default function EditPersonPage() {
       instagram: person.socials?.instagram || ""
     },
     companies:
-      (person as any).companies?.map((c: any) => ({
+      person.companies?.map((c) => ({
         companyId: c.companyId,
         title: c.title || "",
         startDate: c.startDate?.toDate?.()?.toISOString()?.split("T")[0] || "",
@@ -75,7 +105,7 @@ export default function EditPersonPage() {
         description: c.description || ""
       })) || [],
     educations:
-      (person as any).educations?.map((e: any) => ({
+      person.educations?.map((e) => ({
         educationId: e.educationId,
         major: e.major || "",
         startDate: e.startDate?.toDate?.()?.toISOString()?.split("T")[0] || "",
@@ -83,13 +113,13 @@ export default function EditPersonPage() {
         gpa: e.gpa
       })) || [],
     associations:
-      (person as any).associations?.map((a: any) => ({
+      person.associations?.map((a) => ({
         associationId: a.associationId,
         startDate: a.startDate?.toDate?.()?.toISOString()?.split("T")[0] || "",
         endDate: a.endDate?.toDate?.()?.toISOString()?.split("T")[0] || ""
       })) || [],
     politicalParties:
-      (person as any).politicalParties?.map((p: any) => ({
+      person.politicalParties?.map((p) => ({
         politicalPartyId: p.politicalPartyId,
         type: p.type
       })) || []

@@ -23,6 +23,9 @@ import { useAutoCloseDrawer } from "@/hooks/use-auto-close-drawer";
 import { ArrowRightBoldIcon } from "@/icons/arrow-right-bold-icon";
 import { FilterIcon } from "@/icons/filter-icon";
 import { SortDescendingIcon } from "@/icons/sort-desc-icon";
+import useCategoriesDropdown from "@/queries/use-categories-dropdown";
+import usePersons from "@/queries/use-persons";
+import useTerritoriesDropdown from "@/queries/use-territories-dropdown";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import { X } from "lucide-react";
 import Link from "next/link";
@@ -30,16 +33,16 @@ import { parseAsArrayOf, parseAsString, useQueryState } from "nuqs";
 import { useState } from "react";
 
 export default function AnswerActors() {
-  const [territoire, setTerritoire] = useQueryState(
-    "territoire",
+  const { data: categoriesItems } = useCategoriesDropdown();
+  const { data: territoriesItems } = useTerritoriesDropdown();
+  const { data: persons } = usePersons();
+
+  const [territory, setTerritory] = useQueryState(
+    "territory",
     parseAsArrayOf(parseAsString).withDefault([])
   );
-  // const [role, setRole] = useQueryState(
-  //   "role",
-  //   parseAsArrayOf(parseAsString).withDefault([])
-  // );
-  const [catégorie, setCatégorie] = useQueryState(
-    "catégorie",
+  const [category, setCategory] = useQueryState(
+    "category",
     parseAsArrayOf(parseAsString).withDefault([])
   );
   const [sort, setSort] = useQueryState(
@@ -54,109 +57,17 @@ export default function AnswerActors() {
   const removePrefix = (value: string) => value.split(":")[1] ?? value;
   const getLabelFromValue = (value: string) => removePrefix(value);
 
-  const people = [
-    {
-      name: "Marie Claire",
-      title: "Minister of Trade",
-      affiliation: "Government of Martinique",
-      territoire: "Martinique",
-      catégorie: "Government",
-      image: "/images/avatar1.jpg"
-    },
-    {
-      name: "Dubois Henri",
-      title: "CEO, BlueWave Logistics",
-      affiliation: "Martinique Business Association",
-      territoire: "Martinique",
-      catégorie: "Economy",
-      image: "/images/avatar2.jpg"
-    },
-    {
-      name: "Marie Lefevre",
-      title: "Director of Education",
-      affiliation: "Ministry of Education",
-      territoire: "Guadeloupe",
-      catégorie: "Education",
-      image: "/images/avatar3.jpg"
-    },
-    {
-      name: "Marie Bernard",
-      title: "Chief Sustainability Officer",
-      affiliation: "EcoFuture Foundation",
-      territoire: "Réunion",
-      catégorie: "Environment",
-      image: "/images/avatar4.jpg"
-    },
-    {
-      name: "Fontaine Lopez",
-      title: "Minister of Health",
-      affiliation: "Health Department of Mayotte",
-      territoire: "Mayotte",
-      catégorie: "Health",
-      image: "/images/avatar5.jpg"
-    },
-    {
-      name: "Claire Dubois",
-      title: "President, Regional Chamber of Commerce",
-      affiliation: "French Guiana Trade Council",
-      territoire: "French Guiana",
-      catégorie: "Business Leaders",
-      image: "/images/avatar6.jpg"
-    },
-    {
-      name: "Jean Martin",
-      title: "Environmental Policy Advisor",
-      affiliation: "Ministry of Environment",
-      territoire: "Guadeloupe",
-      catégorie: "Environment",
-      image: "/images/avatar7.jpg"
-    },
-    {
-      name: "Sophie Laurent",
-      title: "Dean, University of Réunion",
-      affiliation: "University of Réunion",
-      territoire: "Réunion",
-      catégorie: "Education",
-      image: "/images/avatar8.jpg"
-    },
-    {
-      name: "Paul Dubois",
-      title: "CEO, Oceanic Exports",
-      affiliation: "Mayotte Business Network",
-      territoire: "Mayotte",
-      catégorie: "Business Leaders",
-      image: "/images/avatar9.jpg"
-    },
-    {
-      name: "Claire Bernard",
-      title: "Public Health Director",
-      affiliation: "Government Health Agency",
-      territoire: "French Guiana",
-      catégorie: "Health",
-      image: "/images/avatar10.jpg"
-    }
-  ];
-
-  const filters = {
-    territoire: [
-      { label: "Martinique", value: "Martinique" },
-      { label: "Guadeloupe", value: "Guadeloupe" },
-      { label: "Réunion", value: "Réunion" },
-      { label: "Mayotte", value: "Mayotte" },
-      { label: "Guyane", value: "Guyane" }
-    ],
-    // role: [
-    //   { label: "Government", value: "Government" },
-    //   { label: "Business Leaders", value: "Business Leaders" }
-    // ],
-    catégorie: [
-      { label: "Economy", value: "Economy" },
-      { label: "Government", value: "Government" },
-      { label: "Health", value: "Health" },
-      { label: "Education", value: "Education" },
-      { label: "Environment", value: "Environment" }
-    ]
-  };
+  const people = (persons || []).map((person) => ({
+    name: person.name,
+    title: person.currentJobPosition || "No Position",
+    affiliation: person.associations?.[0]?.name || "No Affiliation",
+    territory: person.territory?.name || "Unknown",
+    territoryId: person.territoryId,
+    category: person.category?.name || "Uncategorized",
+    categoryId: person.categoryId,
+    image: person.profilePicture || "/images/avatar-placeholder.jpg",
+    slug: person.slug
+  }));
 
   const sortBy = [
     { label: "Nouveauté", value: "Nouveauté" },
@@ -165,31 +76,23 @@ export default function AnswerActors() {
     { label: "Pertinence", value: "Pertinence" }
   ];
 
-  const activeValues = [
-    ...(territoire ?? []),
-    // ...(role ?? []),
-    ...(catégorie ?? [])
-  ];
+  const activeValues = [...(territory ?? []), ...(category ?? [])];
 
   const removeActiveValue = (val: string) => {
-    if ((territoire ?? []).includes(val)) {
-      setTerritoire((prev) => (prev ?? []).filter((v) => v !== val));
+    if ((territory ?? []).includes(val)) {
+      setTerritory((prev) => (prev ?? []).filter((v) => v !== val));
       return;
     }
-    // if ((role ?? []).includes(val)) {
-    //   setRole((prev) => (prev ?? []).filter((v) => v !== val));
-    //   return;
-    // }
-    if ((catégorie ?? []).includes(val)) {
-      setCatégorie((prev) => (prev ?? []).filter((v) => v !== val));
+
+    if ((category ?? []).includes(val)) {
+      setCategory((prev) => (prev ?? []).filter((v) => v !== val));
       return;
     }
   };
 
   const clearAll = () => {
-    setTerritoire(null);
-    // setRole(null);
-    setCatégorie(null);
+    setTerritory(null);
+    setCategory(null);
   };
 
   const filteredPeople = people.filter((p) => {
@@ -199,15 +102,13 @@ export default function AnswerActors() {
       p.title.toLowerCase().includes(search.toLowerCase());
 
     const matchTerritory =
-      territoire.length === 0 ||
-      territoire.some((t) => removePrefix(t) === p.territoire);
-
-    // const matchRole =
-    //   role.length === 0 || role.some((r) => removePrefix(r) === p.category);
+      territory.length === 0 || territory.some((t) => t === p.territory);
 
     const matchCategory =
-      catégorie.length === 0 ||
-      catégorie.some((c) => removePrefix(c) === p.catégorie);
+      category.length === 0 ||
+      category.some((c) => {
+        return c === p.category;
+      });
 
     return matchSearch && matchTerritory && matchCategory;
   });
@@ -221,6 +122,10 @@ export default function AnswerActors() {
     page * pageSize,
     (page + 1) * pageSize
   );
+
+  if (filteredPeople.length === 0 && !persons) {
+    return null; // Loading or no data
+  }
 
   if (filteredPeople.length === 0) {
     return <NoResult />;
@@ -236,19 +141,14 @@ export default function AnswerActors() {
               Recherche par
             </h3>
             <SidebarFilters
-              groups={{ territoire: filters.territoire }}
-              value={territoire ?? []}
-              setValue={setTerritoire}
+              groups={{ territoire: territoriesItems }}
+              value={territory ?? []}
+              setValue={setTerritory}
             />
-            {/* <SidebarFilters
-              groups={{ role: filters.role }}
-              value={role ?? []}
-              setValue={setRole}
-            /> */}
             <SidebarFilters
-              groups={{ catégorie: filters.catégorie }}
-              value={catégorie ?? []}
-              setValue={setCatégorie}
+              groups={{ catégorie: categoriesItems }}
+              value={category ?? []}
+              setValue={setCategory}
               isLast
             />
           </aside>
@@ -320,19 +220,14 @@ export default function AnswerActors() {
                     </DrawerTitle>
                     <div className=" max-h-[75vh] overflow-y-auto border-b">
                       <SidebarFilters
-                        groups={{ territoire: filters.territoire }}
-                        value={territoire ?? []}
-                        setValue={setTerritoire}
+                        groups={{ territoire: territoriesItems }}
+                        value={territory ?? []}
+                        setValue={setTerritory}
                       />
-                      {/* <SidebarFilters
-                        groups={{ role: filters.role }}
-                        value={role ?? []}
-                        setValue={setRole}
-                      /> */}
                       <SidebarFilters
-                        groups={{ catégorie: filters.catégorie }}
-                        value={catégorie ?? []}
-                        setValue={setCatégorie}
+                        groups={{ catégorie: categoriesItems }}
+                        value={category ?? []}
+                        setValue={setCategory}
                       />
                     </div>
 
@@ -450,7 +345,7 @@ export default function AnswerActors() {
                           className="text-primary hover:underline text-base font-regular leading-[140%] tracking-[-0.01em] hover:bg-transparent self-start sm:self-auto p-0"
                           asChild
                         >
-                          <Link href={`/actors/${person.name}`}>
+                          <Link href={`/actors/${person.slug}`}>
                             <span className="inline top-0">Profil</span>
                             <ArrowRightBoldIcon className="w-5 h-5 size-5 stroke-2" />
                           </Link>
@@ -472,7 +367,7 @@ export default function AnswerActors() {
                             Territoire
                           </div>
                           <div className="font-regular text-foreground text-base leading-[110%] tracking-[-0.01em]">
-                            {person.territoire}
+                            {person.territory}
                           </div>
                         </div>
 
@@ -481,7 +376,7 @@ export default function AnswerActors() {
                             Catégorie
                           </div>
                           <div className="font-regular text-foreground text-base leading-[110%] tracking-[-0.01em]">
-                            {person.catégorie}
+                            {person.category}
                           </div>
                         </div>
                       </div>

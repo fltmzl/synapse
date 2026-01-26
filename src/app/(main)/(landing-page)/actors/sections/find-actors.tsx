@@ -4,42 +4,19 @@ import { parseAsArrayOf, parseAsString, useQueryState } from "nuqs";
 import { useState } from "react";
 
 import FilterMultipleWithSearch from "@/components/filter-multiple-with-search";
+import useCategoriesDropdown from "@/queries/use-categories-dropdown";
+import useTerritoriesDropdown from "@/queries/use-territories-dropdown";
 import SearchPersonality from "../components/search-actors";
 
 export default function FindActors() {
   const [query, setQuery] = useState("");
-
-  const filters = {
-    territory: [
-      { label: "Martinique", value: "Martinique" },
-      { label: "Guadeloupe", value: "Guadeloupe" },
-      { label: "Réunion", value: "Réunion" },
-      { label: "Mayotte", value: "Mayotte" },
-      { label: "Guyane", value: "Guyane" }
-    ],
-    // role: [
-    //   { label: "Government", value: "Government" },
-    //   { label: "Business Leaders", value: "Business Leaders" }
-    // ],
-    category: [
-      { label: "Administration", value: "Administration" },
-      { label: "Artistique", value: "Artistique" },
-      { label: "Associatif", value: "Associatif" },
-      { label: "Economique", value: "Economique" },
-      { label: "Judiciaire", value: "Judiciaire" },
-      { label: "Médiatique", value: "Médiatique" },
-      { label: "Politique", value: "Politique" }
-    ]
-  };
+  const { data: categoriesItems } = useCategoriesDropdown();
+  const { data: territoriesItems } = useTerritoriesDropdown();
 
   const [territory, setTerritory] = useQueryState(
     "territory",
     parseAsArrayOf(parseAsString).withDefault([])
   );
-  // const [role, setRole] = useQueryState(
-  //   "role",
-  //   parseAsArrayOf(parseAsString).withDefault([])
-  // );
   const [category, setCategory] = useQueryState(
     "category",
     parseAsArrayOf(parseAsString).withDefault([])
@@ -68,22 +45,15 @@ export default function FindActors() {
           setValue={setTerritory}
           value={territory}
           placeholder="Entrez recherche…"
-          listItems={filters.territory}
+          listItems={territoriesItems}
         />
-        {/* <FilterMultipleWithSearch
-          buttonLabel="Role"
-          setValue={setRole}
-          value={role}
-          placeholder="Entrez recherche…"
-          listItems={filters.role}
-        /> */}
 
         <FilterMultipleWithSearch
           buttonLabel="Catégorie"
           setValue={setCategory}
           value={category}
           placeholder="Entrez recherche…"
-          listItems={filters.category}
+          listItems={categoriesItems}
         />
       </div>
     </section>

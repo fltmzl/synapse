@@ -83,61 +83,61 @@ export function initialElements() {
     position: center
   });
 
-  // nodes.push({
-  //   id: `group-1`,
-  //   type: "groupNode",
-  //   data: { label: `Distribution & Logistics` },
-  //   position: { x: 100, y: 100 },
-  //   style: {
-  //     width: "auto", // biarkan auto
-  //     height: "auto", // biarkan auto
-  //     minWidth: 300,
-  //     minHeight: 200
-  //   }
-  // });
-  // nodes.push({
-  //   id: `shopie`,
-  //   type: "circleBlueNode",
-  //   data: { label: `Shopie Laurent` },
-  //   position: { x: 10, y: 10 },
-  //   parentId: "group-1",
-  //   extent: "parent"
-  // });
-  // nodes.push({
-  //   id: `lucien`,
-  //   type: "circleBlueNode",
-  //   data: { label: `Lucien Moreau` },
-  //   position: { x: 20, y: 20 },
-  //   parentId: "group-1",
-  //   extent: "parent"
-  // });
+  nodes.push({
+    id: `group-1`,
+    type: "groupNode",
+    data: { label: `Distribution & Logistics` },
+    position: { x: 100, y: 100 },
+    style: {
+      width: "auto", // biarkan auto
+      height: "auto", // biarkan auto
+      minWidth: 300,
+      minHeight: 200
+    }
+  });
+  nodes.push({
+    id: `shopie`,
+    type: "circleBlueNode",
+    data: { label: `Shopie Laurent` },
+    position: { x: 10, y: 10 },
+    parentId: "group-1",
+    extent: "parent"
+  });
+  nodes.push({
+    id: `lucien`,
+    type: "circleBlueNode",
+    data: { label: `Lucien Moreau` },
+    position: { x: 20, y: 20 },
+    parentId: "group-1",
+    extent: "parent"
+  });
 
-  // edges.push({
-  //   id: "5-shopie",
-  //   source: "5",
-  //   target: "shopie",
-  //   type: "customEdge"
-  // });
-  // edges.push({
-  //   id: "5-lucien",
-  //   source: "5",
-  //   target: "lucien",
-  //   type: "customEdge"
-  // });
+  edges.push({
+    id: "5-shopie",
+    source: "5",
+    target: "shopie",
+    type: "customEdge"
+  });
+  edges.push({
+    id: "5-lucien",
+    source: "5",
+    target: "lucien",
+    type: "customEdge"
+  });
 
-  // edges.push({
-  //   id: "shopie-group-1",
-  //   source: "shopie",
-  //   target: "group-1",
-  //   type: "customEdge"
-  // });
+  edges.push({
+    id: "shopie-group-1",
+    source: "shopie",
+    target: "group-1",
+    type: "customEdge"
+  });
 
-  // edges.push({
-  //   id: "lucien-group-1",
-  //   source: "lucien",
-  //   target: "group-1",
-  //   type: "customEdge"
-  // });
+  edges.push({
+    id: "lucien-group-1",
+    source: "lucien",
+    target: "group-1",
+    type: "customEdge"
+  });
 
   for (let i = 0; i < 8; i++) {
     const degrees = i * (360 / 8);
@@ -149,6 +149,7 @@ export function initialElements() {
       id: `${i}`,
       data: { label: `Source ${i}` },
       type: "circleBlueNode",
+      parentId: i === 5 ? "group-1" : undefined,
       position: { x: 0, y: 0 }
     });
 
@@ -165,6 +166,74 @@ export function initialElements() {
       }
     });
   }
+
+  return { nodes, edges };
+}
+
+type GraphDTO = {
+  company: {
+    id: string;
+    name: string;
+    industry: string;
+  };
+  persons: {
+    id: string;
+    name: string;
+    role: string;
+    relation: string;
+  }[];
+};
+
+export function mapCompanyPersonsToReactFlow(
+  data: GraphDTO,
+  center = { x: 0, y: 0 },
+  radius = 240
+): { nodes: Node[]; edges: Edge[] } {
+  const nodes: Node[] = [];
+  const edges: Edge[] = [];
+
+  /** ===== COMPANY (CENTER) ===== */
+  nodes.push({
+    id: data.company.id,
+    type: "centerNode",
+    position: center,
+    data: {
+      label: data.company.name
+    }
+  });
+
+  const total = data.persons.length;
+
+  data.persons.forEach((person, index) => {
+    const angle = (index / total) * 2 * Math.PI;
+
+    const x = center.x + radius * Math.cos(angle);
+    const y = center.y + radius * Math.sin(angle);
+
+    /** PERSON NODE */
+    nodes.push({
+      id: person.id,
+      type: "circleBlueNode",
+      position: { x, y },
+      data: {
+        label: person.name,
+        role: person.role
+      }
+    });
+
+    /** EDGE */
+    edges.push({
+      id: `${person.id}->${data.company.id}`,
+      source: data.company.id,
+      target: person.id,
+      type: "customEdge",
+      label: person.relation,
+      markerEnd: {
+        type: MarkerType.ArrowClosed,
+        color: "rgba(36, 71, 213, 1)"
+      }
+    });
+  });
 
   return { nodes, edges };
 }

@@ -21,7 +21,7 @@ export const personColumns: ColumnDef<Person>[] = [
           <AvatarFallback>{row.original.name.charAt(0)}</AvatarFallback>
         </Avatar>
         <Link
-          href={`/dashboard/admin-panel/persons/edit/${row.original.id}`}
+          href={`/dashboard/admin-panel/persons/edit/${row.original.slug}`}
           className="font-medium max-w-[200px] truncate hover:underline"
         >
           {row.getValue("name")}

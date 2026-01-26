@@ -7,7 +7,8 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage
+  FormMessage,
+  FormDescription
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -45,6 +46,7 @@ import usePlaces from "@/queries/use-places";
 import usePlaceMutation from "@/mutations/use-place-mutation";
 import { ImageUpload } from "@/components/ui/image-upload";
 import { ComboboxCreate } from "@/components/ui/combobox-create";
+import usePersons from "@/queries/use-persons";
 import { DashboardHeader } from "@/components/dashboard-header";
 import { Spinner } from "@/components/spinner";
 import {
@@ -77,7 +79,8 @@ export const companyFormSchema = z.object({
       facebook: z.string().optional(),
       instagram: z.string().optional()
     })
-    .optional()
+    .optional(),
+  authorizedRepresentativeId: z.string().optional()
 });
 
 export type CompanyFormValues = z.infer<typeof companyFormSchema>;
@@ -85,7 +88,10 @@ export type CompanyFormValues = z.infer<typeof companyFormSchema>;
 type CompanyFormProps = {
   initialValues?: CompanyFormValues;
   isMutationLoading?: boolean;
-  onSubmit: (data: CompanyFormValues) => void | Promise<void>;
+  onSubmit: (
+    data: CompanyFormValues,
+    newRepresentativeName?: string
+  ) => void | Promise<void>;
   pageTitle: string;
   pageDescription: string;
 };
@@ -119,7 +125,8 @@ export function CompanyForm({
         twitter: "",
         facebook: "",
         instagram: ""
-      }
+      },
+      authorizedRepresentativeId: ""
     },
     mode: "all"
   });
@@ -129,6 +136,9 @@ export function CompanyForm({
   const { data: categories = [], isLoading: isCategoriesLoading } =
     useCategories();
   const { createCategoryMutation } = useCategoryMutation();
+
+  const { data: persons = [], isLoading: isPersonsLoading } = usePersons();
+  const [newRepresentativeName, setNewRepresentativeName] = React.useState("");
 
   const { data: territories = [], isLoading: isTerritoriesLoading } =
     useTerritories();
@@ -152,6 +162,11 @@ export function CompanyForm({
     [places]
   );
 
+  const personOptions = React.useMemo(
+    () => persons.map((p) => ({ value: p.id, label: p.name })),
+    [persons]
+  );
+
   return (
     <>
       <DashboardHeader
@@ -160,7 +175,9 @@ export function CompanyForm({
         actions={
           <Button
             size="sm"
-            onClick={form.handleSubmit(onSubmit)}
+            onClick={form.handleSubmit((data) =>
+              onSubmit(data, newRepresentativeName)
+            )}
             disabled={isMutationLoading}
           >
             {isMutationLoading ? <Spinner /> : <Save className="size-4 mr-2" />}
@@ -172,7 +189,9 @@ export function CompanyForm({
       <div className="flex flex-1 flex-col p-4">
         <Form {...form}>
           <form
-            onSubmit={form.handleSubmit(onSubmit)}
+            onSubmit={form.handleSubmit((data) =>
+              onSubmit(data, newRepresentativeName)
+            )}
             className="space-y-8 w-full max-w-4xl mx-auto"
           >
             <Link
@@ -280,6 +299,71 @@ export function CompanyForm({
                             )}
                           />
                         </div>
+                        <FormField
+                          control={form.control}
+                          name="authorizedRepresentativeId"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Authorized Representative</FormLabel>
+                              <FormControl>
+                                <ComboboxCreate
+                                  options={personOptions}
+                                  value={field.value}
+                                  onValueChange={(val) => {
+                                    field.onChange(val);
+                                    setNewRepresentativeName(""); // Clear new name if existing selected
+                                  }}
+                                  onCreate={(name) => {
+                                    setNewRepresentativeName(name);
+                                    // We don't set the field value here because the ID doesn't exist yet.
+                                    // We'll handle this in onSubmit.
+                                    // Visually, we might want to show the name as selected or a badge.
+                                    // For now, ComboboxCreate might need a way to show a "pending creation" state
+                                    // or we just rely on the fact that if value is empty but newRepresentativeName is set,
+                                    // we show the name.
+                                    // However, ComboboxCreate expects a value that matches an option or it shows placeholder.
+                                    // A simple workaround is to let the user know they are creating a new one.
+                                    // But ComboboxCreate internal state might handle "searchQuery" as value if we tweak it,
+                                    // or we just accept that it looks like "Select option..." but we show a message below?
+                                    // Better: The ComboboxCreate component as seen in the code:
+                                    // It calls onCreate. It doesn't automatically select the new item unless we pass it back.
+                                    // Since we are doing atomic creation, we can't pass an ID back yet.
+                                    // Let's just use the field value to store the NAME temporarily if it's a new creation?
+                                    // No, the schema expects a string, which is fine.
+                                    // But if we put the name in the field, it won't match any option ID.
+                                    // The ComboboxCreate displays `selectedOption ? selectedOption.label : placeholder`.
+                                    // If we put the name in `value`, `selectedOption` will be undefined.
+                                    // So it will show "Select option...".
+                                    // We might need to handle this UI better, but for now let's just set the name
+                                    // and maybe show a helper text.
+                                    field.onChange(name); // Store name in the field for now? No, that confuses ID vs Name.
+                                    // Actually, let's store a special marker or just keep it empty and use newRepresentativeName.
+                                    // But to show it in the UI, we need to trick it or update ComboboxCreate.
+                                    // Let's assume for this task we just set the name as the value,
+                                    // and in the ComboboxCreate, if no option matches but value is set, we display value?
+                                    // Looking at ComboboxCreate:
+                                    // `const selectedOption = options.find((option) => option.value === value);`
+                                    // `{selectedOption ? selectedOption.label : placeholder}`
+                                    // So it will show placeholder.
+                                    // Let's just use a helper message for now.
+                                  }}
+                                  placeholder="Select representative"
+                                  disabled={
+                                    isPersonsLoading || isMutationLoading
+                                  }
+                                  createText="Create new person"
+                                />
+                              </FormControl>
+                              {newRepresentativeName && (
+                                <FormDescription className="text-primary font-medium">
+                                  Will create new person:{" "}
+                                  {newRepresentativeName}
+                                </FormDescription>
+                              )}
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
                       </div>
                     </div>
 

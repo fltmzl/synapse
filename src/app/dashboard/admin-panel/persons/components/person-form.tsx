@@ -64,53 +64,6 @@ import useCompanyMutation from "@/mutations/use-company-mutation";
 
 const DESCRIPTION_MAX_LENGTH = 1000;
 
-// export interface PersonFormValues {
-//   name: string;
-//   idNumber?: string;
-//   code?: string;
-//   phoneNumber?: string;
-//   countryCode?: string;
-//   email?: string;
-//   description?: string;
-//   profilePicture?: string;
-//   currentJobPosition?: string;
-//   categoryId?: string;
-//   placeId?: string;
-//   territoryId?: string;
-//   socials?: {
-//     whatsapp?: string;
-//     linkedin?: string;
-//     twitter?: string;
-//     facebook?: string;
-//     instagram?: string;
-//   };
-//   companies: {
-//     companyId: string;
-//     title?: string;
-//     startDate?: string;
-//     endDate?: string;
-//     locationType?: string;
-//     employmentType?: string;
-//     description?: string;
-//   }[];
-//   educations: {
-//     educationId: string;
-//     major?: string;
-//     startDate?: string;
-//     endDate?: string;
-//     gpa?: number;
-//   }[];
-//   associations: {
-//     associationId: string;
-//     startDate?: string;
-//     endDate?: string;
-//   }[];
-//   politicalParties: {
-//     politicalPartyId: string;
-//     type: "supports" | "opposes";
-//   }[];
-// }
-
 export const personFormSchema = z.object({
   name: z.string().min(1, "Name is required"),
   idNumber: z.string().optional(),
@@ -811,11 +764,16 @@ export function PersonForm({
                                   value={field.value}
                                   onValueChange={field.onChange}
                                   onCreate={(name) => {
-                                    createEducationMutation.mutate(name, {
-                                      onSuccess: (newEdu) => {
-                                        if (newEdu) field.onChange(newEdu.id);
+                                    createEducationMutation.mutate(
+                                      {
+                                        name
+                                      },
+                                      {
+                                        onSuccess: (newEdu) => {
+                                          if (newEdu) field.onChange(newEdu.id);
+                                        }
                                       }
-                                    });
+                                    );
                                   }}
                                   placeholder="Select institution"
                                   isCreating={createEducationMutation.isPending}
@@ -938,12 +896,15 @@ export function PersonForm({
                                   value={field.value}
                                   onValueChange={field.onChange}
                                   onCreate={(name) => {
-                                    createAssociationMutation.mutate(name, {
-                                      onSuccess: (newAssoc) => {
-                                        if (newAssoc)
-                                          field.onChange(newAssoc.id);
+                                    createAssociationMutation.mutate(
+                                      { name },
+                                      {
+                                        onSuccess: (newAssoc) => {
+                                          if (newAssoc)
+                                            field.onChange(newAssoc.id);
+                                        }
                                       }
-                                    });
+                                    );
                                   }}
                                   placeholder="Select association"
                                   isCreating={
@@ -1053,12 +1014,15 @@ export function PersonForm({
                                   value={field.value}
                                   onValueChange={field.onChange}
                                   onCreate={(name) => {
-                                    createPoliticalPartyMutation.mutate(name, {
-                                      onSuccess: (newParty) => {
-                                        if (newParty)
-                                          field.onChange(newParty.id);
+                                    createPoliticalPartyMutation.mutate(
+                                      { name },
+                                      {
+                                        onSuccess: (newParty) => {
+                                          if (newParty)
+                                            field.onChange(newParty.id);
+                                        }
                                       }
-                                    });
+                                    );
                                   }}
                                   placeholder="Select party"
                                   isCreating={

@@ -21,7 +21,9 @@ import {
   Ticket,
   PanelLeft,
   Video,
-  Building2
+  Building2,
+  GraduationCap,
+  Flag
 } from "lucide-react";
 
 import {
@@ -99,6 +101,24 @@ const menuItems: NavMenu[] = [
     title: "Companies",
     url: "/dashboard/admin-panel/companies",
     icon: Building2,
+    items: []
+  },
+  {
+    title: "Educations",
+    url: "/dashboard/admin-panel/educations",
+    icon: GraduationCap,
+    items: []
+  },
+  {
+    title: "Political Parties",
+    url: "/dashboard/admin-panel/political-parties",
+    icon: Flag,
+    items: []
+  },
+  {
+    title: "Associations",
+    url: "/dashboard/admin-panel/associations",
+    icon: Users,
     items: []
   }
 ];

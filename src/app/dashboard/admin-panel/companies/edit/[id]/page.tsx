@@ -13,7 +13,8 @@ export default function EditCompanyPage() {
   const id = params.id as string;
 
   const { data: company, isLoading } = useCompany(id);
-  const { updateCompanyMutation } = useCompanyMutation();
+  const { updateCompanyMutation, updateCompanyWithRepresentativeMutation } =
+    useCompanyMutation();
 
   if (isLoading) {
     return (
@@ -57,25 +58,41 @@ export default function EditCompanyPage() {
       twitter: company.socials?.twitter || "",
       facebook: company.socials?.facebook || "",
       instagram: company.socials?.instagram || ""
-    }
+    },
+    authorizedRepresentativeId: company.authorizedRepresentativeId || ""
   };
 
-  const onSubmit = async (data: CompanyFormValues) => {
-    const payload: UpdateCompanyDto = {
-      ...data,
-      establishmentDate: data.establishmentDate
-        ? new Date(data.establishmentDate)
-        : undefined
-    };
-
-    updateCompanyMutation.mutate(
-      { id, data: payload },
-      {
-        onSuccess: () => {
-          router.push("/dashboard/admin-panel/companies");
+  const onSubmit = async (
+    data: CompanyFormValues,
+    newRepresentativeName?: string
+  ) => {
+    if (newRepresentativeName && newRepresentativeName.trim()) {
+      // Update company with new representative
+      await updateCompanyWithRepresentativeMutation.mutateAsync({
+        companyId: id,
+        company: {
+          ...data,
+          establishmentDate: data.establishmentDate
+            ? new Date(data.establishmentDate)
+            : undefined,
+          authorizedRepresentativeId: undefined // Will be set by the service
+        },
+        representative: {
+          name: newRepresentativeName.trim()
         }
-      }
-    );
+      });
+    } else {
+      // Update company normally
+      const payload: UpdateCompanyDto = {
+        ...data,
+        establishmentDate: data.establishmentDate
+          ? new Date(data.establishmentDate)
+          : undefined
+      };
+
+      await updateCompanyMutation.mutateAsync({ id, data: payload });
+    }
+    router.push("/dashboard/admin-panel/companies");
   };
 
   return (
@@ -83,7 +100,10 @@ export default function EditCompanyPage() {
       <CompanyForm
         initialValues={initialValues}
         onSubmit={onSubmit}
-        isMutationLoading={updateCompanyMutation.isPending}
+        isMutationLoading={
+          updateCompanyMutation.isPending ||
+          updateCompanyWithRepresentativeMutation.isPending
+        }
         pageTitle="Edit Company"
         pageDescription={`Edit details for ${company.name}`}
       />

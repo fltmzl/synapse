@@ -5,7 +5,8 @@ import { toast } from "sonner";
 import {
   CreatePersonDto,
   UpdatePersonDto,
-  CreatePersonWithRelationsDto
+  CreatePersonWithRelationsDto,
+  UpdatePersonWithRelationsDto
 } from "@/types/person-relation.type";
 
 export default function usePersonMutation() {
@@ -35,8 +36,13 @@ export default function usePersonMutation() {
   });
 
   const updatePersonMutation = useMutation({
-    mutationFn: ({ id, data }: { id: string; data: UpdatePersonDto }) =>
-      PersonService.update({ id, data }),
+    mutationFn: ({
+      id,
+      data
+    }: {
+      id: string;
+      data: UpdatePersonDto | UpdatePersonWithRelationsDto;
+    }) => PersonService.update({ id, data }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QUERIES.PERSONS] });
       toast.success("Person updated successfully");

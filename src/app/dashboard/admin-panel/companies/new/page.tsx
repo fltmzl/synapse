@@ -8,27 +8,47 @@ import { CreateCompanyDto } from "@/types/person-relation.type";
 
 export default function NewCompanyPage() {
   const router = useRouter();
-  const { createCompanyMutation } = useCompanyMutation();
+  const { createCompanyMutation, createCompanyWithRepresentativeMutation } =
+    useCompanyMutation();
 
-  const onSubmit = async (data: CompanyFormValues) => {
-    const payload: CreateCompanyDto = {
-      ...data,
-      establishmentDate: data.establishmentDate
-        ? new Date(data.establishmentDate)
-        : undefined
-    };
-
-    createCompanyMutation.mutate(payload, {
-      onSuccess: () => {
-        router.push("/dashboard/admin-panel/companies");
-      }
-    });
+  const onSubmit = async (
+    data: CompanyFormValues,
+    newRepresentativeName?: string
+  ) => {
+    if (newRepresentativeName && newRepresentativeName.trim()) {
+      // Create company with new representative
+      await createCompanyWithRepresentativeMutation.mutateAsync({
+        company: {
+          ...data,
+          establishmentDate: data.establishmentDate
+            ? new Date(data.establishmentDate)
+            : undefined,
+          authorizedRepresentativeId: undefined // Will be set by the service
+        },
+        representative: {
+          name: newRepresentativeName.trim()
+        }
+      });
+    } else {
+      // Create company normally
+      const payload: CreateCompanyDto = {
+        ...data,
+        establishmentDate: data.establishmentDate
+          ? new Date(data.establishmentDate)
+          : undefined
+      };
+      await createCompanyMutation.mutateAsync(payload);
+    }
+    router.push("/dashboard/admin-panel/companies");
   };
 
   return (
     <CompanyForm
       onSubmit={onSubmit}
-      isMutationLoading={createCompanyMutation.isPending}
+      isMutationLoading={
+        createCompanyMutation.isPending ||
+        createCompanyWithRepresentativeMutation.isPending
+      }
       pageTitle="New Company"
       pageDescription="Create a new company or organization"
     />

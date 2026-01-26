@@ -15,7 +15,8 @@ import {
   Company,
   CreateCompanyDto,
   UpdateCompanyDto,
-  CreateCompanyWithRepresentativeDto
+  CreateCompanyWithRepresentativeDto,
+  UpdateCompanyWithRepresentativeDto
 } from "@/types/person-relation.type";
 
 /**
@@ -181,6 +182,74 @@ export class CompanyService {
     return {
       success: true,
       message: "Company updated successfully"
+    };
+  }
+
+  /**
+   * Update a company along with creating a new authorized representative person in a single batch operation
+   */
+  static async updateWithRepresentative(
+    payload: UpdateCompanyWithRepresentativeDto
+  ) {
+    const batch = writeBatch(db);
+
+    // 1. Prepare Person (Representative)
+    const personId = doc(collection(db, "persons")).id;
+    const personRef = doc(db, "persons", personId);
+    const personSlug = generateSlug(payload.representative.name);
+    const now = serverTimestamp();
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const personData: Record<string, any> = {
+      ...payload.representative,
+      slug: personSlug,
+      createdAt: now,
+      updatedAt: now
+    };
+
+    // Filter out undefined values for person
+    const cleanPersonData = Object.fromEntries(
+      Object.entries(personData).filter(([_, v]) => v !== undefined)
+    );
+
+    batch.set(personRef, cleanPersonData);
+
+    // 2. Update Company
+    const companyRef = doc(db, CompanyService.colName, payload.companyId);
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const companyData: Record<string, any> = {
+      ...payload.company,
+      authorizedRepresentativeId: personId, // Link to the new person
+      updatedAt: now
+    };
+
+    // Regenerate slug if name is updated
+    if (payload.company.name) {
+      companyData.slug = generateSlug(payload.company.name);
+    }
+
+    if (payload.company.establishmentDate) {
+      companyData.establishmentDate = FirestoreTimestamp.fromDate(
+        payload.company.establishmentDate
+      );
+    }
+
+    // Filter out undefined values for company
+    const cleanCompanyData = Object.fromEntries(
+      Object.entries(companyData).filter(([_, v]) => v !== undefined)
+    );
+
+    batch.update(companyRef, cleanCompanyData);
+
+    await batch.commit();
+
+    return {
+      personId,
+      personSlug,
+      success: true,
+      message:
+        "Company updated and authorized representative created successfully"
     };
   }
 

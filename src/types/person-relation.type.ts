@@ -36,6 +36,35 @@ export type Person = {
   updatedAt?: Timestamp;
 };
 
+export type PersonWithDetails = Person & {
+  territory?: {
+    id: string;
+    name: string;
+    createdAt?: Timestamp;
+    updatedAt?: Timestamp;
+  } | null;
+  category?: {
+    id: string;
+    name: string;
+    createdAt?: Timestamp;
+    updatedAt?: Timestamp;
+  } | null;
+  companies?: Array<Company & CompanyPerson>;
+  educations?: Array<Education & EducationPerson>;
+  associations?: Array<{
+    id: string;
+    associationId: string;
+    name: string;
+    profilePicture?: string;
+    link?: string;
+    title?: string;
+    type?: string;
+    startDate?: Timestamp;
+    endDate?: Timestamp;
+  }>;
+  politicalParties?: Array<PoliticalParty & PoliticalPartyPerson>;
+};
+
 export type CreatePersonDto = {
   idNumber?: string;
   code?: string;
@@ -108,6 +137,14 @@ export type UpdateCompanyDto = Partial<CreateCompanyDto>;
 // CompanyPerson Types (Junction Table)
 // ============================================================================
 
+export type CompanyPersonEmploymentType =
+  | "fulltime"
+  | "parttime"
+  | "contract"
+  | "freelance"
+  | "internship"
+  | "other";
+
 export type CompanyPerson = {
   id: string;
   companyId: string;
@@ -117,7 +154,7 @@ export type CompanyPerson = {
   endDate?: Timestamp;
   locationType?: string;
   description?: string;
-  employmentType?: string;
+  employmentType?: CompanyPersonEmploymentType;
   createdAt?: Timestamp;
   updatedAt?: Timestamp;
 };
@@ -130,7 +167,7 @@ export type CreateCompanyPersonDto = {
   endDate?: Date;
   locationType?: string;
   description?: string;
-  employmentType?: string;
+  employmentType?: CompanyPersonEmploymentType;
 };
 
 export type UpdateCompanyPersonDto = Partial<
@@ -147,6 +184,7 @@ export type Education = {
   slug: string;
   description?: string;
   profilePicture?: string;
+  link?: string;
   createdAt?: Timestamp;
   updatedAt?: Timestamp;
 };
@@ -155,6 +193,7 @@ export type CreateEducationDto = {
   name: string;
   description?: string;
   profilePicture?: string;
+  link?: string;
 };
 
 export type UpdateEducationDto = Partial<CreateEducationDto>;
@@ -197,6 +236,7 @@ export type Association = {
   name: string;
   slug: string;
   profilePicture?: string;
+  link?: string;
   createdAt?: Timestamp;
   updatedAt?: Timestamp;
 };
@@ -204,6 +244,7 @@ export type Association = {
 export type CreateAssociationDto = {
   name: string;
   profilePicture?: string;
+  link?: string;
 };
 
 export type UpdateAssociationDto = Partial<CreateAssociationDto>;
@@ -216,6 +257,8 @@ export type AssociationPerson = {
   id: string;
   associationId: string;
   personId: string;
+  title?: string;
+  type?: string;
   startDate?: Timestamp;
   endDate?: Timestamp;
   createdAt?: Timestamp;
@@ -225,6 +268,8 @@ export type AssociationPerson = {
 export type CreateAssociationPersonDto = {
   associationId: string;
   personId: string;
+  title?: string;
+  type?: string;
   startDate?: Date;
   endDate?: Date;
 };
@@ -360,9 +405,46 @@ export type CreatePersonWithRelationsDto = {
 };
 
 /**
+ * Comprehensive type for updating a person with all possible relations
+ */
+export type UpdatePersonWithRelationsDto = {
+  person: UpdatePersonDto;
+  companies?: Array<
+    Omit<CreateCompanyPersonDto, "personId"> & {
+      companyId: string;
+    }
+  >;
+  educations?: Array<
+    Omit<CreateEducationPersonDto, "personId"> & {
+      educationId: string;
+    }
+  >;
+  associations?: Array<
+    Omit<CreateAssociationPersonDto, "personId"> & {
+      associationId: string;
+    }
+  >;
+  politicalParties?: Array<
+    Omit<CreatePoliticalPartyPersonDto, "personId"> & {
+      politicalPartyId: string;
+      type: PoliticalPartyRelationType;
+    }
+  >;
+};
+
+/**
  * Type for creating a company with a new authorized representative person
  */
 export type CreateCompanyWithRepresentativeDto = {
   company: CreateCompanyDto;
+  representative: CreatePersonDto;
+};
+
+/**
+ * Type for updating a company with a new authorized representative person
+ */
+export type UpdateCompanyWithRepresentativeDto = {
+  companyId: string;
+  company: UpdateCompanyDto;
   representative: CreatePersonDto;
 };

@@ -4,7 +4,9 @@ import { CompanyService } from "@/services/company.api";
 import { toast } from "sonner";
 import {
   CreateCompanyDto,
-  UpdateCompanyDto
+  UpdateCompanyDto,
+  CreateCompanyWithRepresentativeDto,
+  UpdateCompanyWithRepresentativeDto
 } from "@/types/person-relation.type";
 
 export default function useCompanyMutation() {
@@ -21,6 +23,23 @@ export default function useCompanyMutation() {
     }
   });
 
+  const createCompanyWithRepresentativeMutation = useMutation({
+    mutationFn: (data: CreateCompanyWithRepresentativeDto) =>
+      CompanyService.createWithRepresentative(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [QUERIES.COMPANIES] });
+      queryClient.invalidateQueries({ queryKey: [QUERIES.PERSONS] });
+      toast.success(
+        "Company and authorized representative created successfully"
+      );
+    },
+    onError: (error: Error) => {
+      toast.error(
+        error.message || "Failed to create company with representative"
+      );
+    }
+  });
+
   const updateCompanyMutation = useMutation({
     mutationFn: ({ id, data }: { id: string; data: UpdateCompanyDto }) =>
       CompanyService.update({ id, data }),
@@ -30,6 +49,23 @@ export default function useCompanyMutation() {
     },
     onError: (error: Error) => {
       toast.error(error.message || "Failed to update company");
+    }
+  });
+
+  const updateCompanyWithRepresentativeMutation = useMutation({
+    mutationFn: (data: UpdateCompanyWithRepresentativeDto) =>
+      CompanyService.updateWithRepresentative(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [QUERIES.COMPANIES] });
+      queryClient.invalidateQueries({ queryKey: [QUERIES.PERSONS] });
+      toast.success(
+        "Company updated and authorized representative created successfully"
+      );
+    },
+    onError: (error: Error) => {
+      toast.error(
+        error.message || "Failed to update company with representative"
+      );
     }
   });
 
@@ -46,7 +82,9 @@ export default function useCompanyMutation() {
 
   return {
     createCompanyMutation,
+    createCompanyWithRepresentativeMutation,
     updateCompanyMutation,
+    updateCompanyWithRepresentativeMutation,
     deleteCompanyMutation
   };
 }

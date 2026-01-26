@@ -4,7 +4,10 @@ import React from "react";
 import { useRouter } from "next/navigation";
 import { PersonForm, PersonFormValues } from "../components/person-form";
 import usePersonMutation from "@/mutations/use-person-mutation";
-import { CreatePersonWithRelationsDto } from "@/types/person-relation.type";
+import {
+  CompanyPersonEmploymentType,
+  CreatePersonWithRelationsDto
+} from "@/types/person-relation.type";
 
 export default function NewPersonPage() {
   const router = useRouter();
@@ -31,7 +34,10 @@ export default function NewPersonPage() {
       companies: data.companies.map((c) => ({
         ...c,
         startDate: c.startDate ? new Date(c.startDate) : undefined,
-        endDate: c.endDate ? new Date(c.endDate) : undefined
+        endDate: c.endDate ? new Date(c.endDate) : undefined,
+        employmentType: c.employmentType
+          ? (c.employmentType as CompanyPersonEmploymentType)
+          : undefined
       })),
       educations: data.educations.map((e) => ({
         ...e,

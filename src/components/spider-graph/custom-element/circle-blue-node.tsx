@@ -16,7 +16,8 @@ export default function CircleBlueNode({
 
   // Cek apakah node ini berada di atas center node
   const isAboveCenter = useMemo(() => {
-    const centerNode = getNodes().find((node) => node.type === "centerNode");
+    const nodes = getNodes();
+    const centerNode = nodes.find((node) => node.type === "centerNode");
 
     if (!centerNode) return false;
 

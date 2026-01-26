@@ -11,13 +11,29 @@ import {
   serverTimestamp,
   Timestamp,
   updateDoc,
-  writeBatch
+  writeBatch,
+  limit
 } from "firebase/firestore";
 import {
   Person,
   CreatePersonDto,
   UpdatePersonDto,
-  CreatePersonWithRelationsDto
+  CreatePersonWithRelationsDto,
+  UpdatePersonWithRelationsDto,
+  PersonWithDetails,
+  Company,
+  Education,
+  PoliticalParty,
+  CompanyPerson,
+  EducationPerson,
+  AssociationPerson,
+  PoliticalPartyPerson,
+  Association,
+  CreateCompanyPersonDto,
+  CreateEducationPersonDto,
+  CreateAssociationPersonDto,
+  CreatePoliticalPartyPersonDto,
+  PoliticalPartyRelationType
 } from "@/types/person-relation.type";
 
 /**
@@ -163,12 +179,89 @@ export class PersonService {
     };
   }
 
-  static async getAll(): Promise<Person[]> {
-    const querySnapshot = await getDocs(PersonService.colRef);
-    return querySnapshot.docs.map((doc) => ({
+  static async getAll(): Promise<PersonWithDetails[]> {
+    const [
+      personsSnap,
+      territoriesSnap,
+      categoriesSnap,
+      associationsSnap,
+      associationPersonSnap
+    ] = await Promise.all([
+      getDocs(PersonService.colRef),
+      getDocs(collection(db, "territories")),
+      getDocs(collection(db, "categories")),
+      getDocs(collection(db, "associations")),
+      getDocs(collection(db, "association_person"))
+    ]);
+
+    const territoriesMap = new Map(
+      territoriesSnap.docs.map((doc) => [
+        doc.id,
+        { id: doc.id, ...(doc.data() as { name: string }) }
+      ])
+    );
+
+    const categoriesMap = new Map(
+      categoriesSnap.docs.map((doc) => [
+        doc.id,
+        { id: doc.id, ...(doc.data() as { name: string }) }
+      ])
+    );
+
+    const associationsMap = new Map(
+      associationsSnap.docs.map((doc) => [
+        doc.id,
+        {
+          id: doc.id,
+          ...(doc.data() as { name: string; profilePicture?: string })
+        }
+      ])
+    );
+
+    const associationPersonList = associationPersonSnap.docs.map((doc) => ({
       id: doc.id,
-      ...(doc.data() as Omit<Person, "id">)
+      ...(doc.data() as {
+        personId: string;
+        associationId: string;
+        startDate?: Timestamp;
+        endDate?: Timestamp;
+      })
     }));
+
+    return personsSnap.docs.map((doc) => {
+      const personData = doc.data() as Omit<Person, "id">;
+      const personId = doc.id;
+
+      const territory = personData.territoryId
+        ? territoriesMap.get(personData.territoryId) || null
+        : null;
+
+      const category = personData.categoryId
+        ? categoriesMap.get(personData.categoryId) || null
+        : null;
+
+      const personAssociations = associationPersonList
+        .filter((ap) => ap.personId === personId)
+        .map((ap) => {
+          const assoc = associationsMap.get(ap.associationId);
+          return {
+            id: ap.id,
+            associationId: ap.associationId,
+            name: assoc?.name || "Unknown Association",
+            profilePicture: assoc?.profilePicture,
+            startDate: ap.startDate,
+            endDate: ap.endDate
+          };
+        });
+
+      return {
+        id: personId,
+        ...personData,
+        territory,
+        category,
+        associations: personAssociations
+      };
+    });
   }
 
   static async getById(id: string): Promise<Person | null> {
@@ -184,16 +277,243 @@ export class PersonService {
     return null;
   }
 
+  static async getBySlug(slug: string): Promise<Person | null> {
+    const q = query(PersonService.colRef, where("slug", "==", slug), limit(1));
+    const querySnapshot = await getDocs(q);
+
+    if (!querySnapshot.empty) {
+      const docSnap = querySnapshot.docs[0];
+      return {
+        id: docSnap.id,
+        ...docSnap.data()
+      } as Person;
+    }
+
+    return null;
+  }
+
   /**
    * Get a person with all their relations populated
    */
-  static async getWithRelations(id: string) {
-    const person = await this.getById(id);
+  static async getWithRelations(slug: string): Promise<
+    | (PersonWithDetails & {
+        companies: Array<Company & CompanyPerson>;
+        educations: Array<Education & EducationPerson>;
+        politicalParties: Array<PoliticalParty & PoliticalPartyPerson>;
+      })
+    | null
+  > {
+    const person = await this.getBySlug(slug);
     if (!person) return null;
 
-    // Fetch relations
-    const [companies, educations, associations, politicalParties] =
+    const id = person.id;
+
+    // Fetch junction records and basic details
+    const [
+      companyPersonSnap,
+      educationPersonSnap,
+      associationPersonSnap,
+      politicalPartyPersonSnap,
+      territorySnap,
+      categorySnap
+    ] = await Promise.all([
+      getDocs(
+        query(collection(db, "company_person"), where("personId", "==", id))
+      ),
+      getDocs(
+        query(collection(db, "education_person"), where("personId", "==", id))
+      ),
+      getDocs(
+        query(collection(db, "association_person"), where("personId", "==", id))
+      ),
+      getDocs(
+        query(
+          collection(db, "political_parties_person"),
+          where("personId", "==", id)
+        )
+      ),
+      person.territoryId
+        ? getDoc(doc(db, "territories", person.territoryId))
+        : Promise.resolve(null),
+      person.categoryId
+        ? getDoc(doc(db, "categories", person.categoryId))
+        : Promise.resolve(null)
+    ]);
+
+    const territory =
+      territorySnap && territorySnap.exists()
+        ? {
+            id: territorySnap.id,
+            ...(territorySnap.data() as {
+              name: string;
+              createdAt: Timestamp;
+              updatedAt: Timestamp;
+            })
+          }
+        : null;
+
+    const category =
+      categorySnap && categorySnap.exists()
+        ? {
+            id: categorySnap.id,
+            ...(categorySnap.data() as {
+              name: string;
+              createdAt: Timestamp;
+              updatedAt: Timestamp;
+            })
+          }
+        : null;
+
+    // Helper to fetch root details for junction records
+    const fetchRootDetails = async <T>(
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      junctionDocs: any[],
+      collectionName: string,
+      idField: string
+    ) => {
+      const ids = Array.from(new Set(junctionDocs.map((d) => d[idField])));
+      if (ids.length === 0) return new Map<string, T>();
+
+      const details = await Promise.all(
+        ids.map((id) => getDoc(doc(db, collectionName, id)))
+      );
+
+      return new Map(
+        details
+          .filter((snap) => snap.exists())
+          .map((snap) => [snap.id, { id: snap.id, ...snap.data() } as T])
+      );
+    };
+
+    // Fetch all root details in parallel
+    const [companiesMap, educationsMap, associationsMap, politicalPartiesMap] =
       await Promise.all([
+        fetchRootDetails<Company>(
+          companyPersonSnap.docs.map((d) => d.data()),
+          "companies",
+          "companyId"
+        ),
+        fetchRootDetails<Education>(
+          educationPersonSnap.docs.map((d) => d.data()),
+          "educations",
+          "educationId"
+        ),
+        fetchRootDetails<Association>(
+          associationPersonSnap.docs.map((d) => d.data()),
+          "associations",
+          "associationId"
+        ),
+        fetchRootDetails<PoliticalParty>(
+          politicalPartyPersonSnap.docs.map((d) => d.data()),
+          "political_parties",
+          "politicalPartyId"
+        )
+      ]);
+
+    // Join data
+    const companies = companyPersonSnap.docs.map((d) => {
+      const data = d.data() as CompanyPerson;
+      const root = companiesMap.get(data.companyId);
+      return { ...root, ...data, id: d.id } as Company & CompanyPerson;
+    });
+
+    const educations = educationPersonSnap.docs.map((d) => {
+      const data = d.data() as EducationPerson;
+      const root = educationsMap.get(data.educationId);
+      return { ...root, ...data, id: d.id } as Education & EducationPerson;
+    });
+
+    const associations = associationPersonSnap.docs.map((d) => {
+      const data = d.data() as AssociationPerson;
+      const root = associationsMap.get(data.associationId);
+      return {
+        id: d.id,
+        associationId: data.associationId,
+        name: root?.name || "Unknown Association",
+        profilePicture: root?.profilePicture,
+        link: root?.link,
+        title: data.title,
+        type: data.type,
+        startDate: data.startDate,
+        endDate: data.endDate
+      };
+    });
+
+    const politicalParties = politicalPartyPersonSnap.docs.map((d) => {
+      const data = d.data() as PoliticalPartyPerson;
+      const root = politicalPartiesMap.get(data.politicalPartyId);
+      return {
+        ...root,
+        ...data,
+        id: d.id
+      } as PoliticalParty & PoliticalPartyPerson;
+    });
+
+    return {
+      ...person,
+      territory,
+      category,
+      companies,
+      educations,
+      associations,
+      politicalParties
+    };
+  }
+
+  static async update({
+    id,
+    data
+  }: {
+    id: string;
+    data: UpdatePersonDto | UpdatePersonWithRelationsDto;
+  }) {
+    const batch = writeBatch(db);
+    const personRef = doc(db, PersonService.colName, id);
+    const now = serverTimestamp();
+
+    // Helper to clean undefined values
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const clean = (obj: Record<string, any>) =>
+      Object.fromEntries(
+        Object.entries(obj).filter(([_, v]) => v !== undefined)
+      );
+
+    let personData: UpdatePersonDto;
+    let relations: Omit<UpdatePersonWithRelationsDto, "person"> | null = null;
+
+    if ("person" in data) {
+      personData = data.person;
+      relations = {
+        companies: data.companies,
+        educations: data.educations,
+        associations: data.associations,
+        politicalParties: data.politicalParties
+      };
+    } else {
+      personData = data;
+    }
+
+    const cleanPersonData = clean(personData);
+    if (cleanPersonData.name) {
+      cleanPersonData.slug = generateSlug(cleanPersonData.name);
+    }
+
+    // 1. Update Person
+    batch.update(personRef, {
+      ...cleanPersonData,
+      updatedAt: now
+    });
+
+    // 2. Handle Relations if provided
+    if (relations) {
+      // We need to delete existing relations first.
+      // Since we can't query in a batch, we fetch them first.
+      const [
+        companyPersonSnap,
+        educationPersonSnap,
+        associationPersonSnap,
+        politicalPartyPersonSnap
+      ] = await Promise.all([
         getDocs(
           query(collection(db, "company_person"), where("personId", "==", id))
         ),
@@ -214,39 +534,113 @@ export class PersonService {
         )
       ]);
 
-    return {
-      ...person,
-      companies: companies.docs.map((doc) => ({ id: doc.id, ...doc.data() })),
-      educations: educations.docs.map((doc) => ({ id: doc.id, ...doc.data() })),
-      associations: associations.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data()
-      })),
-      politicalParties: politicalParties.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data()
-      }))
-    };
-  }
+      // Delete existing
+      companyPersonSnap.docs.forEach((d) => batch.delete(d.ref));
+      educationPersonSnap.docs.forEach((d) => batch.delete(d.ref));
+      associationPersonSnap.docs.forEach((d) => batch.delete(d.ref));
+      politicalPartyPersonSnap.docs.forEach((d) => batch.delete(d.ref));
 
-  static async update({ id, data }: { id: string; data: UpdatePersonDto }) {
-    const docRef = doc(db, PersonService.colName, id);
+      // Add new Company Relations
+      if (relations.companies && relations.companies.length > 0) {
+        const col = collection(db, "company_person");
+        relations.companies.forEach(
+          (
+            rel: Omit<CreateCompanyPersonDto, "personId"> & {
+              companyId: string;
+            }
+          ) => {
+            const relRef = doc(col);
+            batch.set(relRef, {
+              ...clean(rel),
+              personId: id,
+              startDate: rel.startDate
+                ? Timestamp.fromDate(new Date(rel.startDate))
+                : null,
+              endDate: rel.endDate
+                ? Timestamp.fromDate(new Date(rel.endDate))
+                : null,
+              createdAt: now,
+              updatedAt: now
+            });
+          }
+        );
+      }
 
-    // Filter out undefined values
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const cleanData: Record<string, any> = Object.fromEntries(
-      Object.entries(data).filter(([_, v]) => v !== undefined)
-    );
+      // Add new Education Relations
+      if (relations.educations && relations.educations.length > 0) {
+        const col = collection(db, "education_person");
+        relations.educations.forEach(
+          (
+            rel: Omit<CreateEducationPersonDto, "personId"> & {
+              educationId: string;
+            }
+          ) => {
+            const relRef = doc(col);
+            batch.set(relRef, {
+              ...clean(rel),
+              personId: id,
+              startDate: rel.startDate
+                ? Timestamp.fromDate(new Date(rel.startDate))
+                : null,
+              endDate: rel.endDate
+                ? Timestamp.fromDate(new Date(rel.endDate))
+                : null,
+              createdAt: now,
+              updatedAt: now
+            });
+          }
+        );
+      }
 
-    // Regenerate slug if name is updated
-    if (data.name) {
-      cleanData.slug = generateSlug(data.name);
+      // Add new Association Relations
+      if (relations.associations && relations.associations.length > 0) {
+        const col = collection(db, "association_person");
+        relations.associations.forEach(
+          (
+            rel: Omit<CreateAssociationPersonDto, "personId"> & {
+              associationId: string;
+            }
+          ) => {
+            const relRef = doc(col);
+            batch.set(relRef, {
+              ...clean(rel),
+              personId: id,
+              startDate: rel.startDate
+                ? Timestamp.fromDate(new Date(rel.startDate))
+                : null,
+              endDate: rel.endDate
+                ? Timestamp.fromDate(new Date(rel.endDate))
+                : null,
+              createdAt: now,
+              updatedAt: now
+            });
+          }
+        );
+      }
+
+      // Add new Political Party Relations
+      if (relations.politicalParties && relations.politicalParties.length > 0) {
+        const col = collection(db, "political_parties_person");
+        relations.politicalParties.forEach(
+          (
+            rel: Omit<CreatePoliticalPartyPersonDto, "personId"> & {
+              politicalPartyId: string;
+              type: PoliticalPartyRelationType;
+            }
+          ) => {
+            const relRef = doc(col);
+            batch.set(relRef, {
+              ...clean(rel),
+              personId: id,
+              createdAt: now,
+              updatedAt: now
+            });
+          }
+        );
+      }
     }
 
-    await updateDoc(docRef, {
-      ...cleanData,
-      updatedAt: serverTimestamp()
-    });
+    await batch.commit();
 
     return {
       success: true,
