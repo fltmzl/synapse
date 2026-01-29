@@ -14,6 +14,8 @@ import {
   CreatePoliticalPartyDto,
   UpdatePoliticalPartyDto
 } from "@/types/person-relation.type";
+import { generateCode, CODE_PREFIXES } from "@/lib/code-generator";
+import { syncPoliticalParty } from "@/lib/neo4j-sync-client";
 
 /**
  * Utility function to generate slug from name
@@ -33,17 +35,28 @@ export class PoliticalPartyService {
 
   static async create(payload: CreatePoliticalPartyDto) {
     const slug = generateSlug(payload.name);
+    const code = payload.code || generateCode(CODE_PREFIXES.POLITICAL_PARTY);
 
     const docRef = await addDoc(PoliticalPartyService.colRef, {
       ...payload,
+      code,
       slug,
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp()
     });
 
+    // Sync to Neo4j
+    await syncPoliticalParty("create", {
+      id: docRef.id,
+      code,
+      slug,
+      ...payload
+    });
+
     return {
       id: docRef.id,
       ...payload,
+      code,
       slug,
       success: true,
       message: "Political Party created successfully"
@@ -80,6 +93,13 @@ export class PoliticalPartyService {
   }) {
     const docRef = doc(db, PoliticalPartyService.colName, id);
 
+    // Get current political party data for code
+    const currentDoc = await getDoc(docRef);
+    if (!currentDoc.exists()) {
+      throw new Error("Political Party not found");
+    }
+    const currentData = currentDoc.data();
+
     // Filter out undefined values
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const cleanData: Record<string, any> = Object.fromEntries(
@@ -96,6 +116,16 @@ export class PoliticalPartyService {
       updatedAt: serverTimestamp()
     });
 
+    // Sync to Neo4j
+    if (currentData.code) {
+      await syncPoliticalParty("update", {
+        id,
+        code: currentData.code,
+        ...currentData,
+        ...cleanData
+      });
+    }
+
     return {
       success: true,
       message: "Political Party updated successfully"
@@ -104,7 +134,20 @@ export class PoliticalPartyService {
 
   static async delete(id: string) {
     const docRef = doc(db, PoliticalPartyService.colName, id);
-    await deleteDoc(docRef);
+
+    // Get political party data for code before deleting
+    const partyDoc = await getDoc(docRef);
+    if (partyDoc.exists()) {
+      const partyData = partyDoc.data();
+
+      // Delete from Firestore
+      await deleteDoc(docRef);
+
+      // Sync to Neo4j
+      if (partyData.code) {
+        await syncPoliticalParty("delete", { code: partyData.code });
+      }
+    }
 
     return {
       success: true,

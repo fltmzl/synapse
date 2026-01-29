@@ -150,7 +150,7 @@ function addNode(
   if (!nodesMap.has(nodeId)) {
     const node: Node<CustomNodeData> = {
       id: nodeId,
-      type: getNodeType(nodeData.labels),
+      type: getNodeType(nodeData.properties.category || "Company"),
       data: {
         label: nodeData.properties.name,
         name: nodeData.properties.name,
@@ -195,11 +195,20 @@ function addEdge(
 /**
  * Determine node type based on labels
  */
-function getNodeType(labels: string[]): NodeType {
-  if (labels.includes("Company")) return "centerNode";
-  if (labels.includes("Division")) return "circleBlueNode";
-  if (labels.includes("Person")) return "circleBlueNode";
-  return "default";
+// function getNodeType(labels: string[]): NodeType {
+//   if (labels.includes("Company")) return "centerNode";
+//   if (labels.includes("Division")) return "circleBlueNode";
+//   if (labels.includes("Person")) return "circleBlueNode";
+//   return "default";
+// }
+function getNodeType(category: string): NodeType {
+  return "circleBlueNode";
+  if (category.toLowerCase() === "Company".toLowerCase()) return "centerNode";
+  if (category.toLowerCase() === "Division".toLowerCase())
+    return "circleBlueNode";
+  if (category.toLowerCase() === "Person".toLowerCase())
+    return "circleBlueNode";
+  return "circleBlueNode";
 }
 
 /**

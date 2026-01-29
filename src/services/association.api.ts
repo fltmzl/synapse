@@ -14,6 +14,8 @@ import {
   CreateAssociationDto,
   UpdateAssociationDto
 } from "@/types/person-relation.type";
+import { generateCode, CODE_PREFIXES } from "@/lib/code-generator";
+import { syncAssociation } from "@/lib/neo4j-sync-client";
 
 /**
  * Utility function to generate slug from name
@@ -33,17 +35,28 @@ export class AssociationService {
 
   static async create(payload: CreateAssociationDto) {
     const slug = generateSlug(payload.name);
+    const code = payload.code || generateCode(CODE_PREFIXES.ASSOCIATION);
 
     const docRef = await addDoc(AssociationService.colRef, {
       ...payload,
+      code,
       slug,
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp()
     });
 
+    // Sync to Neo4j
+    await syncAssociation("create", {
+      id: docRef.id,
+      code,
+      slug,
+      ...payload
+    });
+
     return {
       id: docRef.id,
       ...payload,
+      code,
       slug,
       success: true,
       message: "Association created successfully"
@@ -80,6 +93,13 @@ export class AssociationService {
   }) {
     const docRef = doc(db, AssociationService.colName, id);
 
+    // Get current association data for code
+    const currentDoc = await getDoc(docRef);
+    if (!currentDoc.exists()) {
+      throw new Error("Association not found");
+    }
+    const currentData = currentDoc.data();
+
     // Filter out undefined values
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const cleanData: Record<string, any> = Object.fromEntries(
@@ -96,6 +116,16 @@ export class AssociationService {
       updatedAt: serverTimestamp()
     });
 
+    // Sync to Neo4j
+    if (currentData.code) {
+      await syncAssociation("update", {
+        id,
+        code: currentData.code,
+        ...currentData,
+        ...cleanData
+      });
+    }
+
     return {
       success: true,
       message: "Association updated successfully"
@@ -104,7 +134,20 @@ export class AssociationService {
 
   static async delete(id: string) {
     const docRef = doc(db, AssociationService.colName, id);
-    await deleteDoc(docRef);
+
+    // Get association data for code before deleting
+    const associationDoc = await getDoc(docRef);
+    if (associationDoc.exists()) {
+      const associationData = associationDoc.data();
+
+      // Delete from Firestore
+      await deleteDoc(docRef);
+
+      // Sync to Neo4j
+      if (associationData.code) {
+        await syncAssociation("delete", { code: associationData.code });
+      }
+    }
 
     return {
       success: true,

@@ -17,7 +17,7 @@ export class SpiderGraphService {
       // `;
 
       const query = `
-          MATCH (center {id: $id})
+          MATCH (center {slug: $id})
           OPTIONAL MATCH path = (center)-[*1..3]-(n)
           RETURN center, path;
       `;

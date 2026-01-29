@@ -41,13 +41,15 @@ import { PlusIcon } from "@/icons/plus-icon";
 import { SearchIcons } from "@/icons/search-icon";
 import useSpiderGraph from "@/queries/use-spider-graph";
 import { ExpandIcon, MaximizeIcon, MinusIcon, XIcon } from "lucide-react";
+import { useParams } from "next/navigation";
 import { useMemo, useState } from "react";
 
 export default function NetworkConnectionSection() {
   const isClient = useIsClient();
+  const { slug } = useParams();
   const { isOpen, openModal, setIsOpen } = useModal();
   const [search, setSearch] = useState("");
-  const { data, isLoading } = useSpiderGraph("company", "company_gbh");
+  const { data, isLoading } = useSpiderGraph("person", slug as string);
 
   const smallGraphData = useMemo(
     () => ({
@@ -91,6 +93,8 @@ export default function NetworkConnectionSection() {
   //       }
   //     ]
   //   });
+
+  console.log({ initialNodes, initialEdges });
 
   return (
     <SectionContainer className="rounded-2lg">

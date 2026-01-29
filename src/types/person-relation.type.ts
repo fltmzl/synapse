@@ -180,6 +180,7 @@ export type UpdateCompanyPersonDto = Partial<
 
 export type Education = {
   id: string;
+  code?: string;
   name: string;
   slug: string;
   description?: string;
@@ -190,6 +191,7 @@ export type Education = {
 };
 
 export type CreateEducationDto = {
+  code?: string;
   name: string;
   description?: string;
   profilePicture?: string;
@@ -233,6 +235,7 @@ export type UpdateEducationPersonDto = Partial<
 
 export type Association = {
   id: string;
+  code?: string;
   name: string;
   slug: string;
   profilePicture?: string;
@@ -242,6 +245,7 @@ export type Association = {
 };
 
 export type CreateAssociationDto = {
+  code?: string;
   name: string;
   profilePicture?: string;
   link?: string;
@@ -284,6 +288,7 @@ export type UpdateAssociationPersonDto = Partial<
 
 export type PoliticalParty = {
   id: string;
+  code?: string;
   name: string;
   slug: string;
   profilePicture?: string;
@@ -292,6 +297,7 @@ export type PoliticalParty = {
 };
 
 export type CreatePoliticalPartyDto = {
+  code?: string;
   name: string;
   profilePicture?: string;
 };

@@ -35,6 +35,8 @@ import {
   CreatePoliticalPartyPersonDto,
   PoliticalPartyRelationType
 } from "@/types/person-relation.type";
+import { generateCode, CODE_PREFIXES } from "@/lib/code-generator";
+import { syncPerson, syncRelationship } from "@/lib/neo4j-sync-client";
 
 /**
  * Utility function to generate slug from name
@@ -54,17 +56,28 @@ export class PersonService {
 
   static async create(payload: CreatePersonDto) {
     const slug = generateSlug(payload.name);
+    const code = payload.code || generateCode(CODE_PREFIXES.PERSON);
 
     const docRef = await addDoc(PersonService.colRef, {
       ...payload,
+      code,
       slug,
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp()
     });
 
+    // Sync to Neo4j
+    await syncPerson("create", {
+      id: docRef.id,
+      code,
+      slug,
+      ...payload
+    });
+
     return {
       id: docRef.id,
       ...payload,
+      code,
       slug,
       success: true,
       message: "Person created successfully"
@@ -80,6 +93,7 @@ export class PersonService {
     const personRef = doc(db, PersonService.colName, personId);
 
     const slug = generateSlug(payload.person.name);
+    const code = payload.person.code || generateCode(CODE_PREFIXES.PERSON);
     const now = serverTimestamp();
 
     // Helper to clean undefined values
@@ -92,6 +106,7 @@ export class PersonService {
     // 1. Create Person
     batch.set(personRef, {
       ...clean(payload.person),
+      code,
       slug,
       createdAt: now,
       updatedAt: now
@@ -171,8 +186,106 @@ export class PersonService {
 
     await batch.commit();
 
+    // Sync person to Neo4j
+    await syncPerson("create", {
+      id: personId,
+      code,
+      slug,
+      ...payload.person
+    });
+
+    // Sync relationships to Neo4j
+    try {
+      // 1. Sync company relationships (WORKS_FOR)
+      if (payload.companies && payload.companies.length > 0) {
+        await Promise.all(
+          payload.companies.map(async (rel) => {
+            const docSnap = await getDoc(doc(db, "companies", rel.companyId));
+            const companyCode = docSnap.data()?.code;
+            if (companyCode) {
+              await syncRelationship("create", "WORKS_FOR", {
+                personCode: code,
+                companyCode,
+                title: rel.title,
+                employmentType: rel.employmentType,
+                startDate: rel.startDate ? rel.startDate.toISOString() : null,
+                endDate: rel.endDate ? rel.endDate.toISOString() : null
+              });
+            }
+          })
+        );
+      }
+
+      // 2. Sync education relationships (STUDIED_AT)
+      if (payload.educations && payload.educations.length > 0) {
+        await Promise.all(
+          payload.educations.map(async (rel) => {
+            const docSnap = await getDoc(
+              doc(db, "educations", rel.educationId)
+            );
+            const educationCode = docSnap.data()?.code;
+            if (educationCode) {
+              await syncRelationship("create", "STUDIED_AT", {
+                personCode: code,
+                educationCode,
+                major: rel.major,
+                gpa: rel.gpa,
+                startDate: rel.startDate ? rel.startDate.toISOString() : null,
+                endDate: rel.endDate ? rel.endDate.toISOString() : null
+              });
+            }
+          })
+        );
+      }
+
+      // 3. Sync association relationships (MEMBER_OF)
+      if (payload.associations && payload.associations.length > 0) {
+        await Promise.all(
+          payload.associations.map(async (rel) => {
+            const docSnap = await getDoc(
+              doc(db, "associations", rel.associationId)
+            );
+            const associationCode = docSnap.data()?.code;
+            if (associationCode) {
+              await syncRelationship("create", "MEMBER_OF", {
+                personCode: code,
+                associationCode,
+                title: rel.title,
+                type: rel.type,
+                startDate: rel.startDate ? rel.startDate.toISOString() : null,
+                endDate: rel.endDate ? rel.endDate.toISOString() : null
+              });
+            }
+          })
+        );
+      }
+
+      // 4. Sync political party relationships (SUPPORTS/OPPOSES)
+      if (payload.politicalParties && payload.politicalParties.length > 0) {
+        await Promise.all(
+          payload.politicalParties.map(async (rel) => {
+            const docSnap = await getDoc(
+              doc(db, "political_parties", rel.politicalPartyId)
+            );
+            const partyCode = docSnap.data()?.code;
+            if (partyCode) {
+              await syncRelationship("create", rel.type.toUpperCase(), {
+                personCode: code,
+                partyCode,
+                type: rel.type.toUpperCase()
+              });
+            }
+          })
+        );
+      }
+    } catch (error) {
+      console.error("[PersonService] Error syncing relationships:", error);
+      throw error;
+    }
+
     return {
       id: personId,
+      code,
       slug,
       success: true,
       message: "Person and relations created successfully"
@@ -642,6 +755,131 @@ export class PersonService {
 
     await batch.commit();
 
+    // Sync to Neo4j
+    try {
+      // Fetch updated person to get code
+      const updatedPersonDoc = await getDoc(personRef);
+      if (updatedPersonDoc.exists()) {
+        const updatedData = updatedPersonDoc.data();
+        const personCode = updatedData.code;
+
+        if (personCode) {
+          // 1. Sync Person Node
+          await syncPerson("update", {
+            id,
+            code: personCode,
+            ...updatedData
+          });
+
+          // 2. Sync Relationships (if updated)
+          if (relations) {
+            // Sync Company Relations
+            if (relations.companies && relations.companies.length > 0) {
+              await Promise.all(
+                relations.companies.map(async (rel) => {
+                  const docSnap = await getDoc(
+                    doc(db, "companies", rel.companyId)
+                  );
+                  const companyCode = docSnap.data()?.code;
+                  if (companyCode) {
+                    await syncRelationship("create", "WORKS_FOR", {
+                      personCode,
+                      companyCode,
+                      title: rel.title,
+                      employmentType: rel.employmentType,
+                      startDate: rel.startDate
+                        ? new Date(rel.startDate).toISOString()
+                        : null,
+                      endDate: rel.endDate
+                        ? new Date(rel.endDate).toISOString()
+                        : null
+                    });
+                  }
+                })
+              );
+            }
+
+            // Sync Education Relations
+            if (relations.educations && relations.educations.length > 0) {
+              await Promise.all(
+                relations.educations.map(async (rel) => {
+                  const docSnap = await getDoc(
+                    doc(db, "educations", rel.educationId)
+                  );
+                  const educationCode = docSnap.data()?.code;
+                  if (educationCode) {
+                    await syncRelationship("create", "STUDIED_AT", {
+                      personCode,
+                      educationCode,
+                      major: rel.major,
+                      gpa: rel.gpa,
+                      startDate: rel.startDate
+                        ? new Date(rel.startDate).toISOString()
+                        : null,
+                      endDate: rel.endDate
+                        ? new Date(rel.endDate).toISOString()
+                        : null
+                    });
+                  }
+                })
+              );
+            }
+
+            // Sync Association Relations
+            if (relations.associations && relations.associations.length > 0) {
+              await Promise.all(
+                relations.associations.map(async (rel) => {
+                  const docSnap = await getDoc(
+                    doc(db, "associations", rel.associationId)
+                  );
+                  const associationCode = docSnap.data()?.code;
+                  if (associationCode) {
+                    await syncRelationship("create", "MEMBER_OF", {
+                      personCode,
+                      associationCode,
+                      title: rel.title,
+                      type: rel.type,
+                      startDate: rel.startDate
+                        ? new Date(rel.startDate).toISOString()
+                        : null,
+                      endDate: rel.endDate
+                        ? new Date(rel.endDate).toISOString()
+                        : null
+                    });
+                  }
+                })
+              );
+            }
+
+            // Sync Political Party Relations
+            if (
+              relations.politicalParties &&
+              relations.politicalParties.length > 0
+            ) {
+              await Promise.all(
+                relations.politicalParties.map(async (rel) => {
+                  const docSnap = await getDoc(
+                    doc(db, "political_parties", rel.politicalPartyId)
+                  );
+                  const partyCode = docSnap.data()?.code;
+                  if (partyCode) {
+                    await syncRelationship("create", rel.type.toUpperCase(), {
+                      personCode,
+                      partyCode,
+                      type: rel.type.toUpperCase()
+                    });
+                  }
+                })
+              );
+            }
+          }
+        }
+      }
+    } catch (error) {
+      console.error("[PersonService] Error syncing to Neo4j:", error);
+      throw error;
+    }
+
     return {
       success: true,
       message: "Person updated successfully"
@@ -650,7 +888,20 @@ export class PersonService {
 
   static async delete(id: string) {
     const docRef = doc(db, PersonService.colName, id);
-    await deleteDoc(docRef);
+
+    // Get person data for code before deleting
+    const personDoc = await getDoc(docRef);
+    if (personDoc.exists()) {
+      const personData = personDoc.data();
+
+      // Delete from Firestore
+      await deleteDoc(docRef);
+
+      // Sync to Neo4j
+      if (personData.code) {
+        await syncPerson("delete", { code: personData.code });
+      }
+    }
 
     return {
       success: true,

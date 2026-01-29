@@ -14,6 +14,8 @@ import {
   CreateEducationDto,
   UpdateEducationDto
 } from "@/types/person-relation.type";
+import { generateCode, CODE_PREFIXES } from "@/lib/code-generator";
+import { syncEducation } from "@/lib/neo4j-sync-client";
 
 /**
  * Utility function to generate slug from name
@@ -33,17 +35,28 @@ export class EducationService {
 
   static async create(payload: CreateEducationDto) {
     const slug = generateSlug(payload.name);
+    const code = payload.code || generateCode(CODE_PREFIXES.EDUCATION);
 
     const docRef = await addDoc(EducationService.colRef, {
       ...payload,
+      code,
       slug,
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp()
     });
 
+    // Sync to Neo4j
+    await syncEducation("create", {
+      id: docRef.id,
+      code,
+      slug,
+      ...payload
+    });
+
     return {
       id: docRef.id,
       ...payload,
+      code,
       slug,
       success: true,
       message: "Education created successfully"
@@ -74,6 +87,13 @@ export class EducationService {
   static async update({ id, data }: { id: string; data: UpdateEducationDto }) {
     const docRef = doc(db, EducationService.colName, id);
 
+    // Get current education data for code
+    const currentDoc = await getDoc(docRef);
+    if (!currentDoc.exists()) {
+      throw new Error("Education not found");
+    }
+    const currentData = currentDoc.data();
+
     // Filter out undefined values
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const cleanData: Record<string, any> = Object.fromEntries(
@@ -90,6 +110,16 @@ export class EducationService {
       updatedAt: serverTimestamp()
     });
 
+    // Sync to Neo4j
+    if (currentData.code) {
+      await syncEducation("update", {
+        id,
+        code: currentData.code,
+        ...currentData,
+        ...cleanData
+      });
+    }
+
     return {
       success: true,
       message: "Education updated successfully"
@@ -98,7 +128,20 @@ export class EducationService {
 
   static async delete(id: string) {
     const docRef = doc(db, EducationService.colName, id);
-    await deleteDoc(docRef);
+
+    // Get education data for code before deleting
+    const educationDoc = await getDoc(docRef);
+    if (educationDoc.exists()) {
+      const educationData = educationDoc.data();
+
+      // Delete from Firestore
+      await deleteDoc(docRef);
+
+      // Sync to Neo4j
+      if (educationData.code) {
+        await syncEducation("delete", { code: educationData.code });
+      }
+    }
 
     return {
       success: true,
