@@ -1,16 +1,22 @@
 "use client";
 
 import SectionContainer from "@/components/container/section-container";
-import { EmploymentType, ExperienceRole } from "@/types/common.type";
-import React, { useState } from "react";
-import ExperienceInfo from "../components/experience-info";
-import SingleExperienceInfo from "../components/single-experience-info";
+import NoResult from "@/components/no-result";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 import { ArrowDownIcon } from "@/icons/arrow-down-icon";
 import { ArrowUpIcon } from "@/icons/arrow-up-icon";
+import usePerson from "@/queries/use-person";
+import { ExperienceRole } from "@/types/common.type";
+import { CompanyPersonEmploymentType } from "@/types/person-relation.type";
+import { format } from "date-fns";
+import { useParams } from "next/navigation";
+import { useState } from "react";
+import ExperienceInfo from "../components/experience-info";
+import SingleExperienceInfo from "../components/single-experience-info";
 
 type SingleExperience = {
-  id: number;
+  id: string;
   type: "single";
   title: string;
   company: {
@@ -23,101 +29,81 @@ type SingleExperience = {
 };
 
 type MultipleExperience = {
-  id: number;
+  id: string;
   type: "multiple";
   company: {
     image?: string;
     name: string;
     link: string;
     duration: string;
-    employmentType: EmploymentType;
+    employmentType: CompanyPersonEmploymentType;
     location: string;
   };
   experienceRoles: ExperienceRole[];
 };
 
 export default function ExperienceSection() {
+  const { slug } = useParams();
+  const { data: person, isLoading } = usePerson(slug as string);
   const [isShowMore, setIsShowMore] = useState(false);
 
-  const experiences: (MultipleExperience | SingleExperience)[] = [
-    {
-      id: 1,
-      type: "multiple",
-      company: {
-        name: "Synapse Intelligence Group",
-        link: "#",
-        employmentType: "Full time",
-        location: "Martinique, France",
-        duration: "10 years 6 month"
-      },
-      experienceRoles: [
-        {
-          title: "Directeur Général",
-          startDate: "12-2009",
-          endDate: "11-2022",
-          description: `
-            <ul>
-              <li>
-                Overseeing strategic development for AI-based data analysis in French
-                Overseas Territories.
-              </li>
-              <li>Leading a team of 45 researchers and analysts.</li>
-            </ul>
-          `
-        },
-        {
-          title: "Economic Advisor",
-          startDate: "2009",
-          endDate: null,
-          description: `
-            <ul>
-              <li>
-                Overseeing strategic development for AI-based data analysis in French
-                Overseas Territories.
-              </li>
-              <li>Leading a team of 45 researchers and analysts.</li>
-            </ul>
-          `
-        }
-      ]
-    },
-    {
-      id: 2,
+  if (isLoading) {
+    return (
+      <SectionContainer className="rounded-2lg">
+        <div className="p-5 lg:px-6 border-b">
+          <h2 className="text-xl font-medium">Poste</h2>
+        </div>
+        <div className="px-5 lg:px-6 divide-y divide-border">
+          {[1, 2].map((i) => (
+            <div key={i} className="flex items-start gap-4 py-6">
+              <Skeleton className="size-10 rounded-sm" />
+              <div className="space-y-2 flex-1">
+                <Skeleton className="h-6 w-1/3" />
+                <Skeleton className="h-4 w-1/4" />
+                <Skeleton className="h-4 w-1/5" />
+              </div>
+            </div>
+          ))}
+        </div>
+      </SectionContainer>
+    );
+  }
+
+  if (!person) return null;
+
+  const experiences: (SingleExperience | MultipleExperience)[] =
+    person.companies.map((company) => ({
+      id: company.id,
       type: "single",
       company: {
-        image: null,
-        name: "Caribbean Business Council",
-        link: "#"
+        image: company.profilePicture,
+        name: company.name,
+        link: company.website
       },
-      title: "Consultant",
-      startDate: "09-2013",
-      endDate: "09-2017"
-    },
-    {
-      id: 3,
-      type: "single",
-      company: {
-        image: null,
-        name: "Caribbean Business Council",
-        link: "#"
-      },
-      title: "Consultant",
-      startDate: "09-2013",
-      endDate: "09-2017"
-    },
-    {
-      id: 4,
-      type: "single",
-      company: {
-        image: null,
-        name: "Caribbean Business Council",
-        link: "#"
-      },
-      title: "Consultant",
-      startDate: "09-2013",
-      endDate: "09-2017"
-    }
-  ];
+      title: company?.title || "",
+      startDate: company.startDate
+        ? format(company.startDate?.toDate(), "MMM yyyy")
+        : "-",
+      endDate: company.endDate
+        ? format(company.endDate?.toDate(), "MMM yyyy")
+        : "-"
+    }));
+
+  if (experiences.length === 0) {
+    return (
+      <SectionContainer className="rounded-2lg">
+        <div className="p-5 lg:px-6 border-b">
+          <h2 className="text-xl font-medium">Poste</h2>
+        </div>
+        <div>
+          <NoResult
+            title="No experience found"
+            description="This person has no experience records yet."
+          />
+        </div>
+      </SectionContainer>
+    );
+  }
 
   const filteredExperiences = isShowMore
     ? experiences

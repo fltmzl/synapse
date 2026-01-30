@@ -56,12 +56,12 @@ export default function ProfileForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      firstName: "Johnathan",
-      lastName: "Carter",
-      email: "Johnathancarter@mail.com",
+      firstName: "",
+      lastName: "",
+      email: "",
       countryCode: "+33",
       photoURL: null,
-      phoneNumber: "1 44 55 66 77"
+      phoneNumber: ""
     }
   });
   const [photo, setPhoto] = useState<

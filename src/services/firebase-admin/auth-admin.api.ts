@@ -11,12 +11,14 @@ export class AuthAdminService {
     lastName,
     role,
     phoneNumber,
-    countryCode
+    countryCode,
+    password
   }: CreateUserPayload) {
     // 1. Create user in Firebase Auth (Admin SDK)
     const userRecord = await firebaseAdmin.auth().createUser({
       email,
-      displayName: `${firstName} ${lastName}`
+      displayName: `${firstName} ${lastName}`,
+      password
     });
 
     // 2. Insert to Firestore (Admin SDK)
@@ -59,6 +61,17 @@ export class AuthAdminService {
       id: docSnap.id,
       ...(docSnap.data() as User)
     };
+  }
+
+  static async getAllUsers(): Promise<User[]> {
+    const snapshot = await adminDb
+      .collection("users")
+      .orderBy("createdAt", "desc")
+      .get();
+    return snapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...(doc.data() as User)
+    }));
   }
 
   static async sendSetPasswordLink({

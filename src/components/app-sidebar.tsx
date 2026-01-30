@@ -20,7 +20,10 @@ import {
   Database,
   Ticket,
   PanelLeft,
-  Video
+  Video,
+  Building2,
+  GraduationCap,
+  Flag
 } from "lucide-react";
 
 import {
@@ -59,6 +62,12 @@ export type NavMenu = {
 // Define menu structure with submenus
 const menuItems: NavMenu[] = [
   {
+    title: "Users",
+    url: "/dashboard/admin-panel/users",
+    icon: UserCircle,
+    items: []
+  },
+  {
     title: "Top of the day",
     url: "/dashboard/admin-panel/article",
     icon: FileText,
@@ -86,6 +95,36 @@ const menuItems: NavMenu[] = [
     title: "Video Reels",
     url: "/dashboard/admin-panel/video-reels",
     icon: Video,
+    items: []
+  },
+  {
+    title: "Persons",
+    url: "/dashboard/admin-panel/persons",
+    icon: Users,
+    items: []
+  },
+  {
+    title: "Companies",
+    url: "/dashboard/admin-panel/companies",
+    icon: Building2,
+    items: []
+  },
+  {
+    title: "Educations",
+    url: "/dashboard/admin-panel/educations",
+    icon: GraduationCap,
+    items: []
+  },
+  {
+    title: "Political Parties",
+    url: "/dashboard/admin-panel/political-parties",
+    icon: Flag,
+    items: []
+  },
+  {
+    title: "Associations",
+    url: "/dashboard/admin-panel/associations",
+    icon: Users,
     items: []
   }
 ];

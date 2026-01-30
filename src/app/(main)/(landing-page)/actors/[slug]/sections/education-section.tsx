@@ -1,42 +1,82 @@
+"use client";
+
 import SectionContainer from "@/components/container/section-container";
 import React from "react";
 import EducationInfo from "../components/education-info";
+import { useParams } from "next/navigation";
+import usePerson from "@/queries/use-person";
+import { format } from "date-fns";
+import { Skeleton } from "@/components/ui/skeleton";
+import NoResult from "@/components/no-result";
 
 export default function EducationSection() {
+  const { slug } = useParams();
+  const { data: person, isLoading } = usePerson(slug as string);
+
+  if (isLoading) {
+    return (
+      <SectionContainer className="rounded-2lg">
+        <div className="p-5 lg:px-6 border-b">
+          <h2 className="text-xl font-medium">Education</h2>
+        </div>
+        <div className="px-5 lg:px-6 divide-y divide-border">
+          {[1, 2].map((i) => (
+            <div key={i} className="flex items-start gap-4 py-6">
+              <Skeleton className="size-10 rounded-sm" />
+              <div className="space-y-2 flex-1">
+                <Skeleton className="h-6 w-1/3" />
+                <Skeleton className="h-4 w-1/4" />
+                <Skeleton className="h-4 w-1/5" />
+              </div>
+            </div>
+          ))}
+        </div>
+      </SectionContainer>
+    );
+  }
+
+  if (!person) return null;
+
   const educations: {
-    id: number;
+    id: string;
     title: string;
     education: {
       name: string;
-      image?: string | null;
-      link?: string;
+      image?: string;
+      link?: string | undefined;
     };
     startDate: string;
     endDate: string | null;
-  }[] = [
-    {
-      id: 1,
-      title: "Master in International Business",
+  }[] =
+    person?.educations.map((education) => ({
+      id: education.id,
+      title: education?.major || "Untitled",
       education: {
-        image: "/images/education/skema-business-school.png",
-        name: "Skema Business School",
-        link: "#"
+        name: education?.name || "Untitled",
+        image: education?.profilePicture,
+        link: education?.link || undefined
       },
-      startDate: "01-2008",
-      endDate: "01-2010"
-    },
-    {
-      id: 2,
-      title: "Bachelor in Economics",
-      education: {
-        image: "/images/education/universite-des-antilles.png",
-        name: "Université des Antilles",
-        link: "#"
-      },
-      startDate: "01-2005",
-      endDate: "01-2008"
-    }
-  ];
+      startDate: education?.startDate
+        ? format(education?.startDate?.toDate(), "yyyy")
+        : "",
+      endDate: education?.endDate
+        ? format(education?.endDate?.toDate(), "yyyy")
+        : ""
+    })) || [];
+
+  if (educations.length === 0) {
+    return (
+      <SectionContainer className="rounded-2lg">
+        <div className="p-5 lg:px-6 border-b">
+          <h2 className="text-xl font-medium">Education</h2>
+        </div>
+        <NoResult
+          title="No education found"
+          description="This person has no education records yet."
+        />
+      </SectionContainer>
+    );
+  }
 
   return (
     <SectionContainer className="rounded-2lg">

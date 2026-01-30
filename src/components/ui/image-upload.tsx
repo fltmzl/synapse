@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
+import { cn } from "@/lib/tiptap-utils";
 import { StorageService } from "@/services/storage.api";
 import { ImagePlus, Trash, UploadCloud, X } from "lucide-react";
 import Image from "next/image";
@@ -14,13 +15,15 @@ interface ImageUploadProps {
   onChange: (value: string) => void;
   disabled?: boolean;
   className?: string;
+  variant?: "square" | "circle";
 }
 
 export function ImageUpload({
   value,
   onChange,
   disabled,
-  className
+  className,
+  variant = "square"
 }: ImageUploadProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -72,17 +75,31 @@ export function ImageUpload({
   return (
     <div className={className}>
       {value ? (
-        <div className="relative aspect-video w-full overflow-hidden rounded-lg border bg-muted">
-          <Image src={value} alt="Cover Image" fill className="object-cover" />
-          <div className="absolute right-2 top-2">
+        <div
+          className={`relative overflow-hidden border bg-muted ${
+            variant === "circle"
+              ? "aspect-square w-32 rounded-full mx-auto"
+              : "aspect-video w-full rounded-lg"
+          }`}
+        >
+          <Image src={value} alt="Upload Image" fill className="object-cover" />
+          <div
+            className={cn(
+              "absolute",
+              variant === "circle"
+                ? "top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2"
+                : "right-2 top-2"
+            )}
+          >
             <Button
               type="button"
               variant="destructive"
               size="icon"
+              className={variant === "circle" ? "h-7 w-7" : ""}
               onClick={handleRemove}
               disabled={disabled}
             >
-              <Trash className="h-4 w-4" />
+              <Trash className={variant === "circle" ? "h-3 w-3" : "h-4 w-4"} />
             </Button>
           </div>
         </div>
@@ -90,7 +107,12 @@ export function ImageUpload({
         <div
           {...getRootProps()}
           className={`
-            relative flex aspect-video cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed transition-colors
+            relative flex cursor-pointer flex-col items-center justify-center border-2 border-dashed transition-colors
+            ${
+              variant === "circle"
+                ? "aspect-square w-32 rounded-full mx-auto"
+                : "aspect-video w-full rounded-lg"
+            }
             ${
               isDragActive
                 ? "border-primary bg-primary/10"
@@ -101,29 +123,47 @@ export function ImageUpload({
         >
           <input {...getInputProps()} />
           <div className="flex flex-col items-center justify-center gap-2 text-center">
-            <div className="rounded-full bg-background p-4 shadow-sm">
+            <div
+              className={`bg-background shadow-sm ${
+                variant === "circle" ? "rounded-full p-2" : "rounded-full p-4"
+              }`}
+            >
               {isLoading ? (
-                <div className="h-8 w-8 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+                <div
+                  className={`animate-spin rounded-full border-2 border-primary border-t-transparent ${
+                    variant === "circle" ? "h-5 w-5" : "h-8 w-8"
+                  }`}
+                />
               ) : (
-                <ImagePlus className="h-8 w-8 text-muted-foreground" />
+                <ImagePlus
+                  className={`text-muted-foreground ${
+                    variant === "circle" ? "h-5 w-5" : "h-8 w-8"
+                  }`}
+                />
               )}
             </div>
-            <div className="space-y-1">
-              <p className="text-sm font-medium text-muted-foreground">
-                {isLoading
-                  ? "Uploading..."
-                  : isDragActive
-                    ? "Drop the image here"
-                    : "Drag & drop or click to upload"}
-              </p>
-              <p className="text-xs text-muted-foreground/75">
-                Supports: PNG, JPG, WEBP
-              </p>
-            </div>
+            {variant !== "circle" && (
+              <div className="space-y-1">
+                <p className="text-sm font-medium text-muted-foreground">
+                  {isLoading
+                    ? "Uploading..."
+                    : isDragActive
+                      ? "Drop the image here"
+                      : "Drag & drop or click to upload"}
+                </p>
+                <p className="text-xs text-muted-foreground/75">
+                  Supports: PNG, JPG, WEBP
+                </p>
+              </div>
+            )}
           </div>
           {isLoading && (
-            <div className="absolute bottom-0 left-0 right-0 p-4">
-              <Progress value={progress} className="h-2" />
+            <div
+              className={`absolute bottom-0 left-0 right-0 ${
+                variant === "circle" ? "px-4 pb-2" : "p-4"
+              }`}
+            >
+              <Progress value={progress} className="h-1" />
             </div>
           )}
         </div>

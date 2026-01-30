@@ -7,5 +7,11 @@ export const QUERIES = {
   TERRITORIES: "territories",
   PLACES: "places",
   PUBLISHERS: "publishers",
-  PERSONS: "persons"
+  PERSONS: "persons",
+  COMPANIES: "companies",
+  EDUCATIONS: "educations",
+  ASSOCIATIONS: "associations",
+  POLITICAL_PARTIES: "political-parties",
+  SPIDER_GRAPH: "spider-graph",
+  USERS: "users"
 };
