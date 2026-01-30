@@ -62,6 +62,12 @@ export type NavMenu = {
 // Define menu structure with submenus
 const menuItems: NavMenu[] = [
   {
+    title: "Users",
+    url: "/dashboard/admin-panel/users",
+    icon: UserCircle,
+    items: []
+  },
+  {
     title: "Top of the day",
     url: "/dashboard/admin-panel/article",
     icon: FileText,
