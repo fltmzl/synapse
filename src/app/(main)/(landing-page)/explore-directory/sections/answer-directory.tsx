@@ -3,7 +3,6 @@
 import SidebarFilters from "@/components/filter-sidebar";
 import NoResult from "@/components/no-result";
 import Pagination from "@/components/pagination";
-import SelectSingleItem from "@/components/select-single-item";
 import { Button } from "@/components/ui/button";
 import {
   Drawer,
@@ -12,39 +11,36 @@ import {
   DrawerTitle,
   DrawerTrigger
 } from "@/components/ui/drawer";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger
-} from "@/components/ui/select";
+import { Select, SelectTrigger } from "@/components/ui/select";
 import { DEFAULT_PAGE_SIZE } from "@/constants/pagination.constant";
-import { directory } from "@/data/directory-data";
 import { useAutoCloseDrawer } from "@/hooks/use-auto-close-drawer";
-import { ArrowRightBoldIcon } from "@/icons/arrow-right-bold-icon";
-import { BuildingIcon } from "@/icons/building-icon";
-import { FacebookFillIcon } from "@/icons/facebook-fill-icon";
 import { FilterIcon } from "@/icons/filter-icon";
-import { InstagramIconFlat } from "@/icons/instagram-icon-flat";
-import { LinkedinIconFlat } from "@/icons/linkedin-icon-flat";
 import { SortDescendingIcon } from "@/icons/sort-desc-icon";
-import { MapPin, User, X } from "lucide-react";
-import Link from "next/link";
-import { parseAsArrayOf, parseAsString, useQueryState } from "nuqs";
-import { useState } from "react";
+import useCategoriesDropdown from "@/queries/use-categories-dropdown";
+import useCompanies from "@/queries/use-companies";
+import useTerritoriesDropdown from "@/queries/use-territories-dropdown";
+import { X } from "lucide-react";
+import {
+  parseAsArrayOf,
+  parseAsInteger,
+  parseAsString,
+  useQueryState
+} from "nuqs";
+import { useEffect, useState } from "react";
+import CompanyCard, { CompanyCardSkeleton } from "../components/company-card";
 import FilterPopover from "../components/popover-filter";
+import { useDebounce } from "@/hooks/use-debounce";
 
 export default function AnswerDirectory() {
-  const [territoire, setTerritoire] = useQueryState(
+  const { data: categoriesItems } = useCategoriesDropdown();
+  const { data: territoriesItems } = useTerritoriesDropdown();
+
+  const [territory, setTerritory] = useQueryState(
     "territoire",
     parseAsArrayOf(parseAsString).withDefault([])
   );
-  // const [role, setRole] = useQueryState(
-  //   "role",
-  //   parseAsArrayOf(parseAsString).withDefault([])
-  // );
-  const [catégorie, setCatégorie] = useQueryState(
-    " catégorie",
+  const [category, setCategory] = useQueryState(
+    "category",
     parseAsArrayOf(parseAsString).withDefault([])
   );
   const [sort, setSort] = useQueryState(
@@ -56,94 +52,74 @@ export default function AnswerDirectory() {
     parseAsString.withDefault("")
   );
 
-  const removePrefix = (value: string) => value.split(":")[1] ?? value;
-  const getLabelFromValue = (value: string) => removePrefix(value);
+  const [page, setPage] = useQueryState("page", parseAsInteger.withDefault(0));
+  const [pageSize, setPageSize] = useQueryState(
+    "pageSize",
+    parseAsInteger.withDefault(DEFAULT_PAGE_SIZE)
+  );
+
+  const debouncedSearch = useDebounce(search, 1000);
+
+  // Reset page to 0 when search changes
+  useEffect(() => {
+    setPage(0);
+  }, [search, setPage]);
+
+  const territoryIds = territory;
+  const categoryIds = category;
+
+  const { data: companiesResponse, isLoading } = useCompanies({
+    categoryIds,
+    territoryIds,
+    search: debouncedSearch || undefined,
+    page,
+    pageSize
+  });
+
+  const companies = companiesResponse?.data ?? [];
+  const totalRows = companiesResponse?.total ?? 0;
 
   const filters = {
-    territoire: [
-      { label: "Martinique", value: "Martinique" },
-      { label: "Guadeloupe", value: "Guadeloupe" },
-      { label: "Réunion", value: "Réunion" },
-      { label: "Mayotte", value: "Mayotte" },
-      { label: "Guyane", value: "Guyane" }
-    ],
-    // role: [
-    //   { label: "Government", value: "Government" },
-    //   { label: "Business Leaders", value: "Business Leaders" }
-    // ],
-      catégorie: [
-      { label: "Economy", value: "Economy" },
-      { label: "Government", value: "Government" },
-      { label: "Health", value: "Health" },
-      { label: "Education", value: "Education" },
-      { label: "Environment", value: "Environment" }
-    ]
+    territoire: territoriesItems,
+    category: categoriesItems
   };
 
- const sortBy = [
-    { label: "Nouveauté", value: "Nouveauté" },
-    { label: "Durée", value: "Durée" },
-    { label: "Popularité", value: "Popularité" },
-    { label: "Pertinence", value: "Pertinence" }
-  ];
-
-  const activeValues = [
-    ...(territoire ?? []),
-    // ...(role ?? []),
-    ...(catégorie ?? [])
-  ];
+  const activeValues = [...(territory ?? []), ...(category ?? [])];
 
   const removeActiveValue = (val: string) => {
-    if ((territoire ?? []).includes(val)) {
-      setTerritoire((prev) => (prev ?? []).filter((v) => v !== val));
+    if ((territory ?? []).includes(val)) {
+      setTerritory((prev) => (prev ?? []).filter((v) => v !== val));
       return;
     }
-    // if ((role ?? []).includes(val)) {
-    //   setRole((prev) => (prev ?? []).filter((v) => v !== val));
-    //   return;
-    // }
-    if ((catégorie ?? []).includes(val)) {
-      setCatégorie((prev) => (prev ?? []).filter((v) => v !== val));
+    if ((category ?? []).includes(val)) {
+      setCategory((prev) => (prev ?? []).filter((v) => v !== val));
       return;
     }
   };
 
   const clearAll = () => {
-    setTerritoire(null);
-    setCatégorie(null);
+    setTerritory(null);
+    setCategory(null);
   };
-
-  const filteredDirectory = directory.filter((p) => {
-    const matchSearch =
-      !search || p.name.toLowerCase().includes(search.toLowerCase());
-
-    const matchTerritory =
-      territoire.length === 0 ||
-      territoire.some((t) => removePrefix(t) === p.territory);
-
-    // const matchRole =
-    //   role.length === 0 || role.some((r) => removePrefix(r) === p.category);
-
-    const matchCategory =
-      catégorie.length === 0 ||
-      catégorie.some((c) => removePrefix(c) === p.category);
-
-    return matchSearch && matchTerritory && matchCategory;
-  });
 
   const [openFilter, setOpenFilter] = useState(false);
   useAutoCloseDrawer(openFilter, () => setOpenFilter(false));
 
-  const [page, setPage] = useState(0);
-  const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
-  const paginatedDirectory = filteredDirectory.slice(
-    page * pageSize,
-    (page + 1) * pageSize
-  );
+  if (isLoading) {
+    return (
+      <section className="bg-background">
+        <div className="py-12 lg:py-20 px-6 max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 py-8">
+            {[...Array(6)].map((_, i) => (
+              <CompanyCardSkeleton key={i} />
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
 
-  if (!search) return null;
-
-  if (filteredDirectory.length === 0) {
+  if (totalRows === 0) {
     return <NoResult />;
   }
 
@@ -155,7 +131,7 @@ export default function AnswerDirectory() {
             <div className="flex items-center justify-between gap-3 flex-wrap px-2">
               <div className="flex gap-1 items-center">
                 <p className="text-sm lg:text-lg leading-[140%] tracking-[-0.01em] lg:leading-[110%] text-muted-foreground">
-                  Showing {filteredDirectory.length} results for{" "}
+                  Showing {totalRows} results for{" "}
                 </p>
                 <span className="text-sm lg:text-lg leading-[130%] tracking-[-0.02em] lg:tracking-[-0.01em] lg:leading-[110%]">
                   {search ? `"${search}"` : `"All"`}
@@ -164,25 +140,12 @@ export default function AnswerDirectory() {
 
               {/* 💻 DESKTOP */}
               <div className="hidden lg:flex gap-4 items-center">
-                <div className="flex items-center gap-3">
-                  <span className="text-base font-medium text-foreground">
-                    Filtrer par
-                  </span>
-                  <SelectSingleItem
-                    listItems={sortBy}
-                    selected={sort}
-                    onChange={setSort}
-                  />
-                </div>
-
                 <FilterPopover
                   filters={filters}
-                  territoire={territoire}
-                  setTerritoire={setTerritoire}
-                  // role={role}
-                  // setRole={setRole}
-                  catégorie={catégorie}
-                  setCatégorie={setCatégorie}
+                  territoire={territory}
+                  setTerritoire={setTerritory}
+                  category={category}
+                  setCategory={setCategory}
                   activeValues={activeValues}
                   clearAll={clearAll}
                 />
@@ -194,17 +157,6 @@ export default function AnswerDirectory() {
                   <SelectTrigger className="p-3 w-12 h-12 justify-center [&>*:last-child]:hidden rounded-[8px]">
                     <SortDescendingIcon className="size-6 text-foreground" />
                   </SelectTrigger>
-
-                  <SelectContent align="end">
-                    {sortBy.map((sortOption) => (
-                      <SelectItem
-                        key={sortOption.value}
-                        value={sortOption.value}
-                      >
-                        {sortOption.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
                 </Select>
 
                 <Drawer
@@ -234,18 +186,13 @@ export default function AnswerDirectory() {
                     <div className=" max-h-[75vh] overflow-y-auto border-b">
                       <SidebarFilters
                         groups={{ territory: filters.territoire }}
-                        value={territoire ?? []}
-                        setValue={setTerritoire}
+                        value={territory ?? []}
+                        setValue={setTerritory}
                       />
-                      {/* <SidebarFilters
-                        groups={{ role: filters.role }}
-                        value={role ?? []}
-                        setValue={setRole}
-                      /> */}
                       <SidebarFilters
-                        groups={{ catégorie: filters.catégorie   }}
-                        value={catégorie ?? []}
-                        setValue={setCatégorie}
+                        groups={{ category: filters.category }}
+                        value={category ?? []}
+                        setValue={setCategory}
                       />
                     </div>
 
@@ -324,98 +271,29 @@ export default function AnswerDirectory() {
             )}
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 py-8">
-              {paginatedDirectory.map((directoryItem, index) => {
+              {companies.map((directoryItem, index) => {
                 return (
-                  <article
+                  <CompanyCard
                     key={index}
-                    className="border rounded-[12px] flex flex-col justify-between hover:shadow-sm transition-all w-full h-full"
-                  >
-                    <div className="flex items-center gap-4 py-6 px-5 lg:px-6 border-b">
-                      <div className="flex items-center justify-center w-16 h-16 bg-[#EEF6FF] rounded-full">
-                        <BuildingIcon className="text-primary size-8 mx-4 "></BuildingIcon>
-                      </div>
-
-                      <div className="flex flex-col">
-                        <span className="font-medium text-xl text-foreground leading-[130%] tracking-[-0.02em]">
-                          {directoryItem.name}
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="py-6 px-5 lg:px-6 space-y-4 ">
-                      <div className="flex items-start gap-5">
-                        <div className="flex gap-2 items-center min-w-[108px]">
-                          <BuildingIcon className="size-5 text-muted-foreground"></BuildingIcon>
-                          <span className="text-muted-foreground leading-[150%] text-base tracking-[-0.01em]">
-                            Catégorie
-                          </span>
-                        </div>
-                        <span className="leading-[150%] text-base tracking-[-0.01em] font-medium">
-                          {directoryItem.category}
-                        </span>
-                      </div>
-
-                      <div className="flex items-start gap-5">
-                        <div className="flex  gap-2 items-center min-w-[108px]">
-                          <MapPin
-                            strokeWidth={1.5}
-                            className="size-5 text-muted-foreground/80"
-                          ></MapPin>
-                          <span className="text-muted-foreground leading-[150%] text-base tracking-[-0.01em]">
-                            Territoire
-                          </span>
-                        </div>
-                        <span className=" leading-[150%] text-base tracking-[-0.01em] font-medium">
-                          {directoryItem.territory}
-                        </span>
-                      </div>
-
-                      <div className="flex items-start gap-5">
-                        <div className="flex  gap-2 items-center min-w-[108px]">
-                          <User
-                            strokeWidth={1}
-                            className="size-5 text-muted-foreground/80"
-                          ></User>
-                          <span className="text-muted-foreground leading-[150%] text-base tracking-[-0.01em]">
-                            PIC
-                          </span>
-                        </div>
-                        <span className=" leading-[150%] text-base tracking-[-0.01em] font-medium">
-                          {directoryItem.pic}
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className=" rounded-b-xl flex items-center justify-between border-t px-6 py-4 bg-[var(--body)]">
-                      <div className="flex items-center gap-4 text-muted-foreground">
-                        <Link href={"#"}>
-                          <FacebookFillIcon className="ri-facebook-fill text-xl"></FacebookFillIcon>
-                        </Link>
-                        <Link href={"#"}>
-                          <InstagramIconFlat className="ri-instagram-line text-xl"></InstagramIconFlat>
-                        </Link>
-                        <Link href={"#"}>
-                          <LinkedinIconFlat className="ri-linkedin-box-line text-xl"></LinkedinIconFlat>
-                        </Link>
-                      </div>
-
-                      <Link
-                        href={`/explore-directory/${directoryItem.slug}`}
-                        className="flex items-center gap-[6px]"
-                      >
-                        <span className="text-primary text-sm font-medium leading-5 tracking-[-0.01em] ">
-                          View detail
-                        </span>
-                        <ArrowRightBoldIcon className="inline size-5 text-primary" />
-                      </Link>
-                    </div>
-                  </article>
+                    slug={directoryItem.slug}
+                    name={directoryItem.name}
+                    category={directoryItem.category?.name || "-"}
+                    territory={directoryItem.territory?.name || "-"}
+                    authorizedRepresentative={
+                      directoryItem.authorizedRepresentative?.name || "-"
+                    }
+                    socials={{
+                      facebook: directoryItem.socials?.facebook,
+                      instagram: directoryItem.socials?.instagram,
+                      linkedin: directoryItem.socials?.linkedin
+                    }}
+                  />
                 );
               })}
             </div>
 
             <Pagination
-              totalRows={filteredDirectory.length}
+              totalRows={totalRows}
               page={page}
               pageSize={pageSize}
               onPageChange={setPage}

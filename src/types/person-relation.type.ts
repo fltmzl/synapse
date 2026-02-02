@@ -81,6 +81,30 @@ export type CreatePersonDto = {
   socials?: Socials;
 };
 
+export type CreateManyPersonFromExcelDto = {
+  identifier: {
+    id: string;
+  };
+  general: {
+    gender: string;
+    firstName: string;
+    lastName: string;
+    dateOfBirth: string;
+    email: string;
+  };
+  location: {
+    implantation: string;
+  };
+  company: {
+    occupation: string;
+    id: string;
+    entity: string;
+    field: string;
+    category: string;
+    area: string;
+  };
+};
+
 export type UpdatePersonDto = Partial<CreatePersonDto>;
 
 // ============================================================================
@@ -109,6 +133,41 @@ export type Company = {
   socials?: Socials;
   createdAt?: Timestamp;
   updatedAt?: Timestamp;
+  implantation?: string;
+  zipCode?: string;
+  city?: string;
+  sirenCode?: string;
+  legalStatus?: string;
+  economicalNumbers?: string;
+  nafCode?: string;
+  activity?: string;
+};
+
+export type CompanyWithDetails = Omit<
+  Company,
+  "createdAt" | "updatedAt" | "establishmentDate"
+> & {
+  createdAt?: number | Timestamp | null;
+  updatedAt?: number | Timestamp | null;
+  establishmentDate?: number | Timestamp | null;
+  category?: {
+    id: string;
+    name: string;
+  } | null;
+  territory?: {
+    id: string;
+    name: string;
+  } | null;
+  authorizedRepresentative?: {
+    id: string;
+    name: string;
+    profilePicture?: string;
+    email?: string;
+    phoneNumber?: string;
+    description?: string;
+    currentJobPosition?: string;
+    slug?: string;
+  } | null;
 };
 
 export type CreateCompanyDto = {
@@ -168,6 +227,55 @@ export type CreateCompanyPersonDto = {
   locationType?: string;
   description?: string;
   employmentType?: CompanyPersonEmploymentType;
+};
+
+export type CompanyDataFromExcelDto = {
+  identifier: {
+    id: string;
+  };
+  structure: {
+    structure_name: string;
+  };
+  address: {
+    implantation: string;
+    date_of_creation: string;
+    street: string;
+    zip_code: string;
+    city: string;
+    phone: string;
+    email: string;
+    website: string;
+    naf_code: string;
+    activity: string;
+    category: string;
+    description: string;
+    legal_status: string;
+    siren_code: string;
+  };
+  legal_representative: {
+    first_name: string;
+    last_name: string;
+    if_not_a_person: string;
+    position: string;
+    contact: string;
+    id: string;
+  };
+  economical_numbers: {
+    number_of_employees: number;
+    capital: number;
+    turnover: number;
+    financial_result: number;
+    margin: number;
+    operating_profit: number;
+  };
+};
+
+export type CompanyPersonRelationsFromExcelDto = {
+  relation: {
+    person: string;
+    organization: string;
+    nature_of_the_link: string;
+  };
 };
 
 export type UpdateCompanyPersonDto = Partial<

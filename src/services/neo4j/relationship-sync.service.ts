@@ -17,6 +17,46 @@ export enum RelationshipType {
  */
 export class RelationshipNeo4jSyncService extends BaseNeo4jSyncService {
   /**
+   * Sync multiple work relationships (Person -> Company) in a single batch
+   */
+  static async syncWorkRelationshipsBatch(
+    items: Array<{
+      personCode: string;
+      companyCode: string;
+      roles?: string[];
+      label?: string;
+      title?: string;
+      employmentType?: string;
+      startDate?: string | null;
+      endDate?: string | null;
+      isCurrent?: boolean;
+    }>
+  ): Promise<void> {
+    const batchItems = items.map((params) => ({
+      fromCode: params.personCode,
+      toCode: params.companyCode,
+      properties: {
+        roles: params.roles || [],
+        label: params.label || params.title || "",
+        title: params.title || "",
+        employmentType: params.employmentType || null,
+        startDate: params.startDate || null,
+        endDate: params.endDate || null,
+        isCurrent:
+          params.isCurrent ??
+          (params.endDate === null || params.endDate === undefined)
+      }
+    }));
+
+    await this.mergeRelationshipsBatch(
+      "Person",
+      "Organization",
+      RelationshipType.WORKS_FOR,
+      batchItems
+    );
+  }
+
+  /**
    * Sync a work relationship (Person -> Company)
    */
   static async syncWorkRelationship(params: {
@@ -30,26 +70,7 @@ export class RelationshipNeo4jSyncService extends BaseNeo4jSyncService {
     endDate?: string | null;
     isCurrent?: boolean;
   }): Promise<void> {
-    const properties = {
-      roles: params.roles || [],
-      label: params.label || params.title || "",
-      title: params.title || "",
-      employmentType: params.employmentType || null,
-      startDate: params.startDate || null,
-      endDate: params.endDate || null,
-      isCurrent:
-        params.isCurrent ??
-        (params.endDate === null || params.endDate === undefined)
-    };
-
-    await this.mergeRelationship(
-      "Person",
-      params.personCode,
-      "Organization",
-      params.companyCode,
-      RelationshipType.WORKS_FOR,
-      properties
-    );
+    await this.syncWorkRelationshipsBatch([params]);
   }
 
   /**

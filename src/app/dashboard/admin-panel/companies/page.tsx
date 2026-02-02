@@ -10,7 +10,8 @@ import { companyColumns } from "./components/company-columns";
 import useCompanies from "@/queries/use-companies";
 
 export default function CompaniesPage() {
-  const { data: companies, isLoading } = useCompanies();
+  const { data: companiesResponse, isLoading } = useCompanies();
+  const companies = companiesResponse?.data ?? [];
 
   return (
     <>

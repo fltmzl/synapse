@@ -92,6 +92,12 @@ export async function POST(request: NextRequest) {
 
 async function handlePersonSync(action: string, data: any) {
   switch (action) {
+    case "batch":
+      if (!Array.isArray(data))
+        throw new Error("Data must be an array for batch action");
+      await PersonNeo4jSyncService.syncPersonsBatch(data);
+      break;
+
     case "create":
     case "update":
       if (!data.code) throw new Error("Person code is required");
@@ -110,6 +116,12 @@ async function handlePersonSync(action: string, data: any) {
 
 async function handleCompanySync(action: string, data: any) {
   switch (action) {
+    case "batch":
+      if (!Array.isArray(data))
+        throw new Error("Data must be an array for batch action");
+      await CompanyNeo4jSyncService.syncCompaniesBatch(data);
+      break;
+
     case "create":
     case "update":
       if (!data.code) throw new Error("Company code is required");
@@ -182,6 +194,23 @@ async function handlePoliticalPartySync(action: string, data: any) {
 
 async function handleRelationshipSync(action: string, data: any) {
   const { relationshipType, ...params } = data;
+
+  if (action === "batch") {
+    if (!Array.isArray(data))
+      throw new Error("Data must be an array for batch action");
+
+    // For now we only support batching WORKS_FOR since it's the main concern for Excel import
+    // Extend for other types as needed
+    const worksForItems = data.filter(
+      (item) => item.relationshipType === "WORKS_FOR"
+    );
+    if (worksForItems.length > 0) {
+      await RelationshipNeo4jSyncService.syncWorkRelationshipsBatch(
+        worksForItems
+      );
+    }
+    return;
+  }
 
   switch (action) {
     case "create":

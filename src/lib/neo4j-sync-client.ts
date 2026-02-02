@@ -4,7 +4,12 @@
  * Helper utility for calling Neo4j sync API
  */
 
-export type SyncAction = "create" | "update" | "delete" | "delete_all";
+export type SyncAction =
+  | "create"
+  | "update"
+  | "delete"
+  | "delete_all"
+  | "batch";
 
 export type EntityType =
   | "person"
@@ -24,7 +29,9 @@ interface SyncParams {
  * Call Neo4j sync API
  */
 export async function syncToNeo4j(params: SyncParams): Promise<void> {
-  console.log("API ROUTE: Syncing to Neo4j");
+  console.log(
+    `API ROUTE: Syncing ${params.entityType} (${params.action}) to Neo4j`
+  );
   try {
     const response = await fetch("/api/neo4j/sync", {
       method: "POST",
@@ -37,13 +44,26 @@ export async function syncToNeo4j(params: SyncParams): Promise<void> {
     if (!response.ok) {
       const error = await response.json();
       console.error("[Neo4j Sync] Failed:", error);
-      // Don't throw - we don't want to break the main flow if sync fails
-      // Just log the error for monitoring
     }
   } catch (error) {
     console.error("[Neo4j Sync] Error:", error);
-    // Silent fail - sync is async and shouldn't break main operations
   }
+}
+
+/**
+ * Sync entities in batch to Neo4j
+ */
+export async function syncBatch(
+  entityType: EntityType,
+  items: any[]
+): Promise<void> {
+  if (items.length === 0) return;
+
+  await syncToNeo4j({
+    action: "batch",
+    entityType,
+    data: items
+  });
 }
 
 /**

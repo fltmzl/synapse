@@ -33,10 +33,16 @@ import {
   CreateEducationPersonDto,
   CreateAssociationPersonDto,
   CreatePoliticalPartyPersonDto,
-  PoliticalPartyRelationType
+  PoliticalPartyRelationType,
+  CreateManyPersonFromExcelDto
 } from "@/types/person-relation.type";
 import { generateCode, CODE_PREFIXES } from "@/lib/code-generator";
-import { syncPerson, syncRelationship } from "@/lib/neo4j-sync-client";
+import {
+  syncPerson,
+  syncRelationship,
+  syncBatch
+} from "@/lib/neo4j-sync-client";
+import { uniqueBySelector } from "@/app/dashboard/admin-panel/persons/utils";
 
 /**
  * Utility function to generate slug from name
@@ -81,6 +87,122 @@ export class PersonService {
       slug,
       success: true,
       message: "Person created successfully"
+    };
+  }
+
+  static async createManyFromExcel(payload: CreateManyPersonFromExcelDto[]) {
+    // 1. Extract unique territories from implantation names
+    const uniqueTerritoryNames = uniqueBySelector(
+      payload,
+      (item) => item.location.implantation
+    ).filter(Boolean);
+
+    // 2. Upsert territories to Firestore
+    if (uniqueTerritoryNames.length > 0) {
+      const territoryBatch = writeBatch(db);
+      uniqueTerritoryNames.forEach((name) => {
+        const slug = generateSlug(name);
+        const territoryRef = doc(db, "territories", slug);
+        territoryBatch.set(
+          territoryRef,
+          {
+            id: slug,
+            name: name,
+            slug: slug,
+            updatedAt: serverTimestamp()
+          },
+          { merge: true }
+        );
+      });
+      await territoryBatch.commit();
+    }
+
+    // 3. Map data to Firestore document structure
+    const mappedDataToBeInserted = payload.map((item) => {
+      const slug = generateSlug(
+        `${item.general.firstName} ${item.general.lastName}`
+      );
+      const code = item.identifier.id || generateCode(CODE_PREFIXES.PERSON);
+      const territorySlug = item.location.implantation
+        ? generateSlug(item.location.implantation)
+        : null;
+
+      return {
+        // Person Data
+        id: item.identifier.id,
+        gender: item.general.gender,
+        firstName: item.general.firstName,
+        lastName: item.general.lastName,
+        name: `${item.general.firstName} ${item.general.lastName}`,
+        dateOfBirth: item.general.dateOfBirth,
+        email: item.general.email,
+        currentJobPosition: item.company.occupation,
+        territoryId: territorySlug, // Link to the created/updated territory
+        code,
+        slug,
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp()
+      };
+    });
+
+    // 2. Chunk into batches of 500 (Firestore limit)
+    const BATCH_SIZE = 450;
+    const chunks = [];
+
+    for (let i = 0; i < mappedDataToBeInserted.length; i += BATCH_SIZE) {
+      chunks.push(mappedDataToBeInserted.slice(i, i + BATCH_SIZE));
+    }
+
+    console.log(
+      `Processing ${payload.length} items in ${chunks.length} batches.`
+    );
+
+    // 3. Process batches
+    let successCount = 0;
+    let failCount = 0;
+
+    for (const [index, chunk] of chunks.entries()) {
+      try {
+        const batch = writeBatch(db);
+
+        chunk.forEach((personData) => {
+          // Use provided ID if available, otherwise generate new one
+          const personRef = personData.id
+            ? doc(db, PersonService.colName, personData.id)
+            : doc(PersonService.colRef);
+
+          batch.set(personRef, personData);
+        });
+
+        await batch.commit();
+
+        // Batch Sync to Neo4j (Batch size matches Firestore batch for consistency)
+        await syncBatch(
+          "person",
+          chunk.map((personData) => ({
+            ...personData,
+            id: personData.id,
+            code: personData.id,
+            slug: generateSlug(personData.name)
+          }))
+        ).catch((err) => console.error("Neo4j Batch Sync Failed:", err));
+
+        successCount += chunk.length;
+        console.log(
+          `Batch ${index + 1}/${chunks.length} committed and synced successfully.`
+        );
+      } catch (error) {
+        console.error(`Batch ${index + 1}/${chunks.length} failed:`, error);
+        failCount += chunk.length;
+      }
+    }
+
+    return {
+      success: true,
+      totalProcessed: payload.length,
+      successCount,
+      failCount,
+      message: `Processed ${payload.length} items. Success: ${successCount}, Failed: ${failCount}`
     };
   }
 

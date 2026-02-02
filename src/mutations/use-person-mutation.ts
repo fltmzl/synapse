@@ -6,7 +6,8 @@ import {
   CreatePersonDto,
   UpdatePersonDto,
   CreatePersonWithRelationsDto,
-  UpdatePersonWithRelationsDto
+  UpdatePersonWithRelationsDto,
+  CreateManyPersonFromExcelDto
 } from "@/types/person-relation.type";
 
 export default function usePersonMutation() {
@@ -63,10 +64,23 @@ export default function usePersonMutation() {
     }
   });
 
+  const createManyFromExcelMutation = useMutation({
+    mutationFn: (data: CreateManyPersonFromExcelDto[]) =>
+      PersonService.createManyFromExcel(data),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: [QUERIES.PERSONS] });
+      toast.success(data.message || "Persons imported successfully");
+    },
+    onError: (error: Error) => {
+      toast.error(error.message || "Failed to import persons");
+    }
+  });
+
   return {
     createPersonMutation,
     createPersonWithRelationsMutation,
     updatePersonMutation,
-    deletePersonMutation
+    deletePersonMutation,
+    createManyFromExcelMutation
   };
 }

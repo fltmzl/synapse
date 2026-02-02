@@ -9,25 +9,37 @@ export class CompanyNeo4jSyncService extends BaseNeo4jSyncService {
   private static readonly LABEL = "Organization";
 
   /**
+   * Sync multiple companies to Neo4j in a single batch
+   */
+  static async syncCompaniesBatch(
+    companies: Array<Partial<Company> & { code: string }>
+  ): Promise<void> {
+    const items = companies.map((company) => ({
+      code: company.code,
+      properties: {
+        id: company.id,
+        code: company.code,
+        name: company.name,
+        slug: company.slug,
+        profilePicture: company.profilePicture || null,
+        description: company.description || null,
+        email: company.email || null,
+        phoneNumber: company.phoneNumber || null,
+        website: company.website || null,
+        category: "ORGANIZATION"
+      }
+    }));
+
+    await this.mergeNodesBatch(this.LABEL, items);
+  }
+
+  /**
    * Sync a company to Neo4j
    */
   static async syncCompany(
     company: Partial<Company> & { code: string }
   ): Promise<void> {
-    const properties = {
-      id: company.id,
-      code: company.code,
-      name: company.name,
-      slug: company.slug,
-      profilePicture: company.profilePicture || null,
-      description: company.description || null,
-      category: "COMPANY", // Distinguishes from ASSOCIATION
-      email: company.email || null,
-      phoneNumber: company.phoneNumber || null,
-      website: company.website || null
-    };
-
-    await this.mergeNode(this.LABEL, company.code, properties);
+    await this.syncCompaniesBatch([company]);
   }
 
   /**

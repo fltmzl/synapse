@@ -1,22 +1,46 @@
 "use client";
 
-import Link from "next/link";
-import { directory } from "@/data/directory-data";
-import { BuildingIcon } from "@/icons/building-icon";
-import { MapPin, User } from "lucide-react";
-import { FacebookFillIcon } from "@/icons/facebook-fill-icon";
-import { InstagramIconFlat } from "@/icons/instagram-icon-flat";
-import { LinkedinIconFlat } from "@/icons/linkedin-icon-flat";
-import { ArrowRightBoldIcon } from "@/icons/arrow-right-bold-icon";
-import { useRef } from "react";
 import { ArrowLeftIcon } from "@/icons/arrow-left-icon";
 import { ArrowRightIcon } from "@/icons/arrow-right-icon";
-import { DirectoryItem } from "@/types/directory.type";
+import useCompanies from "@/queries/use-companies";
+import { useRef } from "react";
+import CompanyCard, {
+  CompanyCardSkeleton
+} from "../../components/company-card";
 
 export default function AdministrationSimilars() {
   // separate refs for desktop and mobile
+  const { data: companiesResponse, isLoading } = useCompanies({
+    pageSize: 6,
+    page: 0
+  });
+  const companies = companiesResponse?.data ?? [];
   const scrollRefDesktop = useRef<HTMLDivElement>(null);
   const scrollRefMobile = useRef<HTMLDivElement>(null);
+
+  if (isLoading) {
+    return (
+      <section className="bg-white px-5 py-24 flex flex-col items-center">
+        <div className="flex justify-between items-center w-full max-w-[1240px] 3xl:max-w-[1400px] mb-8">
+          <h2 className="text-3xl font-medium tracking-tight">Similars</h2>
+        </div>
+        <div className="w-full max-w-[1240px] 3xl:max-w-[1400px] hidden lg:flex gap-4 overflow-x-auto hide-scrollbar">
+          {[...Array(3)].map((_, i) => (
+            <div key={i} className="min-w-full lg:min-w-[405px]">
+              <CompanyCardSkeleton />
+            </div>
+          ))}
+        </div>
+        <div className="w-full lg:hidden flex gap-4 overflow-x-auto hide-scrollbar">
+          {[...Array(2)].map((_, i) => (
+            <div key={i} className="min-w-[90%] md:min-w-[45%]">
+              <CompanyCardSkeleton />
+            </div>
+          ))}
+        </div>
+      </section>
+    );
+  }
 
   const scrollDesktop = (direction: "left" | "right") => {
     if (!scrollRefDesktop.current) return;
@@ -77,8 +101,24 @@ export default function AdministrationSimilars() {
           ref={scrollRefDesktop}
           className="3xl:max-w-[1400px] 3xl:mx-auto hidden lg:flex gap-4 overflow-x-auto hide-scrollbar scroll-smooth pr-0 mr-0"
         >
-          {directory.slice(0, 6).map((item) => (
-            <Card key={item.slug} item={item} />
+          {companies.map((company, index) => (
+            <div key={index} className="min-w-full lg:min-w-[405px]">
+              <CompanyCard
+                key={index}
+                slug={company.slug}
+                name={company.name}
+                category={company.category?.name || "-"}
+                territory={company.territory?.name || "-"}
+                authorizedRepresentative={
+                  company.authorizedRepresentative?.name || "-"
+                }
+                socials={{
+                  facebook: company.socials?.facebook,
+                  instagram: company.socials?.instagram,
+                  linkedin: company.socials?.linkedin
+                }}
+              />
+            </div>
           ))}
         </div>
 
@@ -87,22 +127,38 @@ export default function AdministrationSimilars() {
             ref={scrollRefMobile}
             className="flex gap-4 overflow-x-auto snap-x snap-mandatory hide-scrollbar scroll-smooth w-full"
           >
-            {Array.from({ length: Math.ceil(directory.length / 2) }).map(
-              (_, index) => {
-                const start = index * 2;
-                const pair = directory.slice(start, start + 2);
-                return (
-                  <div
-                    key={index}
-                    className="snap-center flex-shrink-0 w-full flex flex-col gap-4"
-                  >
-                    {pair.map((item) => (
-                      <Card key={item.slug} item={item} />
-                    ))}
-                  </div>
-                );
-              }
-            )}
+            {Array.from({
+              length: Math.ceil((companies?.length || 0) / 2)
+            }).map((_, index) => {
+              const start = index * 2;
+              const pair = companies?.slice(start, start + 2);
+              return (
+                <div
+                  key={index}
+                  className="snap-center flex-shrink-0 w-full flex flex-col gap-4"
+                >
+                  {pair?.map((company, index) => (
+                    <div key={index} className="min-w-full lg:min-w-[405px]">
+                      <CompanyCard
+                        key={index}
+                        slug={company.slug}
+                        name={company.name}
+                        category={company.category?.name || "-"}
+                        territory={company.territory?.name || "-"}
+                        authorizedRepresentative={
+                          company.authorizedRepresentative?.name || "-"
+                        }
+                        socials={{
+                          facebook: company.socials?.facebook,
+                          instagram: company.socials?.instagram,
+                          linkedin: company.socials?.linkedin
+                        }}
+                      />
+                    </div>
+                  ))}
+                </div>
+              );
+            })}
           </div>
 
           <div className="flex gap-4 mt-6">
@@ -124,86 +180,5 @@ export default function AdministrationSimilars() {
         </div>
       </div>
     </section>
-  );
-}
-
-function Card({ item }: { item: DirectoryItem }) {
-  return (
-    <article
-      className="border rounded-[12px] flex flex-col justify-between hover:shadow-sm transition-all bg-white
-                        min-w-full lg:min-w-[405px]"
-    >
-      <div className="flex items-center gap-4 py-6 px-5 border-b">
-        <div className="flex items-center justify-center w-16 h-16 bg-[#EEF6FF] rounded-full">
-          <BuildingIcon className="text-primary size-8 mx-4" />
-        </div>
-        <span className="font-medium text-lg leading-[130%] tracking-[-0.02em]">
-          {item.name}
-        </span>
-      </div>
-
-      <div className="p-6 space-y-4">
-        <div className="flex items-start gap-5">
-          <div className="flex gap-2 items-center min-w-[108px]">
-            <BuildingIcon className="size-5 text-muted-foreground" />
-            <span className="text-muted-foreground leading-[150%] text-base tracking-[-0.01em]">
-              Catégorie
-            </span>
-          </div>
-          <span className="text-[var(--font-navy)] leading-[150%] text-base tracking-[-0.01em] font-medium">
-            {item.category}
-          </span>
-        </div>
-
-        <div className="flex items-start gap-5">
-          <div className="flex gap-2 items-center min-w-[108px]">
-            <MapPin
-              strokeWidth={1.5}
-              className="size-5 text-muted-foreground/80"
-            />
-            <span className="text-muted-foreground leading-[150%] text-base tracking-[-0.01em]">
-              Territoire
-            </span>
-          </div>
-          <span className="text-[var(--font-navy)] leading-[150%] text-base tracking-[-0.01em] font-medium">
-            {item.territory}
-          </span>
-        </div>
-
-        <div className="flex items-start gap-5">
-          <div className="flex gap-2 items-center min-w-[108px]">
-            <User strokeWidth={1} className="size-5 text-muted-foreground/80" />
-            <span className="text-muted-foreground leading-[150%] text-base tracking-[-0.01em]">
-              PIC
-            </span>
-          </div>
-          <span className="text-[var(--font-navy)] leading-[150%] text-base tracking-[-0.01em] font-medium">
-            {item.pic}
-          </span>
-        </div>
-      </div>
-
-      <div className="border-t py-4 px-6 flex items-center justify-between bg-[var(--body)] rounded-b-[12px]">
-        <div className="flex items-center gap-3 text-muted-foreground">
-          <Link href={"#"}>
-            <FacebookFillIcon className="size-[18px]" />
-          </Link>
-          <Link href={"#"}>
-            <InstagramIconFlat className="size-[18px]" />
-          </Link>
-          <Link href={"#"}>
-            <LinkedinIconFlat className="size-[18px]" />
-          </Link>
-        </div>
-
-        <Link
-          href={`/explore-directory/${item.slug}`}
-          className="flex items-center gap-[6px]"
-        >
-          <span className="text-primary text-sm font-medium">View detail</span>
-          <ArrowRightBoldIcon className="size-[18px] text-primary" />
-        </Link>
-      </div>
-    </article>
   );
 }

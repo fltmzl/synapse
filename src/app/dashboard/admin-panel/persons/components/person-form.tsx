@@ -215,8 +215,9 @@ export function PersonForm({
   const { data: places = [], isLoading: isPlacesLoading } = usePlaces();
   const { createPlaceMutation } = usePlaceMutation();
 
-  const { data: companies = [], isLoading: isCompaniesLoading } =
+  const { data: companiesResponse, isLoading: isCompaniesLoading } =
     useCompanies();
+  const companies = companiesResponse?.data ?? [];
   const { createCompanyMutation } = useCompanyMutation();
 
   const { data: educations = [], isLoading: isEducationsLoading } =

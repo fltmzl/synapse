@@ -5,41 +5,23 @@ import { useState } from "react";
 
 import FilterMultipleWithSearch from "@/components/filter-multiple-with-search";
 import SearchDirectory from "../components/search-directory";
+import useTerritoriesDropdown from "@/queries/use-territories-dropdown";
+import useCategoriesDropdown from "@/queries/use-categories-dropdown";
 
 export default function FindDirectory() {
   const [query, setQuery] = useState("");
+  const { data: categoriesItems } = useCategoriesDropdown();
+  const { data: territoriesItems } = useTerritoriesDropdown();
 
   const filters = {
-    territory: [
-      { label: "Martinique", value: "Martinique" },
-      { label: "Guadeloupe", value: "Guadeloupe" },
-      { label: "Réunion", value: "Réunion" },
-      { label: "Mayotte", value: "Mayotte" },
-      { label: "Guyane", value: "Guyane" }
-    ],
-    // role: [
-    //   { label: "Government", value: "Government" },
-    //   { label: "Business Leaders", value: "Business Leaders" }
-    // ],
-    category: [
-      { label: "Administration", value: "Administration" },
-      { label: "Artistique", value: "Artistique" },
-      { label: "Associatif", value: "Associatif" },
-      { label: "Economique", value: "Economique" },
-      { label: "Judiciaire", value: "Judiciaire" },
-      { label: "Médiatique", value: "Médiatique" },
-      { label: "Politique", value: "Politique" }
-    ]
+    territory: territoriesItems,
+    category: categoriesItems
   };
 
   const [territory, setTerritory] = useQueryState(
     "territory",
     parseAsArrayOf(parseAsString).withDefault([])
   );
-  // const [role, setRole] = useQueryState(
-  //   "role",
-  //   parseAsArrayOf(parseAsString).withDefault([])
-  // );
   const [category, setCategory] = useQueryState(
     "category",
     parseAsArrayOf(parseAsString).withDefault([])
@@ -62,6 +44,7 @@ export default function FindDirectory() {
         <span className="text-md text-muted-foreground font-regular leading-[150%] tracking-tighter ">
           Recherche par
         </span>
+
         <FilterMultipleWithSearch
           buttonLabel="Territoire"
           setValue={setTerritory}
@@ -69,13 +52,6 @@ export default function FindDirectory() {
           placeholder="Entrez recherche…"
           listItems={filters.territory}
         />
-        {/* <FilterMultipleWithSearch
-          buttonLabel="Role"
-          setValue={setRole}
-          value={role}
-          placeholder="Search role"
-          listItems={filters.role}
-        /> */}
 
         <FilterMultipleWithSearch
           buttonLabel="Catégorie"

@@ -1,19 +1,15 @@
 "use client";
 
 import Link from "next/link";
-import { DirectoryItem } from "@/types/directory.type";
+import { CompanyWithDetails } from "@/types/person-relation.type";
 import { ArrowLeftBoldIcon } from "@/icons/arrow-left-bold-icon";
 import DetailInformation from "../card.tsx/detail-info";
 import DescriptionCard from "../card.tsx/descriptif";
 import ContactCard from "../card.tsx/contact";
 import RepresentantCard from "../card.tsx/representant";
 
-export default function DetailDirectorySection({
-  item,
-}: {
-  item: DirectoryItem;
-}) {
-    return (
+export default function DetailDirectorySection({ slug }: { slug: string }) {
+  return (
     <section className="max-w-7xl mx-auto py-10 px-6 lg:px-10">
       <div className="mb-4">
         <Link
@@ -26,14 +22,14 @@ export default function DetailDirectorySection({
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        <DetailInformation item={item} />
+        <DetailInformation />
 
         <div className="lg:col-span-2 space-y-4">
-          <DescriptionCard item={item} />
+          <DescriptionCard />
 
-          <ContactCard item={item} />
+          <ContactCard />
 
-          <RepresentantCard item={item} />
+          <RepresentantCard />
         </div>
       </div>
     </section>

@@ -12,7 +12,7 @@ export default function useTerritoriesDropdown() {
     return (
       items?.map((territory) => ({
         label: territory.name,
-        value: territory.name
+        value: territory.id
       })) || []
     );
   }, [items, isLoading]);

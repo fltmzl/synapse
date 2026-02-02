@@ -9,24 +9,36 @@ export class PersonNeo4jSyncService extends BaseNeo4jSyncService {
   private static readonly LABEL = "Person";
 
   /**
+   * Sync multiple persons to Neo4j in a single batch
+   */
+  static async syncPersonsBatch(
+    persons: Array<Partial<Person> & { code: string }>
+  ): Promise<void> {
+    const items = persons.map((person) => ({
+      code: person.code,
+      properties: {
+        id: person.id,
+        code: person.code,
+        name: person.name,
+        slug: person.slug,
+        profilePicture: person.profilePicture || null,
+        currentJobPosition: person.currentJobPosition || null,
+        email: person.email || null,
+        phoneNumber: person.phoneNumber || null,
+        category: "PERSON"
+      }
+    }));
+
+    await this.mergeNodesBatch(this.LABEL, items);
+  }
+
+  /**
    * Sync a person to Neo4j
    */
   static async syncPerson(
     person: Partial<Person> & { code: string }
   ): Promise<void> {
-    const properties = {
-      id: person.id,
-      code: person.code,
-      name: person.name,
-      slug: person.slug,
-      profilePicture: person.profilePicture || null,
-      currentJobPosition: person.currentJobPosition || null,
-      email: person.email || null,
-      phoneNumber: person.phoneNumber || null,
-      category: "PERSON" // Will be enriched from categoryId if needed
-    };
-
-    await this.mergeNode(this.LABEL, person.code, properties);
+    await this.syncPersonsBatch([person]);
   }
 
   /**

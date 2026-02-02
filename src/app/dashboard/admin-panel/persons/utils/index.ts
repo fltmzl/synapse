@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import * as XLSX from "xlsx";
 
 function normalizeKey(value: string): string {
@@ -25,6 +26,13 @@ function normalizeKey(value: string): string {
   );
 }
 
+export function uniqueBySelector<T, R>(
+  data: T[],
+  selector: (item: T) => R
+): R[] {
+  return [...new Set(data.map(selector))];
+}
+
 function debugStringChars(label: string, value: any) {
   if (!value) return;
 
@@ -40,9 +48,12 @@ function debugStringChars(label: string, value: any) {
 
 type ParsedRow = Record<string, Record<string, any>>;
 
-export function parseGroupedExcel(buffer: ArrayBuffer): ParsedRow[] {
+export function parseGroupedExcel(
+  buffer: ArrayBuffer,
+  sheetIndex: number
+): ParsedRow[] {
   const workbook = XLSX.read(buffer, { type: "array" });
-  const sheetName = workbook.SheetNames[0];
+  const sheetName = workbook.SheetNames[sheetIndex];
   const sheet = workbook.Sheets[sheetName];
 
   const rows = XLSX.utils.sheet_to_json<any[]>(sheet, {

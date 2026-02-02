@@ -4,7 +4,8 @@ export default function useRole() {
   const { role, loading } = useAuthGlobal();
 
   const isSuperadmin = role === "superadmin";
+  const isPaidUser = role === "paid_user";
   const isRegularUser = role === "regular_user" || !role;
 
-  return { isRegularUser, isSuperadmin, role, loading };
+  return { isRegularUser, isSuperadmin, role, loading, isPaidUser };
 }

@@ -34,7 +34,7 @@ export function PersonActions({ person }: PersonActionsProps) {
     <>
       <div className="flex items-center gap-2">
         <Button variant="ghost" size="icon-sm" asChild>
-          <Link href={`/dashboard/admin-panel/persons/edit/${person.id}`}>
+          <Link href={`/dashboard/admin-panel/persons/edit/${person.slug}`}>
             <Pencil className="h-4 w-4" />
             <span className="sr-only">Edit</span>
           </Link>

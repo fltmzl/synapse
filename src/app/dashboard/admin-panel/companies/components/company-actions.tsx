@@ -12,13 +12,13 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import useCompanyMutation from "@/mutations/use-company-mutation";
-import { Company } from "@/types/person-relation.type";
+import { Company, CompanyWithDetails } from "@/types/person-relation.type";
 import { Pencil, Trash } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 
 interface CompanyActionsProps {
-  company: Company;
+  company: CompanyWithDetails;
 }
 
 export function CompanyActions({ company }: CompanyActionsProps) {

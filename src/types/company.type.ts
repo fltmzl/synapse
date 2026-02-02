@@ -19,8 +19,8 @@ export type Contact = {
 export type CompanyDetails = {
   creation: string;
   salaries: string;
-    chiffre_d_affaires: string;
-    implantations: string;
+  chiffre_d_affaires: string;
+  implantations: string;
   employees: string;
   revenue: string;
   location: string;

@@ -52,6 +52,23 @@ export class BaseNeo4jSyncService {
   }
 
   /**
+   * Create or update multiple nodes using UNWIND
+   */
+  protected static async mergeNodesBatch(
+    label: string,
+    items: Array<{ code: string; properties: Record<string, any> }>
+  ): Promise<void> {
+    const query = `
+      UNWIND $items AS item
+      MERGE (n:${label} {code: item.code})
+      SET n += item.properties
+      SET n.updatedAt = datetime()
+    `;
+
+    await this.executeQuery(query, { items });
+  }
+
+  /**
    * Delete a node by code
    */
   protected static async deleteNode(
@@ -91,6 +108,31 @@ export class BaseNeo4jSyncService {
       toCode,
       properties
     });
+  }
+
+  /**
+   * Create or update multiple relationships using UNWIND
+   */
+  protected static async mergeRelationshipsBatch(
+    fromLabel: string,
+    toLabel: string,
+    relationshipType: string,
+    items: Array<{
+      fromCode: string;
+      toCode: string;
+      properties: Record<string, any>;
+    }>
+  ): Promise<void> {
+    const query = `
+      UNWIND $items AS item
+      MATCH (from:${fromLabel} {code: item.fromCode})
+      MATCH (to:${toLabel} {code: item.toCode})
+      MERGE (from)-[r:${relationshipType}]->(to)
+      SET r += item.properties
+      SET r.updatedAt = datetime()
+    `;
+
+    await this.executeQuery(query, { items });
   }
 
   /**

@@ -12,7 +12,7 @@ export default function useCategoriesDropdown() {
     return (
       items?.map((category) => ({
         label: category.name,
-        value: category.name
+        value: category.id
       })) || []
     );
   }, [items, isLoading]);

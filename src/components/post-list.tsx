@@ -17,8 +17,6 @@ export default function PostList({
   data,
   variant = "opportunity"
 }: PostListProps) {
-  console.log({ data });
-
   return (
     <div
       className={cn(

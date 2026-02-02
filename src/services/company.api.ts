@@ -6,17 +6,22 @@ import {
   doc,
   getDoc,
   getDocs,
+  limit,
+  query,
   serverTimestamp,
   Timestamp as FirestoreTimestamp,
   updateDoc,
-  writeBatch
+  where,
+  writeBatch,
+  getCountFromServer
 } from "firebase/firestore";
 import {
   Company,
   CreateCompanyDto,
   UpdateCompanyDto,
   CreateCompanyWithRepresentativeDto,
-  UpdateCompanyWithRepresentativeDto
+  UpdateCompanyWithRepresentativeDto,
+  CompanyWithDetails
 } from "@/types/person-relation.type";
 import { generateCode, CODE_PREFIXES } from "@/lib/code-generator";
 import {
@@ -183,12 +188,231 @@ export class CompanyService {
     };
   }
 
-  static async getAll(): Promise<Company[]> {
-    const querySnapshot = await getDocs(CompanyService.colRef);
-    return querySnapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...(doc.data() as Omit<Company, "id">)
+  static async getAll(filters?: {
+    categoryIds?: string[];
+    territoryIds?: string[];
+    search?: string;
+    page?: number;
+    pageSize?: number;
+  }): Promise<{ data: CompanyWithDetails[]; total: number }> {
+    let q = query(CompanyService.colRef);
+
+    if (filters?.categoryIds && filters.categoryIds.length > 0) {
+      q = query(q, where("categoryId", "in", filters.categoryIds));
+    }
+
+    if (filters?.territoryIds && filters.territoryIds.length > 0) {
+      q = query(q, where("territoryId", "in", filters.territoryIds));
+    }
+
+    // Get total count matching category/territory filters
+    const countSnapshot = await getCountFromServer(q);
+    let total = countSnapshot.data().count;
+
+    let companies: Company[] = [];
+
+    if (filters?.search) {
+      // If searching, we fetch all relevant documents to filter by 'name' in-memory
+      const querySnapshot = await getDocs(q);
+      const allCompanies = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...(doc.data() as Omit<Company, "id">)
+      }));
+
+      const searchLower = filters.search.toLowerCase();
+      const filteredCompanies = allCompanies.filter((c) =>
+        c.name.toLowerCase().includes(searchLower)
+      );
+
+      total = filteredCompanies.length;
+
+      if (filters.page !== undefined && filters.pageSize !== undefined) {
+        const start = filters.page * filters.pageSize;
+        companies = filteredCompanies.slice(
+          start,
+          start + filters.pageSize
+        ) as Company[];
+      } else {
+        companies = filteredCompanies as Company[];
+      }
+    } else {
+      // If no search, we use limit for optimization
+      if (filters?.page !== undefined && filters?.pageSize !== undefined) {
+        const limitCount = (filters.page + 1) * filters.pageSize;
+        const qWithLimit = query(q, limit(limitCount));
+        const querySnapshot = await getDocs(qWithLimit);
+        const allFetched = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...(doc.data() as Omit<Company, "id">)
+        }));
+
+        const start = filters.page * filters.pageSize;
+        companies = allFetched.slice(
+          start,
+          start + filters.pageSize
+        ) as Company[];
+      } else {
+        const querySnapshot = await getDocs(q);
+        companies = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...(doc.data() as Omit<Company, "id">)
+        })) as Company[];
+      }
+    }
+
+    if (companies.length === 0) return { data: [], total };
+
+    // 1. Collect unique IDs for joins
+    const categoryIds = [
+      ...new Set(companies.map((c) => c.categoryId).filter(Boolean))
+    ] as string[];
+    const territoryIds = [
+      ...new Set(companies.map((c) => c.territoryId).filter(Boolean))
+    ] as string[];
+    const representativeIds = [
+      ...new Set(
+        companies.map((c) => c.authorizedRepresentativeId).filter(Boolean)
+      )
+    ] as string[];
+
+    // 2. Fetch related data in parallel (with basic caching/batching simulation)
+    const [categoriesSnap, territoriesSnap, personsSnap] = await Promise.all([
+      categoryIds.length > 0
+        ? Promise.all(
+            categoryIds.map((id) => getDoc(doc(db, "categories", id)))
+          )
+        : Promise.resolve([]),
+      territoryIds.length > 0
+        ? Promise.all(
+            territoryIds.map((id) => getDoc(doc(db, "territories", id)))
+          )
+        : Promise.resolve([]),
+      representativeIds.length > 0
+        ? Promise.all(
+            representativeIds.map((id) => getDoc(doc(db, "persons", id)))
+          )
+        : Promise.resolve([])
+    ]);
+
+    // 3. Create lookup maps
+    const categoryMap = new Map(
+      categoriesSnap
+        .filter((s) => s.exists())
+        .map((s) => [s.id, { id: s.id, name: s.data()?.name }])
+    );
+    const territoryMap = new Map(
+      territoriesSnap
+        .filter((s) => s.exists())
+        .map((s) => [s.id, { id: s.id, name: s.data()?.name }])
+    );
+    const personMap = new Map(
+      personsSnap
+        .filter((s) => s.exists())
+        .map((s) => [s.id, { id: s.id, name: s.data()?.name }])
+    );
+
+    // 4. Map companies with their joined data
+    const dataWithDetails = companies.map((company) => ({
+      ...company,
+      category: company.categoryId ? categoryMap.get(company.categoryId) : null,
+      territory: company.territoryId
+        ? territoryMap.get(company.territoryId)
+        : null,
+      authorizedRepresentative: company.authorizedRepresentativeId
+        ? personMap.get(company.authorizedRepresentativeId)
+        : null
     }));
+
+    return {
+      data: dataWithDetails,
+      total
+    };
+  }
+
+  static async getBySlug(slug: string): Promise<CompanyWithDetails | null> {
+    const q = query(CompanyService.colRef, where("slug", "==", slug));
+    const querySnapshot = await getDocs(q);
+
+    if (querySnapshot.empty) return null;
+
+    const companyDoc = querySnapshot.docs[0];
+    const data = companyDoc.data() as Omit<Company, "id">;
+    const company = {
+      id: companyDoc.id,
+      ...data,
+      createdAt:
+        data.createdAt &&
+        typeof data.createdAt === "object" &&
+        "toMillis" in data.createdAt
+          ? (data.createdAt as FirestoreTimestamp).toMillis()
+          : null,
+      updatedAt:
+        data.updatedAt &&
+        typeof data.updatedAt === "object" &&
+        "toMillis" in data.updatedAt
+          ? (data.updatedAt as FirestoreTimestamp).toMillis()
+          : null,
+      establishmentDate:
+        data.establishmentDate &&
+        typeof data.establishmentDate === "object" &&
+        "toMillis" in data.establishmentDate
+          ? (data.establishmentDate as FirestoreTimestamp).toMillis()
+          : null
+    };
+
+    // Fetch related data
+    const [categorySnap, territorySnap, representativeSnap] = await Promise.all(
+      [
+        company.categoryId
+          ? getDoc(doc(db, "categories", company.categoryId))
+          : Promise.resolve(null),
+        company.territoryId
+          ? getDoc(doc(db, "territories", company.territoryId))
+          : Promise.resolve(null),
+        company.authorizedRepresentativeId
+          ? getDoc(doc(db, "persons", company.authorizedRepresentativeId))
+          : Promise.resolve(null)
+      ]
+    );
+
+    return {
+      ...company,
+      category:
+        categorySnap?.exists() && categorySnap.data()
+          ? {
+              id: categorySnap.id,
+              name: (categorySnap.data() as { name: string }).name
+            }
+          : null,
+      territory:
+        territorySnap?.exists() && territorySnap.data()
+          ? {
+              id: territorySnap.id,
+              name: (territorySnap.data() as { name: string }).name
+            }
+          : null,
+      authorizedRepresentative:
+        representativeSnap?.exists() && representativeSnap.data()
+          ? {
+              id: representativeSnap.id,
+              name: (representativeSnap.data() as { name: string }).name,
+              profilePicture: (
+                representativeSnap.data() as { profilePicture?: string }
+              ).profilePicture,
+              email: (representativeSnap.data() as { email?: string }).email,
+              phoneNumber: (
+                representativeSnap.data() as { phoneNumber?: string }
+              ).phoneNumber,
+              description: (
+                representativeSnap.data() as { description?: string }
+              ).description,
+              currentJobPosition: (
+                representativeSnap.data() as { currentJobPosition?: string }
+              ).currentJobPosition,
+              slug: (representativeSnap.data() as { slug?: string }).slug
+            }
+          : null
+    } as CompanyWithDetails;
   }
 
   static async getById(id: string): Promise<Company | null> {
