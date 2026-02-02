@@ -40,7 +40,7 @@ import { Publisher } from "@/services/publisher.api";
 import { ImageUpload } from "@/components/ui/image-upload";
 import usePersons from "@/queries/use-persons";
 import usePersonMutation from "@/mutations/use-person-mutation";
-import { Person } from "@/services/person.api";
+import { Person } from "@/types/person-relation.type";
 
 // ... existing imports
 
@@ -320,13 +320,16 @@ export function VideoForm({
                             value={field.value}
                             onValueChange={field.onChange}
                             onCreate={(name) => {
-                              createPersonMutation.mutate(name, {
-                                onSuccess: (newPerson: { name: string }) => {
-                                  if (newPerson) {
-                                    field.onChange(newPerson.name);
+                              createPersonMutation.mutate(
+                                { name },
+                                {
+                                  onSuccess: (newPerson: { name: string }) => {
+                                    if (newPerson) {
+                                      field.onChange(newPerson.name);
+                                    }
                                   }
                                 }
-                              });
+                              );
                             }}
                             placeholder="Select person..."
                             searchPlaceholder="Search persons or create new"

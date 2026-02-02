@@ -31,6 +31,8 @@ import { z } from "zod";
 import Link from "next/link";
 import { useUnsavedChanges } from "@/hooks/use-unsaved-changes";
 import { UnsavedChangesDialog } from "@/components/ui/unsaved-changes-dialog";
+import { NotionImportDialog } from "./notion-import-dialog";
+import { FileArchive } from "lucide-react";
 
 const TITLE_MAX_LENGTH = 150;
 const SUMMARY_MAX_LENGTH = 300;
@@ -162,6 +164,25 @@ export function ArticleForm({
     }
   };
 
+  const handleImportSuccess = (data: {
+    title: string;
+    htmlContent: string;
+  }) => {
+    form.setValue("title", data.title);
+    // Also update slug when title is imported
+    const slug = data.title
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/(^-|-$)/g, "");
+    form.setValue("slug", slug);
+
+    if (editor) {
+      editor.commands.setContent(data.htmlContent);
+    } else {
+      form.setValue("content", data.htmlContent);
+    }
+  };
+
   const { showPrompt, confirmNavigation, cancelNavigation } = useUnsavedChanges(
     form.formState.isDirty
   );
@@ -178,6 +199,20 @@ export function ArticleForm({
         description={pageDescription}
         actions={
           <>
+            <NotionImportDialog
+              onImportSuccess={handleImportSuccess}
+              trigger={
+                <Button
+                  variant="outline"
+                  size="sm"
+                  disabled={isMutationLoading}
+                >
+                  <FileArchive className="mr-2 h-4 w-4" />
+                  <span className="hidden sm:block">Import from Notion</span>
+                  <span className="block sm:hidden">Import</span>
+                </Button>
+              }
+            />
             <Button
               variant="secondary"
               size="sm"

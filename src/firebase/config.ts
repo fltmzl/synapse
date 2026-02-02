@@ -24,9 +24,9 @@ export const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 export const auth = getAuth(app);
 
 // Enable Firestore debug logging
-if (process.env.NODE_ENV === "development") {
-  setLogLevel("debug");
-}
+// if (process.env.NODE_ENV === "development") {
+//   setLogLevel("debug");
+// }
 
 export const db = getFirestore(app);
 export const storage = getStorage(app);

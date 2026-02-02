@@ -40,6 +40,7 @@ export type CreateUserPayload = {
   role: Role;
   phoneNumber: string;
   countryCode?: string;
+  password: string;
 };
 
 export class AuthService {

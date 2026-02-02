@@ -13,7 +13,7 @@ export default function Home() {
       <NewsSection />
       <LatestProductions />
       <LatestInfo />
-      <Database />
+      {/* <Database /> */}
       <FindDataPage />
       <BusinessCorner />
     </div>

@@ -1,6 +1,7 @@
 import { ArrowUpRightIcon } from "@/icons/arrow-up-right";
 import { BuildingIcon } from "@/icons/building-icon";
-import { EmploymentType, ExperienceRole } from "@/types/common.type";
+import { ExperienceRole } from "@/types/common.type";
+import { CompanyPersonEmploymentType } from "@/types/person-relation.type";
 import Image from "next/image";
 import Link from "next/link";
 import ExperienceRoleInfo from "./experience-role-info";
@@ -11,7 +12,7 @@ type Props = {
     name: string;
     link?: string;
     duration: string;
-    employmentType: EmploymentType;
+    employmentType: CompanyPersonEmploymentType;
     location: string;
   };
   experienceRoles: ExperienceRole[];

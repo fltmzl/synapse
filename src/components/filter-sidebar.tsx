@@ -8,7 +8,6 @@ import {
   AccordionTrigger,
   AccordionContent
 } from "@/components/ui/accordion";
-import { ChevronDown, ChevronUp } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 type Props = {
@@ -18,9 +17,14 @@ type Props = {
     value: string[] | null | ((old: string[] | null) => string[] | null),
     options?: Record<string, unknown>
   ) => Promise<URLSearchParams>;
-}
+};
 
-export default function SidebarFilters({ groups, value, setValue, isLast = false }: Props & { isLast?: boolean }) {
+export default function SidebarFilters({
+  groups,
+  value,
+  setValue,
+  isLast = false
+}: Props & { isLast?: boolean }) {
   const selected = value ?? [];
   const [expandedSections, setExpandedSections] = useState<
     Record<string, boolean>
@@ -40,7 +44,8 @@ export default function SidebarFilters({ groups, value, setValue, isLast = false
   };
 
   return (
-<div className={cn("w-full p-5", !isLast && "border-b")}>      <Accordion
+    <div className={cn("w-full p-5", !isLast && "border-b")}>
+      <Accordion
         type="multiple"
         className="p-0"
         defaultValue={Object.keys(groups)}

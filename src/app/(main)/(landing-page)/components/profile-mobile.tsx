@@ -19,7 +19,7 @@ export default function ProfileMobile({ image, username }: Props) {
         </Avatar>
       </button>
 
-      {isOpen && <ProfileDialog isOpen={isOpen} setIsOpen={setIsOpen} />}
+      <ProfileDialog />
     </>
   );
 }

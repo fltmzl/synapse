@@ -8,8 +8,9 @@ import Link from "next/link";
 
 type Props = {
   title: string;
-  image: string;
+  image: string | null;
   tags: string[];
+  video: string;
   territory?: string;
   excerpt?: string;
   place?: string;
@@ -22,6 +23,7 @@ type Props = {
 export default function LegalCard({
   title,
   image,
+  video,
   tags,
   territory,
   excerpt,
@@ -38,6 +40,14 @@ export default function LegalCard({
           <div className="relative w-full h-[264px] md:min-h-[120px] lg:min-h-[100px]">
             {image ? (
               <Image src={image} alt={title} fill className="object-cover" />
+            ) : video ? (
+              <video
+                src={`${video}#t=0.1`}
+                className="h-full w-full object-cover"
+                preload="metadata"
+                muted
+                playsInline
+              />
             ) : (
               <div className="w-full h-full bg-muted-foreground"></div>
             )}

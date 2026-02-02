@@ -29,24 +29,30 @@ import { EditIcon } from "@/icons/edit-icon";
 import { cn } from "@/lib/utils";
 import useCountryCodeDropdownData from "@/queries/use-country-code-dropdown-data";
 import useMyProfile from "@/queries/use-my-profile";
+import { useAuthGlobal } from "@/stores/auth-global.store";
+import { useUpdateProfileMutation } from "@/mutations/use-auth-mutation";
+import { StorageService } from "@/services/storage.api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Check, ChevronDown } from "lucide-react";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import z from "zod";
+import { Spinner } from "@/components/spinner";
 
 const formSchema = z.object({
   firstName: z.string().min(1, "First name is required"),
   lastName: z.string().min(1, "Last name is required"),
   phoneNumber: z.string().min(1, "Phone number is required"),
-  email: z.email("Invalid email address").min(1, "Email is required"),
+  email: z.string().email("Invalid email address").min(1, "Email is required"),
   countryCode: z.string().optional(),
   photoURL: z.string().optional().nullable()
 });
 
 export default function ProfileForm() {
-  const { data: myProfile } = useMyProfile();
+  const { user } = useAuthGlobal();
+  const { data: myProfile, isLoading } = useMyProfile();
+  const updateProfileMutation = useUpdateProfileMutation();
   const {
     data: countryCodes,
     isLoading: isLoadingCountryCodes,
@@ -56,21 +62,61 @@ export default function ProfileForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      firstName: "Johnathan",
-      lastName: "Carter",
-      email: "Johnathancarter@mail.com",
+      firstName: "",
+      lastName: "",
+      email: "",
       countryCode: "+33",
       photoURL: null,
-      phoneNumber: "1 44 55 66 77"
+      phoneNumber: ""
     }
   });
+
   const [photo, setPhoto] = useState<
     (File & { preview: string }) | string | null
-  >(form.getValues("photoURL") || null);
+  >(null);
 
-  const onSubmit = (data: z.infer<typeof formSchema>) => {
-    console.log("Submitted:", data);
-    setIsEditMode(false);
+  useEffect(() => {
+    if (myProfile) {
+      form.reset({
+        firstName: myProfile.firstName || "",
+        lastName: myProfile.lastName || "",
+        email: myProfile.email || "",
+        countryCode: myProfile.countryCode || "+1-US",
+        photoURL: myProfile.photoURL || null,
+        phoneNumber: myProfile.phoneNumber || ""
+      });
+      setPhoto(myProfile.photoURL || null);
+    }
+  }, [myProfile, form]);
+
+  const onSubmit = async (data: z.infer<typeof formSchema>) => {
+    if (!user) return;
+
+    try {
+      let photoURL = data.photoURL;
+
+      // Handle file upload if photo is a new File
+      if (photo && typeof photo !== "string") {
+        const path = `profile_pictures/${user.uid}/${photo.name}`;
+        photoURL = await StorageService.uploadFile(photo, path);
+      }
+
+      await updateProfileMutation.mutateAsync({
+        user,
+        payload: {
+          firstName: data.firstName,
+          lastName: data.lastName,
+          email: data.email,
+          phoneNumber: data.phoneNumber,
+          countryCode: data.countryCode,
+          photoURL: photoURL || undefined
+        }
+      });
+
+      setIsEditMode(false);
+    } catch (error) {
+      console.error("Profile update failed:", error);
+    }
   };
 
   const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -84,18 +130,55 @@ export default function ProfileForm() {
 
   const photoSrc = typeof photo === "string" ? photo : photo?.preview;
 
+  if (isLoading) {
+    return (
+      <div className="animate-pulse">
+        <div className="flex gap-4 items-center mb-6">
+          <Skeleton className="size-16 rounded-full" />
+          <div className="flex gap-2.5">
+            <Skeleton className="h-9 w-24 rounded-md" />
+          </div>
+        </div>
+
+        <div className="grid gap-6 lg:grid-cols-2 lg:gap-8">
+          <div className="space-y-2">
+            <Skeleton className="h-4 w-20" />
+            <Skeleton className="h-10 w-full rounded-md" />
+          </div>
+          <div className="space-y-2">
+            <Skeleton className="h-4 w-20" />
+            <Skeleton className="h-10 w-full rounded-md" />
+          </div>
+          <div className="space-y-2">
+            <Skeleton className="h-4 w-20" />
+            <Skeleton className="h-10 w-full rounded-md" />
+          </div>
+          <div className="space-y-2">
+            <Skeleton className="h-4 w-20" />
+            <Skeleton className="h-10 w-full rounded-md" />
+          </div>
+        </div>
+
+        <div className="mt-6 lg:mt-[146px] text-end">
+          <Skeleton className="h-9 w-20 ml-auto rounded-md" />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <div className="flex gap-4 items-center mb-6">
           <Avatar className="size-16">
             <AvatarImage
-              src={photoSrc}
+              src={photoSrc || undefined}
               alt="profile photo"
               className="object-cover"
             />
-            {/* <AvatarFallback>{user?.displayName?.charAt(0)}</AvatarFallback> */}
-            <AvatarFallback>{"John".charAt(0)}</AvatarFallback>
+            <AvatarFallback>
+              {myProfile?.firstName?.charAt(0).toUpperCase() || "U"}
+            </AvatarFallback>
           </Avatar>
 
           <div className="flex gap-2.5">
@@ -321,8 +404,14 @@ export default function ProfileForm() {
 
         {isEditMode ? (
           <div className="mt-6 lg:mt-[106px] text-end">
-            <Button size="sm" variant="default" type="submit">
-              Save changes
+            <Button
+              size="sm"
+              variant="default"
+              type="submit"
+              disabled={form.formState.isSubmitting}
+            >
+              {form.formState.isSubmitting && <Spinner />}
+              {form.formState.isSubmitting ? "Saving..." : "Save changes"}
             </Button>
           </div>
         ) : (

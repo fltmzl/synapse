@@ -276,6 +276,7 @@ export default function LegalNews() {
                         publisher={video.publisher}
                         date={format(video.createdAt.toDate(), "MMM dd, yyyy")}
                         category={video.category}
+                        video={video.videoUrl}
                       />
                     </div>
                   ))}
@@ -314,6 +315,7 @@ export default function LegalNews() {
                                 "MMM dd, yyyy"
                               )}
                               category={video.category}
+                              video={video.videoUrl}
                             />
                           </div>
                         );

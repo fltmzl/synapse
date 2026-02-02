@@ -189,39 +189,55 @@ export default function SpiderGraph({
     return Array.from(new Set(connectedIds));
   }, [selectedNode, edges]);
 
-  const styledNodes = nodes.map((node) => {
-    const isConnected = connectedNodeIds.includes(node.id);
-    const isNodeInsideGroupSelected = node.id === selectedParentNodeId;
+  const styledNodes = useMemo(() => {
+    return nodes.map((node) => {
+      const isConnected = connectedNodeIds.includes(node.id);
+      const isNodeInsideGroupSelected = node.id === selectedParentNodeId;
 
-    return {
-      ...node,
-      style: {
-        ...node.style,
-        opacity: selectedNode
-          ? isConnected || isNodeInsideGroupSelected
-            ? 1
-            : 0.3 // redupkan node yang tidak berhubungan
-          : 1,
-        transition: "opacity 0.3s ease"
-      }
-    };
-  });
+      const opacity = selectedNode
+        ? isConnected || isNodeInsideGroupSelected
+          ? 1
+          : 0.3 // redupkan node yang tidak berhubungan
+        : 1;
 
-  const styledEdges = edges.map((edge) => ({
-    ...edge,
-    style: {
-      ...edge.style,
-      opacity:
+      // Only return a new object if the style actually changed
+      if (node.style?.opacity === opacity) return node;
+
+      return {
+        ...node,
+        style: {
+          ...node.style,
+          opacity,
+          transition: "opacity 0.3s ease"
+        }
+      };
+    });
+  }, [nodes, connectedNodeIds, selectedNode, selectedParentNodeId]);
+
+  const styledEdges = useMemo(() => {
+    return edges.map((edge) => {
+      const opacity =
         selectedNode &&
         !(
           connectedNodeIds.includes(edge.source) &&
           connectedNodeIds.includes(edge.target)
         )
           ? 0.3
-          : 1,
-      transition: "opacity 0.3s ease"
-    }
-  }));
+          : 1;
+
+      // Only return a new object if the style actually changed
+      if (edge.style?.opacity === opacity) return edge;
+
+      return {
+        ...edge,
+        style: {
+          ...edge.style,
+          opacity,
+          transition: "opacity 0.3s ease"
+        }
+      };
+    });
+  }, [edges, connectedNodeIds, selectedNode]);
 
   const onLayout = useCallback(
     ({
@@ -250,8 +266,6 @@ export default function SpiderGraph({
     if (!elk) return;
     onLayout({ direction: "DOWN", useInitialNodes: true });
   }, [elk]);
-
-  console.log({ elk });
 
   if (!elk) return <>Loading Spider...</>;
 

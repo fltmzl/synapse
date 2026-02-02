@@ -16,14 +16,9 @@ import { signOut } from "firebase/auth";
 import { auth } from "@/firebase/config";
 import { useRouter } from "next/navigation";
 
-type Props = {
-  isOpen: boolean;
-  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-};
-
 export type SettingMenuType = "profile" | "security" | "billing";
 
-export default function ProfileDialog({ isOpen, setIsOpen }: Props) {
+export default function ProfileDialog() {
   const [activeMenu, setActiveMenu] = useState<SettingMenuType>("profile");
   const router = useRouter();
 
@@ -81,7 +76,7 @@ export default function ProfileDialog({ isOpen, setIsOpen }: Props) {
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+    <DialogContent>
       <DialogHeader className="sr-only">
         <DialogTitle>Setting</DialogTitle>
       </DialogHeader>
@@ -132,6 +127,6 @@ export default function ProfileDialog({ isOpen, setIsOpen }: Props) {
           <div>{getActiveMenuComponent(activeMenu)}</div>
         </main>
       </DialogContent>
-    </Dialog>
+    </DialogContent>
   );
 }

@@ -1,16 +1,54 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { DirectoryItem } from "@/types/directory.type";
-import {
-  ExternalLink,
-  Globe,
-  MailIcon,
-  MapPin,
-  PhoneIcon
-} from "lucide-react";
+import { ExternalLink, Globe, MailIcon, MapPin, PhoneIcon } from "lucide-react";
 import Link from "next/link";
+import { useParams } from "next/navigation";
+import useCompanyBySlug from "@/queries/use-company-by-slug";
 
-export default function ContactCard({ item }: { item: DirectoryItem }) {
+import { Skeleton } from "@/components/ui/skeleton";
+
+export default function ContactCard() {
+  const params = useParams();
+  const slug = params?.slug as string;
+  const { data: item, isLoading } = useCompanyBySlug(slug);
+
+  if (isLoading) {
+    return (
+      <Card className="rounded-[12px] gap-0 py-0">
+        <CardHeader className="lg:py-5 lg:px-6 p-5">
+          <Skeleton className="h-7 w-24" />
+        </CardHeader>
+        <CardContent className="p-6 min-w-full border-t">
+          <div className="space-y-3 pb-6 flex gap-6 lg:gap-0 lg:justify-between flex-col lg:flex-row">
+            {[...Array(3)].map((_, i) => (
+              <div key={i} className="flex items-center gap-3">
+                <Skeleton className="h-10 w-10 rounded-[6px]" />
+                <div className="flex flex-col gap-1">
+                  <Skeleton className="h-4 w-16" />
+                  <Skeleton className="h-5 w-32" />
+                </div>
+              </div>
+            ))}
+          </div>
+          <hr />
+          <div className="space-y-3 pt-6">
+            <div className="flex flex-col lg:flex-row items-start lg:items-end lg:gap-0 lg:justify-between gap-4">
+              <div className="flex gap-2">
+                <Skeleton className="h-10 w-10 rounded-[6px]" />
+                <div className="space-y-1">
+                  <Skeleton className="h-4 w-16" />
+                  <Skeleton className="h-5 w-48" />
+                </div>
+              </div>
+              <Skeleton className="h-10 w-32 rounded-md" />
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  if (!item) return null;
   return (
     <Card className="rounded-[12px] gap-0 py-0">
       <CardHeader className="lg:py-5 lg:px-6 p-5">
@@ -27,7 +65,7 @@ export default function ContactCard({ item }: { item: DirectoryItem }) {
                 Téléphone
               </span>
               <span className="text-base leading-[150%] tracking-[-0.01em] ">
-                {item.contact?.phone}
+                {item.phoneNumber || "N/A"}
               </span>
             </div>
           </div>
@@ -40,7 +78,7 @@ export default function ContactCard({ item }: { item: DirectoryItem }) {
                 Email
               </span>
               <span className="text-base leading-[150%] tracking-[-0.01em] ">
-                {item.contact?.email}
+                {item.email || "N/A"}
               </span>
             </div>
           </div>
@@ -52,14 +90,20 @@ export default function ContactCard({ item }: { item: DirectoryItem }) {
               <span className="text-sm leading-[140%] tracking-[-0.01em] text-muted-foreground">
                 Website
               </span>
-              <Link
-                href={`https://${item.contact?.website}`}
-                target="_blank"
-                className="text-base flex items-center gap-1 leading-[150%] tracking-[-0.01em] hover:text-primary"
-              >
-                {item.contact?.website}
-                <ExternalLink className="size-[18px] text-primary" />
-              </Link>
+              {item.website ? (
+                <Link
+                  href={`https://${item.website}`}
+                  target="_blank"
+                  className="text-base flex items-center gap-1 leading-[150%] tracking-[-0.01em] hover:text-primary"
+                >
+                  {item.website}
+                  <ExternalLink className="size-[18px] text-primary" />
+                </Link>
+              ) : (
+                <span className="text-base leading-[150%] tracking-[-0.01em] ">
+                  N/A
+                </span>
+              )}
             </div>
           </div>
         </div>
@@ -67,22 +111,27 @@ export default function ContactCard({ item }: { item: DirectoryItem }) {
         <div className="space-y-3 pt-6">
           <div className="flex flex-col lg:flex-row items-start lg:items-end lg:gap-0 lg:justify-between gap-4">
             <div className="flex gap-2">
-            <div className="h-10 w-10 p-[10px] border rounded-[6px]">
-              <MapPin strokeWidth={1.5} className="size-5 text-primary" />
-            </div>
-            <div className="w-full">
+              <div className="h-10 w-10 p-[10px] border rounded-[6px]">
+                <MapPin strokeWidth={1.5} className="size-5 text-primary" />
+              </div>
+              <div className="w-full">
                 <span className="text-sm leading-[140%] tracking-[-0.01em] text-muted-foreground">
                   Address
                 </span>
                 <div className="flex justify-between">
-              <span className="text-base leading-[150%] tracking-[-0.01em] ">{item.contact?.address}</span>
+                  <span className="text-base leading-[150%] tracking-[-0.01em] ">
+                    {item.address || "N/A"}
+                  </span>
+                </div>
               </div>
             </div>
-            </div>
-              <Button variant="outline" className="font-normal px-3 py-[10px] text-sm leading-[140%] tracking-[-0.01em]">
-                <MapPin className="size-5 text-muted-foreground" />
-                Show on map
-              </Button>
+            <Button
+              variant="outline"
+              className="font-normal px-3 py-[10px] text-sm leading-[140%] tracking-[-0.01em]"
+            >
+              <MapPin className="size-5 text-muted-foreground" />
+              Show on map
+            </Button>
           </div>
         </div>
       </CardContent>

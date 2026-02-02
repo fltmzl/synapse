@@ -103,6 +103,7 @@ export default function FilterMultipleWithSearch({
                   <CommandItem
                     className="p-2 pl-4 cursor-pointer flex justify-between"
                     key={String(item.value)}
+                    value={item.value}
                     onSelect={(currentValue) => {
                       const isAlreadySelected = value.includes(currentValue);
 

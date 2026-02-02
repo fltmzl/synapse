@@ -14,6 +14,8 @@ import ProfileDialog from "./dialog/profile-dialog";
 import { useRouter } from "next/navigation";
 import { signOut } from "firebase/auth";
 import { auth } from "@/firebase/config";
+import useRole from "@/hooks/use-role";
+import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 
 type Props = {
   image: string;
@@ -22,6 +24,7 @@ type Props = {
 
 export default function ProfileDekstop({ image, username }: Props) {
   const { isOpen, openModal, setIsOpen } = useModal(false);
+  const { isSuperadmin } = useRole();
   const router = useRouter();
 
   const handleLogout = async () => {
@@ -41,7 +44,7 @@ export default function ProfileDekstop({ image, username }: Props) {
   };
 
   return (
-    <>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DropdownMenu>
         <DropdownMenuTrigger>
           <Avatar className="hidden md:block w-12 h-12">
@@ -49,16 +52,29 @@ export default function ProfileDekstop({ image, username }: Props) {
             <AvatarFallback>{username.charAt(0)}</AvatarFallback>
           </Avatar>
         </DropdownMenuTrigger>
+
         <DropdownMenuContent align="end" className="w-[146px] rounded-[4px]">
-          <DropdownMenuItem className="font-medium" onClick={goToAdminPanel}>
-            <LayoutDashboardIcon /> Admin Panel
+          {isSuperadmin && (
+            <DropdownMenuItem
+              className="font-medium cursor-pointer"
+              onClick={goToAdminPanel}
+            >
+              <LayoutDashboardIcon /> Admin Panel
+            </DropdownMenuItem>
+          )}
+
+          <DropdownMenuItem
+            asChild
+            className="font-medium w-full cursor-pointer"
+          >
+            <DialogTrigger>
+              <SettingsIcon /> Setting
+            </DialogTrigger>
           </DropdownMenuItem>
-          <DropdownMenuItem className="font-medium" onClick={openModal}>
-            <SettingsIcon /> Setting
-          </DropdownMenuItem>
+
           <DropdownMenuItem
             variant="destructive"
-            className="font-medium"
+            className="font-medium cursor-pointer"
             onClick={handleLogout}
           >
             <LogoutIcon />
@@ -67,7 +83,7 @@ export default function ProfileDekstop({ image, username }: Props) {
         </DropdownMenuContent>
       </DropdownMenu>
 
-      {isOpen && <ProfileDialog isOpen={isOpen} setIsOpen={setIsOpen} />}
-    </>
+      <ProfileDialog />
+    </Dialog>
   );
 }
