@@ -9,6 +9,7 @@ import NewsCard from "../components/card/news-card";
 import useArticles from "@/queries/use-articles";
 import NewsCardSkeleton from "../components/skeletons/news-card-skeleton";
 import { format } from "date-fns";
+import NoResult from "@/components/no-result";
 
 export default function NewsSection() {
   const { data: articles, isLoading } = useArticles({
@@ -66,12 +67,17 @@ export default function NewsSection() {
                 />
               ))}
             </>
-          ) : (
+          ) : isLoading ? (
             <>
               {Array.from({ length: 3 }).map((_, index) => (
                 <NewsCardSkeleton key={index} />
               ))}
             </>
+          ) : (
+            <NoResult
+              title="Aucune actualité"
+              description="Aucune actualité n'a été trouvée"
+            />
           )}
         </div>
       </section>

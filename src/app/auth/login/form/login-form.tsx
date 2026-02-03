@@ -49,9 +49,9 @@ export default function LoginForm() {
         password: values.password
       });
 
-      console.log({ user });
       router.push("/");
     } catch (err) {
+      console.error(err);
       form.setError("password", { message: "Invalid email or password" });
     }
   };
