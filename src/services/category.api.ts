@@ -9,7 +9,8 @@ import {
   Timestamp,
   getCountFromServer,
   query,
-  where
+  where,
+  setDoc
 } from "firebase/firestore";
 
 export type Category = {
@@ -33,15 +34,22 @@ export class CategoryService {
 
   static async create(payload: CreateCategoryPayload) {
     const { name } = payload;
+    const id = name
+      .toLowerCase()
+      .trim()
+      .replace(/[^\w\s-]/g, "")
+      .replace(/[\s_-]+/g, "-")
+      .replace(/^-+|-+$/g, "");
 
-    const categoryRef = await addDoc(CategoryService.colRef, {
+    const categoryRef = doc(db, CategoryService.colName, id);
+    await setDoc(categoryRef, {
       name,
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp()
     });
 
     return {
-      id: categoryRef.id,
+      id,
       name,
       success: true,
       message: "Category created successfully"

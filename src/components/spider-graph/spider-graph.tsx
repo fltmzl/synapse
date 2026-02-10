@@ -1,12 +1,7 @@
 "use client";
 
-import GeneralInfo from "@/app/(main)/(landing-page)/actors/[slug]/components/general-info";
 import useELK from "@/hooks/use-elk";
-import { ArrowRightIcon } from "@/icons/arrow-right-icon";
-import { BuildingIcon } from "@/icons/building-icon";
-import { MapPinIcon } from "@/icons/map-pin-icon";
-import { PlusIcon } from "@/icons/plus-icon";
-import { SearchIcons } from "@/icons/search-icon";
+import { cn } from "@/lib/utils";
 import {
   Background,
   Edge,
@@ -21,32 +16,16 @@ import {
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import { ElkExtendedEdge, ElkNode } from "elkjs/lib/elk-api";
-import { MaximizeIcon, MinusIcon, XIcon } from "lucide-react";
 import { useCallback, useLayoutEffect, useMemo, useState } from "react";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger
-} from "../ui/accordion";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { Button } from "../ui/button";
-import { Card } from "../ui/card";
-import { Checkbox } from "../ui/checkbox";
-import { Input } from "../ui/input";
-import { Label } from "../ui/label";
+import { CenterCompanyNode } from "./custom-element/center-company-node";
 import { CenterNode } from "./custom-element/center-node";
 import CircleBlueNode from "./custom-element/circle-blue-node";
 import CustomEdge from "./custom-element/custom-edge";
 import FloatingConnectionLine from "./custom-element/floating-connection-line";
 import FloatingEdge from "./custom-element/floating-edge";
 import { GroupNode } from "./custom-element/group-node";
-import DiamondIcon from "./custom-element/nodes/icons/diamond-icon";
-import HexagonIcon from "./custom-element/nodes/icons/hexagon-icon";
-import PentagonIcon from "./custom-element/nodes/icons/pentagon-icon";
-import RoundedCircleIcon from "./custom-element/nodes/icons/rounded-circle-icon";
-import RoundedTriangleIcon from "./custom-element/nodes/icons/rounded-triangle-icon";
-import { cn } from "@/lib/utils";
+import HexagonNode from "./custom-element/hexagon-node";
+import PentagonNode from "./custom-element/pentagon-node";
 
 type Props = {
   initialNodes: Node[];
@@ -65,7 +44,10 @@ type Props = {
 
 const nodeTypes = {
   centerNode: CenterNode,
+  centerCompanyNode: CenterCompanyNode,
   circleBlueNode: CircleBlueNode,
+  hexagonNode: HexagonNode,
+  pentagonNode: PentagonNode,
   groupNode: GroupNode
 };
 
@@ -259,13 +241,13 @@ export default function SpiderGraph({
         }
       );
     },
-    [nodes, edges, getLayoutedElements]
+    [nodes, edges, initialNodes, initialEdges, getLayoutedElements]
   );
 
   useLayoutEffect(() => {
     if (!elk) return;
     onLayout({ direction: "DOWN", useInitialNodes: true });
-  }, [elk]);
+  }, [elk, initialNodes, initialEdges]);
 
   if (!elk) return <>Loading Spider...</>;
 
@@ -293,6 +275,7 @@ export default function SpiderGraph({
         onNodeClick={(_, node) => {
           setSelectedNode((prev) => {
             if (node.type === "groupNode") return null;
+            // if (node.type === "centerNode") return null;
             return prev === node.id ? null : node.id;
           });
 
@@ -325,222 +308,6 @@ export default function SpiderGraph({
         setSelectedNode,
         reactFlowInstance
       })}
-
-      {/*<div className="absolute top-4 left-4 w-[290px]">
-        <div className="relative">
-          <Input placeholder="Find connection" className="h-10 pl-4 pr-13" />
-          <Button
-            size="icon"
-            className="size-8 rounded-sm absolute top-1 right-1 bg-secondary"
-          >
-            <SearchIcons />
-          </Button>
-        </div>
-
-        {isInfoShowed && (
-          <Card className="p-4 gap-2 mt-2 relative">
-            <h5 className="text-base font-medium">
-              Explore Isabelle’s Network
-            </h5>
-            <p>
-              Click on a node to view detailed information about the connection.
-            </p>
-            <button
-              className="text-muted-foreground absolute top-2 right-2"
-              onClick={() => setIsInfoShowed(false)}
-            >
-              <XIcon className="size-5" />
-            </button>
-          </Card>
-        )}
-      </div>
-
-      {selectedNode && (
-        <div className="absolute top-4 left-4 rounded-lg bg-background border w-full max-w-[300px] z-[2] @xl: bg-blue-400">
-          <div className="p-4">
-            <div>
-              <Avatar className="w-10 h-10 rounded-sm border">
-                <AvatarImage
-                  src={"http://placehold.jpw/100x100.png"}
-                  alt={"actor"}
-                />
-                <AvatarFallback className="rounded-sm bg-body">
-                  <BuildingIcon />
-                </AvatarFallback>
-              </Avatar>
-
-              <h3 className="font-medium mt-3">Caribbean Business Council</h3>
-              <span className="text-sm text-muted-foreground">
-                Business Organization
-              </span>
-            </div>
-
-            <button className="absolute top-4 right-4">
-              <XIcon size={20} className="text-muted-foreground" />
-            </button>
-          </div>
-
-          <hr />
-
-          <div className="p-4">
-            <GeneralInfo
-              size="sm"
-              icon={MapPinIcon}
-              label="Location"
-              value="Bridgetown, Barbados"
-            />
-
-            <p className="text-sm mt-4">
-              Regional business council supporting economic cooperation among
-              Caribbean territories.
-            </p>
-          </div>
-
-          <hr />
-
-          <div className="p-4">
-            <h3 className="font-medium">Connections with Isabelle</h3>
-
-            <div className="text-sm mt-4 space-y-4">
-              <div className="flex justify-between gap-2">
-                <span className="text-muted-foreground">Relation type</span>
-                <span>Affiliation</span>
-              </div>
-              <div className="flex justify-between gap-2">
-                <span className="text-muted-foreground">Role</span>
-                <span>Consultant</span>
-              </div>
-              <div className="flex justify-between gap-2">
-                <span className="text-muted-foreground">Period</span>
-                <span>2013-2017</span>
-              </div>
-            </div>
-          </div>
-
-          <hr />
-
-          <div className="p-4">
-            <Button className="w-full" variant="outline">
-              View full profile <ArrowRightIcon />{" "}
-            </Button>
-          </div>
-        </div>
-      )}
-
-      <div className="absolute top-4 right-4 z-[1]">
-        <Accordion
-          type="single"
-          collapsible
-          className="w-full border rounded-sm"
-        >
-          <AccordionItem
-            value="item-1"
-            className="rounded-t-sm rounded-b-sm [&[data-state=open]>button]:rounded-b-none overflow-hidden"
-          >
-            <AccordionTrigger className="bg-background gap-14 py-2 px-3 hover:no-underline rounded-none">
-              Indicator
-            </AccordionTrigger>
-            <AccordionContent className="flex flex-col gap-3 bg-background border-t p-3">
-              <div className="flex justify-between">
-                <Label htmlFor="person" className="font-normal text-xs">
-                  <RoundedCircleIcon />
-                  Person
-                </Label>
-                <Checkbox id="person" name="person" className="size-4" />
-              </div>
-
-              <div className="flex justify-between">
-                <Label htmlFor="organization" className="font-normal text-xs">
-                  <PentagonIcon />
-                  Organization
-                </Label>
-                <Checkbox
-                  id="organization"
-                  name="organization"
-                  className="size-4"
-                />
-              </div>
-
-              <div className="flex justify-between">
-                <Label htmlFor="government" className="font-normal text-xs">
-                  <DiamondIcon />
-                  Government
-                </Label>
-                <Checkbox
-                  id="government"
-                  name="government"
-                  className="size-4"
-                />
-              </div>
-
-              <div className="flex justify-between">
-                <Label htmlFor="party" className="font-normal text-xs">
-                  <RoundedTriangleIcon />
-                  Party
-                </Label>
-                <Checkbox id="party" name="party" className="size-4" />
-              </div>
-
-              <div className="flex justify-between">
-                <Label htmlFor="education" className="font-normal text-xs">
-                  <HexagonIcon />
-                  Education
-                </Label>
-                <Checkbox id="education" name="education" className="size-4" />
-              </div>
-
-              <div className="flex justify-between">
-                <Label htmlFor="association" className="font-normal text-xs">
-                  <HexagonIcon color="#29CC6A" />
-                  Association
-                </Label>
-                <Checkbox
-                  id="association"
-                  name="association"
-                  className="size-4"
-                />
-              </div>
-
-              <div className="flex justify-between">
-                <Label htmlFor="media" className="font-normal text-xs">
-                  <RoundedCircleIcon color="#8C31F4" />
-                  Media
-                </Label>
-                <Checkbox id="media" name="media" className="size-4" />
-              </div>
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
-      </div>
-
-      <div className="absolute bottom-5 right-5 flex flex-col gap-6">
-        <div className="flex flex-col gap-1">
-          <Button
-            size="icon"
-            className="size-10 rounded-sm"
-            variant="outline"
-            onClick={() => zoomIn()}
-          >
-            <PlusIcon className="size-5" />
-          </Button>
-          <Button
-            size="icon"
-            className="size-10 rounded-sm"
-            variant="outline"
-            onClick={() => zoomOut()}
-          >
-            <MinusIcon className="size-5" />
-          </Button>
-        </div>
-        <Button
-          size="icon"
-          className="size-10 rounded-sm"
-          variant="outline"
-          onClick={() => fitView()}
-        >
-          <MaximizeIcon />
-        </Button>
-      </div>*/}
     </div>
   );
 }

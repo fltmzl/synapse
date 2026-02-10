@@ -31,10 +31,14 @@ import {
   Info,
   Camera,
   Save,
-  ArrowLeft
+  ArrowLeft,
+  Coins,
+  ShieldCheck,
+  FileText,
+  Activity
 } from "lucide-react";
 import React from "react";
-import { useForm, UseFormReturn } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
 import Link from "next/link";
 import { useUnsavedChanges } from "@/hooks/use-unsaved-changes";
@@ -62,24 +66,37 @@ export const companyFormSchema = z.object({
   idNumber: z.string().optional(),
   code: z.string().optional(),
   phoneNumber: z.string().optional(),
-  email: z.email("Invalid email").optional().or(z.literal("")),
-  website: z.url("Invalid URL").optional().or(z.literal("")),
+  email: z.string().email("Invalid email").optional().or(z.literal("")),
+  website: z.string().url("Invalid URL").optional().or(z.literal("")),
   description: z.string().max(DESCRIPTION_MAX_LENGTH).optional(),
   profilePicture: z.string().optional(),
   address: z.string().optional(),
+  zipCode: z.string().optional(),
+  city: z.string().optional(),
+  implantation: z.string().optional(),
   categoryId: z.string().optional(),
   placeId: z.string().optional(),
   territoryId: z.string().optional(),
   establishmentDate: z.string().optional(),
-  socials: z
-    .object({
-      whatsapp: z.string().optional(),
-      linkedin: z.string().optional(),
-      twitter: z.string().optional(),
-      facebook: z.string().optional(),
-      instagram: z.string().optional()
-    })
-    .optional(),
+  sirenCode: z.string().optional(),
+  legalStatus: z.string().optional(),
+  nafCode: z.string().optional(),
+  activity: z.string().optional(),
+  economicalNumbers: z.object({
+    capital: z.number().nullable(),
+    financial_result: z.number().nullable(),
+    margin: z.number().nullable(),
+    number_of_employees: z.number().nullable(),
+    operating_profit: z.number().nullable(),
+    turnover: z.number().nullable()
+  }),
+  socials: z.object({
+    whatsapp: z.string().optional(),
+    linkedin: z.string().optional(),
+    twitter: z.string().optional(),
+    facebook: z.string().optional(),
+    instagram: z.string().optional()
+  }),
   authorizedRepresentativeId: z.string().optional()
 });
 
@@ -115,10 +132,25 @@ export function CompanyForm({
       description: "",
       profilePicture: "",
       address: "",
+      zipCode: "",
+      city: "",
+      implantation: "",
       categoryId: "",
       placeId: "",
       territoryId: "",
       establishmentDate: "",
+      sirenCode: "",
+      legalStatus: "",
+      nafCode: "",
+      activity: "",
+      economicalNumbers: {
+        capital: null,
+        financial_result: null,
+        margin: null,
+        number_of_employees: null,
+        operating_profit: null,
+        turnover: null
+      },
       socials: {
         whatsapp: "",
         linkedin: "",
@@ -146,6 +178,19 @@ export function CompanyForm({
 
   const { data: places = [], isLoading: isPlacesLoading } = usePlaces();
   const { createPlaceMutation } = usePlaceMutation();
+
+  const territoryId = form.watch("territoryId");
+
+  React.useEffect(() => {
+    if (territoryId) {
+      const selectedTerritory = territories.find((t) => t.id === territoryId);
+      if (selectedTerritory) {
+        form.setValue("implantation", selectedTerritory.name);
+      }
+    } else {
+      form.setValue("implantation", "");
+    }
+  }, [territoryId, territories, form]);
 
   const categoryOptions = React.useMemo(
     () => categories.map((cat) => ({ value: cat.id, label: cat.name })),
@@ -175,7 +220,7 @@ export function CompanyForm({
         actions={
           <Button
             size="sm"
-            onClick={form.handleSubmit((data) =>
+            onClick={form.handleSubmit((data: CompanyFormValues) =>
               onSubmit(data, newRepresentativeName)
             )}
             disabled={isMutationLoading}
@@ -189,7 +234,7 @@ export function CompanyForm({
       <div className="flex flex-1 flex-col p-4">
         <Form {...form}>
           <form
-            onSubmit={form.handleSubmit((data) =>
+            onSubmit={form.handleSubmit((data: CompanyFormValues) =>
               onSubmit(data, newRepresentativeName)
             )}
             className="space-y-8 w-full max-w-4xl mx-auto"
@@ -315,37 +360,7 @@ export function CompanyForm({
                                   }}
                                   onCreate={(name) => {
                                     setNewRepresentativeName(name);
-                                    // We don't set the field value here because the ID doesn't exist yet.
-                                    // We'll handle this in onSubmit.
-                                    // Visually, we might want to show the name as selected or a badge.
-                                    // For now, ComboboxCreate might need a way to show a "pending creation" state
-                                    // or we just rely on the fact that if value is empty but newRepresentativeName is set,
-                                    // we show the name.
-                                    // However, ComboboxCreate expects a value that matches an option or it shows placeholder.
-                                    // A simple workaround is to let the user know they are creating a new one.
-                                    // But ComboboxCreate internal state might handle "searchQuery" as value if we tweak it,
-                                    // or we just accept that it looks like "Select option..." but we show a message below?
-                                    // Better: The ComboboxCreate component as seen in the code:
-                                    // It calls onCreate. It doesn't automatically select the new item unless we pass it back.
-                                    // Since we are doing atomic creation, we can't pass an ID back yet.
-                                    // Let's just use the field value to store the NAME temporarily if it's a new creation?
-                                    // No, the schema expects a string, which is fine.
-                                    // But if we put the name in the field, it won't match any option ID.
-                                    // The ComboboxCreate displays `selectedOption ? selectedOption.label : placeholder`.
-                                    // If we put the name in `value`, `selectedOption` will be undefined.
-                                    // So it will show "Select option...".
-                                    // We might need to handle this UI better, but for now let's just set the name
-                                    // and maybe show a helper text.
-                                    field.onChange(name); // Store name in the field for now? No, that confuses ID vs Name.
-                                    // Actually, let's store a special marker or just keep it empty and use newRepresentativeName.
-                                    // But to show it in the UI, we need to trick it or update ComboboxCreate.
-                                    // Let's assume for this task we just set the name as the value,
-                                    // and in the ComboboxCreate, if no option matches but value is set, we display value?
-                                    // Looking at ComboboxCreate:
-                                    // `const selectedOption = options.find((option) => option.value === value);`
-                                    // `{selectedOption ? selectedOption.label : placeholder}`
-                                    // So it will show placeholder.
-                                    // Let's just use a helper message for now.
+                                    field.onChange(name);
                                   }}
                                   placeholder="Select representative"
                                   disabled={
@@ -547,15 +562,239 @@ export function CompanyForm({
                     </div>
                   </CardContent>
                 </Card>
+
+                <Card>
+                  <CardHeader>
+                    <div className="flex items-center gap-2">
+                      <ShieldCheck className="size-5 text-primary" />
+                      <CardTitle>Legal & Administrative</CardTitle>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="grid gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <FormField
+                        control={form.control}
+                        name="sirenCode"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>SIREN Code</FormLabel>
+                            <FormControl>
+                              <Input
+                                placeholder="e.g. 123456789"
+                                {...field}
+                                disabled={isMutationLoading}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="nafCode"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>NAF Code</FormLabel>
+                            <FormControl>
+                              <Input
+                                placeholder="e.g. 64.99Z"
+                                {...field}
+                                disabled={isMutationLoading}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                    <FormField
+                      control={form.control}
+                      name="legalStatus"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Legal Status</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder="e.g. SA à conseil d'administration"
+                              {...field}
+                              disabled={isMutationLoading}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="activity"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Activity</FormLabel>
+                          <FormControl>
+                            <Textarea
+                              placeholder="Describe company activity..."
+                              className="min-h-[80px] resize-none"
+                              {...field}
+                              disabled={isMutationLoading}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </CardContent>
+                </Card>
               </div>
 
-              {/* Right Column - Classification & Meta */}
+              {/* Right Column - Classification & Location */}
               <div className="flex flex-col gap-4">
                 <Card>
                   <CardHeader>
                     <div className="flex items-center gap-2">
+                      <MapPin className="size-5 text-primary" />
+                      <CardTitle>Location</CardTitle>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="grid gap-4">
+                    <div className="pb-4 border-b grid gap-4">
+                      <FormField
+                        control={form.control}
+                        name="territoryId"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Territory</FormLabel>
+                            <FormControl>
+                              <ComboboxCreate
+                                options={territoryOptions}
+                                value={field.value}
+                                onValueChange={field.onChange}
+                                onCreate={(name) => {
+                                  createTerritoryMutation.mutate(name, {
+                                    onSuccess: (newT) => {
+                                      if (newT) field.onChange(newT.id);
+                                    }
+                                  });
+                                }}
+                                placeholder="Select territory"
+                                isCreating={createTerritoryMutation.isPending}
+                                disabled={isTerritoriesLoading}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="placeId"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Place</FormLabel>
+                            <FormControl>
+                              <ComboboxCreate
+                                options={placeOptions}
+                                value={field.value}
+                                onValueChange={field.onChange}
+                                onCreate={(name) => {
+                                  createPlaceMutation.mutate(name, {
+                                    onSuccess: (newP) => {
+                                      if (newP) field.onChange(newP.id);
+                                    }
+                                  });
+                                }}
+                                placeholder="Select place"
+                                isCreating={createPlaceMutation.isPending}
+                                disabled={isPlacesLoading}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+
+                    {/* Hiding implantation as it is auto-filled by territory name */}
+                    <div className="hidden">
+                      <FormField
+                        control={form.control}
+                        name="implantation"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Implantation</FormLabel>
+                            <FormControl>
+                              <Input
+                                placeholder="e.g. CRETEIL"
+                                {...field}
+                                disabled={isMutationLoading}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+                      <FormField
+                        control={form.control}
+                        name="zipCode"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Zip Code</FormLabel>
+                            <FormControl>
+                              <Input
+                                placeholder="94120"
+                                {...field}
+                                disabled={isMutationLoading}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="city"
+                        render={({ field }) => (
+                          <FormItem className="md:col-span-2">
+                            <FormLabel>City</FormLabel>
+                            <FormControl>
+                              <Input
+                                placeholder="FONTENAY-SOUS-BOIS"
+                                {...field}
+                                disabled={isMutationLoading}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                    <FormField
+                      control={form.control}
+                      name="address"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Street Address</FormLabel>
+                          <FormControl>
+                            <Textarea
+                              placeholder="6 ALLEE DES SABLONS"
+                              className="min-h-[60px] resize-none"
+                              {...field}
+                              disabled={isMutationLoading}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <div className="flex items-center gap-2">
                       <Info className="size-5 text-primary" />
-                      <CardTitle>Classification</CardTitle>
+                      <CardTitle>Classification & Dates</CardTitle>
                     </div>
                   </CardHeader>
                   <CardContent className="grid gap-4">
@@ -586,7 +825,6 @@ export function CompanyForm({
                         </FormItem>
                       )}
                     />
-
                     <FormField
                       control={form.control}
                       name="establishmentDate"
@@ -601,7 +839,7 @@ export function CompanyForm({
                                 disabled={isMutationLoading}
                               />
                               <InputGroupAddon className="bg-background px-2 py-0.5 rounded-sm translate-x-1">
-                                <Calendar />
+                                <Calendar className="size-4" />
                               </InputGroupAddon>
                             </InputGroup>
                           </FormControl>
@@ -615,85 +853,169 @@ export function CompanyForm({
                 <Card>
                   <CardHeader>
                     <div className="flex items-center gap-2">
-                      <MapPin className="size-5 text-primary" />
-                      <CardTitle>Location</CardTitle>
+                      <Coins className="size-5 text-primary" />
+                      <CardTitle>Financial Data</CardTitle>
                     </div>
                   </CardHeader>
                   <CardContent className="grid gap-4">
-                    <FormField
-                      control={form.control}
-                      name="territoryId"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Territory</FormLabel>
-                          <FormControl>
-                            <ComboboxCreate
-                              options={territoryOptions}
-                              value={field.value}
-                              onValueChange={field.onChange}
-                              onCreate={(name) => {
-                                createTerritoryMutation.mutate(name, {
-                                  onSuccess: (newT) => {
-                                    if (newT) field.onChange(newT.id);
-                                  }
-                                });
-                              }}
-                              placeholder="Select territory"
-                              isCreating={createTerritoryMutation.isPending}
-                              disabled={isTerritoriesLoading}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={form.control}
-                      name="placeId"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Place</FormLabel>
-                          <FormControl>
-                            <ComboboxCreate
-                              options={placeOptions}
-                              value={field.value}
-                              onValueChange={field.onChange}
-                              onCreate={(name) => {
-                                createPlaceMutation.mutate(name, {
-                                  onSuccess: (newP) => {
-                                    if (newP) field.onChange(newP.id);
-                                  }
-                                });
-                              }}
-                              placeholder="Select place"
-                              isCreating={createPlaceMutation.isPending}
-                              disabled={isPlacesLoading}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={form.control}
-                      name="address"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Full Address</FormLabel>
-                          <FormControl>
-                            <Textarea
-                              placeholder="Street address, city, postal code..."
-                              className="min-h-[80px] resize-none"
-                              {...field}
-                              disabled={isMutationLoading}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <FormField
+                        control={form.control}
+                        name="economicalNumbers.capital"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Capital</FormLabel>
+                            <FormControl>
+                              <Input
+                                type="number"
+                                placeholder="0"
+                                {...field}
+                                value={field.value ?? ""}
+                                onChange={(e) =>
+                                  field.onChange(
+                                    e.target.value === ""
+                                      ? null
+                                      : Number(e.target.value)
+                                  )
+                                }
+                                disabled={isMutationLoading}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="economicalNumbers.turnover"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Turnover</FormLabel>
+                            <FormControl>
+                              <Input
+                                type="number"
+                                placeholder="0"
+                                {...field}
+                                value={field.value ?? ""}
+                                onChange={(e) =>
+                                  field.onChange(
+                                    e.target.value === ""
+                                      ? null
+                                      : Number(e.target.value)
+                                  )
+                                }
+                                disabled={isMutationLoading}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="economicalNumbers.financial_result"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Financial Result</FormLabel>
+                            <FormControl>
+                              <Input
+                                type="number"
+                                placeholder="0"
+                                {...field}
+                                value={field.value ?? ""}
+                                onChange={(e) =>
+                                  field.onChange(
+                                    e.target.value === ""
+                                      ? null
+                                      : Number(e.target.value)
+                                  )
+                                }
+                                disabled={isMutationLoading}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="economicalNumbers.operating_profit"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Operating Profit</FormLabel>
+                            <FormControl>
+                              <Input
+                                type="number"
+                                placeholder="0"
+                                {...field}
+                                value={field.value ?? ""}
+                                onChange={(e) =>
+                                  field.onChange(
+                                    e.target.value === ""
+                                      ? null
+                                      : Number(e.target.value)
+                                  )
+                                }
+                                disabled={isMutationLoading}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="economicalNumbers.number_of_employees"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Employees</FormLabel>
+                            <FormControl>
+                              <Input
+                                type="number"
+                                placeholder="0"
+                                {...field}
+                                value={field.value ?? ""}
+                                onChange={(e) =>
+                                  field.onChange(
+                                    e.target.value === ""
+                                      ? null
+                                      : Number(e.target.value)
+                                  )
+                                }
+                                disabled={isMutationLoading}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="economicalNumbers.margin"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Margin</FormLabel>
+                            <FormControl>
+                              <Input
+                                type="number"
+                                placeholder="0"
+                                {...field}
+                                value={field.value ?? ""}
+                                onChange={(e) =>
+                                  field.onChange(
+                                    e.target.value === ""
+                                      ? null
+                                      : Number(e.target.value)
+                                  )
+                                }
+                                disabled={isMutationLoading}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
                   </CardContent>
                 </Card>
               </div>

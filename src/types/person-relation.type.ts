@@ -111,6 +111,15 @@ export type UpdatePersonDto = Partial<CreatePersonDto>;
 // Company Types
 // ============================================================================
 
+export type EconomicalNumbers = {
+  capital?: string | number | null;
+  financial_result?: string | number | null;
+  margin?: string | number | null;
+  number_of_employees?: string | number | null;
+  operating_profit?: string | number | null;
+  turnover?: string | number | null;
+};
+
 export type Company = {
   id: string;
   idNumber?: string;
@@ -138,7 +147,7 @@ export type Company = {
   city?: string;
   sirenCode?: string;
   legalStatus?: string;
-  economicalNumbers?: string;
+  economicalNumbers?: EconomicalNumbers;
   nafCode?: string;
   activity?: string;
 };
@@ -188,6 +197,14 @@ export type CreateCompanyDto = {
   establishmentDate?: Date;
   authorizedRepresentativeId?: string;
   socials?: Socials;
+  implantation?: string;
+  zipCode?: string;
+  city?: string;
+  sirenCode?: string;
+  legalStatus?: string;
+  economicalNumbers?: EconomicalNumbers;
+  nafCode?: string;
+  activity?: string;
 };
 
 export type UpdateCompanyDto = Partial<CreateCompanyDto>;

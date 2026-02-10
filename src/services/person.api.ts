@@ -12,7 +12,9 @@ import {
   Timestamp,
   updateDoc,
   writeBatch,
-  limit
+  limit,
+  orderBy,
+  getCountFromServer
 } from "firebase/firestore";
 import {
   Person,
@@ -414,7 +416,12 @@ export class PersonService {
     };
   }
 
-  static async getAll(): Promise<PersonWithDetails[]> {
+  static async getAll(limitCount?: number): Promise<PersonWithDetails[]> {
+    let q = query(PersonService.colRef, orderBy("createdAt", "desc"));
+    if (limitCount) {
+      q = query(q, limit(limitCount));
+    }
+
     const [
       personsSnap,
       territoriesSnap,
@@ -422,7 +429,7 @@ export class PersonService {
       associationsSnap,
       associationPersonSnap
     ] = await Promise.all([
-      getDocs(PersonService.colRef),
+      getDocs(q),
       getDocs(collection(db, "territories")),
       getDocs(collection(db, "categories")),
       getDocs(collection(db, "associations")),
@@ -497,6 +504,200 @@ export class PersonService {
         associations: personAssociations
       };
     });
+  }
+
+  static async getAllWithPaginated(filters?: {
+    categoryIds?: string[];
+    territoryIds?: string[];
+    search?: string;
+    page?: number;
+    pageSize?: number;
+  }): Promise<{ data: PersonWithDetails[]; total: number }> {
+    let q = query(PersonService.colRef);
+
+    if (filters?.categoryIds && filters.categoryIds.length > 0) {
+      q = query(q, where("categoryId", "in", filters.categoryIds));
+    }
+
+    if (filters?.territoryIds && filters.territoryIds.length > 0) {
+      q = query(q, where("territoryId", "in", filters.territoryIds));
+    }
+
+    // Get total count matching category/territory filters
+    const countSnapshot = await getCountFromServer(q);
+    let total = countSnapshot.data().count;
+
+    let persons: Person[] = [];
+
+    if (filters?.search) {
+      // If searching, we fetch all relevant documents to filter by 'name' in-memory
+      const querySnapshot = await getDocs(q);
+      const allPersons = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...(doc.data() as Omit<Person, "id">)
+      }));
+
+      const searchLower = filters.search.toLowerCase();
+      const filteredPersons = allPersons.filter(
+        (p) =>
+          p.name.toLowerCase().includes(searchLower) ||
+          p.currentJobPosition?.toLowerCase().includes(searchLower)
+      );
+
+      total = filteredPersons.length;
+
+      if (filters.page !== undefined && filters.pageSize !== undefined) {
+        const start = filters.page * filters.pageSize;
+        persons = filteredPersons.slice(
+          start,
+          start + filters.pageSize
+        ) as Person[];
+      } else {
+        persons = filteredPersons as Person[];
+      }
+    } else {
+      // If no search, we use limit for optimization
+      if (filters?.page !== undefined && filters?.pageSize !== undefined) {
+        const limitCount = (filters.page + 1) * filters.pageSize;
+        const qWithLimit = query(q, limit(limitCount));
+        const querySnapshot = await getDocs(qWithLimit);
+        const allFetched = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...(doc.data() as Omit<Person, "id">)
+        }));
+
+        const start = filters.page * filters.pageSize;
+        persons = allFetched.slice(start, start + filters.pageSize) as Person[];
+      } else {
+        const querySnapshot = await getDocs(q);
+        persons = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...(doc.data() as Omit<Person, "id">)
+        })) as Person[];
+      }
+    }
+
+    if (persons.length === 0) return { data: [], total };
+
+    // 1. Collect unique IDs for joins
+    const categoryIds = [
+      ...new Set(persons.map((p) => p.categoryId).filter(Boolean))
+    ] as string[];
+    const territoryIds = [
+      ...new Set(persons.map((p) => p.territoryId).filter(Boolean))
+    ] as string[];
+    const personIds = persons.map((p) => p.id);
+
+    // 2. Fetch related data in parallel
+    const associationPersonChunks = [];
+    for (let i = 0; i < personIds.length; i += 30) {
+      associationPersonChunks.push(personIds.slice(i, i + 30));
+    }
+
+    const [categoriesSnap, territoriesSnap, ...associationPersonSnaps] =
+      await Promise.all([
+        categoryIds.length > 0
+          ? Promise.all(
+              categoryIds.map((id) => getDoc(doc(db, "categories", id)))
+            )
+          : Promise.resolve([]),
+        territoryIds.length > 0
+          ? Promise.all(
+              territoryIds.map((id) => getDoc(doc(db, "territories", id)))
+            )
+          : Promise.resolve([]),
+        ...associationPersonChunks.map((chunk) =>
+          getDocs(
+            query(
+              collection(db, "association_person"),
+              where("personId", "in", chunk)
+            )
+          )
+        )
+      ]);
+
+    // 3. Create lookup maps
+    const categoryMap = new Map(
+      categoriesSnap
+        .filter((s) => s.exists())
+        .map((s) => [s.id, { id: s.id, name: s.data()?.name }])
+    );
+    const territoryMap = new Map(
+      territoriesSnap
+        .filter((s) => s.exists())
+        .map((s) => [s.id, { id: s.id, name: s.data()?.name }])
+    );
+
+    const associationPersonList = associationPersonSnaps.flatMap((snap) =>
+      snap.docs.map((doc) => ({
+        id: doc.id,
+        ...(doc.data() as {
+          personId: string;
+          associationId: string;
+          startDate?: Timestamp;
+          endDate?: Timestamp;
+        })
+      }))
+    );
+
+    const associationIds = [
+      ...new Set(associationPersonList.map((ap) => ap.associationId))
+    ];
+    const associationsSnap =
+      associationIds.length > 0
+        ? await Promise.all(
+            associationIds.map((id) => getDoc(doc(db, "associations", id)))
+          )
+        : [];
+
+    const associationsMap = new Map(
+      associationsSnap
+        .filter((s) => s.exists())
+        .map((doc) => [
+          doc.id,
+          {
+            id: doc.id,
+            ...(doc.data() as { name: string; profilePicture?: string })
+          }
+        ])
+    );
+
+    // 4. Map persons with their joined data
+    const dataWithDetails = persons.map((person) => {
+      const territory = person.territoryId
+        ? territoryMap.get(person.territoryId) || null
+        : null;
+
+      const category = person.categoryId
+        ? categoryMap.get(person.categoryId) || null
+        : null;
+
+      const personAssociations = associationPersonList
+        .filter((ap) => ap.personId === person.id)
+        .map((ap) => {
+          const assoc = associationsMap.get(ap.associationId);
+          return {
+            id: ap.id,
+            associationId: ap.associationId,
+            name: assoc?.name || "Unknown Association",
+            profilePicture: assoc?.profilePicture,
+            startDate: ap.startDate,
+            endDate: ap.endDate
+          };
+        });
+
+      return {
+        ...person,
+        territory,
+        category,
+        associations: personAssociations
+      } as PersonWithDetails;
+    });
+
+    return {
+      data: dataWithDetails,
+      total
+    };
   }
 
   static async getById(id: string): Promise<Person | null> {

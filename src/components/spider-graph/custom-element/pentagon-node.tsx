@@ -1,20 +1,21 @@
 import type { Node, NodeProps } from "@xyflow/react";
 import BaseSpiderNode from "./base-spider-node";
+import PentagonIcon from "./nodes/icons/pentagon-icon";
 
-type CircleBlueNode = Node<{ label: string }, "circleBlueNode">;
+type PentagonNode = Node<{ label: string }, "pentagonNode">;
 
-export default function CircleBlueNode({
+export default function PentagonNode({
   data,
   positionAbsoluteY,
   selected
-}: NodeProps<CircleBlueNode>) {
+}: NodeProps<PentagonNode>) {
   return (
     <BaseSpiderNode
       label={data.label}
       positionAbsoluteY={positionAbsoluteY}
       selected={selected}
     >
-      <div className="bg-secondary w-4 h-4 rounded-full border-[1.2px] border-white shadow-sm shadow-black/35" />
+      <PentagonIcon />
     </BaseSpiderNode>
   );
 }

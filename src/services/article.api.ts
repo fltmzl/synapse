@@ -61,6 +61,14 @@ export class ArticleService {
     return Array.from(keywords);
   }
 
+  static convertToSlug(text: string) {
+    return text
+      .toLowerCase()
+      .trim()
+      .replace(/[\s_-]+/g, "-")
+      .replace(/^-+|-+$/g, "");
+  }
+
   static async getAll(options: ArticleQueryOptions = {}) {
     const {
       sectionCategory,
@@ -78,7 +86,12 @@ export class ArticleService {
     }
 
     if (category) {
-      constraints.push(where("category", "==", category));
+      constraints.push(
+        where("category", "in", [
+          ArticleService.convertToSlug(category),
+          category
+        ])
+      );
     }
 
     if (isPublished !== undefined) {

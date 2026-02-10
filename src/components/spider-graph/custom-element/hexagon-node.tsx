@@ -1,20 +1,21 @@
 import type { Node, NodeProps } from "@xyflow/react";
 import BaseSpiderNode from "./base-spider-node";
+import HexagonIcon from "./nodes/icons/hexagon-icon";
 
-type CircleBlueNode = Node<{ label: string }, "circleBlueNode">;
+type HexagonNode = Node<{ label: string }, "hexagonNode">;
 
-export default function CircleBlueNode({
+export default function HexagonNode({
   data,
   positionAbsoluteY,
   selected
-}: NodeProps<CircleBlueNode>) {
+}: NodeProps<HexagonNode>) {
   return (
     <BaseSpiderNode
       label={data.label}
       positionAbsoluteY={positionAbsoluteY}
       selected={selected}
     >
-      <div className="bg-secondary w-4 h-4 rounded-full border-[1.2px] border-white shadow-sm shadow-black/35" />
+      <HexagonIcon />
     </BaseSpiderNode>
   );
 }

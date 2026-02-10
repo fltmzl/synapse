@@ -47,11 +47,56 @@ export default function EditCompanyPage() {
     description: company.description || "",
     profilePicture: company.profilePicture || "",
     address: company.address || "",
+    zipCode: company.zipCode || "",
+    city: company.city || "",
+    implantation: company.implantation || "",
     categoryId: company.categoryId || "",
     placeId: company.placeId || "",
     territoryId: company.territoryId || "",
     establishmentDate:
       company.establishmentDate?.toDate?.()?.toISOString()?.split("T")[0] || "",
+    sirenCode: company.sirenCode || "",
+    legalStatus: company.legalStatus || "",
+    nafCode: company.nafCode || "",
+    activity: company.activity || "",
+    economicalNumbers: {
+      capital:
+        company.economicalNumbers?.capital !== undefined &&
+        company.economicalNumbers?.capital !== null &&
+        company.economicalNumbers?.capital !== ""
+          ? Number(company.economicalNumbers.capital)
+          : null,
+      financial_result:
+        company.economicalNumbers?.financial_result !== undefined &&
+        company.economicalNumbers?.financial_result !== null &&
+        company.economicalNumbers?.financial_result !== ""
+          ? Number(company.economicalNumbers.financial_result)
+          : null,
+      margin:
+        company.economicalNumbers?.margin !== undefined &&
+        company.economicalNumbers?.margin !== null &&
+        company.economicalNumbers?.margin !== ""
+          ? Number(company.economicalNumbers.margin)
+          : null,
+      number_of_employees:
+        company.economicalNumbers?.number_of_employees !== undefined &&
+        company.economicalNumbers?.number_of_employees !== null &&
+        company.economicalNumbers?.number_of_employees !== ""
+          ? Number(company.economicalNumbers.number_of_employees)
+          : null,
+      operating_profit:
+        company.economicalNumbers?.operating_profit !== undefined &&
+        company.economicalNumbers?.operating_profit !== null &&
+        company.economicalNumbers?.operating_profit !== ""
+          ? Number(company.economicalNumbers.operating_profit)
+          : null,
+      turnover:
+        company.economicalNumbers?.turnover !== undefined &&
+        company.economicalNumbers?.turnover !== null &&
+        company.economicalNumbers?.turnover !== ""
+          ? Number(company.economicalNumbers.turnover)
+          : null
+    },
     socials: {
       whatsapp: company.socials?.whatsapp || "",
       linkedin: company.socials?.linkedin || "",

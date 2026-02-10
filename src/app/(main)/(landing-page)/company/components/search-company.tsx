@@ -7,6 +7,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { SearchIcon, X } from "lucide-react";
 import { parseAsArrayOf, parseAsString, useQueryState } from "nuqs";
 
+import useCategoriesDropdown from "@/queries/use-categories-dropdown";
+import useTerritoriesDropdown from "@/queries/use-territories-dropdown";
+
 export default function SearchCompany({
   onSearch
 }: {
@@ -14,37 +17,15 @@ export default function SearchCompany({
 }) {
   const [searchValue, setSearchValue] = useQueryState("search");
 
-  const filters = {
-    territoire: [
-      { label: "Martinique", value: "Martinique" },
-      { label: "Guadeloupe", value: "Guadeloupe" },
-      { label: "Réunion", value: "Réunion" },
-      { label: "Mayotte", value: "Mayotte" },
-      { label: "Guyane", value: "Guyane" }
-    ],
-    sector: [
-      { label: "Government", value: "Government" },
-      { label: "Business Leaders", value: "Business Leaders" }
-    ],
-    affiliation: [
-      { label: "Economy", value: "Economy" },
-      { label: "Government", value: "Government" },
-      { label: "Health", value: "Health" },
-      { label: "Education", value: "Education" },
-      { label: "Environment", value: "Environment" }
-    ]
-  };
+  const { data: categoriesItems } = useCategoriesDropdown();
+  const { data: territoriesItems } = useTerritoriesDropdown();
 
-  const [territoire, setTerritoire] = useQueryState(
-    "territoire",
+  const [territory, setTerritory] = useQueryState(
+    "territory",
     parseAsArrayOf(parseAsString).withDefault([])
   );
-  const [sector, setSector] = useQueryState(
-    "sector",
-    parseAsArrayOf(parseAsString).withDefault([])
-  );
-  const [affiliation, setAffiliation] = useQueryState(
-    "affiliation",
+  const [category, setCategory] = useQueryState(
+    "category",
     parseAsArrayOf(parseAsString).withDefault([])
   );
 
@@ -80,30 +61,20 @@ export default function SearchCompany({
               buttonClassName="py-2 px-3 w-fit"
               buttonTextClassName="min-w-auto"
               buttonLabel="Territoire"
-              setValue={setTerritoire}
-              value={territoire}
+              setValue={setTerritory}
+              value={territory}
               placeholder="Search location"
-              listItems={filters.territoire}
+              listItems={territoriesItems}
             />
             <FilterMultipleWithSearch
               buttonSize="sm"
               buttonClassName="py-2 px-3 w-fit"
               buttonTextClassName="min-w-auto"
-              buttonLabel="Secteur"
-              setValue={setSector}
-              value={sector}
-              placeholder="Search role"
-              listItems={filters.sector}
-            />
-            <FilterMultipleWithSearch
-              buttonSize="sm"
-              buttonClassName="py-2 px-3 w-fit"
-              buttonTextClassName="min-w-auto"
-              buttonLabel="Affiliation"
-              setValue={setAffiliation}
-              value={affiliation}
+              buttonLabel="Catégorie"
+              setValue={setCategory}
+              value={category}
               placeholder="Search category"
-              listItems={filters.affiliation}
+              listItems={categoriesItems}
             />
           </div>
         </div>

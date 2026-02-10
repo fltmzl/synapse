@@ -21,7 +21,7 @@ export default function LatestPublicationPage() {
         description="Create and manage latest publications"
         actions={
           <Button size="sm" asChild>
-            <Link href="/dashboard/admin-panel/latest-publication/new">
+            <Link href="/dashboard/admin-panel/article/latest-publication/new">
               <Plus className="size-4 mr-2" />
               New Publication
             </Link>

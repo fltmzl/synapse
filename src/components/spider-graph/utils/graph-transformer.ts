@@ -66,14 +66,21 @@ export interface Neo4jData {
 }
 
 // React Flow Types
-interface CustomNodeData {
+export interface CustomNodeData {
+  label?: string;
   name: string;
   role?: string[] | null;
   category?: string;
   [key: string]: unknown;
 }
 
-type NodeType = "centerNode" | "circleBlueNode" | "default";
+type NodeType =
+  | "centerNode"
+  | "centerPersonNode"
+  | "circleBlueNode"
+  | "hexagonNode"
+  | "pentagonNode"
+  | "default";
 
 interface NodeStyle {
   padding: number;
@@ -91,7 +98,7 @@ interface EdgeStyle {
   stroke?: string;
 }
 
-interface TransformResult {
+export interface TransformResult {
   nodes: Node<CustomNodeData>[];
   edges: Edge[];
 }
@@ -202,12 +209,9 @@ function addEdge(
 //   return "default";
 // }
 function getNodeType(category: string): NodeType {
-  return "circleBlueNode";
-  if (category.toLowerCase() === "Company".toLowerCase()) return "centerNode";
-  if (category.toLowerCase() === "Division".toLowerCase())
-    return "circleBlueNode";
-  if (category.toLowerCase() === "Person".toLowerCase())
-    return "circleBlueNode";
+  if (category.toLowerCase() === "PERSON".toLowerCase()) return "centerNode";
+  if (category.toLowerCase() === "ORGANIZATION".toLowerCase())
+    return "pentagonNode";
   return "circleBlueNode";
 }
 

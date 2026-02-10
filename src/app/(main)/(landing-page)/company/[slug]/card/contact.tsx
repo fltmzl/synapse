@@ -1,15 +1,14 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  ExternalLink,
-  Globe,
-  MailIcon,
-  MapPin,
-  PhoneIcon
-} from "lucide-react";
+import { ExternalLink, Globe, MailIcon, MapPin, PhoneIcon } from "lucide-react";
 import Link from "next/link";
+import { CompanyWithDetails } from "@/types/person-relation.type";
 
-export default function ContactCard() {
+interface ContactCardProps {
+  company: CompanyWithDetails;
+}
+
+export default function ContactCard({ company }: ContactCardProps) {
   return (
     <Card className="rounded-[12px] gap-0 py-0 w-full lg:min-w-[836px]">
       <CardHeader className="lg:py-5 lg:px-6 p-5">
@@ -28,7 +27,7 @@ export default function ContactCard() {
                 Phone number
               </span>
               <span className="text-base leading-[150%] tracking-[-0.01em] ">
-                +596 596 50 00 00{" "}
+                {company.phoneNumber || "N/A"}
               </span>
             </div>
           </div>
@@ -41,7 +40,7 @@ export default function ContactCard() {
                 Email
               </span>
               <span className="text-base leading-[150%] tracking-[-0.01em] ">
-                contact@gbh.fr{" "}
+                {company.email || "N/A"}
               </span>
             </div>
           </div>
@@ -53,14 +52,20 @@ export default function ContactCard() {
               <span className="text-sm leading-[140%] tracking-[-0.01em] text-muted-foreground">
                 Website
               </span>
-              <Link
-                href="https://www.gbh.fr/"
-                target="_blank"
-                className="text-base flex items-center gap-1 leading-[150%] tracking-[-0.01em] hover:text-primary"
-              >
-                https://www.gbh.fr/
-                <ExternalLink className="size-[18px] text-primary" />
-              </Link>
+              {company.website ? (
+                <Link
+                  href={company.website}
+                  target="_blank"
+                  className="text-base flex items-center gap-1 leading-[150%] tracking-[-0.01em] hover:text-primary"
+                >
+                  {company.website}
+                  <ExternalLink className="size-[18px] text-primary" />
+                </Link>
+              ) : (
+                <span className="text-base leading-[150%] tracking-[-0.01em] ">
+                  N/A
+                </span>
+              )}
             </div>
           </div>
         </div>
@@ -77,18 +82,20 @@ export default function ContactCard() {
                 </span>
                 <div className="flex justify-between">
                   <span className="text-base leading-[150%] tracking-[-0.01em] ">
-                    Zone de la Lézarde, 97232 Le Lamentin, Martinique, France
+                    {company.address || "N/A"}
                   </span>
                 </div>
               </div>
             </div>
-            <Button
-              variant="outline"
-              className="font-normal px-3 py-[10px] text-sm leading-[140%] tracking-[-0.01em]"
-            >
-              <MapPin className="size-5 text-muted-foreground" />
-              Localiser{" "}
-            </Button>
+            {company.address && (
+              <Button
+                variant="outline"
+                className="font-normal px-3 py-[10px] text-sm leading-[140%] tracking-[-0.01em]"
+              >
+                <MapPin className="size-5 text-muted-foreground" />
+                Localiser{" "}
+              </Button>
+            )}
           </div>
         </div>
       </CardContent>

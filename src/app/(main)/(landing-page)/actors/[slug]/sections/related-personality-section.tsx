@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { directory } from "@/data/directory-data";
 import { BuildingIcon } from "@/icons/building-icon";
 import { MapPin, User } from "lucide-react";
 import { FacebookFillIcon } from "@/icons/facebook-fill-icon";
@@ -14,8 +13,10 @@ import { ArrowRightIcon } from "@/icons/arrow-right-icon";
 import { DirectoryItem } from "@/types/directory.type";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import usePersons from "@/queries/use-persons";
 
 export default function RelatedPersonalitySection() {
+  const { data: persons, isLoading } = usePersons(6);
   const scrollRefDesktop = useRef<HTMLDivElement>(null);
   const scrollRefMobile = useRef<HTMLDivElement>(null);
 
@@ -38,6 +39,32 @@ export default function RelatedPersonalitySection() {
       behavior: "smooth"
     });
   };
+
+  if (isLoading) {
+    return (
+      <div className="h-64 flex items-center justify-center">Loading...</div>
+    );
+  }
+
+  const people: {
+    id: string;
+    name: string;
+    title: string;
+    affiliation: string;
+    territory: string;
+    category: string;
+    image: string;
+    slug: string;
+  }[] = (persons || []).map((person) => ({
+    id: person.id,
+    name: person.name,
+    title: person.currentJobPosition || "No Position",
+    affiliation: person.associations?.[0]?.name || "No Affiliation",
+    territory: person.territory?.name || "Unknown",
+    category: person.category?.name || "Uncategorized",
+    image: person.profilePicture || "/images/avatar-placeholder.jpg",
+    slug: person.slug
+  }));
 
   return (
     <section className="overflow-x-hidden bg-background">
@@ -70,7 +97,7 @@ export default function RelatedPersonalitySection() {
           ref={scrollRefDesktop}
           className="hidden lg:flex gap-4 overflow-x-auto hide-scrollbar scroll-smooth max-w-full px-6 3xl:max-w-7xl 3xl:mx-auto"
         >
-          {directory.slice(0, 6).map((item) => (
+          {people.map((item) => (
             <Card key={item.slug} item={item} />
           ))}
         </div>
@@ -87,10 +114,10 @@ export default function RelatedPersonalitySection() {
             ref={scrollRefMobile}
             className="flex gap-4 overflow-x-auto snap-x snap-mandatory hide-scrollbar scroll-smooth w-full"
           >
-            {Array.from({ length: Math.ceil(directory.length / 2) }).map(
+            {Array.from({ length: Math.ceil(people.length / 2) }).map(
               (_, index) => {
                 const start = index * 2;
-                const pair = directory.slice(start, start + 2);
+                const pair = people.slice(start, start + 2);
                 return (
                   <div
                     key={index}
@@ -127,7 +154,20 @@ export default function RelatedPersonalitySection() {
   );
 }
 
-function Card({ item }: { item: DirectoryItem }) {
+function Card({
+  item
+}: {
+  item: {
+    id: string;
+    name: string;
+    title: string;
+    affiliation: string;
+    territory: string;
+    category: string;
+    image: string;
+    slug: string;
+  };
+}) {
   return (
     <article className="relative border rounded-[12px] flex flex-col justify-between hover:shadow-sm transition-all bg-background min-w-full lg:min-w-[405px]">
       <Badge size="lg" variant="muted" className="absolute top-4 right-4">
@@ -138,19 +178,26 @@ function Card({ item }: { item: DirectoryItem }) {
         <div className="flex items-center justify-center w-16 h-16 bg-[#EEF6FF] rounded-full">
           <Avatar className="w-20 h-20">
             <AvatarImage
-              src={"http://placehold.jpw/100x100.png"}
-              alt={"actor"}
+              src={item.image}
+              alt={item.name}
+              className="object-cover"
             />
             <AvatarFallback>
-              <span className="text-xl">JD</span>
+              <span className="text-xl">
+                {item.name
+                  .split(" ")
+                  .map((w: string) => w[0])
+                  .join("")
+                  .slice(0, 2)}
+              </span>
             </AvatarFallback>
           </Avatar>
         </div>
         <div className="space-y-2">
           <div className="font-medium text-xl leading-[130%] tracking-[-0.02em]">
-            Marie Clarie
+            {item.name}
           </div>
-          <div className="text-base text-muted-foreground">CEO Synapse</div>
+          <div className="text-base text-muted-foreground">{item.title}</div>
         </div>
       </div>
 
@@ -163,7 +210,7 @@ function Card({ item }: { item: DirectoryItem }) {
             </span>
           </div>
           <span className="text-[var(--font-navy)] leading-[150%] text-base tracking-[-0.01em] font-medium">
-            Directeur Synapse
+            {item.affiliation}
           </span>
         </div>
 
@@ -184,14 +231,14 @@ function Card({ item }: { item: DirectoryItem }) {
       </div>
 
       <div className="border-t py-4 px-6 flex items-center justify-between bg-[var(--body)] rounded-b-[12px]">
-        <div className="flex items-center gap-3 text-muted-foreground">
+        {/* <div className="flex items-center gap-3 text-muted-foreground">      
           <FacebookFillIcon className="size-[18px]" />
           <InstagramIconFlat className="size-[18px]" />
           <LinkedinIconFlat className="size-[18px]" />
-        </div>
+        </div> */}
 
         <Link
-          href={`/explore-directory/${item.slug}`}
+          href={`/actors/${item.slug}`}
           className="flex items-center gap-[6px]"
         >
           <span className="text-secondary text-sm font-medium">

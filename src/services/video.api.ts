@@ -55,6 +55,14 @@ export class VideoService {
     return Array.from(keywords);
   }
 
+  static convertToSlug(text: string) {
+    return text
+      .toLowerCase()
+      .trim()
+      .replace(/[\s_-]+/g, "-")
+      .replace(/^-+|-+$/g, "");
+  }
+
   static async getAll(options?: {
     categories?: string[];
     territories?: string[];
@@ -70,8 +78,19 @@ export class VideoService {
       limit(options?.limit || 10)
     );
 
+    const convertedCategorySlugs =
+      options?.categories?.map((category) =>
+        VideoService.convertToSlug(category)
+      ) || [];
+
     if (options?.categories?.length) {
-      q = query(q, where("category", "in", options.categories));
+      q = query(
+        q,
+        where("category", "in", [
+          ...options.categories,
+          ...convertedCategorySlugs
+        ])
+      );
     }
 
     if (options?.lastVisible) {

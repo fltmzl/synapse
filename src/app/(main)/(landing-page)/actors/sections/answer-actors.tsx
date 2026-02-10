@@ -24,19 +24,25 @@ import { ArrowRightBoldIcon } from "@/icons/arrow-right-bold-icon";
 import { FilterIcon } from "@/icons/filter-icon";
 import { SortDescendingIcon } from "@/icons/sort-desc-icon";
 import useCategoriesDropdown from "@/queries/use-categories-dropdown";
-import usePersons from "@/queries/use-persons";
+import usePersonsPaginated from "@/queries/use-persons-paginated";
 import useTerritoriesDropdown from "@/queries/use-territories-dropdown";
+import { PersonWithDetails } from "@/types/person-relation.type";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
+import { Skeleton } from "@/components/ui/skeleton";
 import { X } from "lucide-react";
 import Link from "next/link";
-import { parseAsArrayOf, parseAsString, useQueryState } from "nuqs";
-import { useState } from "react";
+import {
+  parseAsArrayOf,
+  parseAsInteger,
+  parseAsString,
+  useQueryState
+} from "nuqs";
+import { useEffect, useState } from "react";
+import { useDebounce } from "@/hooks/use-debounce";
 
 export default function AnswerActors() {
   const { data: categoriesItems } = useCategoriesDropdown();
   const { data: territoriesItems } = useTerritoriesDropdown();
-  const { data: persons } = usePersons();
-
   const [territory, setTerritory] = useQueryState(
     "territory",
     parseAsArrayOf(parseAsString).withDefault([])
@@ -54,10 +60,33 @@ export default function AnswerActors() {
     parseAsString.withDefault("")
   );
 
+  const [page, setPage] = useQueryState("page", parseAsInteger.withDefault(0));
+  const [pageSize, setPageSize] = useQueryState(
+    "pageSize",
+    parseAsInteger.withDefault(DEFAULT_PAGE_SIZE)
+  );
+
+  const debouncedSearch = useDebounce(search, 1000);
+
+  useEffect(() => {
+    setPage(0);
+  }, [territory, category, debouncedSearch, setPage]);
+
+  const { data: result, isLoading } = usePersonsPaginated({
+    categoryIds: category,
+    territoryIds: territory,
+    search: debouncedSearch || undefined,
+    page,
+    pageSize
+  });
+
+  const persons = result?.data || [];
+  const totalRows = result?.total || 0;
+
   const removePrefix = (value: string) => value.split(":")[1] ?? value;
   const getLabelFromValue = (value: string) => removePrefix(value);
 
-  const people = (persons || []).map((person) => ({
+  const people = (persons as PersonWithDetails[]).map((person) => ({
     name: person.name,
     title: person.currentJobPosition || "No Position",
     affiliation: person.associations?.[0]?.name || "No Affiliation",
@@ -95,39 +124,14 @@ export default function AnswerActors() {
     setCategory(null);
   };
 
-  const filteredPeople = people.filter((p) => {
-    const matchSearch =
-      !search ||
-      p.name.toLowerCase().includes(search.toLowerCase()) ||
-      p.title.toLowerCase().includes(search.toLowerCase());
-
-    const matchTerritory =
-      territory.length === 0 || territory.some((t) => t === p.territory);
-
-    const matchCategory =
-      category.length === 0 ||
-      category.some((c) => {
-        return c === p.category;
-      });
-
-    return matchSearch && matchTerritory && matchCategory;
-  });
-
   const [openFilter, setOpenFilter] = useState(false);
   useAutoCloseDrawer(openFilter, () => setOpenFilter(false));
 
-  const [page, setPage] = useState(0);
-  const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
-  const paginatedPeople = filteredPeople.slice(
-    page * pageSize,
-    (page + 1) * pageSize
-  );
-
-  if (filteredPeople.length === 0 && !persons) {
-    return null; // Loading or no data
+  if (isLoading) {
+    return <AnswerActorsSkeleton />;
   }
 
-  if (filteredPeople.length === 0) {
+  if (totalRows === 0) {
     return <NoResult />;
   }
 
@@ -157,7 +161,7 @@ export default function AnswerActors() {
             <div className="flex items-center justify-between gap-3 flex-wrap">
               <div className="flex gap-1 items-center">
                 <p className="text-base text-muted-foreground">
-                  Showing {filteredPeople.length} results for{" "}
+                  Showing {totalRows} results for{" "}
                 </p>
                 <span className="text-base font-medium">
                   {search ? `"${search}"` : `"All"`}
@@ -304,7 +308,7 @@ export default function AnswerActors() {
 
             {/* LIST */}
             <div className="space-y-6 divide-y px-2">
-              {paginatedPeople.map((person, index) => {
+              {people.map((person, index) => {
                 return (
                   <article
                     key={index}
@@ -387,7 +391,7 @@ export default function AnswerActors() {
             </div>
 
             <Pagination
-              totalRows={filteredPeople.length}
+              totalRows={totalRows}
               page={page}
               pageSize={pageSize}
               onPageChange={setPage}
@@ -397,5 +401,96 @@ export default function AnswerActors() {
         </div>
       </div>
     </section>
+  );
+}
+
+function AnswerActorsSkeleton() {
+  return (
+    <section className="bg-background">
+      <div className="py-12 lg:py-20 px-6 max-w-7xl mx-auto">
+        <div className="flex flex-col lg:flex-row gap-6">
+          {/* SIDEBAR SKELETON */}
+          <aside className="hidden lg:block w-[336px] flex-shrink-0 border rounded-[12px] h-max sticky top-28 self-start">
+            <h3 className="font-semibold text-2xl leading-[110%] tracking-[-0.02em] p-5 border-b">
+              Recherche par
+            </h3>
+            <div className="p-5 space-y-8">
+              <div className="space-y-4">
+                <Skeleton className="h-6 w-24" />
+                <div className="space-y-2">
+                  {[...Array(5)].map((_, i) => (
+                    <div key={i} className="flex items-center gap-2">
+                      <Skeleton className="size-4 rounded" />
+                      <Skeleton className="h-4 w-32" />
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="space-y-4 border-t pt-8">
+                <Skeleton className="h-6 w-24" />
+                <div className="space-y-2">
+                  {[...Array(5)].map((_, i) => (
+                    <div key={i} className="flex items-center gap-2">
+                      <Skeleton className="size-4 rounded" />
+                      <Skeleton className="h-4 w-32" />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </aside>
+
+          <main className="flex-1">
+            <div className="flex items-center justify-between gap-3 flex-wrap">
+              <Skeleton className="h-6 w-48" />
+              <div className="hidden lg:flex items-center gap-3">
+                <Skeleton className="h-4 w-20" />
+                <Skeleton className="h-10 w-32 rounded-lg" />
+              </div>
+            </div>
+
+            <div className="space-y-6 divide-y px-2 mt-6">
+              {[...Array(3)].map((_, i) => (
+                <ActorCardSkeleton key={i} />
+              ))}
+            </div>
+          </main>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function ActorCardSkeleton() {
+  return (
+    <div className="w-full flex flex-col lg:flex-row justify-between py-8 border-b mb-0">
+      <div className="flex flex-col gap-4 w-full">
+        <div className="flex flex-col sm:flex-row md:items-start md:justify-between gap-4 w-full">
+          <div className="flex items-center gap-4">
+            <Skeleton className="h-16 w-16 rounded-full" />
+            <div className="flex flex-col gap-2">
+              <Skeleton className="h-6 w-32" />
+              <Skeleton className="h-4 w-24" />
+            </div>
+          </div>
+          <Skeleton className="h-10 w-24 rounded-lg hidden sm:block" />
+        </div>
+
+        <div className="flex flex-col md:flex-row md:gap-16 pl-0 md:pl-20 text-xs gap-6">
+          <div className="flex flex-col gap-2 lg:w-[193px] w-full">
+            <Skeleton className="h-3 w-20" />
+            <Skeleton className="h-4 w-32" />
+          </div>
+          <div className="flex flex-col gap-2 lg:w-[143px] w-full">
+            <Skeleton className="h-3 w-20" />
+            <Skeleton className="h-4 w-32" />
+          </div>
+          <div className="flex flex-col gap-2">
+            <Skeleton className="h-3 w-20" />
+            <Skeleton className="h-4 w-32" />
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }

@@ -13,5 +13,6 @@ export const QUERIES = {
   ASSOCIATIONS: "associations",
   POLITICAL_PARTIES: "political-parties",
   SPIDER_GRAPH: "spider-graph",
-  USERS: "users"
+  USERS: "users",
+  COMPANY_PERSONS: "company-persons"
 };
