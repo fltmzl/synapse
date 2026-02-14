@@ -76,6 +76,7 @@ export function AuthInitProvider({ children }: { children: ReactNode }) {
         setUser(firebaseUser);
         const userData = await getUserData(firebaseUser);
         setRole(userData?.role ?? null);
+        console.log("ROLE", userData?.role);
       } else {
         setUser(null);
         setRole(null);
