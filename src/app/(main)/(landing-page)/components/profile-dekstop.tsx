@@ -18,7 +18,7 @@ import useRole from "@/hooks/use-role";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 
 type Props = {
-  image: string;
+  image?: string;
   username: string;
 };
 

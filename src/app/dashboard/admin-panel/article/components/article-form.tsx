@@ -99,7 +99,7 @@ export function ArticleForm({
   const categoryOptions = React.useMemo(
     () =>
       categories.map((cat: Category) => ({
-        value: cat.name,
+        value: cat.id,
         label: cat.name
       })),
     [categories]

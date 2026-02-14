@@ -1,10 +1,13 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { QUERIES } from "@/constants/queries.constant";
 import { AssociationService } from "@/services/association.api";
+import { AssociationPersonService } from "@/services/association-person.api";
 import { toast } from "sonner";
 import {
   CreateAssociationDto,
-  UpdateAssociationDto
+  UpdateAssociationDto,
+  AssociationDataFromExcelDto,
+  AssociationPersonRelationsFromExcelDto
 } from "@/types/person-relation.type";
 
 export default function useAssociationMutation() {
@@ -44,9 +47,38 @@ export default function useAssociationMutation() {
     }
   });
 
+  const createManyFromExcelMutation = useMutation({
+    mutationFn: (data: AssociationDataFromExcelDto[]) =>
+      AssociationService.createManyFromExcel(data),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: [QUERIES.ASSOCIATIONS] });
+      toast.success(data.message || "Associations imported successfully");
+    },
+    onError: (error: Error) => {
+      toast.error(error.message || "Failed to import associations");
+    }
+  });
+
+  const createManyRelationsFromExcelMutation = useMutation({
+    mutationFn: (data: AssociationPersonRelationsFromExcelDto[]) =>
+      AssociationPersonService.createManyRelationsFromExcel(data),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: [QUERIES.ASSOCIATIONS] });
+      queryClient.invalidateQueries({ queryKey: [QUERIES.PERSONS] });
+      toast.success(
+        data.message || "Association relations imported successfully"
+      );
+    },
+    onError: (error: Error) => {
+      toast.error(error.message || "Failed to import association relations");
+    }
+  });
+
   return {
     createAssociationMutation,
     updateAssociationMutation,
-    deleteAssociationMutation
+    deleteAssociationMutation,
+    createManyFromExcelMutation,
+    createManyRelationsFromExcelMutation
   };
 }

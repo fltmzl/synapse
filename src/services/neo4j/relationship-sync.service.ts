@@ -140,6 +140,8 @@ export class RelationshipNeo4jSyncService extends BaseNeo4jSyncService {
     personCode: string;
     partyCode: string;
     type: "SUPPORTS" | "OPPOSES";
+    title?: string;
+    isCurrent?: boolean;
   }): Promise<void> {
     const relationshipType =
       params.type === "SUPPORTS"
@@ -152,7 +154,12 @@ export class RelationshipNeo4jSyncService extends BaseNeo4jSyncService {
       "PoliticalEntity",
       params.partyCode,
       relationshipType,
-      { type: params.type }
+      {
+        type: params.type,
+        title: params.title || "",
+        label: params.title || "",
+        isCurrent: params.isCurrent ?? true
+      }
     );
   }
 
@@ -179,14 +186,20 @@ export class RelationshipNeo4jSyncService extends BaseNeo4jSyncService {
    */
   static async deleteAllRelationships(params: {
     personCode: string;
+    personId?: string;
     relationshipType: RelationshipType;
   }): Promise<void> {
     await this.executeQuery(
       `
-      MATCH (p:Person {code: $personCode})-[r:${params.relationshipType}]->()
+      MATCH (p:Person)
+      WHERE p.code = $personCode OR ($personId IS NOT NULL AND p.id = $personId)
+      MATCH (p)-[r:${params.relationshipType}]->()
       DELETE r
       `,
-      { personCode: params.personCode }
+      {
+        personCode: params.personCode,
+        personId: params.personId || null
+      }
     );
   }
 }

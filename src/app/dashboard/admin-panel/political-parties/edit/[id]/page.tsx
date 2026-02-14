@@ -8,6 +8,7 @@ import {
 import usePoliticalPartyMutation from "@/mutations/use-political-party-mutation";
 import usePoliticalParties from "@/queries/use-political-parties";
 import { Spinner } from "@/components/spinner";
+import { Timestamp } from "firebase/firestore";
 
 export default function EditPoliticalPartyPage() {
   const router = useRouter();
@@ -20,7 +21,17 @@ export default function EditPoliticalPartyPage() {
   const onSubmit = async (data: PoliticalPartyFormValues) => {
     await updatePoliticalPartyMutation.mutateAsync({
       id: id as string,
-      data
+      data: {
+        ...data,
+        dateOfCreation: data.dateOfCreation
+          ? new Date(data.dateOfCreation)
+          : undefined,
+        members: {
+          numberOfMembers: data.members?.numberOfMembers ?? 0,
+          numberOfCandidates: data.members?.numberOfCandidates ?? 0,
+          numberOfElected: data.members?.numberOfElected ?? 0
+        }
+      }
     });
     router.push("/dashboard/admin-panel/political-parties");
   };
@@ -41,11 +52,37 @@ export default function EditPoliticalPartyPage() {
     );
   }
 
+  // Convert Firestore Timestamp to date string for the form
+  const dateOfCreation = politicalParty.dateOfCreation
+    ? politicalParty.dateOfCreation instanceof Timestamp
+      ? politicalParty.dateOfCreation.toDate().toISOString().split("T")[0]
+      : ""
+    : "";
+
   return (
     <PoliticalPartyForm
       initialValues={{
         name: politicalParty.name,
-        profilePicture: politicalParty.profilePicture || ""
+        profilePicture: politicalParty.profilePicture || "",
+        description: politicalParty.description || "",
+        street: politicalParty.street || "",
+        zipCode: politicalParty.zipCode || "",
+        city: politicalParty.city || "",
+        implantation: politicalParty.implantation || "",
+        territoryId: politicalParty.territoryId || "",
+        phone: politicalParty.phone || "",
+        email: politicalParty.email || "",
+        website: politicalParty.website || "",
+        registrationCode: politicalParty.registrationCode || "",
+        dateOfCreation,
+        authorizedRepresentativeId:
+          politicalParty.authorizedRepresentativeId || "",
+        members: {
+          numberOfMembers: politicalParty.members?.numberOfMembers ?? null,
+          numberOfCandidates:
+            politicalParty.members?.numberOfCandidates ?? null,
+          numberOfElected: politicalParty.members?.numberOfElected ?? null
+        }
       }}
       onSubmit={onSubmit}
       isMutationLoading={updatePoliticalPartyMutation.isPending}

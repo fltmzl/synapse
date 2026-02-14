@@ -120,22 +120,22 @@ export function VideoForm({
 
   const categoryOptions = React.useMemo(
     () =>
-      categories.map((cat: Category) => ({ value: cat.name, label: cat.name })),
+      categories.map((cat: Category) => ({ value: cat.id, label: cat.name })),
     [categories]
   );
 
   const territoryOptions = React.useMemo(
-    () => territories.map((t: Territory) => ({ value: t.name, label: t.name })),
+    () => territories.map((t: Territory) => ({ value: t.id, label: t.name })),
     [territories]
   );
 
   const placeOptions = React.useMemo(
-    () => places.map((p: Place) => ({ value: p.name, label: p.name })),
+    () => places.map((p: Place) => ({ value: p.id, label: p.name })),
     [places]
   );
 
   const personOptions = React.useMemo(
-    () => persons.map((p: Person) => ({ value: p.name, label: p.name })),
+    () => persons.map((p: Person) => ({ value: p.id, label: p.name })),
     [persons]
   );
 

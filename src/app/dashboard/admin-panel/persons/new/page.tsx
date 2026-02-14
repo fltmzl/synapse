@@ -49,7 +49,10 @@ export default function NewPersonPage() {
         startDate: a.startDate ? new Date(a.startDate) : undefined,
         endDate: a.endDate ? new Date(a.endDate) : undefined
       })),
-      politicalParties: data.politicalParties
+      politicalParties: data.politicalParties.map((p) => ({
+        ...p,
+        title: p.title || ""
+      }))
     };
 
     createPersonWithRelationsMutation.mutate(payload, {

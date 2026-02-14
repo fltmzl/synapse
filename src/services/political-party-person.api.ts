@@ -19,7 +19,7 @@ import {
 } from "@/types/person-relation.type";
 
 export class PoliticalPartyPersonService {
-  private static colName = "political_parties_person";
+  private static colName = "political_party_person";
   private static colRef = collection(db, PoliticalPartyPersonService.colName);
 
   static async create(payload: CreatePoliticalPartyPersonDto) {

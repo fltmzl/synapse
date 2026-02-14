@@ -72,85 +72,94 @@ export class VideoService {
     lastVisible?: QueryDocumentSnapshot;
     limit?: number;
   }) {
-    let q = query(
-      VideoService.colRef,
-      orderBy("createdAt", "desc"),
-      limit(options?.limit || 10)
-    );
-
-    const convertedCategorySlugs =
-      options?.categories?.map((category) =>
-        VideoService.convertToSlug(category)
-      ) || [];
-
-    if (options?.categories?.length) {
-      q = query(
-        q,
-        where("category", "in", [
-          ...options.categories,
-          ...convertedCategorySlugs
-        ])
+    try {
+      let q = query(
+        VideoService.colRef,
+        orderBy("createdAt", "desc"),
+        limit(options?.limit || 10)
       );
-    }
 
-    if (options?.lastVisible) {
-      q = query(q, startAfter(options.lastVisible));
-    }
+      const convertedCategorySlugs =
+        options?.categories?.map((category) =>
+          VideoService.convertToSlug(category)
+        ) || [];
 
-    // Note: Firestore only supports one 'in' or 'array-contains-any' clause per query.
-    // If we need multiple filters, we might need to filter client-side or use a different strategy.
-    // For now, let's prioritize category filter if present, otherwise handle others if possible or client-side.
-    // Since we can't chain multiple 'in' queries easily without advanced indexing or client-side filtering.
-
-    const querySnapshot = await getDocs(q);
-    let videos = querySnapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data()
-    })) as Video[];
-
-    // Client-side filtering for other fields to avoid Firestore limitations
-    if (options?.territories?.length) {
-      videos = videos.filter(
-        (video) =>
-          video.territory && options.territories?.includes(video.territory)
-      );
-    }
-
-    if (options?.persons?.length) {
-      videos = videos.filter(
-        (video) => video.person && options.persons?.includes(video.person)
-      );
-    }
-
-    if (options?.search) {
-      const searchLower = options.search.toLowerCase();
-      videos = videos.filter(
-        (video) =>
-          video.title.toLowerCase().includes(searchLower) ||
-          video.description.toLowerCase().includes(searchLower)
-      );
-    }
-
-    // Sorting (if not default)
-    if (options?.sortBy) {
-      // Implement client-side sorting if needed beyond default createdAt
-      // For now, we keep the default createdAt desc from Firestore query
-      // unless specific sorting logic is requested.
-      if (options.sortBy === "newest") {
-        videos.sort((a, b) => b.createdAt.toMillis() - a.createdAt.toMillis());
-      } else if (options.sortBy === "duration") {
-        // Assuming duration is not yet a field, skip or implement if available
-      } else if (options.sortBy === "popularity") {
-        videos.sort((a, b) => (b.viewCount || 0) - (a.viewCount || 0));
-      } else if (options.sortBy === "relevance") {
-        // Placeholder for relevance
+      if (options?.categories?.length) {
+        q = query(
+          q,
+          where("category", "in", [
+            ...options.categories,
+            ...convertedCategorySlugs
+          ])
+        );
       }
-    }
 
-    return {
-      data: videos,
-      lastVisible: querySnapshot.docs[querySnapshot.docs.length - 1]
-    };
+      if (options?.lastVisible) {
+        q = query(q, startAfter(options.lastVisible));
+      }
+
+      // Note: Firestore only supports one 'in' or 'array-contains-any' clause per query.
+      // If we need multiple filters, we might need to filter client-side or use a different strategy.
+      // For now, let's prioritize category filter if present, otherwise handle others if possible or client-side.
+      // Since we can't chain multiple 'in' queries easily without advanced indexing or client-side filtering.
+
+      const querySnapshot = await getDocs(q);
+      let videos = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data()
+      })) as Video[];
+
+      console.log("videos", videos);
+
+      // Client-side filtering for other fields to avoid Firestore limitations
+      if (options?.territories?.length) {
+        videos = videos.filter(
+          (video) =>
+            video.territory && options.territories?.includes(video.territory)
+        );
+      }
+
+      if (options?.persons?.length) {
+        videos = videos.filter(
+          (video) => video.person && options.persons?.includes(video.person)
+        );
+      }
+
+      if (options?.search) {
+        const searchLower = options.search.toLowerCase();
+        videos = videos.filter(
+          (video) =>
+            video.title.toLowerCase().includes(searchLower) ||
+            video.description.toLowerCase().includes(searchLower)
+        );
+      }
+
+      // Sorting (if not default)
+      if (options?.sortBy) {
+        // Implement client-side sorting if needed beyond default createdAt
+        // For now, we keep the default createdAt desc from Firestore query
+        // unless specific sorting logic is requested.
+        if (options.sortBy === "newest") {
+          videos.sort(
+            (a, b) => b.createdAt.toMillis() - a.createdAt.toMillis()
+          );
+        } else if (options.sortBy === "duration") {
+          // Assuming duration is not yet a field, skip or implement if available
+        } else if (options.sortBy === "popularity") {
+          videos.sort((a, b) => (b.viewCount || 0) - (a.viewCount || 0));
+        } else if (options.sortBy === "relevance") {
+          // Placeholder for relevance
+        }
+      }
+
+      return {
+        data: videos,
+        lastVisible: querySnapshot.docs[querySnapshot.docs.length - 1]
+      };
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
   }
 
   static async getById(id: string) {

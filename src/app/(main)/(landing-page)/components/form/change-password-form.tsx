@@ -17,7 +17,9 @@ import { EyeIcon } from "@/icons/eye-icon";
 import { EyeOffIcon } from "@/icons/eye-off-icon";
 import { passwordValidation } from "@/lib/common-validation";
 import { PasswordStrengthUtil } from "@/lib/password-strength";
+import { useChangePasswordMutation } from "@/mutations/use-auth-mutation";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { FirebaseError } from "firebase/app";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -35,6 +37,9 @@ export default function ChangePasswordForm({ onSuccess }: Props) {
   const [showPassword, setShowPassword] = useState(false);
   const [showRepeatPassword, setShowRepeatPassword] = useState(false);
   const { passwordStrength, setPasswordStrength } = usePasswordStrength();
+
+  const { mutate: changePassword, isPending: isLoading } =
+    useChangePasswordMutation();
 
   const formSchema = z
     .object({
@@ -62,9 +67,28 @@ export default function ChangePasswordForm({ onSuccess }: Props) {
     setPasswordStrength(PasswordStrengthUtil.getPasswordStrength(value));
   };
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log("register");
-    onSuccess?.();
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    changePassword(
+      {
+        currentPassword: values.currentPassword,
+        newPassword: values.password
+      },
+      {
+        onSuccess: () => {
+          form.reset();
+          onSuccess?.();
+        },
+        onError: (error) => {
+          if (error instanceof FirebaseError) {
+            if (error.code === "auth/invalid-credentials") {
+              form.setError("currentPassword", {
+                message: "Invalid Password"
+              });
+            }
+          }
+        }
+      }
+    );
   }
 
   return (
@@ -154,8 +178,13 @@ export default function ChangePasswordForm({ onSuccess }: Props) {
         />
 
         <div className="mt-6 lg:mt-[100px] text-end">
-          <Button size="sm" variant="default" type="submit">
-            Change password
+          <Button
+            size="sm"
+            variant="default"
+            type="submit"
+            disabled={isLoading}
+          >
+            {isLoading ? "Updating..." : "Change password"}
           </Button>
         </div>
       </form>

@@ -80,6 +80,8 @@ type NodeType =
   | "circleBlueNode"
   | "hexagonNode"
   | "pentagonNode"
+  | "roundedTriangleNode"
+  | "circleRedNode"
   | "default";
 
 interface NodeStyle {
@@ -119,7 +121,7 @@ export function transformNeo4jToReactFlow(
     // Process center node
     if (fields[0] && "labels" in fields[0]) {
       const centerNode = fields[0] as Neo4jNode;
-      addNode(nodesMap, centerNode);
+      addNode(nodesMap, centerNode, true);
     }
 
     // Process path if exists
@@ -150,14 +152,18 @@ export function transformNeo4jToReactFlow(
  */
 function addNode(
   nodesMap: Map<string, Node<CustomNodeData>>,
-  nodeData: Neo4jNode
+  nodeData: Neo4jNode,
+  isCenterNode?: boolean
 ): void {
   const nodeId = nodeData.properties.id || nodeData.elementId;
 
   if (!nodesMap.has(nodeId)) {
     const node: Node<CustomNodeData> = {
       id: nodeId,
-      type: getNodeType(nodeData.properties.category || "Company"),
+      type: getNodeType(
+        nodeData.properties.category || "Company",
+        isCenterNode
+      ),
       data: {
         label: nodeData.properties.name,
         name: nodeData.properties.name,
@@ -202,16 +208,22 @@ function addEdge(
 /**
  * Determine node type based on labels
  */
-// function getNodeType(labels: string[]): NodeType {
-//   if (labels.includes("Company")) return "centerNode";
-//   if (labels.includes("Division")) return "circleBlueNode";
-//   if (labels.includes("Person")) return "circleBlueNode";
-//   return "default";
-// }
-function getNodeType(category: string): NodeType {
-  if (category.toLowerCase() === "PERSON".toLowerCase()) return "centerNode";
+function getNodeType(
+  category: string,
+  isCenterNode: boolean = false
+): NodeType {
+  if (category.toLowerCase() === "PERSON".toLowerCase() && isCenterNode)
+    return "centerNode";
+  if (category.toLowerCase() === "PERSON".toLowerCase())
+    return "circleBlueNode";
   if (category.toLowerCase() === "ORGANIZATION".toLowerCase())
     return "pentagonNode";
+  if (category.toLowerCase() === "POLITICAL_PARTY".toLowerCase())
+    return "roundedTriangleNode";
+  if (category.toLowerCase() === "ASSOCIATION".toLowerCase())
+    return "circleRedNode";
+  if (category.toLowerCase() === "EDUCATION".toLowerCase())
+    return "hexagonNode";
   return "circleBlueNode";
 }
 

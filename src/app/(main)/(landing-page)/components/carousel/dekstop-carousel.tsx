@@ -9,6 +9,7 @@ import ProductionCard from "../card/production-card";
 import useArticles from "@/queries/use-articles";
 import NewsCardSkeleton from "../skeletons/news-card-skeleton";
 import { format } from "date-fns";
+import NoResult from "@/components/no-result";
 
 export default function DesktopCarousel() {
   const { data: productionData, isLoading } = useArticles({
@@ -106,36 +107,40 @@ export default function DesktopCarousel() {
       <div className="flex flex-col justify-between h-full items-start w-full max-w-xs shrink-0">
         <SectionTitle>Les dernières publications</SectionTitle>
 
-        <div className="flex flex-row justify-between w-full items-center">
-          {/* Arrows */}
-          <div className="flex items-center gap-4">
-            <button
-              onClick={() => scroll("left")}
-              className="bg-background rounded-full w-12 h-12 border hover:border-primary grid place-content-center"
-            >
-              <ArrowLeftIcon className="w-6 h-6" />
-            </button>
-            <button
-              onClick={() => scroll("right")}
-              className="bg-background rounded-full w-12 h-12 border hover:border-primary grid place-content-center"
-            >
-              <ArrowRightIcon className="w-6 h-6" />
-            </button>
-          </div>
+        {!isLoading && productionData && productionData.length > 0 && (
+          <div className="flex flex-row justify-between w-full items-center">
+            {/* Arrows */}
+            <div className="flex items-center gap-4">
+              <button
+                onClick={() => scroll("left")}
+                className="bg-background rounded-full w-12 h-12 border hover:border-primary grid place-content-center"
+              >
+                <ArrowLeftIcon className="w-6 h-6" />
+              </button>
+              <button
+                onClick={() => scroll("right")}
+                className="bg-background rounded-full w-12 h-12 border hover:border-primary grid place-content-center"
+              >
+                <ArrowRightIcon className="w-6 h-6" />
+              </button>
+            </div>
 
-          {/* Dots */}
-          <div className="flex items-center gap-2">
-            {Array.from({ length: dotCount }).map((_, i) => (
-              <span
-                key={i}
-                className={clsx(
-                  "h-1.5 rounded-full transition-all duration-300",
-                  activeIndex === i ? "bg-primary w-8 h-1.5" : "bg-border w-1.5"
-                )}
-              />
-            ))}
+            {/* Dots */}
+            <div className="flex items-center gap-2">
+              {Array.from({ length: dotCount }).map((_, i) => (
+                <span
+                  key={i}
+                  className={clsx(
+                    "h-1.5 rounded-full transition-all duration-300",
+                    activeIndex === i
+                      ? "bg-primary w-8 h-1.5"
+                      : "bg-border w-1.5"
+                  )}
+                />
+              ))}
+            </div>
           </div>
-        </div>
+        )}
       </div>
 
       {/* SCROLL AREA */}
@@ -148,7 +153,13 @@ export default function DesktopCarousel() {
           scrollSnapType: "x mandatory"
         }}
       >
-        {productionData && !isLoading ? (
+        {isLoading ? (
+          <>
+            {Array.from({ length: 5 }).map((_, i) => (
+              <NewsCardSkeleton key={i} />
+            ))}
+          </>
+        ) : productionData && productionData.length > 0 ? (
           <>
             {productionData.map((news, i) => (
               <ProductionCard
@@ -168,11 +179,12 @@ export default function DesktopCarousel() {
             ))}
           </>
         ) : (
-          <>
-            {Array.from({ length: 5 }).map((_, i) => (
-              <NewsCardSkeleton key={i} />
-            ))}
-          </>
+          <div className="w-full h-full flex items-center justify-center">
+            <NoResult
+              title="Aucune publication"
+              description="Nous n'avons trouvé aucune publication pour le moment."
+            />
+          </div>
         )}
 
         <div className="flex-shrink-0 w-[24px]" />

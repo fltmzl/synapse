@@ -10,13 +10,16 @@ import {
   serverTimestamp,
   Timestamp as FirestoreTimestamp,
   updateDoc,
-  where
+  where,
+  writeBatch
 } from "firebase/firestore";
 import {
   AssociationPerson,
+  AssociationPersonRelationsFromExcelDto,
   CreateAssociationPersonDto,
   UpdateAssociationPersonDto
 } from "@/types/person-relation.type";
+import { syncRelationship } from "@/lib/neo4j-sync-client";
 
 export class AssociationPersonService {
   private static colName = "association_person";
@@ -46,6 +49,73 @@ export class AssociationPersonService {
       ...payload,
       success: true,
       message: "Association-Person relation created successfully"
+    };
+  }
+
+  static async createManyRelationsFromExcel(
+    payload: AssociationPersonRelationsFromExcelDto[]
+  ) {
+    const BATCH_SIZE = 450;
+    const chunks = [];
+
+    for (let i = 0; i < payload.length; i += BATCH_SIZE) {
+      chunks.push(payload.slice(i, i + BATCH_SIZE));
+    }
+
+    let successCount = 0;
+    let failCount = 0;
+
+    for (const [index, chunk] of chunks.entries()) {
+      try {
+        const batch = writeBatch(db);
+
+        for (const item of chunk) {
+          const personCode = item.relation.person;
+          const associationCode = item.relation.organization;
+          const title = item.relation.nature_of_the_link;
+
+          const id = `${personCode}_${associationCode}`;
+          const docRef = doc(db, AssociationPersonService.colName, id);
+
+          batch.set(docRef, {
+            personId: personCode,
+            associationId: associationCode,
+            title: title,
+            createdAt: serverTimestamp(),
+            updatedAt: serverTimestamp()
+          });
+
+          // Sync individual relationship to Neo4j
+          await syncRelationship("create", "MEMBER_OF", {
+            personCode,
+            associationCode: associationCode,
+            title: title,
+            isCurrent: true
+          }).catch((err) =>
+            console.error("Neo4j association relationship sync failed:", err)
+          );
+        }
+
+        await batch.commit();
+        successCount += chunk.length;
+        console.log(
+          `Association Relation Batch ${index + 1}/${chunks.length} committed and synced successfully.`
+        );
+      } catch (error) {
+        console.error(
+          `Association Relation Batch ${index + 1}/${chunks.length} failed:`,
+          error
+        );
+        failCount += chunk.length;
+      }
+    }
+
+    return {
+      success: true,
+      totalProcessed: payload.length,
+      successCount,
+      failCount,
+      message: `Processed ${payload.length} association relations. Success: ${successCount}, Failed: ${failCount}`
     };
   }
 

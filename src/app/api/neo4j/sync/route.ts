@@ -140,6 +140,12 @@ async function handleCompanySync(action: string, data: any) {
 
 async function handleEducationSync(action: string, data: any) {
   switch (action) {
+    case "batch":
+      if (!Array.isArray(data))
+        throw new Error("Data must be an array for batch action");
+      await EducationNeo4jSyncService.syncEducationsBatch(data);
+      break;
+
     case "create":
     case "update":
       if (!data.code) throw new Error("Education code is required");
@@ -158,6 +164,12 @@ async function handleEducationSync(action: string, data: any) {
 
 async function handleAssociationSync(action: string, data: any) {
   switch (action) {
+    case "batch":
+      if (!Array.isArray(data))
+        throw new Error("Data must be an array for batch action");
+      await AssociationNeo4jSyncService.syncAssociationsBatch(data);
+      break;
+
     case "create":
     case "update":
       if (!data.code) throw new Error("Association code is required");
@@ -176,6 +188,12 @@ async function handleAssociationSync(action: string, data: any) {
 
 async function handlePoliticalPartySync(action: string, data: any) {
   switch (action) {
+    case "batch":
+      if (!Array.isArray(data))
+        throw new Error("Data must be an array for batch action");
+      await PoliticalPartyNeo4jSyncService.syncPoliticalPartiesBatch(data);
+      break;
+
     case "create":
     case "update":
       if (!data.code) throw new Error("Political party code is required");
@@ -248,6 +266,7 @@ async function handleRelationshipSync(action: string, data: any) {
     case "delete_all":
       await RelationshipNeo4jSyncService.deleteAllRelationships({
         personCode: params.personCode,
+        personId: params.personId,
         relationshipType: relationshipType as any
       });
       break;

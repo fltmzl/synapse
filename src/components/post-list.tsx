@@ -24,14 +24,14 @@ export default function PostList({
         variant === "news" && "divide-y divide-border"
       )}
     >
-      {data.slice(0, 5).map((post, i, arr) => {
+      {data.map((post, i, arr) => {
         const isFirst = i === 0;
         const isLast = i === arr.length - 1;
 
         return (
           <Link
             key={post.title + i}
-            href={variant === "news" ? `/news/${post.slug}` : "#"}
+            href={`/news/${post.slug}`}
             className="block group"
           >
             <article

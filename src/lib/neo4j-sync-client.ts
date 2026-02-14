@@ -171,7 +171,14 @@ export async function syncPoliticalParty(
       id: party.id,
       name: party.name,
       slug: party.slug,
-      profilePicture: party.profilePicture
+      profilePicture: party.profilePicture,
+      description: party.description,
+      email: party.email,
+      phone: party.phone,
+      website: party.website,
+      registrationCode: party.registrationCode,
+      implantation: party.implantation,
+      territoryId: party.territoryId
     }
   });
 }

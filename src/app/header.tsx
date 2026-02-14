@@ -65,7 +65,10 @@ export default function Header() {
 
             <div className="flex items-center gap-4">
               {isLoggedIn ? (
-                <ProfileDekstop image="/avatar.jpg" username="John Doe" />
+                <ProfileDekstop
+                  image={user?.photoURL || undefined}
+                  username={user?.displayName || ""}
+                />
               ) : (
                 <Button asChild className="hidden md:block py" size="md">
                   <Link href="/auth/login">Login</Link>

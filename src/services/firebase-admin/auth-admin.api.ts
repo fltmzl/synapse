@@ -37,10 +37,10 @@ export class AuthAdminService {
     await AuthService.assignRole(userRecord.uid, role);
 
     // 4. Send email to user to set password
-    await AuthAdminService.sendSetPasswordLink({
-      email,
-      name: `${firstName} ${lastName}`
-    });
+    // await AuthAdminService.sendSetPasswordLink({
+    //   email,
+    //   name: `${firstName} ${lastName}`
+    // });
 
     return userRecord;
   }

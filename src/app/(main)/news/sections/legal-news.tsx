@@ -26,6 +26,9 @@ import useInfiniteVideos from "@/queries/use-infinite-videos";
 import usePersons from "@/queries/use-persons";
 import useTerritories from "@/queries/use-territories";
 import NoResult from "@/components/no-result";
+import useCategoriesDropdown from "@/queries/use-categories-dropdown";
+import useTerritoriesDropdown from "@/queries/use-territories-dropdown";
+import usePersonsDropdown from "@/queries/use-persons-dropdown";
 
 export default function LegalNews() {
   const [query, setQuery] = useState("");
@@ -64,9 +67,9 @@ export default function LegalNews() {
 
   const videos = videosData?.pages.flatMap((page) => page.data) || [];
 
-  const { data: categoriesData } = useCategories();
-  const { data: territoriesData } = useTerritories();
-  const { data: personsData } = usePersons();
+  const { data: categoriesData } = useCategoriesDropdown();
+  const { data: territoriesData } = useTerritoriesDropdown();
+  const { data: personsData } = usePersonsDropdown();
 
   const {
     isOpen,
@@ -188,36 +191,21 @@ export default function LegalNews() {
                   setValue={setCategories}
                   value={categories}
                   placeholder="Entrez recherche…"
-                  listItems={
-                    categoriesData?.map((c) => ({
-                      label: c.name,
-                      value: c.name
-                    })) || []
-                  }
+                  listItems={categoriesData}
                 />
                 <FilterMultipleWithSearch
                   buttonLabel="Territoire"
                   setValue={setTerritories}
                   value={territories}
                   placeholder="Entrez recherche…"
-                  listItems={
-                    territoriesData?.map((t) => ({
-                      label: t.name,
-                      value: t.name
-                    })) || []
-                  }
+                  listItems={territoriesData}
                 />
                 <FilterMultipleWithSearch
                   buttonLabel="Personnalité"
                   setValue={setPersons}
                   value={persons}
                   placeholder="Entrez recherche…"
-                  listItems={
-                    personsData?.map((p) => ({
-                      label: p.name,
-                      value: p.name
-                    })) || []
-                  }
+                  listItems={personsData}
                 />
               </div>
 

@@ -130,7 +130,7 @@ export default function LoginForm() {
         </Button>
       </form>
 
-      <div className="flex items-center gap-4 my-6">
+      {/* <div className="flex items-center gap-4 my-6">
         <div className="border-b w-full"></div>
         <p className="text-center min-w-max">or continue with</p>
         <div className="border-b w-full"></div>
@@ -147,7 +147,7 @@ export default function LoginForm() {
           <GoogleIcon />
           Google account
         </Button>
-      </div>
+      </div> */}
 
       <p className="text-center mt-6">
         Vous n&rsquo;avez pas de compte?

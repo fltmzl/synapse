@@ -4,7 +4,9 @@ import { PoliticalPartyService } from "@/services/political-party.api";
 import { toast } from "sonner";
 import {
   CreatePoliticalPartyDto,
-  UpdatePoliticalPartyDto
+  UpdatePoliticalPartyDto,
+  PoliticalPartyDataFromExcelDto,
+  PoliticalPartyPersonRelationsFromExcelDto
 } from "@/types/person-relation.type";
 
 export default function usePoliticalPartyMutation() {
@@ -45,9 +47,34 @@ export default function usePoliticalPartyMutation() {
     }
   });
 
+  const createManyFromExcelMutation = useMutation({
+    mutationFn: (data: PoliticalPartyDataFromExcelDto[]) =>
+      PoliticalPartyService.createManyFromExcel(data),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: [QUERIES.POLITICAL_PARTIES] });
+      toast.success(data.message || "Political Parties imported successfully");
+    },
+    onError: (error: Error) => {
+      toast.error(error.message || "Failed to import political parties");
+    }
+  });
+
+  const createManyRelationsFromExcelMutation = useMutation({
+    mutationFn: (data: PoliticalPartyPersonRelationsFromExcelDto[]) =>
+      PoliticalPartyService.createManyRelationsFromExcel(data),
+    onSuccess: (data) => {
+      toast.success(data.message || "Relations imported successfully");
+    },
+    onError: (error: Error) => {
+      toast.error(error.message || "Failed to import relations");
+    }
+  });
+
   return {
     createPoliticalPartyMutation,
     updatePoliticalPartyMutation,
-    deletePoliticalPartyMutation
+    deletePoliticalPartyMutation,
+    createManyFromExcelMutation,
+    createManyRelationsFromExcelMutation
   };
 }

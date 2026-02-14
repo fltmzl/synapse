@@ -23,7 +23,8 @@ import {
   Video,
   Building2,
   GraduationCap,
-  Flag
+  Flag,
+  MonitorPlay
 } from "lucide-react";
 
 import {
@@ -95,6 +96,12 @@ const menuItems: NavMenu[] = [
     title: "Video Reels",
     url: "/dashboard/admin-panel/video-reels",
     icon: Video,
+    items: []
+  },
+  {
+    title: "Jumbotron",
+    url: "/dashboard/admin-panel/jumbotron",
+    icon: MonitorPlay,
     items: []
   },
   {

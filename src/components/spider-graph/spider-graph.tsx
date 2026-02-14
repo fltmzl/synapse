@@ -26,6 +26,8 @@ import FloatingEdge from "./custom-element/floating-edge";
 import { GroupNode } from "./custom-element/group-node";
 import HexagonNode from "./custom-element/hexagon-node";
 import PentagonNode from "./custom-element/pentagon-node";
+import RoundedTriangleNode from "./custom-element/rounded-triangle-node";
+import CircleRedNode from "./custom-element/circle-red-node";
 
 type Props = {
   initialNodes: Node[];
@@ -43,11 +45,13 @@ type Props = {
 };
 
 const nodeTypes = {
-  centerNode: CenterNode,
-  centerCompanyNode: CenterCompanyNode,
-  circleBlueNode: CircleBlueNode,
-  hexagonNode: HexagonNode,
-  pentagonNode: PentagonNode,
+  centerNode: CenterNode, // person center
+  centerCompanyNode: CenterCompanyNode, // company center
+  circleBlueNode: CircleBlueNode, // person
+  hexagonNode: HexagonNode, // education
+  pentagonNode: PentagonNode, // company
+  roundedTriangleNode: RoundedTriangleNode, // political party
+  circleRedNode: CircleRedNode, // association
   groupNode: GroupNode
 };
 

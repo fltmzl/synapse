@@ -8,6 +8,7 @@ import {
 import useAssociationMutation from "@/mutations/use-association-mutation";
 import useAssociations from "@/queries/use-associations";
 import { Spinner } from "@/components/spinner";
+import { Timestamp } from "firebase/firestore";
 
 export default function EditAssociationPage() {
   const router = useRouter();
@@ -20,7 +21,19 @@ export default function EditAssociationPage() {
   const onSubmit = async (data: AssociationFormValues) => {
     await updateAssociationMutation.mutateAsync({
       id: id as string,
-      data
+      data: {
+        ...data,
+        dateOfCreation: data.dateOfCreation
+          ? new Date(data.dateOfCreation)
+          : undefined,
+        action: {
+          numberOfEmployees: data.action?.numberOfEmployees ?? 0,
+          numberOfMembers: data.action?.numberOfMembers ?? 0,
+          budget: data.action?.budget ?? 0,
+          cause: data.action?.cause || "",
+          mainProject: data.action?.mainProject || ""
+        }
+      }
     });
     router.push("/dashboard/admin-panel/associations");
   };
@@ -41,12 +54,39 @@ export default function EditAssociationPage() {
     );
   }
 
+  // Convert Firestore Timestamp to date string for the form
+  const dateOfCreation = association.dateOfCreation
+    ? association.dateOfCreation instanceof Timestamp
+      ? association.dateOfCreation.toDate().toISOString().split("T")[0]
+      : ""
+    : "";
+
   return (
     <AssociationForm
       initialValues={{
         name: association.name,
         profilePicture: association.profilePicture || "",
-        link: association.link || ""
+        description: association.description || "",
+        activity: association.activity || "",
+        street: association.street || "",
+        zipCode: association.zipCode || "",
+        city: association.city || "",
+        implantation: association.implantation || "",
+        territoryId: association.territoryId || "",
+        phone: association.phone || "",
+        email: association.email || "",
+        website: association.website || "",
+        registrationCode: association.registrationCode || "",
+        dateOfCreation,
+        authorizedRepresentativeId:
+          association.authorizedRepresentativeId || "",
+        action: {
+          numberOfEmployees: association.action?.numberOfEmployees ?? null,
+          numberOfMembers: association.action?.numberOfMembers ?? null,
+          budget: association.action?.budget ?? null,
+          cause: association.action?.cause || "",
+          mainProject: association.action?.mainProject || ""
+        }
       }}
       onSubmit={onSubmit}
       isMutationLoading={updateAssociationMutation.isPending}

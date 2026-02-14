@@ -30,10 +30,6 @@ export default function ProfileDialog() {
     {
       slug: "security",
       title: "Sécurité"
-    },
-    {
-      slug: "billing",
-      title: "Offre et facturation"
     }
   ];
 
@@ -43,8 +39,6 @@ export default function ProfileDialog() {
         return "Mon Profil";
       case "security":
         return "Changer mon mot de passe";
-      case "billing":
-        return "Offre et facturation";
       default:
         return "";
     }
@@ -56,8 +50,6 @@ export default function ProfileDialog() {
         return <ProfileForm />;
       case "security":
         return <ChangePasswordForm />;
-      case "billing":
-        return <BillingForm />;
       default:
         return null;
     }

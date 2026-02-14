@@ -8,6 +8,7 @@ import {
 import useEducationMutation from "@/mutations/use-education-mutation";
 import useEducations from "@/queries/use-educations";
 import { Spinner } from "@/components/spinner";
+import { Timestamp } from "firebase/firestore";
 
 export default function EditEducationPage() {
   const router = useRouter();
@@ -20,7 +21,12 @@ export default function EditEducationPage() {
   const onSubmit = async (data: EducationFormValues) => {
     await updateEducationMutation.mutateAsync({
       id: id as string,
-      data
+      data: {
+        ...data,
+        dateOfCreation: data.dateOfCreation
+          ? new Date(data.dateOfCreation)
+          : undefined
+      }
     });
     router.push("/dashboard/admin-panel/educations");
   };
@@ -41,13 +47,30 @@ export default function EditEducationPage() {
     );
   }
 
+  // Convert Firestore Timestamp to date string for the form
+  const dateOfCreation = education.dateOfCreation
+    ? education.dateOfCreation instanceof Timestamp
+      ? education.dateOfCreation.toDate().toISOString().split("T")[0]
+      : ""
+    : "";
+
   return (
     <EducationForm
       initialValues={{
         name: education.name,
-        description: education.description || "",
         profilePicture: education.profilePicture || "",
-        link: education.link || ""
+        description: education.description || "",
+        street: education.street || "",
+        zipCode: education.zipCode || "",
+        city: education.city || "",
+        implantation: education.implantation || "",
+        territoryId: education.territoryId || "",
+        phone: education.phone || "",
+        email: education.email || "",
+        website: education.website || "",
+        registrationCode: education.registrationCode || "",
+        dateOfCreation,
+        authorizedRepresentativeId: education.authorizedRepresentativeId || ""
       }}
       onSubmit={onSubmit}
       isMutationLoading={updateEducationMutation.isPending}

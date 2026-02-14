@@ -6,7 +6,8 @@ import {
   doc,
   getDocs,
   serverTimestamp,
-  Timestamp
+  Timestamp,
+  setDoc
 } from "firebase/firestore";
 
 export type Territory = {
@@ -27,15 +28,22 @@ export class TerritoryService {
 
   static async create(payload: CreateTerritoryPayload) {
     const { name } = payload;
+    const id = name
+      .toLowerCase()
+      .trim()
+      .replace(/[^\w\s-]/g, "")
+      .replace(/[\s_-]+/g, "-")
+      .replace(/^-+|-+$/g, "");
 
-    const docRef = await addDoc(TerritoryService.colRef, {
+    const docRef = doc(db, TerritoryService.colName, id);
+    await setDoc(docRef, {
       name,
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp()
     });
 
     return {
-      id: docRef.id,
+      id,
       name,
       success: true,
       message: "Territory created successfully"

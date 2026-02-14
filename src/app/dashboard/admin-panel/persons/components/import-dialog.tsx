@@ -13,10 +13,19 @@ import {
 import { ExcelUpload } from "@/components/ui/excel-upload";
 import usePersonMutation from "@/mutations/use-person-mutation";
 import useCompanyMutation from "@/mutations/use-company-mutation";
+import usePoliticalPartyMutation from "@/mutations/use-political-party-mutation";
+import useAssociationMutation from "@/mutations/use-association-mutation";
+import useEducationMutation from "@/mutations/use-education-mutation";
 import {
   CreateManyPersonFromExcelDto,
   CompanyDataFromExcelDto,
-  CompanyPersonRelationsFromExcelDto
+  CompanyPersonRelationsFromExcelDto,
+  PoliticalPartyDataFromExcelDto,
+  PoliticalPartyPersonRelationsFromExcelDto,
+  AssociationDataFromExcelDto,
+  AssociationPersonRelationsFromExcelDto,
+  EducationDataFromExcelDto,
+  EducationPersonRelationsFromExcelDto
 } from "@/types/person-relation.type";
 import { Upload } from "lucide-react";
 import { useState } from "react";
@@ -33,11 +42,29 @@ export function ImportDialog() {
     createManyFromExcelMutation: createCompaniesMutation,
     createManyRelationsFromExcelMutation: createRelationsMutation
   } = useCompanyMutation();
+  const {
+    createManyFromExcelMutation: createPoliticalPartiesMutation,
+    createManyRelationsFromExcelMutation: createPoliticalPartyRelationsMutation
+  } = usePoliticalPartyMutation();
+  const {
+    createManyFromExcelMutation: createAssociationsMutation,
+    createManyRelationsFromExcelMutation: createAssociationRelationsMutation
+  } = useAssociationMutation();
+  const {
+    createManyFromExcelMutation: createEducationsMutation,
+    createManyRelationsFromExcelMutation: createEducationRelationsMutation
+  } = useEducationMutation();
 
   const isLoading =
     createPersonsMutation.isPending ||
     createCompaniesMutation.isPending ||
-    createRelationsMutation.isPending;
+    createRelationsMutation.isPending ||
+    createPoliticalPartiesMutation.isPending ||
+    createPoliticalPartyRelationsMutation.isPending ||
+    createAssociationsMutation.isPending ||
+    createAssociationRelationsMutation.isPending ||
+    createEducationsMutation.isPending ||
+    createEducationRelationsMutation.isPending;
 
   const handleImport = async () => {
     if (!file) return;
@@ -45,10 +72,22 @@ export function ImportDialog() {
     try {
       const arrayBuffer = await file.arrayBuffer();
 
-      // Parse Sheet 0 (Persons), Sheet 1 (Companies), Sheet 2 (Relations)
+      // Parse all sheets
       const resultPerson = parseGroupedExcel(arrayBuffer, 0);
       const resultCompany = parseGroupedExcel(arrayBuffer, 1);
-      const resultRelations = parseGroupedExcel(arrayBuffer, 2);
+      const resultPersonCompanyRelations = parseGroupedExcel(arrayBuffer, 2);
+      const resultPoliticalParties = parseGroupedExcel(arrayBuffer, 3);
+      const resultPersonPoliticalPartyRelations = parseGroupedExcel(
+        arrayBuffer,
+        4
+      );
+      const resultAssociations = parseGroupedExcel(arrayBuffer, 5);
+      const resultPersonAssociationRelations = parseGroupedExcel(
+        arrayBuffer,
+        6
+      );
+      const resultEducations = parseGroupedExcel(arrayBuffer, 7);
+      const resultPersonEducationRelations = parseGroupedExcel(arrayBuffer, 8);
 
       // Map Person Data
       const mappedResultPerson = resultPerson.map((item) => {
@@ -68,25 +107,61 @@ export function ImportDialog() {
         resultCompany as unknown as CompanyDataFromExcelDto[];
 
       // Map Relations Data
-      const mappedResultRelations =
-        resultRelations as unknown as CompanyPersonRelationsFromExcelDto[];
+      const mappedResultPersonCompanyRelations =
+        resultPersonCompanyRelations as unknown as CompanyPersonRelationsFromExcelDto[];
 
-      // Execute Mutations
-      // Note: Ideally, we should ensure Persons and Companies are created BEFORE Relations.
-      // However, since we are using IDs (which we set manually or derive), as long as the Documents exist when we try to create relations (or even if they don't yet, provided we just reference IDs), it might be fine for Firestore.
-      // But for Neo4j sync which happens in the backend service, it might check for existence.
-      // Safest approach is to await Persons and Companies, THEN do Relations.
+      // Map Political Parties
+      const mappedResultPoliticalParties =
+        resultPoliticalParties as unknown as PoliticalPartyDataFromExcelDto[];
 
+      // Map Political Party Relations
+      const mappedResultPersonPoliticalPartyRelations =
+        resultPersonPoliticalPartyRelations as unknown as PoliticalPartyPersonRelationsFromExcelDto[];
+
+      // Map Associations
+      const mappedResultAssociations =
+        resultAssociations as unknown as AssociationDataFromExcelDto[];
+
+      // Map Association Relations
+      const mappedResultPersonAssociationRelations =
+        resultPersonAssociationRelations as unknown as AssociationPersonRelationsFromExcelDto[];
+
+      // Map Educations
+      const mappedResultEducations =
+        resultEducations as unknown as EducationDataFromExcelDto[];
+
+      // Map Education Relations
+      const mappedResultPersonEducationRelations =
+        resultPersonEducationRelations as unknown as EducationPersonRelationsFromExcelDto[];
+
+      // Execute Entity Mutations (Persons, Companies, Political Parties, Associations, Educations)
       await Promise.all([
         createPersonsMutation.mutateAsync(mappedResultPerson),
-        createCompaniesMutation.mutateAsync(mappedResultCompany)
+        createCompaniesMutation.mutateAsync(mappedResultCompany),
+        createPoliticalPartiesMutation.mutateAsync(
+          mappedResultPoliticalParties
+        ),
+        createAssociationsMutation.mutateAsync(mappedResultAssociations),
+        createEducationsMutation.mutateAsync(mappedResultEducations)
       ]);
 
-      await createRelationsMutation.mutateAsync(mappedResultRelations);
+      // Execute Relation Mutations
+      await Promise.all([
+        createRelationsMutation.mutateAsync(mappedResultPersonCompanyRelations),
+        createPoliticalPartyRelationsMutation.mutateAsync(
+          mappedResultPersonPoliticalPartyRelations
+        ),
+        createAssociationRelationsMutation.mutateAsync(
+          mappedResultPersonAssociationRelations
+        ),
+        createEducationRelationsMutation.mutateAsync(
+          mappedResultPersonEducationRelations
+        )
+      ]);
 
       setOpen(false);
       setFile(null);
-      toast.success("Persons, Companies, and Relations imported successfully");
+      toast.success("All data imported successfully");
     } catch (error) {
       console.error("Import failed:", error);
       toast.error("Failed to import data");

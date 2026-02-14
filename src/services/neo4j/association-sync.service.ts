@@ -6,7 +6,7 @@ import { Association } from "@/types/person-relation.type";
  * Handles syncing Association entities to Neo4j as Organization nodes
  */
 export class AssociationNeo4jSyncService extends BaseNeo4jSyncService {
-  private static readonly LABEL = "Organization";
+  private static readonly LABEL = "Association";
 
   /**
    * Sync an association to Neo4j
@@ -25,6 +25,28 @@ export class AssociationNeo4jSyncService extends BaseNeo4jSyncService {
     };
 
     await this.mergeNode(this.LABEL, association.code, properties);
+  }
+
+  /**
+   * Sync associations in batch to Neo4j
+   */
+  static async syncAssociationsBatch(
+    associations: Array<Partial<Association> & { code: string }>
+  ): Promise<void> {
+    const items = associations.map((assoc) => ({
+      code: assoc.code,
+      properties: {
+        id: assoc.id,
+        code: assoc.code,
+        name: assoc.name,
+        slug: assoc.slug,
+        profilePicture: assoc.profilePicture || null,
+        link: assoc.link || null,
+        category: "ASSOCIATION"
+      }
+    }));
+
+    await this.mergeNodesBatch(this.LABEL, items);
   }
 
   /**

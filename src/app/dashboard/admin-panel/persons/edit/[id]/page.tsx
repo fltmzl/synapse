@@ -46,7 +46,10 @@ export default function EditPersonPage() {
             startDate: a.startDate ? new Date(a.startDate) : undefined,
             endDate: a.endDate ? new Date(a.endDate) : undefined
           })),
-          politicalParties
+          politicalParties: politicalParties.map((p) => ({
+            ...p,
+            title: p.title || ""
+          }))
         }
       },
       {
@@ -121,7 +124,8 @@ export default function EditPersonPage() {
     politicalParties:
       person.politicalParties?.map((p) => ({
         politicalPartyId: p.politicalPartyId,
-        type: p.type
+        type: p.type,
+        title: p.title
       })) || []
   };
 

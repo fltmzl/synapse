@@ -29,6 +29,29 @@ export class EducationNeo4jSyncService extends BaseNeo4jSyncService {
   }
 
   /**
+   * Sync educations in batch to Neo4j
+   */
+  static async syncEducationsBatch(
+    educations: Array<Partial<Education> & { code: string }>
+  ): Promise<void> {
+    const items = educations.map((edu) => ({
+      code: edu.code,
+      properties: {
+        id: edu.id,
+        code: edu.code,
+        name: edu.name,
+        slug: edu.slug,
+        profilePicture: edu.profilePicture || null,
+        description: edu.description || null,
+        link: edu.link || null,
+        category: "EDUCATION"
+      }
+    }));
+
+    await this.mergeNodesBatch(this.LABEL, items);
+  }
+
+  /**
    * Delete an education institution from Neo4j
    */
   static async deleteEducation(code: string): Promise<void> {

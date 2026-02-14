@@ -44,6 +44,8 @@ import { SearchIcons } from "@/icons/search-icon";
 import useCompany from "@/queries/use-company";
 import useCompanyPersonById from "@/queries/use-company-person-by-id";
 import usePersonById from "@/queries/use-person-by-id";
+import usePoliticalPartyById from "@/queries/use-political-party-by-id";
+import usePoliticalPartyPersonById from "@/queries/use-political-party-person-by-id";
 import useSpiderGraph from "@/queries/use-spider-graph";
 import { Node } from "@xyflow/react";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -85,8 +87,8 @@ const CATEGORY_METADATA: Record<
     label: "Government",
     icon: DiamondIcon
   },
-  PARTY: {
-    label: "Party",
+  POLITICAL_PARTY: {
+    label: "Political Party",
     icon: RoundedTriangleIcon
   },
   EDUCATION: {
@@ -95,8 +97,8 @@ const CATEGORY_METADATA: Record<
   },
   ASSOCIATION: {
     label: "Association",
-    icon: HexagonIcon,
-    color: "#29CC6A"
+    icon: RoundedCircleIcon,
+    color: "#fb2c36"
   },
   MEDIA: {
     label: "Media",
@@ -105,6 +107,21 @@ const CATEGORY_METADATA: Record<
   }
 };
 
+const NetworkConnectionSkeleton = () => (
+  <SectionContainer className="rounded-2lg">
+    <div className="p-5 lg:px-6 border-b flex justify-between items-center">
+      <Skeleton className="h-7 w-32" />
+      <div className="flex gap-2 items-center">
+        <Skeleton className="h-4 w-12" />
+        <Skeleton className="h-6 w-14 rounded-full" />
+      </div>
+    </div>
+    <div className="p-4 h-[400px]">
+      <Skeleton className="w-full h-full rounded-md" />
+    </div>
+  </SectionContainer>
+);
+
 export default function NetworkConnectionSection() {
   const isClient = useIsClient();
   const { slug } = useParams();
@@ -112,6 +129,7 @@ export default function NetworkConnectionSection() {
   const [search, setSearch] = useState("");
   const { data, isLoading } = useSpiderGraph("person", slug as string);
 
+  // Use useMemo for stable categories and avoid unnecessary re-renders
   const availableCategories = useMemo(() => {
     const rawNodes = (data?.nodes as Node<CustomNodeData>[]) || [];
     const categories = new Set<string>();
@@ -177,7 +195,7 @@ export default function NetworkConnectionSection() {
   const { width } = useWindowSize();
   const isMobile = width < 1024;
 
-  if (!isClient || isLoading) return null;
+  if (!isClient || isLoading) return <NetworkConnectionSkeleton />;
 
   return (
     <SectionContainer className="rounded-2lg">
@@ -607,6 +625,100 @@ function CompanyNodeDetailsContent({
   );
 }
 
+function PoliticalPartyNodeDetailsContent({
+  currentCenterNode,
+  nodeId
+}: {
+  currentCenterNode: Node<CustomNodeData>;
+  nodeId: string;
+}) {
+  const { data: partyData, isLoading } = usePoliticalPartyById(nodeId);
+  const { data: partyPersonData, isLoading: partyPersonLoading } =
+    usePoliticalPartyPersonById(`${currentCenterNode.id}_${nodeId}`);
+
+  if (isLoading || partyPersonLoading) {
+    return (
+      <div className="p-4">
+        <DetailSkeleton />
+      </div>
+    );
+  }
+
+  return (
+    <div className="p-4">
+      <div>
+        <Avatar className="w-10 h-10 rounded-sm border">
+          <AvatarImage
+            src={partyData?.profilePicture}
+            alt={partyData?.name || "political party"}
+          />
+          <AvatarFallback className="rounded-sm bg-body">
+            <RoundedTriangleIcon />
+          </AvatarFallback>
+        </Avatar>
+
+        <h3 className="font-medium mt-3">{partyData?.name || "Nom inconnu"}</h3>
+      </div>
+
+      <hr className="-mx-4 my-4" />
+
+      <GeneralInfo
+        size="sm"
+        icon={MapPinIcon}
+        label="Location"
+        value={
+          [partyData?.city, partyData?.implantation]
+            .filter(Boolean)
+            .join(", ") || "Non spécifié"
+        }
+      />
+
+      <p className="text-sm mt-4">
+        {partyData?.description || "Aucune description disponible."}
+      </p>
+
+      <hr className="-mx-4 my-4" />
+
+      <div className="text-sm space-y-2">
+        <LabelValue
+          label="Members"
+          value={String(partyData?.members?.numberOfMembers ?? 0)}
+        />
+        <LabelValue
+          label="Candidates"
+          value={String(partyData?.members?.numberOfCandidates ?? 0)}
+        />
+        <LabelValue
+          label="Elected"
+          value={String(partyData?.members?.numberOfElected ?? 0)}
+        />
+      </div>
+
+      <hr className="-mx-4 my-4" />
+
+      <h3 className="font-medium">
+        Connections with {currentCenterNode.data.name}
+      </h3>
+      <div className="text-sm mt-4 space-y-4">
+        <div className="flex justify-between gap-2">
+          <span className="text-muted-foreground flex-1">Relation type</span>
+          <span className="flex-1">
+            {partyPersonData?.type || "Non spécifié"}
+          </span>
+        </div>
+      </div>
+
+      <hr className="-mx-4 my-4" />
+
+      {/* <Button className="w-full" variant="outline" asChild>
+        <a href={`/political-party/${partyData?.slug}`}>
+          View Details <ArrowRightIcon />
+        </a>
+      </Button> */}
+    </div>
+  );
+}
+
 function SelectedNodeDetails({
   currentCenterNode,
   nodeId,
@@ -623,19 +735,31 @@ function SelectedNodeDetails({
   const node = allNodes.find((n) => n.id === nodeId);
   if (!node) return null;
 
-  const isCompany = node.data.category === "ORGANIZATION";
+  const category = node.data.category;
 
-  const content = isCompany ? (
-    <CompanyNodeDetailsContent
-      currentCenterNode={currentCenterNode}
-      nodeId={nodeId}
-    />
-  ) : (
-    <PersonNodeDetailsContent
-      currentCenterNode={currentCenterNode}
-      nodeId={nodeId}
-    />
-  );
+  let content;
+  if (category === "ORGANIZATION") {
+    content = (
+      <CompanyNodeDetailsContent
+        currentCenterNode={currentCenterNode}
+        nodeId={nodeId}
+      />
+    );
+  } else if (category === "POLITICAL_PARTY") {
+    content = (
+      <PoliticalPartyNodeDetailsContent
+        currentCenterNode={currentCenterNode}
+        nodeId={nodeId}
+      />
+    );
+  } else {
+    content = (
+      <PersonNodeDetailsContent
+        currentCenterNode={currentCenterNode}
+        nodeId={nodeId}
+      />
+    );
+  }
 
   if (isMobile) {
     return (

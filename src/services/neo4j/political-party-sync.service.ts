@@ -20,10 +20,45 @@ export class PoliticalPartyNeo4jSyncService extends BaseNeo4jSyncService {
       name: party.name,
       slug: party.slug,
       profilePicture: party.profilePicture || null,
+      description: party.description || null,
+      email: party.email || null,
+      phone: party.phone || null,
+      website: party.website || null,
+      registrationCode: party.registrationCode || null,
+      implantation: party.implantation || null,
+      territoryId: party.territoryId || null,
       category: "POLITICAL_PARTY"
     };
 
     await this.mergeNode(this.LABEL, party.code, properties);
+  }
+
+  /**
+   * Sync multiple political parties to Neo4j in a single batch
+   */
+  static async syncPoliticalPartiesBatch(
+    parties: Array<Partial<PoliticalParty> & { code: string }>
+  ): Promise<void> {
+    const items = parties.map((party) => ({
+      code: party.code,
+      properties: {
+        id: party.id,
+        code: party.code,
+        name: party.name,
+        slug: party.slug,
+        profilePicture: party.profilePicture || null,
+        description: party.description || null,
+        email: party.email || null,
+        phone: party.phone || null,
+        website: party.website || null,
+        registrationCode: party.registrationCode || null,
+        implantation: party.implantation || null,
+        territoryId: party.territoryId || null,
+        category: "POLITICAL_PARTY"
+      }
+    }));
+
+    await this.mergeNodesBatch(this.LABEL, items);
   }
 
   /**

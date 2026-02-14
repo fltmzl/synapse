@@ -12,7 +12,17 @@ export default function NewPoliticalPartyPage() {
   const { createPoliticalPartyMutation } = usePoliticalPartyMutation();
 
   const onSubmit = async (data: PoliticalPartyFormValues) => {
-    await createPoliticalPartyMutation.mutateAsync(data);
+    await createPoliticalPartyMutation.mutateAsync({
+      ...data,
+      dateOfCreation: data.dateOfCreation
+        ? new Date(data.dateOfCreation)
+        : undefined,
+      members: {
+        numberOfMembers: data.members?.numberOfMembers ?? 0,
+        numberOfCandidates: data.members?.numberOfCandidates ?? 0,
+        numberOfElected: data.members?.numberOfElected ?? 0
+      }
+    });
     router.push("/dashboard/admin-panel/political-parties");
   };
 

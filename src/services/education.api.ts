@@ -1,21 +1,24 @@
 import { db } from "@/firebase/config";
 import {
-  addDoc,
   collection,
   deleteDoc,
   doc,
   getDoc,
   getDocs,
   serverTimestamp,
-  updateDoc
+  setDoc,
+  updateDoc,
+  writeBatch
 } from "firebase/firestore";
 import {
   Education,
   CreateEducationDto,
-  UpdateEducationDto
+  UpdateEducationDto,
+  EducationDataFromExcelDto
 } from "@/types/person-relation.type";
 import { generateCode, CODE_PREFIXES } from "@/lib/code-generator";
-import { syncEducation } from "@/lib/neo4j-sync-client";
+import { syncEducation, syncBatch } from "@/lib/neo4j-sync-client";
+import { uniqueBySelector } from "@/app/dashboard/admin-panel/persons/utils";
 
 /**
  * Utility function to generate slug from name
@@ -37,7 +40,7 @@ export class EducationService {
     const slug = generateSlug(payload.name);
     const code = payload.code || generateCode(CODE_PREFIXES.EDUCATION);
 
-    const docRef = await addDoc(EducationService.colRef, {
+    await setDoc(doc(EducationService.colRef, slug), {
       ...payload,
       code,
       slug,
@@ -47,19 +50,136 @@ export class EducationService {
 
     // Sync to Neo4j
     await syncEducation("create", {
-      id: docRef.id,
+      id: slug,
       code,
       slug,
       ...payload
     });
 
     return {
-      id: docRef.id,
+      id: slug,
       ...payload,
       code,
       slug,
       success: true,
       message: "Education created successfully"
+    };
+  }
+
+  static async createManyFromExcel(payload: EducationDataFromExcelDto[]) {
+    // 1. Extract unique territories from implantation names
+    const uniqueTerritoryNames = uniqueBySelector(
+      payload,
+      (item) => item.address.implantation
+    ).filter(Boolean);
+
+    // 2. Upsert territories to Firestore
+    if (uniqueTerritoryNames.length > 0) {
+      const territoryBatch = writeBatch(db);
+      uniqueTerritoryNames.forEach((name) => {
+        const slug = generateSlug(name);
+        const territoryRef = doc(db, "territories", slug);
+        territoryBatch.set(
+          territoryRef,
+          {
+            id: slug,
+            name: name,
+            slug: slug,
+            updatedAt: serverTimestamp()
+          },
+          { merge: true }
+        );
+      });
+      await territoryBatch.commit();
+    }
+
+    const mappedData = payload.map((item) => {
+      const territorySlug = item.address.implantation
+        ? generateSlug(item.address.implantation)
+        : null;
+
+      const slug = generateSlug(item.structure.structure_name);
+      const id = item.identifier.id; // Use ID from Excel
+      const code = id; // Code must be the same as ID
+
+      return {
+        id: id,
+        name: item.structure.structure_name,
+        implantation: item.address.implantation,
+        territoryId: territorySlug,
+        street: item.address.street,
+        zipCode: item.address.zip_code,
+        city: item.address.city,
+        code: code,
+        slug: slug,
+        authorizedRepresentativeId: item.legal_representative.id,
+        email: item.address.email,
+        phone: item.address.phone,
+        website: item.address.website,
+        description: item.address.description,
+        registrationCode: item.address.registration_code,
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp()
+      };
+    });
+
+    const BATCH_SIZE = 450;
+    const chunks = [];
+
+    for (let i = 0; i < mappedData.length; i += BATCH_SIZE) {
+      chunks.push(mappedData.slice(i, i + BATCH_SIZE));
+    }
+
+    console.log(
+      `Processing ${payload.length} educations in ${chunks.length} batches.`
+    );
+
+    let successCount = 0;
+    let failCount = 0;
+
+    for (const [index, chunk] of chunks.entries()) {
+      try {
+        const batch = writeBatch(db);
+
+        chunk.forEach((data) => {
+          const docRef = doc(db, EducationService.colName, data.id);
+          batch.set(docRef, data, { merge: true });
+        });
+
+        await batch.commit();
+
+        // Batch Sync to Neo4j
+        await syncBatch(
+          "education",
+          chunk.map((data) => ({
+            ...data,
+            id: data.id,
+            code: data.code,
+            slug: data.slug
+          }))
+        ).catch((err) =>
+          console.error("Neo4j Education Batch Sync Failed:", err)
+        );
+
+        successCount += chunk.length;
+        console.log(
+          `Education Batch ${index + 1}/${chunks.length} committed and synced successfully.`
+        );
+      } catch (error) {
+        console.error(
+          `Education Batch ${index + 1}/${chunks.length} failed:`,
+          error
+        );
+        failCount += chunk.length;
+      }
+    }
+
+    return {
+      success: true,
+      totalProcessed: payload.length,
+      successCount,
+      failCount,
+      message: `Processed ${payload.length} educations. Success: ${successCount}, Failed: ${failCount}`
     };
   }
 

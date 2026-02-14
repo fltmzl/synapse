@@ -10,13 +10,16 @@ import {
   serverTimestamp,
   Timestamp as FirestoreTimestamp,
   updateDoc,
-  where
+  where,
+  writeBatch
 } from "firebase/firestore";
 import {
   EducationPerson,
+  EducationPersonRelationsFromExcelDto,
   CreateEducationPersonDto,
   UpdateEducationPersonDto
 } from "@/types/person-relation.type";
+import { syncRelationship } from "@/lib/neo4j-sync-client";
 
 export class EducationPersonService {
   private static colName = "education_person";
@@ -46,6 +49,73 @@ export class EducationPersonService {
       ...payload,
       success: true,
       message: "Education-Person relation created successfully"
+    };
+  }
+
+  static async createManyRelationsFromExcel(
+    payload: EducationPersonRelationsFromExcelDto[]
+  ) {
+    const BATCH_SIZE = 450;
+    const chunks = [];
+
+    for (let i = 0; i < payload.length; i += BATCH_SIZE) {
+      chunks.push(payload.slice(i, i + BATCH_SIZE));
+    }
+
+    let successCount = 0;
+    let failCount = 0;
+
+    for (const [index, chunk] of chunks.entries()) {
+      try {
+        const batch = writeBatch(db);
+
+        for (const item of chunk) {
+          const personCode = item.relation.person;
+          const educationCode = item.relation.organization;
+          const title = item.relation.nature_of_the_link;
+
+          const id = `${personCode}_${educationCode}`;
+          const docRef = doc(db, EducationPersonService.colName, id);
+
+          batch.set(docRef, {
+            personId: personCode,
+            educationId: educationCode,
+            title: title,
+            createdAt: serverTimestamp(),
+            updatedAt: serverTimestamp()
+          });
+
+          // Sync individual relationship to Neo4j
+          await syncRelationship("create", "STUDIED_AT", {
+            personCode,
+            educationCode: educationCode,
+            title: title,
+            isCurrent: true
+          }).catch((err) =>
+            console.error("Neo4j education relationship sync failed:", err)
+          );
+        }
+
+        await batch.commit();
+        successCount += chunk.length;
+        console.log(
+          `Education Relation Batch ${index + 1}/${chunks.length} committed and synced successfully.`
+        );
+      } catch (error) {
+        console.error(
+          `Education Relation Batch ${index + 1}/${chunks.length} failed:`,
+          error
+        );
+        failCount += chunk.length;
+      }
+    }
+
+    return {
+      success: true,
+      totalProcessed: payload.length,
+      successCount,
+      failCount,
+      message: `Processed ${payload.length} education relations. Success: ${successCount}, Failed: ${failCount}`
     };
   }
 

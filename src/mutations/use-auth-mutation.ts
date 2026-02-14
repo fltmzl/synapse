@@ -28,3 +28,15 @@ export function useUpdateProfileMutation() {
     }
   });
 }
+
+export function useChangePasswordMutation() {
+  return useMutation({
+    mutationFn: AuthService.changePassword,
+    onSuccess: (data) => {
+      toast.success(data.message || "Password updated successfully");
+    },
+    onError: (error: Error) => {
+      toast.error(error.message || "Failed to update password");
+    }
+  });
+}

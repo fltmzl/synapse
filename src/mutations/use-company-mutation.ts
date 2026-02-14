@@ -85,7 +85,7 @@ export default function useCompanyMutation() {
 
   const createManyFromExcelMutation = useMutation({
     mutationFn: (data: CompanyDataFromExcelDto[]) =>
-      CompanyPersonService.createManyFromExcel(data),
+      CompanyService.createManyFromExcel(data),
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: [QUERIES.COMPANIES] });
       toast.success(data.message || "Companies imported successfully");

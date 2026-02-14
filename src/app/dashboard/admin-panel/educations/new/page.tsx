@@ -12,7 +12,12 @@ export default function NewEducationPage() {
   const { createEducationMutation } = useEducationMutation();
 
   const onSubmit = async (data: EducationFormValues) => {
-    await createEducationMutation.mutateAsync(data);
+    await createEducationMutation.mutateAsync({
+      ...data,
+      dateOfCreation: data.dateOfCreation
+        ? new Date(data.dateOfCreation)
+        : undefined
+    });
     router.push("/dashboard/admin-panel/educations");
   };
 

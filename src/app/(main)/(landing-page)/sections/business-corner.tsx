@@ -4,10 +4,20 @@ import BusinessForm from "@/components/business-form";
 import { H4 } from "@/components/typography/h4";
 import { P } from "@/components/typography/paragraph";
 import SectionTitle from "@/components/typography/section-title";
-import BusinessCard from "../components/card/business-card";
-import BusinessForecast from "../components/card/forecast-card";
+import BusinessSectionGroup from "../components/card/business-section-group";
+import useArticles from "@/queries/use-articles";
+import NewsCardSkeleton from "../components/skeletons/news-card-skeleton";
+import NoResult from "@/components/no-result";
 
 export default function BusinessCorner() {
+  const { data: articles, isLoading } = useArticles({
+    sectionCategory: "business_corner",
+    isPublished: true
+  });
+
+  const leftArticles = articles?.slice(0, 3) || [];
+  const rightArticles = articles?.slice(3, 6) || [];
+
   return (
     <section className="bg-section">
       <div
@@ -20,21 +30,24 @@ export default function BusinessCorner() {
 
         <div className="flex flex-col lg:flex-row gap-10">
           <div className="flex-1 flex flex-col">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-              <div>
-                <H4 className="hover:text-primary hover:underline mb-6 inline-block">
-                  Les opportunités de reprises
-                </H4>
-                <BusinessCard />
+            {isLoading ? (
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                <NewsCardSkeleton />
+                <NewsCardSkeleton />
               </div>
-
-              <div>
-                <H4 className="hover:text-primary hover:underline mb-6 inline-block">
-                  Les prévisions économiques
-                </H4>
-                <BusinessForecast />
+            ) : articles && articles.length > 0 ? (
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                <BusinessSectionGroup articles={leftArticles} />
+                <BusinessSectionGroup articles={rightArticles} />
               </div>
-            </div>
+            ) : (
+              <div className="flex h-full items-center justify-center border rounded-[12px] bg-background p-10">
+                <NoResult
+                  title="Aucune actualité"
+                  description="Aucune actualité n'a été trouvée pour le moment."
+                />
+              </div>
+            )}
           </div>
 
           <aside

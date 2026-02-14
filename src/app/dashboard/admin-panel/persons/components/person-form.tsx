@@ -116,6 +116,7 @@ export const personFormSchema = z.object({
   politicalParties: z.array(
     z.object({
       politicalPartyId: z.string().min(1, "Political Party is required"),
+      title: z.string().optional(),
       type: z.enum(["supports", "opposes"])
     })
   )
@@ -974,7 +975,8 @@ export function PersonForm({
                     onClick={() =>
                       appendPoliticalParty({
                         politicalPartyId: "",
-                        type: "supports"
+                        type: "supports",
+                        title: ""
                       })
                     }
                   >
@@ -1000,7 +1002,7 @@ export function PersonForm({
                           Remove
                         </Button>
                       </div>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <FormField
                           control={form.control}
                           name={`politicalParties.${index}.politicalPartyId`}
@@ -1031,6 +1033,21 @@ export function PersonForm({
                                   }
                                   disabled={isPoliticalPartiesLoading}
                                 />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name={`politicalParties.${index}.title`}
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="label-required">
+                                Title
+                              </FormLabel>
+                              <FormControl>
+                                <Input {...field} />
                               </FormControl>
                               <FormMessage />
                             </FormItem>

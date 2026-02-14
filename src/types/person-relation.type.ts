@@ -308,7 +308,19 @@ export type Education = {
   code?: string;
   name: string;
   slug: string;
+  implantation?: string;
+  territoryId?: string;
+  dateOfCreation?: Timestamp;
+  street?: string;
+  zipCode?: string;
+  city?: string;
+  phone?: string;
+  email?: string;
+  website?: string;
+  categoryId?: string;
   description?: string;
+  registrationCode?: string;
+  authorizedRepresentativeId?: string;
   profilePicture?: string;
   link?: string;
   createdAt?: Timestamp;
@@ -318,12 +330,59 @@ export type Education = {
 export type CreateEducationDto = {
   code?: string;
   name: string;
+  implantation?: string;
+  territoryId?: string;
+  dateOfCreation?: Date;
+  street?: string;
+  zipCode?: string;
+  city?: string;
+  phone?: string;
+  email?: string;
+  website?: string;
+  categoryId?: string;
   description?: string;
+  registrationCode?: string;
+  authorizedRepresentativeId?: string;
   profilePicture?: string;
   link?: string;
 };
 
 export type UpdateEducationDto = Partial<CreateEducationDto>;
+
+export type EducationDataFromExcelDto = {
+  identifier: {
+    id: string;
+  };
+  structure: {
+    structure_name: string;
+  };
+  address: {
+    implantation: string;
+    date_of_creation: string;
+    street: string;
+    zip_code: string;
+    city: string;
+    phone: string;
+    email: string;
+    website: string;
+    category: string;
+    description: string;
+    registration_code: string;
+  };
+  legal_representative: {
+    first_name: string;
+    last_name: string;
+    id: string;
+  };
+};
+
+export type EducationPersonRelationsFromExcelDto = {
+  relation: {
+    organization: string;
+    person: string;
+    nature_of_the_link: string;
+  };
+};
 
 // ============================================================================
 // EducationPerson Types (Junction Table)
@@ -363,6 +422,27 @@ export type Association = {
   code?: string;
   name: string;
   slug: string;
+  implantation?: string;
+  territoryId?: string;
+  dateOfCreation?: Timestamp;
+  street?: string;
+  zipCode?: string;
+  city?: string;
+  phone?: string;
+  email?: string;
+  website?: string;
+  activity?: string;
+  categoryId?: string;
+  description?: string;
+  registrationCode?: string;
+  authorizedRepresentativeId?: string;
+  action?: {
+    numberOfEmployees?: number;
+    numberOfMembers?: number;
+    budget?: number;
+    cause?: string;
+    mainProject?: string;
+  };
   profilePicture?: string;
   link?: string;
   createdAt?: Timestamp;
@@ -372,11 +452,75 @@ export type Association = {
 export type CreateAssociationDto = {
   code?: string;
   name: string;
+  implantation?: string;
+  territoryId?: string;
+  dateOfCreation?: Date;
+  street?: string;
+  zipCode?: string;
+  city?: string;
+  phone?: string;
+  email?: string;
+  website?: string;
+  activity?: string;
+  categoryId?: string;
+  description?: string;
+  registrationCode?: string;
+  authorizedRepresentativeId?: string;
+  action?: {
+    numberOfEmployees?: number;
+    numberOfMembers?: number;
+    budget?: number;
+    cause?: string;
+    mainProject?: string;
+  };
   profilePicture?: string;
   link?: string;
 };
 
 export type UpdateAssociationDto = Partial<CreateAssociationDto>;
+
+export type AssociationDataFromExcelDto = {
+  identifier: {
+    id: string;
+  };
+  structure: {
+    structure_name: string;
+  };
+  address: {
+    implantation: string;
+    date_of_creation: string;
+    street: string;
+    zip_code: string;
+    city: string;
+    phone: string;
+    email: string;
+    website: string;
+    activity: string;
+    category: string;
+    description: string;
+    registration_code: string;
+  };
+  legal_representative: {
+    first_name: string;
+    last_name: string;
+    id: string;
+  };
+  action: {
+    number_of_employees: number | string;
+    number_of_members: number | string;
+    budget: number | string;
+    cause: string;
+    main_project: string;
+  };
+};
+
+export type AssociationPersonRelationsFromExcelDto = {
+  relation: {
+    organization: string;
+    person: string;
+    nature_of_the_link: string;
+  };
+};
 
 // ============================================================================
 // AssociationPerson Types (Junction Table)
@@ -416,6 +560,24 @@ export type PoliticalParty = {
   code?: string;
   name: string;
   slug: string;
+  implantation: string; // territory name
+  territoryId: string; // territory id
+  dateOfCreation?: Timestamp;
+  street?: string;
+  zipCode?: string;
+  city?: string;
+  phone?: string;
+  email?: string;
+  website?: string;
+  categoryId?: string;
+  description?: string;
+  registrationCode?: string;
+  authorizedRepresentativeId?: string; // id person
+  members: {
+    numberOfMembers: number;
+    numberOfCandidates: number;
+    numberOfElected: number;
+  };
   profilePicture?: string;
   createdAt?: Timestamp;
   updatedAt?: Timestamp;
@@ -424,10 +586,69 @@ export type PoliticalParty = {
 export type CreatePoliticalPartyDto = {
   code?: string;
   name: string;
+  slug?: string;
+  implantation?: string;
+  territoryId?: string;
+  dateOfCreation?: Date;
+  street?: string;
+  zipCode?: string;
+  city?: string;
+  phone?: string;
+  email?: string;
+  website?: string;
+  categoryId?: string;
+  description?: string;
+  registrationCode?: string;
+  authorizedRepresentativeId?: string;
+  members?: {
+    numberOfMembers?: number;
+    numberOfCandidates?: number;
+    numberOfElected?: number;
+  };
   profilePicture?: string;
 };
 
 export type UpdatePoliticalPartyDto = Partial<CreatePoliticalPartyDto>;
+
+export type PoliticalPartyDataFromExcelDto = {
+  identifier: {
+    id: string;
+  };
+  structure: {
+    political_party: string;
+  };
+  address: {
+    implantation: string;
+    date_of_creation: string;
+    street: string;
+    zip_code: string;
+    city: string;
+    phone: string;
+    email: string;
+    website: string;
+    category: string;
+    description: string;
+    registration_code: string;
+  };
+  legal_representative: {
+    first_name: string;
+    last_name: string;
+    id: string;
+  };
+  members: {
+    number_of_members: number | string;
+    number_of_candidates: number | string;
+    number_of_elected: number | string;
+  };
+};
+
+export type PoliticalPartyPersonRelationsFromExcelDto = {
+  relation: {
+    person: string;
+    political_party: string;
+    nature_of_the_link: string;
+  };
+};
 
 // ============================================================================
 // PoliticalPartyPerson Types (Junction Table)
@@ -440,6 +661,7 @@ export type PoliticalPartyPerson = {
   politicalPartyId: string;
   personId: string;
   type: PoliticalPartyRelationType;
+  title: string; // from nature_of_the_link
   createdAt?: Timestamp;
   updatedAt?: Timestamp;
 };
@@ -448,6 +670,7 @@ export type CreatePoliticalPartyPersonDto = {
   politicalPartyId: string;
   personId: string;
   type: PoliticalPartyRelationType;
+  title: string;
 };
 
 export type UpdatePoliticalPartyPersonDto = Partial<

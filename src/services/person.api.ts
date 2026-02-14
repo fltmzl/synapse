@@ -292,16 +292,14 @@ export class PersonService {
     // 5. Create Political Party Relations
     if (payload.politicalParties && payload.politicalParties.length > 0) {
       console.log("Creating political party relations");
-      const politicalPartyPersonCol = collection(
-        db,
-        "political_parties_person"
-      );
+      const politicalPartyPersonCol = collection(db, "political_party_person");
       payload.politicalParties.forEach((rel) => {
         const relRef = doc(politicalPartyPersonCol);
         const cleanedRel = clean(rel);
         batch.set(relRef, {
           ...cleanedRel,
           personId,
+          title: rel.title,
           createdAt: now,
           updatedAt: now
         });
@@ -391,11 +389,13 @@ export class PersonService {
             const docSnap = await getDoc(
               doc(db, "political_parties", rel.politicalPartyId)
             );
+            console.log({ title: rel.title });
             const partyCode = docSnap.data()?.code;
             if (partyCode) {
               await syncRelationship("create", rel.type.toUpperCase(), {
                 personCode: code,
                 partyCode,
+                title: rel.title,
                 type: rel.type.toUpperCase()
               });
             }
@@ -764,7 +764,7 @@ export class PersonService {
       ),
       getDocs(
         query(
-          collection(db, "political_parties_person"),
+          collection(db, "political_party_person"),
           where("personId", "==", id)
         )
       ),
@@ -964,7 +964,7 @@ export class PersonService {
         ),
         getDocs(
           query(
-            collection(db, "political_parties_person"),
+            collection(db, "political_party_person"),
             where("personId", "==", id)
           )
         )
@@ -1056,7 +1056,7 @@ export class PersonService {
 
       // Add new Political Party Relations
       if (relations.politicalParties && relations.politicalParties.length > 0) {
-        const col = collection(db, "political_parties_person");
+        const col = collection(db, "political_party_person");
         relations.politicalParties.forEach(
           (
             rel: Omit<CreatePoliticalPartyPersonDto, "personId"> & {
@@ -1084,18 +1084,44 @@ export class PersonService {
       const updatedPersonDoc = await getDoc(personRef);
       if (updatedPersonDoc.exists()) {
         const updatedData = updatedPersonDoc.data();
-        const personCode = updatedData.code;
+        const effectivePersonCode = updatedData.code || id;
 
-        if (personCode) {
+        if (effectivePersonCode) {
           // 1. Sync Person Node
           await syncPerson("update", {
             id,
-            code: personCode,
+            code: effectivePersonCode,
             ...updatedData
           });
 
           // 2. Sync Relationships (if updated)
           if (relations) {
+            // First, delete ALL existing relationships in Neo4j before re-creating
+            // This ensures removed relations are also removed from Neo4j
+            // We pass both personCode and personId to be robust
+            await Promise.all([
+              syncRelationship("delete_all", "WORKS_FOR", {
+                personCode: effectivePersonCode,
+                personId: id
+              }),
+              syncRelationship("delete_all", "STUDIED_AT", {
+                personCode: effectivePersonCode,
+                personId: id
+              }),
+              syncRelationship("delete_all", "MEMBER_OF", {
+                personCode: effectivePersonCode,
+                personId: id
+              }),
+              syncRelationship("delete_all", "SUPPORTS", {
+                personCode: effectivePersonCode,
+                personId: id
+              }),
+              syncRelationship("delete_all", "OPPOSES", {
+                personCode: effectivePersonCode,
+                personId: id
+              })
+            ]);
+
             // Sync Company Relations
             if (relations.companies && relations.companies.length > 0) {
               await Promise.all(
@@ -1106,7 +1132,7 @@ export class PersonService {
                   const companyCode = docSnap.data()?.code;
                   if (companyCode) {
                     await syncRelationship("create", "WORKS_FOR", {
-                      personCode,
+                      personCode: effectivePersonCode,
                       companyCode,
                       title: rel.title,
                       employmentType: rel.employmentType,
@@ -1132,7 +1158,7 @@ export class PersonService {
                   const educationCode = docSnap.data()?.code;
                   if (educationCode) {
                     await syncRelationship("create", "STUDIED_AT", {
-                      personCode,
+                      personCode: effectivePersonCode,
                       educationCode,
                       major: rel.major,
                       gpa: rel.gpa,
@@ -1158,7 +1184,7 @@ export class PersonService {
                   const associationCode = docSnap.data()?.code;
                   if (associationCode) {
                     await syncRelationship("create", "MEMBER_OF", {
-                      personCode,
+                      personCode: effectivePersonCode,
                       associationCode,
                       title: rel.title,
                       type: rel.type,
@@ -1187,7 +1213,7 @@ export class PersonService {
                   const partyCode = docSnap.data()?.code;
                   if (partyCode) {
                     await syncRelationship("create", rel.type.toUpperCase(), {
-                      personCode,
+                      personCode: effectivePersonCode,
                       partyCode,
                       type: rel.type.toUpperCase()
                     });
