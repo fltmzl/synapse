@@ -14,14 +14,21 @@ import {
   reauthenticateWithCredential,
   updateEmail,
   updatePassword,
-  deleteUser
+  deleteUser,
+  confirmPasswordReset,
+  verifyPasswordResetCode
 } from "firebase/auth";
 import {
+  collection,
   deleteDoc,
   doc,
   getDoc,
+  getDocs,
+  limit,
+  query,
   serverTimestamp,
-  setDoc
+  setDoc,
+  where
 } from "firebase/firestore";
 
 export type RegisterPayload = {
@@ -296,5 +303,43 @@ export class AuthService {
     await deleteUser(user);
 
     return { success: true, message: "Account deleted successfully" };
+  }
+
+  static async confirmPasswordReset({
+    oobCode,
+    newPassword
+  }: {
+    oobCode: string;
+    newPassword: string;
+  }) {
+    await confirmPasswordReset(auth, oobCode, newPassword);
+    return {
+      success: true,
+      message: "Password has been reset successfully"
+    };
+  }
+
+  static async verifyPasswordResetCode(oobCode: string) {
+    return await verifyPasswordResetCode(auth, oobCode);
+  }
+
+  static async getNameByEmail(email: string): Promise<string | null> {
+    try {
+      const usersRef = collection(db, "users");
+      const q = query(usersRef, where("email", "==", email), limit(1));
+      const querySnapshot = await getDocs(q);
+
+      if (querySnapshot.empty) {
+        return null;
+      }
+
+      const userData = querySnapshot.docs[0].data() as User;
+      return (
+        `${userData.firstName || ""} ${userData.lastName || ""}`.trim() || null
+      );
+    } catch (err) {
+      console.error("Error getting name by email:", err);
+      return null;
+    }
   }
 }

@@ -101,7 +101,7 @@ export class AuthAdminService {
     name
   }: {
     email: string;
-    name?: string;
+    name?: string | null;
   }) {
     const setPasswordLink =
       await AuthAdminService.createResetPasswordLink(email);
@@ -109,9 +109,10 @@ export class AuthAdminService {
       to: [email],
       message: {
         subject: "Synapse - Reset Password",
-        text: `Hi ${
-          name || ""
-        }, click this link to reset your password: ${setPasswordLink}`
+        html: MailService.createResetPasswordTemplate({
+          firstName: name || "User",
+          resetLink: setPasswordLink
+        })
       }
     });
 
@@ -145,7 +146,7 @@ export class AuthAdminService {
 
     const customLink = `${
       process.env.NEXT_PUBLIC_APP_URL
-    }/auth/new-password?oobCode=${oobCode}&email=${encodeURIComponent(email)}`;
+    }/auth/create-password?oobCode=${oobCode}&email=${encodeURIComponent(email)}`;
 
     return customLink;
   }

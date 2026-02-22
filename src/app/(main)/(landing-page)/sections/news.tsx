@@ -11,6 +11,7 @@ import { format } from "date-fns";
 import NoResult from "@/components/no-result";
 import { useActiveJumbotron } from "@/queries/use-jumbotrons";
 import Image from "next/image";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function NewsSection() {
   const { data: articles, isLoading } = useArticles({
@@ -18,9 +19,18 @@ export default function NewsSection() {
     isPublished: true
   });
 
-  const { data: activeJumbotron } = useActiveJumbotron();
+  const { data: activeJumbotron, isLoading: isJumbotronLoading } =
+    useActiveJumbotron();
 
   const renderJumbotron = () => {
+    if (isJumbotronLoading) {
+      return (
+        <div className="relative aspect-video min-h-[320px] md:min-h-[480px] lg:min-h-[620px] transition-all duration-500 ease-in-out rounded-md overflow-hidden">
+          <Skeleton className="w-full h-full" />
+        </div>
+      );
+    }
+
     // If there's an active jumbotron, render dynamically
     if (activeJumbotron) {
       if (activeJumbotron.mediaType === "video") {

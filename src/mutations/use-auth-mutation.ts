@@ -40,3 +40,24 @@ export function useChangePasswordMutation() {
     }
   });
 }
+
+export function useSendResetPasswordLinkMutation() {
+  return useMutation({
+    mutationFn: AuthService.sendResetPasswordLink,
+    onError: (error: Error) => {
+      toast.error(error.message || "Failed to send reset password link");
+    }
+  });
+}
+
+export function useResetPasswordMutation() {
+  return useMutation({
+    mutationFn: AuthService.confirmPasswordReset,
+    onSuccess: (data) => {
+      toast.success(data.message || "Password updated successfully");
+    },
+    onError: (error: Error) => {
+      toast.error(error.message || "Failed to reset password");
+    }
+  });
+}

@@ -12,16 +12,57 @@ import {
   EmptyTitle
 } from "@/components/ui/empty";
 import SuccessIcon from "@/icons/success-icon";
-import { XIcon } from "lucide-react";
+import { Loader2, XIcon } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
+import { AuthService } from "@/services/auth.api";
 import AuthLayout from "../auth-layout";
 import CreatePasswordForm from "./form/create-password-form";
 
 export default function CreatePasswordPage() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const oobCode = searchParams.get("oobCode");
+
   const [isCreatePasswordSuccess, setIsCreatePasswordSuccess] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!oobCode) {
+      toast.error("Invalid or missing password reset code.", {
+        position: "top-center"
+      });
+      router.push("/auth/login");
+      return;
+    }
+
+    const verifyCode = async () => {
+      try {
+        await AuthService.verifyPasswordResetCode(oobCode);
+        setLoading(false);
+      } catch (error) {
+        console.error("Verification error:", error);
+        toast.error("Reset link is invalid or expired.", {
+          position: "top-center"
+        });
+        router.push("/auth/login");
+      }
+    };
+
+    verifyCode();
+  }, [oobCode, router]);
 
   const handleCreatePasswordSuccess = () => setIsCreatePasswordSuccess(true);
+
+  if (loading) {
+    return (
+      <div className="min-h-dvh grid place-content-center px-5">
+        <Loader2 className="size-12 animate-spin text-primary/70" />
+      </div>
+    );
+  }
 
   if (isCreatePasswordSuccess) {
     return (
@@ -80,7 +121,10 @@ export default function CreatePasswordPage() {
             Créer un mot de passe
           </CardTitle>
           <div>
-            <CreatePasswordForm onSuccess={handleCreatePasswordSuccess} />
+            <CreatePasswordForm
+              oobCode={oobCode!}
+              onSuccess={handleCreatePasswordSuccess}
+            />
           </div>
         </Card>
       </main>

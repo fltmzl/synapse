@@ -35,7 +35,7 @@ import { GoogleIcon } from "@/icons/google-icon";
 import { passwordValidation } from "@/lib/common-validation";
 import { PasswordStrengthUtil } from "@/lib/password-strength";
 import { cn } from "@/lib/utils";
-import { CountryCodeService } from "@/services/country-code.api";
+import { useResetPasswordMutation } from "@/mutations/use-auth-mutation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery } from "@tanstack/react-query";
 import { Check, ChevronDown } from "lucide-react";
@@ -47,17 +47,18 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 type Props = {
+  oobCode: string;
   onSuccess?: () => void;
 };
 
-export default function CreatePasswordForm({ onSuccess }: Props) {
+export default function CreatePasswordForm({ oobCode, onSuccess }: Props) {
   const router = useRouter();
 
   const [showPassword, setShowPassword] = useState(false);
   const [showRepeatPassword, setShowRepeatPassword] = useState(false);
   const { passwordStrength, setPasswordStrength } = usePasswordStrength();
 
-  // const registerMutation = useRegister();
+  const resetPasswordMutation = useResetPasswordMutation();
 
   const formSchema = z
     .object({
@@ -84,8 +85,17 @@ export default function CreatePasswordForm({ onSuccess }: Props) {
   };
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log("register");
-    onSuccess?.();
+    resetPasswordMutation.mutate(
+      {
+        oobCode,
+        newPassword: values.password
+      },
+      {
+        onSuccess: () => {
+          onSuccess?.();
+        }
+      }
+    );
   }
   return (
     <Form {...form}>
@@ -153,9 +163,9 @@ export default function CreatePasswordForm({ onSuccess }: Props) {
           type="submit"
           size="lg"
           className="w-full mt-6"
-          disabled={!form.formState.isValid}
+          disabled={!form.formState.isValid || resetPasswordMutation.isPending}
         >
-          Reset Password
+          {resetPasswordMutation.isPending ? "Updating..." : "Reset Password"}
         </Button>
       </form>
 

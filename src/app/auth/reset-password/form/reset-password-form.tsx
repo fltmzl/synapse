@@ -1,5 +1,6 @@
 "use client";
 
+import { Spinner } from "@/components/spinner";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -10,6 +11,7 @@ import {
   FormMessage
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useSendResetPasswordLinkMutation } from "@/mutations/use-auth-mutation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -21,7 +23,7 @@ type Props = {
 };
 
 export default function ResetPasswordForm({ onSuccess }: Props) {
-  const router = useRouter();
+  const sendResetPasswordLinkMutation = useSendResetPasswordLinkMutation();
 
   const formSchema = z.object({
     email: z
@@ -38,18 +40,19 @@ export default function ResetPasswordForm({ onSuccess }: Props) {
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log("Submit");
-    onSuccess?.();
-    // try {
-    //   const user = await AuthService.loginWithEmail({
-    //     email: values.email,
-    //     password: values.password
-    //   });
-
-    //   router.push("/onboarding");
-    // } catch (err) {
-    //   form.setError("password", { message: "Invalid email or password" });
-    // }
+    sendResetPasswordLinkMutation.mutate(
+      {
+        email: values.email
+      },
+      {
+        onSuccess: () => {
+          onSuccess?.();
+        },
+        onError: (error: Error) => {
+          form.setError("email", { message: error.message });
+        }
+      }
+    );
   };
 
   return (
@@ -69,7 +72,15 @@ export default function ResetPasswordForm({ onSuccess }: Props) {
           )}
         />
 
-        <Button type="submit" size="lg" className="w-full mt-3">
+        <Button
+          type="submit"
+          size="lg"
+          className="w-full mt-3"
+          disabled={
+            !form.formState.isValid || sendResetPasswordLinkMutation.isPending
+          }
+        >
+          {sendResetPasswordLinkMutation.isPending && <Spinner />}
           Submit
         </Button>
       </form>

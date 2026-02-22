@@ -57,7 +57,9 @@ export default function RegisterPage() {
           variant="outline"
           className="size-10 rounded-sm absolute top-0 left-5 xl:-left-21"
         >
-          <XIcon />
+          <Link href="/auth/login">
+            <XIcon />
+          </Link>
         </Button>
 
         <div className="mt-20 lg:mt-0">

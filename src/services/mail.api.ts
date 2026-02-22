@@ -1,5 +1,4 @@
-import { adminDb } from "@/firebase/firebase.admin";
-import { firestore } from "firebase-admin";
+import nodemailer from "nodemailer";
 
 export type MailPayload = {
   to: string[];
@@ -12,28 +11,37 @@ export type MailPayload = {
 };
 
 export class MailService {
-  private static colRef = adminDb.collection("mail");
+  private static getTransporter() {
+    return nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS
+      },
+      tls: {
+        rejectUnauthorized: false
+      }
+    });
+  }
 
   static async sendMail(payload: MailPayload) {
-    const EMAIL_FROM = process.env.EMAIL_FROM;
-    let emailFrom = "Synapse";
-
-    if (payload.from) {
-      emailFrom = payload.from;
-    } else if (EMAIL_FROM) {
-      emailFrom = EMAIL_FROM;
-    }
+    const transporter = this.getTransporter();
+    const EMAIL_FROM = process.env.EMAIL_FROM || "Synapse";
+    const emailFrom = payload.from || EMAIL_FROM;
 
     try {
-      const docRef = await this.colRef.add({
-        ...payload,
-        from: emailFrom,
-        createdAt: firestore.FieldValue.serverTimestamp()
+      const info = await transporter.sendMail({
+        from: `"${emailFrom}" <${process.env.SMTP_USER}>`,
+        to: payload.to.join(", "),
+        subject: payload.message.subject,
+        text: payload.message.text,
+        html: payload.message.html
       });
 
-      return { id: docRef.id };
+      console.log("Email sent: %s", info.messageId);
+      return { id: info.messageId };
     } catch (error) {
-      console.error("Failed to send mail:", error);
+      console.error("Failed to send mail via Nodemailer:", error);
       throw error;
     }
   }
@@ -138,5 +146,51 @@ export class MailService {
         </body>
       </html>    
     `;
+  }
+
+  static createResetPasswordTemplate({
+    firstName,
+    resetLink
+  }: {
+    firstName: string;
+    resetLink: string;
+  }) {
+    return `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <meta charset="UTF-8" />
+          <title>Reset Your Password</title>
+        </head>
+        <body style="font-family: Arial, sans-serif; font-size: 16px; color: #333; line-height: 1.6; margin: 0; padding: 20px; background-color: #f9f9f9;">
+          <table width="100%" border="0" cellspacing="0" cellpadding="0" style="max-width: 600px; margin: auto; background: #ffffff; padding: 30px; border-radius: 8px; border: 1px solid #e5e5e5;">
+            <tr>
+              <td>
+                <h2 style="color: #173dba; margin-top: 0;">Reset Your Password</h2>
+                <p>Hi <strong>${firstName}</strong>,</p>
+      
+                <p>We received a request to reset the password for your Synapse account. No changes have been made yet.</p>
+
+                <p>You can reset your password by clicking the button below:</p>
+
+                <p style="text-align: center; padding: 20px 0;">
+                  <a href="${resetLink}" style="color: #ffffff; background: #173dba; text-decoration: none; padding: 12px 25px; border-radius: 8px; display: inline-block; font-weight: bold;">Reset Password</a>
+                </p>
+
+                <p>For security reasons, this link will expire in 1 hour. If you didn't request a password reset, you can safely ignore this email.</p>
+                
+                <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;" />
+                
+                <p style="font-size: 12px; color: #888;">
+                  If you're having trouble clicking the button, copy and paste the URL below into your web browser:
+                  <br />
+                  <span style="word-break: break-all; color: #1F3C3C;">${resetLink}</span>
+                </p>
+              </td>
+            </tr>
+          </table>
+        </body>
+      </html>        
+      `;
   }
 }

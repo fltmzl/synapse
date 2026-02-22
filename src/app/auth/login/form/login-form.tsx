@@ -149,12 +149,12 @@ export default function LoginForm() {
         </Button>
       </div> */}
 
-      <p className="text-center mt-6">
+      {/* <p className="text-center mt-6">
         Vous n&rsquo;avez pas de compte?
         <Link href="/auth/register" className="underline ms-1 text-primary">
           Souscrire
         </Link>
-      </p>
+      </p> */}
     </Form>
   );
 }
