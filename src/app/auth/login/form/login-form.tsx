@@ -110,14 +110,14 @@ export default function LoginForm() {
           )}
         />
 
-        <div className="text-end">
+        {/* <div className="text-end">
           <Link
             href={"/auth/reset-password"}
             className="text-sm tracking-tight text-primary"
           >
             Forgot Password ?
           </Link>
-        </div>
+        </div> */}
 
         <Button
           type="submit"

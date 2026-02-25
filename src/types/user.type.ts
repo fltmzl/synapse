@@ -20,3 +20,17 @@ export type User = {
     ongoingProgramEmails?: boolean;
   };
 };
+
+export type UpdateUserPayload = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  role: Role;
+  phoneNumber: string;
+  countryCode?: string;
+};
+
+export type ChangePasswordPayload = {
+  uid: string;
+  newPassword: string;
+};

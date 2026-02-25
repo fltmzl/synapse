@@ -9,3 +9,18 @@ export const userSchema = z.object({
   countryCode: z.string().min(1, { message: "Country code is required" }),
   password: z.string().min(1, { message: "Password is required" })
 });
+export const updateUserSchema = userSchema.omit({ password: true });
+
+export const changePasswordSchema = z
+  .object({
+    newPassword: z
+      .string()
+      .min(6, { message: "Password must be at least 6 characters" }),
+    confirmPassword: z
+      .string()
+      .min(6, { message: "Password must be at least 6 characters" })
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"]
+  });

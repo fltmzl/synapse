@@ -1,5 +1,9 @@
 import { adminDb, firebaseAdmin } from "@/firebase/firebase.admin";
-import { User } from "@/types/user.type";
+import {
+  User,
+  UpdateUserPayload,
+  ChangePasswordPayload
+} from "@/types/user.type";
 import { firestore } from "firebase-admin";
 import { AuthService, CreateUserPayload } from "../auth.api";
 import { MailService } from "../mail.api";
@@ -123,6 +127,60 @@ export class AuthAdminService {
     await firebaseAdmin.auth().deleteUser(userId);
 
     return userId;
+  }
+
+  static async updateUser(uid: string, data: UpdateUserPayload) {
+    const { firstName, lastName, email, role, phoneNumber, countryCode } = data;
+
+    // 1. Update Firebase Auth (Admin SDK)
+    await firebaseAdmin.auth().updateUser(uid, {
+      email,
+      displayName: `${firstName} ${lastName}`.trim()
+    });
+
+    // 2. Update Firestore doc (Admin SDK)
+    await adminDb.collection("users").doc(uid).update({
+      firstName,
+      lastName,
+      email,
+      role,
+      phoneNumber,
+      countryCode,
+      updatedAt: firestore.FieldValue.serverTimestamp()
+    });
+
+    // 3. Re-assign role (ensure custom claims are correct)
+    await AuthService.assignRole(uid, role);
+
+    return { uid };
+  }
+
+  static async deleteUser(uid: string) {
+    // 1. Delete from Firebase Auth
+    await AuthAdminService.deleteUserAuth(uid);
+
+    // 2. Delete from Firestore
+    await adminDb.collection("users").doc(uid).delete();
+
+    return { uid };
+  }
+
+  static async changeUserPassword(uid: string, newPassword: string) {
+    await firebaseAdmin.auth().updateUser(uid, { password: newPassword });
+    return { uid };
+  }
+
+  static async getUserById(uid: string): Promise<User | null> {
+    const docSnap = await adminDb.collection("users").doc(uid).get();
+
+    if (!docSnap.exists) {
+      return null;
+    }
+
+    return {
+      id: docSnap.id,
+      ...(docSnap.data() as User)
+    };
   }
 
   private static async createSetPasswordLink(email: string) {

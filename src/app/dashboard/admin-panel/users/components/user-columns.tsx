@@ -4,6 +4,7 @@ import { User } from "@/types/user.type";
 import { ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
 import { Badge } from "@/components/ui/badge";
+import { UserActions } from "./user-actions";
 
 export const userColumns: ColumnDef<User>[] = [
   {
@@ -43,16 +44,9 @@ export const userColumns: ColumnDef<User>[] = [
         "-"
       );
     }
+  },
+  {
+    id: "actions",
+    cell: ({ row }) => <UserActions user={row.original} />
   }
-  // {
-  //   accessorKey: "createdAt",
-  //   header: "Created",
-  //   cell: ({ row }) => {
-  //     console.log({ created: row.original.createdAt.toMillis() });
-  //     const date = row.original.createdAt
-  //       ? row.original.createdAt?.toDate()
-  //       : null;
-  //     return date ? format(date, "MMM dd, yyyy") : "-";
-  //   }
-  // }
 ];
