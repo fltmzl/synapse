@@ -35,7 +35,7 @@ export function ArticleActions({ article }: ArticleActionsProps) {
       <div className="flex items-center gap-2">
         <Button variant="ghost" size="icon-sm" asChild>
           <Link
-            href={`/dashboard/admin-panel/latest-publication/edit/${article.id}`}
+            href={`/dashboard/admin-panel/article/latest-publication/edit/${article.id}`}
           >
             <Pencil className="h-4 w-4" />
             <span className="sr-only">Edit</span>

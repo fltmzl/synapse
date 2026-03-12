@@ -1,6 +1,7 @@
 import BrandLogo from "@/components/brand-logo";
 import { CopyrightYear } from "@/components/copyright-year";
 import { Button } from "@/components/ui/button";
+import { FOOTER_INFO } from "@/constants/footer-info.constant";
 import { FbIcon } from "@/icons/fb-icon";
 import { FbIconFlat } from "@/icons/fb-icon-flat";
 import { InstagramIconFlat } from "@/icons/instagram-icon-flat";
@@ -21,15 +22,15 @@ export default function Footer() {
             <ul className="space-y-4">
               <li className="flex items-center gap-2">
                 <PhoneIcon size={20} />
-                <span>+596 696 43 84 93</span>
+                <span>{FOOTER_INFO.PHONE_NUMBER}</span>
               </li>
               <li className="flex items-center gap-2">
                 <MailIcon size={20} />
-                <span>contact@synapse-intelligence.com</span>
+                <span>{FOOTER_INFO.EMAIL}</span>
               </li>
               <li className="flex items-center gap-2">
                 <MapPinIcon size={20} />
-                <span>101 rue de Sèvres, 75006 Paris</span>
+                <span>{FOOTER_INFO.ADDRESS}</span>
               </li>
             </ul>
           </div>

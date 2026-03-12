@@ -240,7 +240,8 @@ export class PersonService {
     if (payload.companies && payload.companies.length > 0) {
       const companyPersonCol = collection(db, "company_person");
       payload.companies.forEach((rel) => {
-        const relRef = doc(companyPersonCol);
+        const relId = `${personId}_${rel.companyId}`;
+        const relRef = doc(companyPersonCol, relId);
         const cleanedRel = clean(rel);
         batch.set(relRef, {
           ...cleanedRel,
@@ -258,7 +259,8 @@ export class PersonService {
       console.log("Creating education relations");
       const educationPersonCol = collection(db, "education_person");
       payload.educations.forEach((rel) => {
-        const relRef = doc(educationPersonCol);
+        const relId = `${personId}_${rel.educationId}`;
+        const relRef = doc(educationPersonCol, relId);
         const cleanedRel = clean(rel);
         batch.set(relRef, {
           ...cleanedRel,
@@ -276,7 +278,8 @@ export class PersonService {
       console.log("Creating association relations");
       const associationPersonCol = collection(db, "association_person");
       payload.associations.forEach((rel) => {
-        const relRef = doc(associationPersonCol);
+        const relId = `${personId}_${rel.associationId}`;
+        const relRef = doc(associationPersonCol, relId);
         const cleanedRel = clean(rel);
         batch.set(relRef, {
           ...cleanedRel,
@@ -294,7 +297,8 @@ export class PersonService {
       console.log("Creating political party relations");
       const politicalPartyPersonCol = collection(db, "political_party_person");
       payload.politicalParties.forEach((rel) => {
-        const relRef = doc(politicalPartyPersonCol);
+        const relId = `${personId}_${rel.politicalPartyId}`;
+        const relRef = doc(politicalPartyPersonCol, relId);
         const cleanedRel = clean(rel);
         batch.set(relRef, {
           ...cleanedRel,
@@ -985,7 +989,8 @@ export class PersonService {
               companyId: string;
             }
           ) => {
-            const relRef = doc(col);
+            const relId = `${id}_${rel.companyId}`;
+            const relRef = doc(col, relId);
             batch.set(relRef, {
               ...clean(rel),
               personId: id,
@@ -1011,7 +1016,8 @@ export class PersonService {
               educationId: string;
             }
           ) => {
-            const relRef = doc(col);
+            const relId = `${id}_${rel.educationId}`;
+            const relRef = doc(col, relId);
             batch.set(relRef, {
               ...clean(rel),
               personId: id,
@@ -1037,7 +1043,8 @@ export class PersonService {
               associationId: string;
             }
           ) => {
-            const relRef = doc(col);
+            const relId = `${id}_${rel.associationId}`;
+            const relRef = doc(col, relId);
             batch.set(relRef, {
               ...clean(rel),
               personId: id,
@@ -1064,7 +1071,8 @@ export class PersonService {
               type: PoliticalPartyRelationType;
             }
           ) => {
-            const relRef = doc(col);
+            const relId = `${id}_${rel.politicalPartyId}`;
+            const relRef = doc(col, relId);
             batch.set(relRef, {
               ...clean(rel),
               personId: id,

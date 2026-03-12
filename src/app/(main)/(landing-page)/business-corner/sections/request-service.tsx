@@ -1,4 +1,5 @@
 import BusinessForm from "@/components/business-form";
+import { FOOTER_INFO } from "@/constants/footer-info.constant";
 import { ArrowUpRightIcon } from "@/icons/arrow-up-right";
 import { Mail, MapPin, PhoneCall } from "lucide-react";
 import Link from "next/link";
@@ -40,7 +41,7 @@ export default function RequestService() {
                     </span>
                     <div className="flex gap-1 items-center">
                       <span className="text-lg leading-[140%] tracking-[-0.01em]">
-                        +33 1 23 45 67 89
+                        {FOOTER_INFO.PHONE_NUMBER}
                       </span>
                       <ArrowUpRightIcon className="size-5 text-primary" />
                     </div>
@@ -60,7 +61,7 @@ export default function RequestService() {
                     </span>
                     <div className="flex gap-1 items-center">
                       <span className="text-lg leading-[140%] tracking-[-0.01em]">
-                        contact@synapse.fr
+                        {FOOTER_INFO.EMAIL}
                       </span>
                       <ArrowUpRightIcon className="size-5 text-primary" />
                     </div>
@@ -81,7 +82,7 @@ export default function RequestService() {
                     </span>
                     <div className="flex gap-1 items-center">
                       <span className="text-lg leading-[140%] tracking-[-0.01em]">
-                        123 Avenue de la République, Paris, France
+                        {FOOTER_INFO.ADDRESS}
                       </span>
                       <ArrowUpRightIcon className="size-5 text-primary" />
                     </div>
