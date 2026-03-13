@@ -135,6 +135,55 @@ export async function POST(req: Request) {
       htmlContent = htmlContent.replace(regex, `src="${replacement.newUrl}"`);
     }
 
+    // 6.2 Process PDFs
+    const pdfRegex = /<a[^>]+href="([^">]+\.pdf)"/g;
+    const pdfReplacements: { original: string; newUrl: string }[] = [];
+
+    while ((match = pdfRegex.exec(htmlContent)) !== null) {
+      const originalHref = match[1];
+      // Skip absolute URLs
+      if (originalHref.startsWith("http") || originalHref.startsWith("data:")) {
+        continue;
+      }
+
+      const decodedHref = decodeURIComponent(originalHref);
+
+      // Find the pdf entry in the inner zip
+      const pdfEntry = innerEntries.find(
+        (entry) => entry.entryName === decodedHref
+      );
+
+      if (pdfEntry) {
+        const pdfBuffer = pdfEntry.getData();
+        const timestamp = Date.now();
+        const fileName = `${timestamp}-${pdfEntry.name.replace(/\s+/g, "-")}`;
+        const storagePath = `pdfs/${fileName}`;
+
+        // Upload to Firebase Storage with metadata
+        const storageRef = ref(storage, storagePath);
+        await uploadBytes(storageRef, pdfBuffer, {
+          contentType: "application/pdf"
+        });
+        const downloadUrl = await getDownloadURL(storageRef);
+
+        pdfReplacements.push({ original: originalHref, newUrl: downloadUrl });
+      }
+    }
+
+    // Replace original href with download URLs in HTML and add target="_blank"
+    for (const replacement of pdfReplacements) {
+      const escapedOriginal = replacement.original.replace(
+        /[.*+?^${}()|[\]\\]/g,
+        "\\$&"
+      );
+      const regex = new RegExp(`href="${escapedOriginal}"`, "g");
+      // Replace with new URL and add security/UX attributes
+      htmlContent = htmlContent.replace(
+        regex,
+        `href="${replacement.newUrl}" target="_blank" rel="noopener noreferrer"`
+      );
+    }
+
     // 7️⃣ Extract Title and Body Content
     const titleMatch = htmlContent.match(/<title>(.*?)<\/title>/i);
     const title = titleMatch ? titleMatch[1] : "Untitled Article";
