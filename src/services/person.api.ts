@@ -45,6 +45,7 @@ import {
   syncBatch
 } from "@/lib/neo4j-sync-client";
 import { uniqueBySelector } from "@/app/dashboard/admin-panel/persons/utils";
+import { capitalizeFirstLetter } from "@/lib/utils";
 
 /**
  * Utility function to generate slug from name
@@ -528,7 +529,7 @@ export class PersonService {
     }
 
     if (filters?.search) {
-      const search = filters.search.trim().toUpperCase();
+      const search = capitalizeFirstLetter(filters.search.trim());
       q = query(
         q,
         where("name", ">=", search),
