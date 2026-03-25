@@ -327,59 +327,43 @@ export class CompanyService {
       q = query(q, where("territoryId", "in", filters.territoryIds));
     }
 
-    // Get total count matching category/territory filters
+    if (filters?.search) {
+      const search = filters.search.trim().toUpperCase();
+      q = query(
+        q,
+        where("name", ">=", search),
+        where("name", "<=", search + "\uf8ff")
+      );
+    }
+
+    // Get total count matching all filters (including search)
     const countSnapshot = await getCountFromServer(q);
-    let total = countSnapshot.data().count;
+    const total = countSnapshot.data().count;
 
     let companies: Company[] = [];
 
-    if (filters?.search) {
-      // If searching, we fetch all relevant documents to filter by 'name' in-memory
-      const querySnapshot = await getDocs(q);
-      const allCompanies = querySnapshot.docs.map((doc) => ({
+    // Unified Pagination Logic
+    if (filters?.page !== undefined && filters?.pageSize !== undefined) {
+      const limitCount = (filters.page + 1) * filters.pageSize;
+      const qWithLimit = query(q, limit(limitCount));
+      const querySnapshot = await getDocs(qWithLimit);
+      const allFetched = querySnapshot.docs.map((doc) => ({
         id: doc.id,
         ...(doc.data() as Omit<Company, "id">)
       }));
 
-      const searchLower = filters.search.toLowerCase();
-      const filteredCompanies = allCompanies.filter((c) =>
-        c.name.toLowerCase().includes(searchLower)
-      );
-
-      total = filteredCompanies.length;
-
-      if (filters.page !== undefined && filters.pageSize !== undefined) {
-        const start = filters.page * filters.pageSize;
-        companies = filteredCompanies.slice(
-          start,
-          start + filters.pageSize
-        ) as Company[];
-      } else {
-        companies = filteredCompanies as Company[];
-      }
+      const start = filters.page * filters.pageSize;
+      companies = allFetched.slice(
+        start,
+        start + filters.pageSize
+      ) as Company[];
     } else {
-      // If no search, we use limit for optimization
-      if (filters?.page !== undefined && filters?.pageSize !== undefined) {
-        const limitCount = (filters.page + 1) * filters.pageSize;
-        const qWithLimit = query(q, limit(limitCount));
-        const querySnapshot = await getDocs(qWithLimit);
-        const allFetched = querySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...(doc.data() as Omit<Company, "id">)
-        }));
-
-        const start = filters.page * filters.pageSize;
-        companies = allFetched.slice(
-          start,
-          start + filters.pageSize
-        ) as Company[];
-      } else {
-        const querySnapshot = await getDocs(q);
-        companies = querySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...(doc.data() as Omit<Company, "id">)
-        })) as Company[];
-      }
+      const qWithLimit = query(q, limit(500));
+      const querySnapshot = await getDocs(qWithLimit);
+      companies = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...(doc.data() as Omit<Company, "id">)
+      })) as Company[];
     }
 
     if (companies.length === 0) return { data: [], total };
