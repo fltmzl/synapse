@@ -12,6 +12,8 @@ export type DatabaseRegionData = {
 
 export type DatabaseData = DatabaseRegionData[];
 
+import { VertexAnswerResponse } from "./vertex-ai.type";
+
 export type Message = {
   sender: "user" | "ai";
   text: string;
@@ -19,4 +21,5 @@ export type Message = {
   fileUrl?: string;
   sourceName?: string;
   sourceUrl?: string;
+  references?: VertexAnswerResponse["answer"]["references"];
 };

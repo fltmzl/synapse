@@ -15,6 +15,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { ArticleService } from "@/services/article.api";
+import parse, { HTMLReactParserOptions, Element } from "html-react-parser";
+import { FileAttachmentCard } from "./file-attachment-card";
 
 type Props = {
   articleDetail: Article | null;
@@ -27,6 +29,25 @@ export default function ArticleCard({ articleDetail }: Props) {
   };
 
   const [activeImage, setActiveImage] = useState(0);
+
+  const options: HTMLReactParserOptions = {
+    replace: (domNode) => {
+      if (
+        domNode instanceof Element &&
+        domNode.attribs &&
+        domNode.attribs["data-type"] === "file"
+      ) {
+        const { src, name, size } = domNode.attribs;
+        return (
+          <FileAttachmentCard
+            src={src}
+            name={name || "Attachment"}
+            size={size}
+          />
+        );
+      }
+    }
+  };
 
   if (!articleDetail) {
     return (
@@ -174,11 +195,9 @@ export default function ArticleCard({ articleDetail }: Props) {
                 "prose-h5:text-base",
                 "prose-h6:text-sm"
               )}
-              // prose-h1:text-3xl prose-h2:text-2xl prose-h3:text-xl prose-p:text-base prose-li:marker:text-muted-foreground
-
-              // text-2xl lg:text-[40px] font-medium leading-[110%] tracking-[-0.03em]
-              dangerouslySetInnerHTML={{ __html: article?.content || "" }}
-            />
+            >
+              {parse(article?.content || "", options)}
+            </article>
 
             <div className="flex items-center gap-4 text-muted-foreground">
               <span className="text-lg leading-[140%]">Share</span>

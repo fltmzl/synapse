@@ -29,8 +29,10 @@ interface ComboboxCreateProps {
   options: Option[];
   value?: string;
   onValueChange: (value: string) => void;
+  onSearchChange?: (search: string) => void;
   onCreate?: (value: string) => void;
   isCreating?: boolean;
+  shouldFilter?: boolean;
   placeholder?: string;
   searchPlaceholder?: string;
   emptyText?: string;
@@ -50,7 +52,9 @@ export function ComboboxCreate({
   emptyText = "No option found.",
   createText = "Create",
   className,
-  disabled = false
+  disabled = false,
+  onSearchChange,
+  shouldFilter = true
 }: ComboboxCreateProps) {
   const [open, setOpen] = React.useState(false);
   const [searchQuery, setSearchQuery] = React.useState("");
@@ -96,11 +100,14 @@ export function ComboboxCreate({
         </Button>
       </PopoverTrigger>
       <PopoverContent className="min-w-[var(--radix-popover-trigger-width)] w-full p-0">
-        <Command>
+        <Command shouldFilter={shouldFilter}>
           <CommandInput
             placeholder={searchPlaceholder}
             value={searchQuery}
-            onValueChange={setSearchQuery}
+            onValueChange={(val) => {
+              setSearchQuery(val);
+              if (onSearchChange) onSearchChange(val);
+            }}
           />
           <CommandList>
             <CommandEmpty className="py-2 px-2">

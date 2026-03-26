@@ -35,6 +35,10 @@ yarn-error.log*
 .env.local
 .env.staging
 .env.prod
+.env.prod.backup
+.env.backup
+ai-plan.md
+
 
 # vercel
 .vercel

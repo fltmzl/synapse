@@ -3,6 +3,12 @@ import { Button } from "@/components/ui/button";
 import { Message } from "@/types/database.type";
 import { useState } from "react";
 import ChatContainer from "./chat-container";
+import axios from "axios";
+import {
+  VertexAnswerResponse,
+  VertexSearchResult
+} from "@/types/vertex-ai.type";
+import { processVertexResponse } from "@/lib/vertex-utils";
 
 type Props = {
   initialShowPopular: boolean;
@@ -12,43 +18,54 @@ type Props = {
 export default function ChatWrapper({ initialShowPopular, questions }: Props) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [showPopular, setShowPopular] = useState(initialShowPopular);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSend = (userMessage: string): void => {
+  const handleSend = async (userMessage: string): Promise<void> => {
+    if (!userMessage.trim() || isLoading) return;
+
     if (showPopular) setShowPopular(false);
 
-    const aiResponse = `
-          <p>In <strong>Guadeloupe</strong>, the unemployment rate for <strong>2023</strong> was <strong>12%</strong>.</p>
-          <p>This marks a small but significant improvement compared to 2022 (12.8%), reflecting better labor integration programs and growth in tourism-related jobs.</p>
-          <div class="mt-3">
-            <p><strong>📊 Key Economic Indicators (2023)</strong></p>
-            <ol class="list-disc">
-              <li>Workforce population: <strong>40,000</strong></li>
-              <li>Registered companies: <strong>1,452</strong></li>
-              <li>Average monthly income: <strong>€1,115</strong></li>
-              <li>GDP growth rate: <strong>5%</strong></li>
-            </ol>
-          </div>
-        `;
+    // 1. Add user message
+    const userMsg: Message = { sender: "user", text: userMessage };
+    setMessages((prev) => [...prev, userMsg]);
+    setIsLoading(true);
 
-    const newMessages: Message[] = [
-      { sender: "user", text: userMessage },
-      {
+    try {
+      const response = await axios.post<{
+        answer: VertexAnswerResponse["answer"];
+        results: VertexSearchResult[];
+      }>("/api/search", { query: userMessage });
+
+      const { answer } = response.data;
+
+      // 2. Map AI response with processed text (markdown to html + citations)
+      const processedHtml = await processVertexResponse(answer);
+
+      const aiMsg: Message = {
         sender: "ai",
-        text: aiResponse,
-        fileName: "Martinique_GDP_growth_trend.png",
-        fileUrl: "/0ee490b7-e479-4e78-8114-ff4c13414425.png",
-        sourceName: "Banque de France – Overseas Economic Report",
-        sourceUrl: "https://www.banque-france.fr"
-      }
-    ];
+        text:
+          processedHtml ||
+          "I'm sorry, I couldn't generate an answer from the search results.",
+        references: answer.references
+      };
 
-    setMessages((prev) => [...prev, ...newMessages]);
+      setMessages((prev) => [...prev, aiMsg]);
+    } catch (error) {
+      console.error("Vertex Search Error:", error);
+      const errorMsg: Message = {
+        sender: "ai",
+        text: "I'm having trouble connecting to the database right now. Please try again later."
+      };
+      setMessages((prev) => [...prev, errorMsg]);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
     <div className="max-h-[870px] overflow-y-auto hide-scrollbar flex flex-col gap-8">
       <div className="max-w-[860px] mx-auto w-full">
-        <ChatContainer messages={messages} />
+        <ChatContainer messages={messages} isLoading={isLoading} />
       </div>
 
       <div className="sticky left-0 right-0 bottom-0 w-full z-40">
