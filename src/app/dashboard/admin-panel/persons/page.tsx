@@ -4,14 +4,35 @@ import { DashboardHeader } from "@/components/dashboard-header";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import Link from "next/link";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { ImportDialog } from "./components/import-dialog";
 import { DataTable } from "@/components/data-table/data-table";
 import { personColumns } from "./components/person-columns";
-import usePersons from "@/queries/use-persons";
+import usePersonsPaginated from "@/queries/use-persons-paginated";
+
+import { ColumnFiltersState } from "@tanstack/react-table";
+import { useDebounce } from "@/hooks/use-debounce";
 
 export default function PersonsPage() {
-  const { data: persons, isLoading } = usePersons();
+  const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 50 });
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+
+  const searchFilter =
+    (columnFilters.find((f) => f.id === "name")?.value as string) || "";
+  const debouncedSearch = useDebounce(searchFilter, 500);
+
+  const { data: personsResponse, isLoading } = usePersonsPaginated({
+    page: pagination.pageIndex,
+    pageSize: pagination.pageSize,
+    search: debouncedSearch
+  });
+
+  useEffect(() => {
+    setPagination((prev) => ({ ...prev, pageIndex: 0 }));
+  }, [debouncedSearch]);
+
+  const persons = personsResponse?.data ?? [];
+  const total = personsResponse?.total ?? 0;
 
   return (
     <>
@@ -39,6 +60,14 @@ export default function PersonsPage() {
           search="name"
           isLoading={isLoading}
           toolbarComponent={() => <></>}
+          tableOptions={{
+            manualPagination: true,
+            pageCount: Math.ceil(total / pagination.pageSize),
+            manualFiltering: true,
+            state: { pagination, columnFilters },
+            onPaginationChange: setPagination,
+            onColumnFiltersChange: setColumnFilters
+          }}
         />
       </div>
     </>

@@ -68,6 +68,8 @@ export function DataTable<TData, TValue>({
   const [rowSelection, setRowSelection] = useState({});
   const [globalFilter, setGlobalFilter] = useState("");
 
+  const { state: tableStateOptions, ...restTableOptions } = tableOptions || {};
+
   const table = useReactTable({
     // main table
     data,
@@ -108,9 +110,10 @@ export function DataTable<TData, TValue>({
       sorting,
       columnFilters,
       columnVisibility,
-      rowSelection
+      rowSelection,
+      ...tableStateOptions
     },
-    ...tableOptions
+    ...restTableOptions
   });
 
   return (

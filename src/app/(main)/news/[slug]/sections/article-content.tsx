@@ -22,6 +22,8 @@ export default function ArticleContent({ slug }: { slug: string }) {
 
   if (isError) return <ArticleError onRetry={() => refetch()} />;
 
+  console.log({ article });
+
   return (
     <section className="w-full min-h-screen p-4 flex flex-col gap-4">
       <ArticleCard articleDetail={article || null} />

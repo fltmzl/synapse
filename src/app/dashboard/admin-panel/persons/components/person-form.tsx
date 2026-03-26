@@ -61,6 +61,7 @@ import {
 } from "@/components/ui/input-group";
 import { Separator } from "@/components/ui/separator";
 import useCompanyMutation from "@/mutations/use-company-mutation";
+import { useDebounce } from "@/hooks/use-debounce";
 
 const DESCRIPTION_MAX_LENGTH = 1000;
 
@@ -216,8 +217,11 @@ export function PersonForm({
   const { data: places = [], isLoading: isPlacesLoading } = usePlaces();
   const { createPlaceMutation } = usePlaceMutation();
 
+  const [companySearch, setCompanySearch] = React.useState("");
+  const debouncedCompanySearch = useDebounce(companySearch, 500);
+
   const { data: companiesResponse, isLoading: isCompaniesLoading } =
-    useCompanies();
+    useCompanies({ search: debouncedCompanySearch });
   const companies = companiesResponse?.data ?? [];
   const { createCompanyMutation } = useCompanyMutation();
 
@@ -649,6 +653,8 @@ export function PersonForm({
                                   placeholder="Select company"
                                   isCreating={createCompanyMutation.isPending}
                                   disabled={isCompaniesLoading}
+                                  onSearchChange={setCompanySearch}
+                                  shouldFilter={false}
                                 />
                               </FormControl>
                               <FormMessage />

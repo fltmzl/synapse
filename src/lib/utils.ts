@@ -39,3 +39,8 @@ export const copyToClipboard = (
     }
   );
 };
+
+export function capitalizeFirstLetter(string: string) {
+  if (!string) return ""; // Handle empty strings safely
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
